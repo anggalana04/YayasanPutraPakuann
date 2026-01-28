@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Yayasan Putra Pakuan</title>
+    <title>@yield('title', 'Yayasan Putra Pakuan')</title>
     <!-- Google Fonts: Lexend -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -53,26 +53,30 @@
 <body class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 transition-colors duration-200">
     <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden group/design-root">
         <!-- Top Navigation -->
-        <header class="sticky top-0 z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-slate-200 dark:border-white/10">
+        <header class="sticky top-0 z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-slate-200 dark:border-white/10 w-full" style="position:sticky;top:0;z-index:50;">
             <div class="layout-container flex justify-center w-full">
                 <div class="flex max-w-[1280px] w-full px-4 md:px-10 py-3 items-center justify-between">
+
                     <div class="flex items-center gap-4 text-text-main dark:text-white">
+                        <a href="{{ route('home') }}">
                         <div class="size-10 text-primary">
                             <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="Logo">
                         </div>
-                        <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Yayasan Putra Pakuan</h2>
+                    </a>
+                            <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Yayasan Putra Pakuan</h2>
                     </div>
                     <div class="hidden md:flex items-center gap-8">
                         <nav class="flex items-center gap-6">
-                            <a class="text-sm font-medium hover:text-primary transition-colors" href="{{ url('/') }}">Beranda</a>
-                            <a class="text-sm font-medium hover:text-primary transition-colors" href="{{ route('about') }}">Tentang Kami</a>
-                            <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Unit Sekolah</a>
-                            <a class="text-sm font-medium {{ Request::is('akreditasi') ? 'text-secondary font-bold' : 'hover:text-secondary transition-colors' }}" href="{{ route('akreditasi') }}">Prestasi</a>
-                            <a class="text-sm font-medium hover:text-secondary transition-colors" href="#">Pendaftaran</a>
+                            <a class="text-sm font-medium {{ Request::is('/') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ url('/') }}">Beranda</a>
+                            <a class="text-sm font-medium {{ Request::is('about') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ route('about') }}">Tentang Kami</a>
+                            <a class="text-sm font-medium {{ Request::is('fasilitas') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ route('fasilitas') }}">Fasilitas</a>
+                            <a class="text-sm font-medium {{ Request::is('akreditasi') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ route('akreditasi') }}">Prestasi</a>
+                            <a class="text-sm font-medium {{ Request::is('berita') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ route('berita') }}">Berita</a>
+                            <a class="text-sm font-medium {{ Request::is('kontak') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ route('kontak') }}">Kontak</a>
                         </nav>
-                        <button class="flex items-center justify-center rounded-xl h-10 px-6 bg-secondary hover:bg-red-700 text-white text-sm font-bold transition-all shadow-lg shadow-secondary/20">
+                        {{-- <button class="flex items-center justify-center rounded-xl h-10 px-6 bg-secondary hover:bg-red-700 text-white text-sm font-bold transition-all shadow-lg shadow-secondary/20">
                             Masuk
-                        </button>
+                        </button> --}}
                     </div>
                     <!-- Mobile Menu Icon -->
                     <button id="mobile-menu-btn" class="md:hidden text-primary dark:text-white">
@@ -80,21 +84,50 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Mobile Menu hidden -->
             <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white dark:bg-background-dark border-b border-slate-200 dark:border-white/10 p-4 flex flex-col gap-4 shadow-lg">
                 <nav class="flex flex-col gap-4">
-                    <a class="text-sm font-medium hover:text-primary transition-colors" href="{{ url('/') }}">Beranda</a>
-                    <a class="text-sm font-medium hover:text-primary transition-colors" href="{{ route('about') }}">Tentang Kami</a>
-                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Unit Sekolah</a>
-                    <a class="text-sm font-medium {{ Request::is('akreditasi') ? 'text-primary' : 'hover:text-primary transition-colors' }}" href="{{ url('/akreditasi') }}">Prestasi</a>
-                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Pendaftaran</a>
+                    <a class="text-sm font-medium {{ Request::is('/') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ url('/') }}">Beranda</a>
+                    <a class="text-sm font-medium {{ Request::is('about') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ route('about') }}">Tentang Kami</a>
+                    <a class="text-sm font-medium {{ Request::is('fasilitas') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ route('fasilitas') }}">Fasilitas</a>
+                    <a class="text-sm font-medium {{ Request::is('akreditasi') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ url('/akreditasi') }}">Prestasi</a>
+                    <a class="text-sm font-medium {{ Request::is('berita') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ url('/berita') }}">Berita</a>
+                    <a class="text-sm font-medium {{ Request::is('kontak') ? 'text-secondary font-bold' : 'hover:text-primary transition-colors' }}" href="{{ route('kontak') }}">Kontak</a>
+
                 </nav>
-                <button class="flex items-center justify-center rounded-xl h-10 px-6 bg-secondary hover:bg-red-700 text-white text-sm font-bold transition-all shadow-lg shadow-secondary/20 w-full">
+                {{-- <button class="flex items-center justify-center rounded-xl h-10 px-6 bg-secondary hover:bg-red-700 text-white text-sm font-bold transition-all shadow-lg shadow-secondary/20 w-full">
                     Masuk
-                </button>
+                </button> --}}
             </div>
         </header>
+
+        <!-- Floating Action Button (FAB) -->
+        <div id="fab-overlay" class="fixed inset-0 z-[98] bg-black/40 hidden transition-opacity"></div>
+        <div id="fab" class="fixed z-[99] bottom-6 right-6 flex flex-col items-end gap-3">
+            <!-- Expanded Buttons -->
+            <div id="fab-actions" class="flex flex-col items-end gap-3 mb-2 hidden">
+                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500 text-white shadow-lg hover:bg-green-600 transition-all">
+                    <span class="material-symbols-outlined">chat</span> WhatsApp
+                </a>
+                <a href="mailto:info@putrapakuan.sch.id" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 text-white shadow-lg hover:bg-red-600 transition-all">
+                    <span class="material-symbols-outlined">mail</span> Gmail
+                </a>
+                <a href="/brochure.pdf" download class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white shadow-lg hover:bg-sky-600 transition-all">
+                    <span class="material-symbols-outlined">download</span> Download Brochure
+                </a>
+                <a href="{{ route('kontak') }}" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-white shadow-lg hover:bg-red-700 transition-all">
+                    <span class="material-symbols-outlined">call</span> Kontak Sekolah
+                </a>
+                <a href="{{ route('fasilitas') }}" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-primary shadow-lg border border-primary hover:bg-primary hover:text-white transition-all">
+                    <span class="material-symbols-outlined">school</span> Lihat Fasilitas
+                </a>
+            </div>
+            <!-- Main FAB Button -->
+            <button id="fab-main" class="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-white shadow-2xl text-3xl hover:bg-sky-600 transition-all focus:outline-none">
+                <span id="fab-icon" class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
 
         <!-- Main Content Wrapper -->
         <main class="flex flex-col items-center w-full">
@@ -108,9 +141,8 @@
                     <div class="md:col-span-1 flex flex-col gap-4">
                         <div class="flex items-center gap-3 text-text-main dark:text-white">
                             <div class="size-6 text-primary">
-                                <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                                    <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
-                                </svg>
+                                                            <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="Logo">
+
                             </div>
                             <h2 class="text-base font-bold">Yayasan Putra Pakuan</h2>
                         </div>
@@ -155,7 +187,7 @@
             </div>
         </footer>
     </div>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -167,8 +199,38 @@
                 });
             }
         });
+
+        // Floating Action Button logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const fabMain = document.getElementById('fab-main');
+            const fabActions = document.getElementById('fab-actions');
+            const fabOverlay = document.getElementById('fab-overlay');
+            const fabIcon = document.getElementById('fab-icon');
+            let expanded = false;
+
+            function openFab() {
+                fabActions.classList.remove('hidden');
+                fabOverlay.classList.remove('hidden');
+                fabIcon.textContent = 'close';
+                expanded = true;
+            }
+            function closeFab() {
+                fabActions.classList.add('hidden');
+                fabOverlay.classList.add('hidden');
+                fabIcon.textContent = 'menu';
+                expanded = false;
+            }
+            fabMain.addEventListener('click', () => {
+                if (expanded) {
+                    closeFab();
+                } else {
+                    openFab();
+                }
+            });
+            fabOverlay.addEventListener('click', closeFab);
+        });
     </script>
-    
+
     <!-- AOS Animation Library JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>

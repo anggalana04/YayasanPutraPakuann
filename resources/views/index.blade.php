@@ -14,6 +14,7 @@
 @endpush
 
 @section('content')
+
     <!-- Hero Section -->
     <div class="w-full relative bg-primary overflow-hidden">
         <div class="w-full min-h-[700px] md:min-h-[600px] relative flex items-center">
@@ -26,28 +27,28 @@
                 <div class="absolute inset-0 bg-black/40"></div>
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30"></div>
             </div>
-            
+
             <!-- Decorative Elements -->
             <div class="absolute top-20 right-10 w-72 h-72 bg-secondary/10 rounded-full blur-3xl"></div>
             <div class="absolute bottom-20 left-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-            
+
             <!-- Content Container -->
             <div class="relative z-10 w-full max-w-[1280px] mx-auto px-4 md:px-10 py-20">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <!-- Left Column - Main Content -->
                     <div class="flex flex-col gap-8 text-center lg:text-left" data-aos="fade-right">
                         <div class="flex flex-col gap-4">
-                            
-                            
+
+
                             <h1 class="text-white text-4xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight">
                                 Building the <span class="text-primary relative inline-block">Leaders</span> of Tomorrow
                             </h1>
-                            
+
                             <p class="text-slate-200 text-lg md:text-xl leading-relaxed max-w-xl font-medium">
                                 Membentuk generasi unggul melalui pendidikan berkualitas dan pengembangan karakter islami yang kuat.
                             </p>
                         </div>
-                        
+
                         <div class="flex flex-wrap gap-4 justify-center lg:justify-start items-center">
                             <button class="group flex items-center gap-2 cursor-pointer justify-center rounded-full h-14 px-8 bg-secondary hover:bg-red-700 text-white text-base font-bold transition-all transform hover:scale-105 shadow-xl shadow-secondary/20">
                                 <span>Join Us Today</span>
@@ -58,7 +59,7 @@
                                 <span>Watch Video</span>
                             </button>
                         </div>
-                        
+
                         <!-- Stats Mini -->
                         <!-- <div class="grid grid-cols-3 gap-6 mt-4">
                             <div class="text-center lg:text-left">
@@ -75,22 +76,22 @@
                             </div>
                         </div> -->
                     </div>
-                    
+
                     <!-- Right Column - PAXIST Card -->
                     <div class="flex items-center justify-center lg:justify-end" data-aos="fade-left">
                         <div class="relative">
                             <!-- Decorative Background -->
                             <div class="absolute inset-0 bg-gradient-to-br from-secondary/20 to-blue-500/20 rounded-3xl blur-xl transform rotate-6"></div>
-                            
+
                             <!-- Main Card -->
                             <div class="relative bg-white/80 backdrop-blur-md border border-white/40 p-8 md:p-12 rounded-3xl shadow-2xl max-w-md">
                                 <div class="flex flex-col gap-6 items-center text-center">
-                                    
+
                                     <div class="w-40 h-40  rounded-2xl flex items-center justify-center  ">
                                         <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="">
                                     </div>
-                                    
-                                    
+
+
                                     <div class="flex flex-col gap-3">
                                         <h2 class="text-secondary font-black text-3xl md:text-4xl tracking-wider">
                                             PAXIST
@@ -100,8 +101,8 @@
                                             Putra Pakuan Excellent, Intelectual, School Talent
                                         </p>
                                     </div>
-                                    
-                                    
+
+
                                     <div class="flex flex-col gap-3 w-full mt-4">
                                         <div class="flex items-center gap-3 bg-slate-100/50 rounded-lg p-3">
                                             <span class="material-symbols-outlined text-secondary text-2xl">check_circle</span>
@@ -118,11 +119,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Wave SVG -->
             <div class="absolute bottom-0 w-full overflow-hidden leading-[0]">
                 <svg class="relative block w-[calc(100%+1.3px)] h-[50px] md:h-[100px]" preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
@@ -185,13 +186,13 @@
                 <!-- PAUD IT -->
                 <div class="group relative overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] cursor-pointer" onmouseenter="this.querySelector('video').play()" onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
                     <!-- Static Image -->
-                    <img 
+                    <img
                         src="https://putrapakuan.sch.id/wp-content/uploads/2025/07/Lady.jpg"
                         alt="Principal PAUD IT"
                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
                     />
                     <!-- Video on Hover -->
-                    <video 
+                    <video
                         class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         muted
                         loop
@@ -211,12 +212,12 @@
 
                 <!-- SDIT -->
                 <div class="group relative overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] cursor-pointer" onmouseenter="this.querySelector('video').play()" onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
-                    <img 
+                    <img
                         src="https://putrapakuan.sch.id/wp-content/uploads/2025/07/Backup_of_KALENDER.jpg"
                         alt="Principal SDIT"
                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
                     />
-                    <video 
+                    <video
                         class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         muted
                         loop
@@ -234,12 +235,12 @@
 
                 <!-- SMP -->
                 <div class="group relative overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] cursor-pointer" onmouseenter="this.querySelector('video').play()" onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
-                    <img 
+                    <img
                         src="https://putrapakuan.sch.id/wp-content/uploads/2025/07/BU-ELI.jpg"
                         alt="Principal SMP"
                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
                     />
-                    <video 
+                    <video
                         class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         muted
                         loop
@@ -257,12 +258,12 @@
 
                 <!-- SMK -->
                 <div class="group relative overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] cursor-pointer" onmouseenter="this.querySelector('video').play()" onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
-                    <img 
+                    <img
                         src="https://putrapakuan.sch.id/wp-content/uploads/2025/07/Apid-Sutarno_DKV_Scan-PAS-FOTO-scaled.png"
                         alt="Principal SMK"
                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
                     />
-                    <video 
+                    <video
                         class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         muted
                         loop
@@ -280,12 +281,12 @@
 
                 <!-- PKBM -->
                 <div class="group relative overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] cursor-pointer" onmouseenter="this.querySelector('video').play()" onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
-                    <img 
+                    <img
                         src="https://putrapakuan.sch.id/wp-content/uploads/2025/07/PA-OMANG.jpg"
                         alt="Principal PKBM"
                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
                     />
-                    <video 
+                    <video
                         class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         muted
                         loop

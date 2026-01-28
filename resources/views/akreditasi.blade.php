@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Breadcrumb -->
+<div class="w-full max-w-[1200px] mx-auto px-4 sm:px-8 pt-6">
+    <div class="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-text-muted-light dark:text-text-muted-dark mb-4">
+        <a class="hover:text-primary transition-colors" href="/">Beranda</a>
+        <span>/</span>
+        <span class="text-primary">Prestasi</span>
+    </div>
+</div>
 <!-- Hero Section -->
 <section class="w-full max-w-[1280px] px-4 md:px-10 py-6 md:py-10">
     <div class="relative overflow-hidden rounded-2xl md:rounded-[2rem] bg-slate-900 min-h-[480px] flex items-end">
@@ -49,7 +57,7 @@
                 Standar Pendidikan Terakreditasi
             </h2>
             <p class="text-text-muted dark:text-slate-400 text-base leading-relaxed">
-                Pengakuan resmi dari Badan Akreditasi Nasional Sekolah/Madrasah (BAN-S/M) yang menjamin kualitas kurikulum, fasilitas, dan tenaga pengajar kami.
+                Pengakuan resmi dari BAN-S/M yang menjamin kualitas kurikulum, fasilitas, dan tenaga pengajar kami.
             </p>
         </div>
         <button class="text-secondary font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all whitespace-nowrap">
@@ -166,12 +174,12 @@
                 <p class="text-sm text-text-muted dark:text-slate-400 line-clamp-2 mb-4 flex-1">
                     Ananda Rizky Pratama berhasil menyisihkan 500 peserta dari seluruh provinsi dalam bidang Fisika.
                 </p>
-                <div class="pt-4 border-t border-slate-100 dark:border-white/10 flex items-center gap-3">
+                {{-- <div class="pt-4 border-t border-slate-100 dark:border-white/10 flex items-center gap-3">
                     <div class="size-8 rounded-full bg-slate-200 overflow-hidden">
                         <div class="w-full h-full bg-cover bg-center" data-alt="Portrait of student Rizky" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD8ndN7Hrdx6KYp83M42vOhAc9jGGbdc-DPmi3KkQzD6JQb9H2L-oDiXxRgZFKB3sZal9m5m3FrM89RUPrZS02IDlvKZ1_7HhUEaEYibnvEI4CEBFsxViAbeIMsqjagCqn0Ams_DaEF3-kpv5Wb0SuWOTBy3KGGTZaj1JGdBoeLhwOlC_l0M9ZG0SrCuFPXVN45xu93BhEpcoW8U5p_dxQicN4BsR7msIkrvNxI_rlnVSzSwEYCDMj8HDQfY0KyikMghHfniban0Fg");'></div>
                     </div>
                     <span class="text-xs font-medium text-text-main dark:text-slate-200">Rizky Pratama</span>
-                </div>
+                </div> --}}
             </div>
         </div>
         <!-- Victory 2 -->

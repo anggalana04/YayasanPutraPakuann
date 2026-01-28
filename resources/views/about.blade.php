@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Breadcrumb -->
+<div class="w-full max-w-[1200px] mx-auto px-4 sm:px-8 pt-6">
+    <div class="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-text-muted-light dark:text-text-muted-dark mb-4">
+        <a class="hover:text-primary transition-colors" href="/">Beranda</a>
+        <span>/</span>
+        <span class="text-primary">Tentang Kami</span>
+    </div>
+</div>
 <div class="w-full">
     <!-- Hero Section -->
     <section class="relative w-full">
@@ -8,18 +16,13 @@
             <div class="@container">
                 <div class="@[480px]:p-0">
                     <div class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat rounded-xl items-center justify-center p-8 relative overflow-hidden shadow-lg" data-alt="Students learning together in a bright modern classroom environment" style='background-image: linear-gradient(rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuCyxKfVDeLSWPV1yQB0WFPdY5Q10HNTcC3AtqpQRxhyqODYmqqxpeZhZFqT6ZDQkZBPAXoE_EqgO71INcV3ooRr3hGzNbMjjFoqXTYhuL41Yy2bp2HYA81i711p3gVIjD8kupvIzmy2oXVeQ0YC8XuiIBSsxWPSGBUDfZOFkUKAD5826KpWIiH4V7Cd6lfb1b6iw6feCWgJDuFn4iClKqnu7_rber9eUm8yw7ocikKyZWC-BsFX6MaAZSqepE-B59BHpAN8n_m_YUA");'>
-                        <div class="relative z-10 flex flex-col gap-4 text-center max-w-[720px]">
-                            <h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em] md:text-5xl lg:text-6xl drop-shadow-sm">
-                                Shaping the Future of Putra Pakuan
+                        <div class="relative z-10 flex flex-col gap-4 text-center max-w-[720px] mx-auto bg-black/60 backdrop-blur-sm p-8 rounded-xl shadow-xl">
+                            <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em] mb-3 text-white drop-shadow-lg">
+                                Tentang Yayasan Putra Pakuan
                             </h1>
-                            <h2 class="text-slate-100 text-lg font-medium leading-relaxed md:text-xl">
-                                Guided by purpose, driven by excellence. We nurture the next generation of leaders.
-                            </h2>
-                        </div>
-                        <div class="relative z-10 pt-4">
-                            <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-8 bg-primary hover:bg-sky-500 text-white text-base font-bold shadow-lg transition-transform active:scale-95">
-                                <span class="truncate">Learn More About Us</span>
-                            </button>
+                            <p class="text-white/90 text-lg leading-relaxed drop-shadow">
+                                Yayasan Putra Pakuan berkomitmen memberikan pendidikan terbaik dan lingkungan yang mendukung tumbuh kembang siswa secara holistik.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -89,9 +92,9 @@
                     </p>
                 </div>
                 <!-- Signature -->
-                <div class="mt-8">
+                <!-- <div class="mt-8">
                     <img alt="Signature" class="h-12 w-auto opacity-70 dark:invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOY4QEIYJMNIM_k2wkkZpNWRMpvLUUqfd9mnqQXUFK-tIupSeP_M_rWAdTAcjrweFz9FYkjFFbDc3a1sBPu0mVo_-qxQmc6zP8uLjPl7uCsHzqMLfN90B8SwH0NMszuu24GcaTTN-VAqRyxWcmPrZHXCPDPyY67dZ56Ld7nRsKxLsHhZw-nJ6n5Onxj1kdEN8OTNR1DclrLcy9IzNjBaGdsLSZMN88JPKRQGAkk_97XW_ZKxssXgrgTa2Zb5CbEPTxJhe725tEDIQ"/>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
