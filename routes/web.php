@@ -2,26 +2,48 @@
 
 use Illuminate\Support\Facades\Route;
 
+// =====================
+// YAYASAN (MAIN SITE)
+// =====================
 Route::get('/', function () {
-    return view('index');
-})->name('home');
-
-Route::get('/akreditasi', function () {
-    return view('akreditasi');
-})->name('akreditasi');
+    return view('yayasan/index');
+})->name('yayasan.home');
 
 Route::get('/about', function () {
-    return view('about');
-})->name('about');
+    return view('yayasan/about');
+})->name('yayasan.about');
 
 Route::get('/fasilitas', function () {
-    return view('fasilitas');
-})->name('fasilitas');
+    return view('yayasan/fasilitas');
+})->name('yayasan.fasilitas');
 
-Route::get('/berita', function() {
-    return view('berita');
-})->name('berita');
+Route::get('/akreditasi', function () {
+    return view('yayasan/akreditasi');
+})->name('yayasan.akreditasi');
+
+Route::get('/berita', function () {
+    return view('yayasan/berita');
+})->name('yayasan.berita');
 
 Route::get('/kontak', function () {
-    return view('kontak');
-})->name('kontak');
+    return view('yayasan/kontak');
+})->name('yayasan.kontak');
+
+
+// =====================
+// SEKOLAH (SD / SMP / SMK)
+// =====================
+Route::prefix('{school}')->where(['school' => 'sd|smp|smk'])->group(function () {
+
+    Route::get('/', function ($school) {
+        return view('smk/index', compact('school'));
+    })->name('smk.home');
+
+    Route::get('/profil', function ($school) {
+        return view('school/profil', compact('school'));
+    })->name('school.profil');
+
+    Route::get('/ppdb', function ($school) {
+        return view('school/ppdb', compact('school'));
+    })->name('school.ppdb');
+});
