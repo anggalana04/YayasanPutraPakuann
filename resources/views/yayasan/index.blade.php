@@ -130,7 +130,7 @@
                 <!-- PAUD IT -->
                 <div class="group relative overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] cursor-pointer" onmouseenter="this.querySelector('video').play()" onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
                     <img
-                        src="https://putrapakuan.sch.id/wp-content/uploads/2025/07/Lady.jpg"
+                        src="{{ asset('images/KEPSEK_PAUDIT.jpg') }}"
                         alt="Principal PAUD IT"
                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
                     />
@@ -145,7 +145,7 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/60 to-slate-900/30"></div>
                     <div class="absolute inset-0 flex flex-col justify-end p-8 text-white">
                         <h3 class="text-3xl md:text-4xl font-black mb-2">PAUD IT</h3>
-                        <p class="text-base md:text-lg font-semibold mb-4 opacity-90">Kepala Sekolah</p>
+                        <p class="text-base md:text-lg font-semibold mb-4 opacity-90">Lady Syafira W, S. Pd</p>
                         <p class="text-sm md:text-base leading-relaxed opacity-90">Membangun fondasi karakter islami sejak dini</p>
                     </div>
                 </div>
@@ -153,7 +153,7 @@
                 <!-- SDIT -->
                 <div class="group relative overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] cursor-pointer" onmouseenter="this.querySelector('video').play()" onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
                     <img
-                        src="https://putrapakuan.sch.id/wp-content/uploads/2025/07/Backup_of_KALENDER.jpg"
+                        src="{{ asset('images/KEPSEK_SDIT.jpg') }}"
                         alt="Principal SDIT"
                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
                     />
@@ -176,7 +176,7 @@
                 <!-- SMP -->
                 <div class="group relative overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] cursor-pointer" onmouseenter="this.querySelector('video').play()" onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
                     <img
-                        src="https://putrapakuan.sch.id/wp-content/uploads/2025/07/BU-ELI.jpg"
+                        src="{{ asset('images/KEPSEK_SMP.jpg') }}"
                         alt="Principal SMP"
                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
                     />
@@ -199,7 +199,7 @@
                 <!-- SMK -->
                 <div class="group relative overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] cursor-pointer" onmouseenter="this.querySelector('video').play()" onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
                     <img
-                        src="https://putrapakuan.sch.id/wp-content/uploads/2025/07/Apid-Sutarno_DKV_Scan-PAS-FOTO-scaled.png"
+                        src="{{ asset('images/KEPSEK_SMK.png') }}"
                         alt="Principal SMK"
                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
                     />
@@ -222,7 +222,7 @@
                 <!-- PKBM -->
                 <div class="group relative overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] cursor-pointer" onmouseenter="this.querySelector('video').play()" onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
                     <img
-                        src="https://putrapakuan.sch.id/wp-content/uploads/2025/07/PA-OMANG.jpg"
+                        src="{{ asset('images/KEPSEK_PKBM.jpg') }}"
                         alt="Principal PKBM"
                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
                     />

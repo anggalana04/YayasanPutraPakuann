@@ -34,16 +34,36 @@ Route::get('/kontak', function () {
 // SEKOLAH (SD / SMP / SMK)
 // =====================
 Route::prefix('{school}')->where(['school' => 'sd|smp|smk'])->group(function () {
-
     Route::get('/', function ($school) {
-        return view('smk/index', compact('school'));
-    })->name('smk.home');
+        // Use the correct view path based on school
+        $view = strtoupper($school) . '.index';
+        if (view()->exists($view)) {
+            return view($view, compact('school'));
+        }
+        abort(404);
+    })->name('school.home');
+
+    Route::get('/visi', function ($school) {
+        $view = strtoupper($school) . '.visi';
+        if (view()->exists($view)) {
+            return view($view, compact('school'));
+        }
+        abort(404);
+    })->name('school.visi');
 
     Route::get('/profil', function ($school) {
-        return view('school/profil', compact('school'));
+        $view = strtoupper($school) . '.profil';
+        if (view()->exists($view)) {
+            return view($view, compact('school'));
+        }
+        abort(404);
     })->name('school.profil');
 
     Route::get('/ppdb', function ($school) {
-        return view('school/ppdb', compact('school'));
+        $view = strtoupper($school) . '.ppdb';
+        if (view()->exists($view)) {
+            return view($view, compact('school'));
+        }
+        abort(404);
     })->name('school.ppdb');
 });

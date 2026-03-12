@@ -1,87 +1,61 @@
-<!DOCTYPE html>
-<html lang="id"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SMK Putra Pakuan - Unggul, Berkarakter, Berdaya Saing</title>
+@extends('layouts.SMK.app')
+
+@section('title', 'SMK Putra Pakuan - Unggul, Berkarakter, Berdaya Saing')
+
+@push('head')
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#f2cc0d",
-                        "background-light": "#f8f8f5",
-                        "background-dark": "#221f10",
-                        "charcoal": "#1c190d",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.5rem",
-                        "lg": "1rem",
-                        "xl": "1.5rem",
-                        "full": "9999px"
-                    },
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#f2cc0d",
+                    "background-light": "#f8f8f5",
+                    "background-dark": "#221f10",
+                    "charcoal": "#1c190d",
+                },
+                fontFamily: {
+                    "display": ["Lexend", "sans-serif"]
+                },
+                borderRadius: {
+                    "DEFAULT": "0.5rem",
+                    "lg": "1rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
                 },
             },
-        }
-    </script>
+        },
+    }
+</script>
 <style type="text/tailwindcss">
-        body { font-family: 'Lexend', sans-serif; }
-        .hero-slider {
-            height: calc(100vh - 72px);
-            position: relative;
-            overflow: hidden;
-        }
-        .slide {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-        .slide.active {
-            opacity: 1;
-        }
-        .glass-card {
-            background: rgba(28, 25, 13, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(242, 204, 13, 0.2);
-        }
-    </style>
-</head>
-<body class="bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100">
-<nav class="sticky top-0 z-50 w-full bg-charcoal text-white border-b border-primary/20">
-<div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-<div class="flex items-center gap-3">
-<div class="size-10 bg-primary rounded-lg flex items-center justify-center text-charcoal">
-<span class="material-symbols-outlined font-bold">school</span>
-</div>
-<div>
-<h1 class="text-lg font-bold leading-none tracking-tight text-white">SMK PUTRA PAKUAN</h1>
-<p class="text-[10px] text-primary font-medium tracking-widest uppercase">Vocational High School</p>
-</div>
-</div>
-<div class="hidden lg:flex items-center gap-6">
-<a class="text-xs font-semibold hover:text-primary transition-colors" href="#">PROFIL</a>
-<a class="text-xs font-semibold hover:text-primary transition-colors" href="#">VISI DAN MISI</a>
-<a class="text-xs font-semibold hover:text-primary transition-colors" href="#">KATEGORI</a>
-<a class="text-xs font-semibold hover:text-primary transition-colors" href="#">DIREKTORI</a>
-<a class="text-xs font-semibold text-primary" href="#">PPDB 2024</a>
-<a class="text-xs font-semibold hover:text-primary transition-colors" href="#">GALERI</a>
-<button class="bg-primary hover:bg-primary/90 text-charcoal px-5 py-2.5 rounded-lg text-xs font-bold transition-all ml-4">
-                HUBUNGI KAMI
-            </button>
-</div>
-<button class="lg:hidden text-primary">
-<span class="material-symbols-outlined">menu</span>
-</button>
-</div>
-</nav>
+    body { font-family: 'Lexend', sans-serif; }
+    .hero-slider {
+        height: calc(100vh - 72px);
+        position: relative;
+        overflow: hidden;
+    }
+    .slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+    }
+    .slide.active {
+        opacity: 1;
+    }
+    .glass-card {
+        background: rgba(28, 25, 13, 0.4);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(242, 204, 13, 0.2);
+    }
+</style>
+@endpush
+
+@section('content')
 <section class="hero-slider bg-charcoal">
 <div class="slide active">
 <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCXpMjqgfiuKKSUoRdYNiimPNmi33yGSv3H1SaO224yREfseZpcO58hsaQNLTW26k-6h_ReeWKPSDwfwkCeRL47KVJ2OZ7_07xCQIUf_yjDCQTcuI0StKSRBoKdWJ_g40oTEJdFkwC33UMvSCyoruiBd_VRAxai80IG1XSnml39DK0QKzEQefEAJkEs2c6oRqRjrVPzsHQV8CNWeS5RNQQAyen_XVhX3q_tGFyatat2H16LqQ97VODQMhJMqZCeKy2Oa27diTKrcw')">
@@ -177,10 +151,10 @@
 <div class="w-full lg:w-5/12 relative">
 <div class="absolute -top-6 -left-6 w-32 h-32 bg-primary rounded-2xl -z-10"></div>
 <div class="rounded-3xl overflow-hidden shadow-2xl">
-<img alt="Principal Portrait" class="w-full h-auto object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_30q8zfLV3P-wkPODDGk_L2m2T-FnehVj1ufXeiHAN7KKCj977ku-ZTxJqUx5gnRJb_JRTd2pcEojdeZwktIz-4zRYiFtlHc-yDEv1Fz-JmiLGX_Qy7YgwHbk1ECt1sKgJphHES96sbz4dBYbGI_78dMN_i6elRsTacbv-qlykh0tjPelpD_U1e1ircUOHH4XrbU99BubsRfwNzqw4AFeCb2hXCUxoyWqSUwieUHqXJY5tu1QT1ZVPIC90c7Q7338lIiYsATBKg"/>
+<img alt="Principal Portrait" class="w-full h-auto object-cover" src="{{ asset('images/KEPSEK_SMK.png') }}"/>
 </div>
 <div class="absolute -bottom-6 -right-6 bg-primary p-6 rounded-2xl shadow-xl">
-<p class="text-charcoal font-black text-xl leading-none">Drs. H. Ahmad Fauzi</p>
+<p class="text-charcoal font-black text-xl leading-none">Apid Sutarno, S.Kom, Gr.</p>
 <p class="text-charcoal/70 text-sm font-bold mt-1">Kepala Sekolah</p>
 </div>
 </div>
@@ -188,10 +162,18 @@
 <span class="material-symbols-outlined text-primary text-6xl">format_quote</span>
 <h2 class="text-4xl font-black text-charcoal dark:text-white">Sambutan Kepala Sekolah</h2>
 <p class="text-xl italic text-slate-600 dark:text-slate-300 leading-relaxed">
-                    "Pendidikan bukan hanya soal transfer ilmu, tapi tentang membentuk karakter dan kesiapan menghadapi masa depan. Di SMK Putra Pakuan, kami berkomitmen untuk melahirkan lulusan yang tidak hanya kompeten secara teknis, tapi juga memiliki integritas tinggi."
+                    "Bismillahirrahmanirrahim
+
+Assalamualaikum warahmatullahi wabarakatuh
+
+Alhamdulillahi rabbil'alamin kami panjatkan kehadlirat Allah SWT, bahwasannya dengan rahmat dan karunia-nya akhirnya website sekolah ini dengan alamat http://smk.putrapakuan.sch.id/ dapat kami perbaharui.
+
+Kami mengucapkan selamat datang di Website kami Sekolah Menengah Kejuruan Putra Pakuan yang saya tujukan untuk seluruh guru, karyawan dan siswa siswi serta khalayak umum guna dapat mengakses seluruh informasi tentang segala profil, aktivitas/kegiatan serta fasilitas  yang ada di sekolah kami.
+
+"
                 </p>
 <p class="text-slate-600 dark:text-slate-400">
-                    Kami terus berinovasi dalam kurikulum dan fasilitas untuk memastikan setiap siswa mendapatkan pengalaman belajar terbaik yang relevan dengan kebutuhan industri saat ini. Selamat bergabung dan mari ukir prestasi bersama kami.
+                    Kami berharap, dengan adanya media layanan informasi situs ini semoga dapat mewujudkan hubungan silaturahmi yang lebih erat lagi, menambah wawasan, mempermudah dan mempercepat proses dalam mendapatkan informasi yang dibutuhkan.
                 </p>
 </div>
 </div>
@@ -266,77 +248,77 @@
 </div>
 </div>
 </section>
-<footer class="bg-charcoal text-white pt-20 pb-10 border-t-4 border-primary">
-<div class="max-w-7xl mx-auto px-6">
-<div class="grid lg:grid-cols-4 gap-12 mb-16">
-<div class="col-span-1 lg:col-span-1 space-y-6">
-<div class="flex items-center gap-3">
-<div class="size-10 bg-primary rounded-lg flex items-center justify-center text-charcoal">
-<span class="material-symbols-outlined font-bold">school</span>
-</div>
-<h2 class="text-xl font-black tracking-tight">SMK PUTRA PAKUAN</h2>
-</div>
-<p class="text-slate-400 text-sm leading-relaxed">
-                    Membangun generasi emas Indonesia yang kompeten, kreatif, dan mandiri melalui pendidikan vokasi yang berkualitas dan relevan.
-                </p>
-<div class="flex gap-4">
-<a class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all" href="#">
-<span class="material-symbols-outlined text-xl">social_leaderboard</span>
-</a>
-<a class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all" href="#">
-<span class="material-symbols-outlined text-xl">language</span>
-</a>
-<a class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all" href="#">
-<span class="material-symbols-outlined text-xl">alternate_email</span>
-</a>
-</div>
-</div>
-<div class="space-y-6">
-<h4 class="text-lg font-bold text-primary">Navigasi</h4>
-<ul class="space-y-4 text-slate-400 text-sm font-medium">
-<li><a class="hover:text-white transition-colors" href="#">Profil Sekolah</a></li>
-<li><a class="hover:text-white transition-colors" href="#">Visi &amp; Misi</a></li>
-<li><a class="hover:text-white transition-colors" href="#">Direktori Guru</a></li>
-<li><a class="hover:text-white transition-colors" href="#">Galeri Foto</a></li>
-<li><a class="hover:text-white transition-colors" href="#">PPDB Online</a></li>
-</ul>
-</div>
-<div class="space-y-6">
-<h4 class="text-lg font-bold text-primary">Jurusan</h4>
-<ul class="space-y-4 text-slate-400 text-sm font-medium">
-<li><a class="hover:text-white transition-colors" href="#">Rekayasa Perangkat Lunak</a></li>
-<li><a class="hover:text-white transition-colors" href="#">Teknik Komputer &amp; Jaringan</a></li>
-<li><a class="hover:text-white transition-colors" href="#">Multimedia &amp; Desain Grafis</a></li>
-<li><a class="hover:text-white transition-colors" href="#">Akuntansi Keuangan</a></li>
-<li><a class="hover:text-white transition-colors" href="#">Perkantoran Digital</a></li>
-</ul>
-</div>
-<div class="space-y-6">
-<h4 class="text-lg font-bold text-primary">Hubungi Kami</h4>
-<div class="space-y-4">
-<div class="flex gap-3 items-start">
-<span class="material-symbols-outlined text-primary mt-1">location_on</span>
-<p class="text-slate-400 text-sm">Jl. Raya Pakuan No. 123, Bogor, Jawa Barat, Indonesia</p>
-</div>
-<div class="flex gap-3 items-center">
-<span class="material-symbols-outlined text-primary">call</span>
-<p class="text-slate-400 text-sm">(0251) 1234567</p>
-</div>
-<div class="flex gap-3 items-center">
-<span class="material-symbols-outlined text-primary">mail</span>
-<p class="text-slate-400 text-sm">info@smkputrapakuan.sch.id</p>
-</div>
-</div>
-</div>
-</div>
-<div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-xs font-medium">
-<p>© 2024 SMK Putra Pakuan. All rights reserved.</p>
-<div class="flex gap-6">
-<a class="hover:text-white" href="#">Privacy Policy</a>
-<a class="hover:text-white" href="#">Terms of Service</a>
-</div>
-</div>
-</div>
-</footer>
-
-</body></html>
+<!-- Foto & Video Terbaru Section -->
+<section class="py-24 bg-white dark:bg-charcoal/30">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-4xl font-black text-charcoal dark:text-white">Foto & Video Terbaru</h2>
+                <p class="text-slate-500 mt-2">Dokumentasi kegiatan dan momen spesial terbaru dari SMK Putra Pakuan.</p>
+            </div>
+            <a class="hidden lg:flex items-center gap-2 text-charcoal dark:text-primary font-bold hover:gap-4 transition-all" href="#">
+                Lihat Semua Galeri <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Foto 1 -->
+            <div class="bg-white dark:bg-charcoal/40 rounded-2xl overflow-hidden shadow-md border border-charcoal/5 dark:border-white/5 hover:shadow-xl transition-shadow group">
+                <div class="h-56 bg-cover bg-center overflow-hidden" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80')">
+                    <div class="w-full h-full bg-charcoal/20 group-hover:bg-charcoal/0 transition-colors"></div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex gap-4 text-xs font-bold text-slate-400">
+                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_month</span> 10 Mar 2024</span>
+                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">photo_camera</span> Dokumentasi</span>
+                    </div>
+                    <h3 class="text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">Kegiatan Praktek Industri Siswa RPL</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3">
+                        Siswa kelas XI RPL sedang melakukan praktek kerja industri di perusahaan mitra untuk meningkatkan kompetensi...
+                    </p>
+                    <button class="text-charcoal dark:text-white font-bold text-sm flex items-center gap-1 underline decoration-primary decoration-2 underline-offset-4">
+                        Lihat Foto
+                    </button>
+                </div>
+            </div>
+            <!-- Video 1 -->
+            <div class="bg-white dark:bg-charcoal/40 rounded-2xl overflow-hidden shadow-md border border-charcoal/5 dark:border-white/5 hover:shadow-xl transition-shadow group">
+                <div class="h-56 bg-black flex items-center justify-center">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/1Q8fG0TtVAY" title="Video Kegiatan" allowfullscreen></iframe>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex gap-4 text-xs font-bold text-slate-400">
+                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_month</span> 05 Mar 2024</span>
+                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">videocam</span> Video</span>
+                    </div>
+                    <h3 class="text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">Liputan Kegiatan Expo SMK</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3">
+                        Saksikan keseruan Expo SMK Putra Pakuan yang menampilkan karya dan inovasi siswa dari berbagai jurusan.
+                    </p>
+                    <button class="text-charcoal dark:text-white font-bold text-sm flex items-center gap-1 underline decoration-primary decoration-2 underline-offset-4">
+                        Tonton Video
+                    </button>
+                </div>
+            </div>
+            <!-- Foto 2 -->
+            <div class="bg-white dark:bg-charcoal/40 rounded-2xl overflow-hidden shadow-md border border-charcoal/5 dark:border-white/5 hover:shadow-xl transition-shadow group">
+                <div class="h-56 bg-cover bg-center overflow-hidden" style="background-image: url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80')">
+                    <div class="w-full h-full bg-charcoal/20 group-hover:bg-charcoal/0 transition-colors"></div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex gap-4 text-xs font-bold text-slate-400">
+                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_month</span> 28 Feb 2024</span>
+                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">photo_camera</span> Dokumentasi</span>
+                    </div>
+                    <h3 class="text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">Juara Lomba Desain Grafis Nasional</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3">
+                        Tim Multimedia SMK Putra Pakuan berhasil meraih juara 1 dalam lomba desain grafis tingkat nasional.
+                    </p>
+                    <button class="text-charcoal dark:text-white font-bold text-sm flex items-center gap-1 underline decoration-primary decoration-2 underline-offset-4">
+                        Lihat Foto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endsection
