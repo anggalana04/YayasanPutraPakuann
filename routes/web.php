@@ -29,41 +29,61 @@ Route::get('/kontak', function () {
     return view('yayasan/kontak');
 })->name('yayasan.kontak');
 
-
 // =====================
 // SEKOLAH (SD / SMP / SMK)
 // =====================
-Route::prefix('{school}')->where(['school' => 'sd|smp|smk'])->group(function () {
-    Route::get('/', function ($school) {
-        // Use the correct view path based on school
-        $view = strtoupper($school) . '.index';
-        if (view()->exists($view)) {
-            return view($view, compact('school'));
-        }
-        abort(404);
-    })->name('school.home');
+Route::prefix('{school}')
+    ->where(['school' => 'sd|smp|smk'])
+    ->group(function () {
 
-    Route::get('/visi', function ($school) {
-        $view = strtoupper($school) . '.visi';
-        if (view()->exists($view)) {
-            return view($view, compact('school'));
-        }
-        abort(404);
-    })->name('school.visi');
+        // helper function
+        $render = function ($school, $page) {
+            $view = strtoupper($school) . '.' . $page;
 
-    Route::get('/profil', function ($school) {
-        $view = strtoupper($school) . '.profil';
-        if (view()->exists($view)) {
-            return view($view, compact('school'));
-        }
-        abort(404);
-    })->name('school.profil');
+            if (view()->exists($view)) {
+                return view($view, compact('school'));
+            }
 
-    Route::get('/ppdb', function ($school) {
-        $view = strtoupper($school) . '.ppdb';
-        if (view()->exists($view)) {
-            return view($view, compact('school'));
-        }
-        abort(404);
-    })->name('school.ppdb');
-});
+            abort(404);
+        };
+
+        Route::get('/', fn($school) => $render($school, 'index'))->name('school.home');
+
+        Route::get('/visi', fn($school) => $render($school, 'visi'))->name('school.visi');
+
+        Route::get('/profil', fn($school) => $render($school, 'profil'))->name('school.profil');
+
+        Route::get('/ppdb', fn($school) => $render($school, 'ppdb.index'))->name('school.ppdb');
+
+        Route::get('/program', fn($school) => $render($school, 'program'))->name('school.program');
+
+        Route::get('/kesiswaan', fn($school) => $render($school, 'kesiswaan'))->name('school.kesiswaan');
+
+        Route::get('/galeri', fn($school) => $render($school, 'galeri'))->name('school.galeri');
+
+        Route::get('/kontak', fn($school) => $render($school, 'kontak'))->name('school.kontak');
+
+        Route::get('/berita', fn($school) => $render($school, 'berita.index'))->name('school.berita');
+
+        Route::get('/berita/detail', fn($school) => $render($school, 'berita.detail'))->name('school.berita.detail');
+
+        Route::get('/direktori/guru', function ($school) {
+            $view = strtoupper($school) . '.direktori_guru';
+
+            if (view()->exists($view)) {
+                return view($view, compact('school'));
+            }
+
+            abort(404);
+        })->name('school.direktori.guru');
+
+        Route::get('/direktori/siswa', function ($school) {
+            $view = strtoupper($school) . '.direktori_siswa';
+
+            if (view()->exists($view)) {
+                return view($view, compact('school'));
+            }
+
+            abort(404);
+        })->name('school.direktori.siswa');
+    });

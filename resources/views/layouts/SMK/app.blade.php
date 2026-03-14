@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -42,7 +43,7 @@
     <nav class="sticky top-0 z-50 w-full bg-charcoal text-white border-b border-primary/20">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <a href="{{ route('yayasan.home') }}">
+                <a href="{{ route('school.home', ['school'=> 'smk']) }}">
                     <div class="size-10">
                         <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="Logo">
                     </div>
@@ -56,19 +57,23 @@
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.profil', ['school' => 'smk']) }}">PROFIL</a>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.visi', ['school' => 'smk']) }}">VISI DAN MISI</a>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="#">KATEGORI</a>
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.berita', ['school' => request()->route('school') ?? 'smk']) }}">BERITA</a>
                 <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <button type="button" class="text-xs font-semibold hover:text-primary transition-colors flex items-center gap-1 focus:outline-none" @click="open = !open" @focus="open = true" @blur="open = false">
+                    <button type="button" class="text-xs font-semibold hover:text-primary transition-colors flex items-center gap-1 focus:outline-none" @click.prevent="open = !open" @focus="open = true" tabindex="0">
                         DIREKTORI
                         <span class="material-symbols-outlined text-xs">expand_more</span>
                     </button>
-                    <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="absolute left-0 mt-2 w-64 bg-white text-charcoal rounded-lg shadow-lg border border-primary/10 z-50" style="display: none;" @mousedown.away="open = false">
-                        <a href="#" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold border-b border-slate-100">Direktori Guru & Tenaga Kependidikan</a>
-                        <a href="#" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold border-b border-slate-100">Direktori Peserta Didik</a>
+                    <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="absolute left-0 mt-2 w-64 bg-white text-charcoal rounded-lg shadow-lg border border-primary/10 z-50">
+                        <a href="{{ route('school.direktori.guru', ['school' => 'smk']) }}"
+                        class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold border-b border-slate-100">
+                        Direktori Guru & Tenaga Kependidikan
+                        </a>
+                        <a href="{{ route('school.direktori.siswa', ['school' => 'smk']) }}" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold border-b border-slate-100">Direktori Peserta Didik</a>
                         <a href="#" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold">Tracer Study</a>
                     </div>
                 </div>
-                <a class="text-xs font-semibold hover:text-primary transition-colors" href="#">GALERI</a>
-                <a class="text-xs font-semibold hover:text-primary transition-colors" href="#">HUBUNGI KAMI</a>
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.galeri', ['school' => 'smk']) }}">GALERI</a>
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.kontak', ['school' => 'smk']) }}">HUBUNGI KAMI</a>
                 <button class="bg-primary hover:bg-primary/90 text-charcoal px-5 py-2.5 rounded-lg text-xs font-bold transition-all ml-4" onclick="window.location.href='{{ route('school.ppdb', ['school' => 'smk']) }}'">
                     PPDB 2024
                 </button>
@@ -82,7 +87,7 @@
         <div id="mobile-menu" class="fixed inset-0 z-50 bg-charcoal/95 text-white flex flex-col gap-6 px-8 py-10 transition-all duration-300 translate-x-full lg:hidden" style="display:none;">
             <div class="flex justify-between items-center mb-8">
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('yayasan.home') }}">
+                    <a href="{{ route('school.home', ['school'=> 'smk']) }}">
                         <div class="size-10">
                             <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="Logo">
                         </div>
@@ -98,6 +103,7 @@
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.profil', ['school' => 'smk']) }}">PROFIL</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.visi', ['school' => 'smk']) }}">VISI DAN MISI</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="#">KATEGORI</a>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.berita', ['school' => request()->route('school') ?? 'smk']) }}">BERITA</a>
             <div class="flex flex-col gap-2">
                 <button class="text-base font-semibold hover:text-primary transition-colors flex items-center gap-1 focus:outline-none" id="mobile-direktori-toggle">
                     DIREKTORI
@@ -111,9 +117,7 @@
             </div>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="#">GALERI</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="#">HUBUNGI KAMI</a>
-            <button class="bg-primary hover:bg-primary/90 text-charcoal px-5 py-2.5 rounded-lg text-base font-bold transition-all mt-4" onclick="window.location.href='{{ route('school.ppdb', ['school' => 'smk']) }}'">
-                PPDB 2024
-            </button>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.ppdb', ['school' => 'smk']) }}">PPDB 2024</a>
         </div>
         <script>
             // Mobile menu toggle
@@ -186,7 +190,7 @@
                         <li><a class="hover:text-white transition-colors" href="#">Visi & Misi</a></li>
                         <li><a class="hover:text-white transition-colors" href="#">Direktori Guru</a></li>
                         <li><a class="hover:text-white transition-colors" href="#">Galeri Foto</a></li>
-                        <li><a class="hover:text-white transition-colors" href="#">PPDB Online</a></li>
+                        <li><a class="hover:text-white transition-colors" href="{{ route('school.ppdb', ['school' => 'smk']) }}">PPDB Online</a></li>
                     </ul>
                 </div>
                 <div class="space-y-6">
