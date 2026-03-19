@@ -23,7 +23,7 @@
                     </p>
                     <div class="flex flex-col gap-4 sm:flex-row">
                         <button class="flex h-14 items-center justify-center rounded-xl bg-primary px-8 text-base font-bold text-charcoal transition-transform hover:scale-[1.02] active:scale-95"
-                            onclick="window.location.href='{{ route('school.ppdb', ['school' => request()->route('school')]) }}'">
+                            onclick="window.location.href='{{ route('ppdb.dashboard', ['school' => request()->route('school')]) }}'">
                             Daftar Sekarang
                         </button>
                         <button class="flex h-14 items-center justify-center rounded-xl border-2 border-charcoal/10 px-8 text-base font-bold text-charcoal transition-colors hover:bg-charcoal/5 dark:border-slate-800 dark:text-slate-200"
@@ -69,7 +69,7 @@
                     </div>
                     <h3 class="mb-2 text-xl font-bold">2. Upload Berkas</h3>
                     <p class="text-sm leading-relaxed text-slate-500">Unggah dokumen persyaratan seperti Ijazah, KK, dan Akta Kelahiran.</p>
-                </div>                
+                </div>
                 <div class="group flex flex-col h-full relative rounded-2xl bg-white p-8 shadow-sm transition-all hover:shadow-md dark:bg-slate-900/50">
                     <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-charcoal">
                         <span class="material-symbols-outlined text-3xl">verified</span>

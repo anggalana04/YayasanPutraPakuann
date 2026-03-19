@@ -44,6 +44,12 @@ Route::prefix('{school}')
                 return view($view, compact('school'));
             }
 
+            // Fallback to SMK views for PPDB and other shared pages
+            $fallback = 'SMK.' . $page;
+            if (view()->exists($fallback)) {
+                return view($fallback, compact('school'));
+            }
+
             abort(404);
         };
 
@@ -54,6 +60,18 @@ Route::prefix('{school}')
         Route::get('/profil', fn($school) => $render($school, 'profil'))->name('school.profil');
 
         Route::get('/ppdb', fn($school) => $render($school, 'ppdb.index'))->name('school.ppdb');
+
+        // PPDB Authentication Routes
+        Route::get('/ppdb/login', fn($school) => view('ppdb.login', compact('school')))->name('ppdb.login');
+        Route::get('/ppdb/register', fn($school) => $render($school, 'ppdb.register'))->name('ppdb.register');
+        Route::post('/ppdb/login', [App\Http\Controllers\PpdbAuthController::class, 'login'])->name('ppdb.login.post');
+        Route::post('/ppdb/logout', [App\Http\Controllers\PpdbAuthController::class, 'logout'])->name('ppdb.logout');
+
+        // PPDB Routes (Frontend Development - Auth will be added later)
+        Route::get('/ppdb/dashboard', fn($school) => $render($school, 'ppdb.dashboard'))->name('ppdb.dashboard');
+        Route::get('/ppdb/biodata', fn($school) => $render($school, 'ppdb.biodata'))->name('ppdb.biodata');
+        Route::get('/ppdb/berkas', fn($school) => $render($school, 'ppdb.berkas'))->name('ppdb.berkas');
+        Route::get('/ppdb/payment', fn($school) => $render($school, 'ppdb.payment'))->name('ppdb.payment');
 
         Route::get('/program', fn($school) => $render($school, 'program'))->name('school.program');
 

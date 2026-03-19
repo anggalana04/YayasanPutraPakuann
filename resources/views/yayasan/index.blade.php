@@ -21,7 +21,7 @@
             <!-- Background Video with Overlay -->
             <div class="absolute inset-0 overflow-hidden">
                 <video class="absolute inset-0 w-full h-full object-cover scale-[1.45]" autoplay muted loop playsinline>
-                    <source src="{{ asset('video/Company Profile SMK Putra Pakuan - Putra Pakuan Bogor (720p, h264).mp4') }}" type="video/mp4">
+                    <source src="{{ asset('vid/pakuan.mp4') }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 <div class="absolute inset-0 bg-slate-900/70"></div>
