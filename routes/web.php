@@ -29,6 +29,51 @@ Route::get('/kontak', function () {
     return view('yayasan/kontak');
 })->name('yayasan.kontak');
 
+Route::get('/admin', function () {
+    return view('admin.superadmin.dashboard');
+});
+
+// Admin/Superadmin Dashboard
+Route::get('/admin', function () {
+    return view('admin.superadmin.dashboard');
+});
+
+// CMS Management Index
+Route::get('/admin/cms', function () {
+    return view('admin.superadmin.cms.index');
+})->name('admin.cms.index');
+
+// CMS Detail Page
+Route::get('/admin/cms/detail', function () {
+    return view('admin.superadmin.cms.detail');
+})->name('admin.cms.detail');
+
+// School selection page for CMS
+Route::get('/admin/cms/schools', function () {
+    return view('admin.superadmin.cms.schools');
+})->name('admin.cms.schools');
+
+// PPDB Management
+Route::get('/admin/ppdb/management', function () {
+    return view('admin.superadmin.ppdb.management');
+});
+
+// PPDB Applicant Management
+Route::get('/admin/ppdb/applicants', function () {
+    return view('admin.superadmin.ppdb.applicants');
+})->name('admin.ppdb.applicants');
+
+// Route for applicant detail view
+Route::get('/admin/ppdb/applicants/{id}', function ($id) {
+    // You can replace this with controller logic as needed
+    return view('admin.superadmin.ppdb.applicant_detail');
+})->name('admin.ppdb.applicant_detail');
+
+// User Management (Superadmin)
+Route::get('/admin/user-management', function () {
+    return view('admin.superadmin.user_management');
+})->name('admin.user_management');
+
 // =====================
 // SEKOLAH (SD / SMP / SMK)
 // =====================

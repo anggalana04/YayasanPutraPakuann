@@ -5,26 +5,46 @@
 
 <div class="pb-20 px-4 md:px-8 max-w-4xl mx-auto">
 <!-- Stepper Signature Component -->
-<section class="mb-12 flex justify-between items-start">
-<div class="flex flex-col items-center gap-2 group">
-<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold shadow-sm">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check</span>
+<section class="pt-12 mb-12">
+<div class="flex flex-row items-center justify-between w-full">
+<!-- Step 1 (Done) -->
+<div class="flex flex-col items-center flex-1">
+<div class="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-xl shadow-md">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">check</span>
 </div>
-<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Biodata</span>
+<div class="mt-2">
+<p class="text-xs uppercase tracking-widest text-green-500 font-bold">Langkah 1</p>
+<h3 class="text-lg font-bold text-on-surface">Informasi Pribadi</h3>
 </div>
-<div class="flex-1 h-[2px] bg-primary-container mt-6 mx-2"></div>
-<div class="flex flex-col items-center gap-2">
-<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold shadow-sm">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check</span>
 </div>
-<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Berkas</span>
+<!-- Connecting Line -->
+<div class="flex-1 mx-2">
+<div class="h-0.5 bg-surface-container-highest w-full md:block"></div>
 </div>
-<div class="flex-1 h-[2px] bg-primary-container mt-6 mx-2"></div>
-<div class="flex flex-col items-center gap-2">
-<div class="w-14 h-14 -mt-1 rounded-full bg-primary text-primary-fixed flex items-center justify-center font-bold shadow-lg ring-4 ring-primary/10">
-<span class="text-lg">03</span>
+<!-- Step 2 (Done) -->
+<div class="flex flex-col items-center flex-1">
+<div class="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-lg shadow-md">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">check</span>
 </div>
-<span class="text-[10px] font-bold uppercase tracking-widest text-primary">Pembayaran</span>
+<div class="mt-2">
+<p class="text-xs uppercase tracking-widest text-green-500 font-bold">Langkah 2</p>
+<h3 class="text-lg font-bold text-on-surface">Pilihan Jurusan & Berkas</h3>
+</div>
+</div>
+<!-- Connecting Line -->
+<div class="flex-1 mx-2">
+<div class="h-0.5 bg-surface-container-highest w-full md:block"></div>
+</div>
+<!-- Step 3 (Active) -->
+<div class="flex flex-col items-center flex-1">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold text-lg shadow-md">
+03
+</div>
+<div class="mt-2">
+<p class="text-xs uppercase tracking-widest text-primary font-bold">Langkah 3</p>
+<h3 class="text-lg font-bold text-on-surface">Pembayaran</h3>
+</div>
+</div>
 </div>
 </section>
 <!-- Header Editorial -->
@@ -109,7 +129,7 @@
 <span class="material-symbols-outlined">home</span>
 <span class="font-lexend text-[10px] font-medium mt-1">Home</span>
 </div>
-<div class="flex flex-col items-center justify-center bg-[#f2cc0d] text-[#1c190d] rounded-2xl p-2 min-w-[64px] active:scale-90">
+<div class="flex flex-col items-center justify-center bg-[#f2cc0d] text-[#1c190d] rounded-2xl p-2 min-w-16 active:scale-90">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">track_changes</span>
 <span class="font-lexend text-[10px] font-medium mt-1">Status</span>
 </div>

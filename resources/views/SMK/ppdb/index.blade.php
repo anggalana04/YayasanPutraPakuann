@@ -7,13 +7,13 @@
         <section class="py-12 lg:py-20">
             <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
                 <div class="flex flex-col gap-8">
-                    <div class="inline-flex w-fit items-center gap-2 rounded-full bg-primary/20 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-charcoal">
+                    {{-- <div class="inline-flex w-fit items-center gap-2 rounded-full bg-primary/20 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-charcoal">
                         <span class="relative flex h-2 w-2">
                             <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
                             <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
                         </span>
                         Pendaftaran Dibuka
-                    </div>
+                    </div> --}}
                     <h1 class="text-5xl font-black leading-tight tracking-tight text-charcoal dark:text-slate-50 lg:text-7xl">
                         PPDB 2024 <br/>
                         <span class="text-primary">SMK Putra Pakuan</span>

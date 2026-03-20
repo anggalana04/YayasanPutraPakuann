@@ -31,72 +31,49 @@
                             Sedang Diverifikasi
                         </span>
 </div>
-<!-- Progress Bar Visual -->
-<div class="relative pt-8 pb-12">
-<div class="flex mb-2 items-center justify-between">
-<div>
-<span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-brand-charcoal bg-brand-yellow">
-                                    Progress Verifikasi
-                                </span>
-</div>
-<div class="text-right">
-<span class="text-xs font-semibold inline-block text-brand-charcoal">
-                                    45%
-                                </span>
-</div>
-</div>
-<div class="overflow-hidden h-3 mb-4 text-xs flex rounded-full bg-surface-container-high">
-<div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-brand-yellow transition-all duration-1000" style="width:45%"></div>
-</div>
-</div>
 <!-- Step Tracker (Vertical Editorial Style) -->
 <div class="space-y-0 relative">
 <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-surface-container-high"></div>
 <!-- Step 1: Done -->
 <div class="relative flex gap-6 pb-10 items-start">
-<div class="z-10 bg-brand-yellow text-brand-charcoal w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
-<span class="material-symbols-outlined" data-icon="check" style="font-variation-settings: 'FILL' 0; font-weight: 700;">check</span>
-</div>
-<div>
-<h3 class="font-bold text-lg text-brand-charcoal">Pendaftaran Terkirim</h3>
-<p class="text-sm text-on-surface-variant">Dokumen telah kami terima secara digital pada 20 Mei 2024.</p>
-</div>
+    <div class="z-10 bg-brand-yellow text-brand-charcoal w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
+        <span class="material-symbols-outlined" data-icon="check" style="font-variation-settings: 'FILL' 0; font-weight: 700;">check</span>
+    </div>
+    <div class="flex-1">
+        <h3 class="font-bold text-lg text-brand-charcoal">Pendaftaran Terkirim</h3>
+        <p class="text-sm text-on-surface-variant">Dokumen telah kami terima secara digital pada 20 Mei 2024.</p>
+        <span class="text-xs text-on-surface-variant">Selesai: 20 Mei 2024</span>
+    </div>
+    <div class="flex items-center">
+        <button class="bg-brand-yellow text-brand-charcoal font-bold px-4 py-2 rounded-xl shadow hover:bg-brand-yellow/80 transition-colors">Daftar Ulang</button>
+    </div>
 </div>
 <!-- Step 2: Active -->
 <div class="relative flex gap-6 pb-10 items-start">
-<div class="z-10 bg-white border-4 border-brand-yellow text-brand-yellow w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
-<span class="material-symbols-outlined" data-icon="pending" style="font-variation-settings: 'FILL' 1;">pending</span>
-</div>
-<div>
-<h3 class="font-bold text-lg text-brand-charcoal">Verifikasi Berkas</h3>
-<p class="text-sm text-on-surface-variant">Tim administrasi sedang meninjau keaslian dokumen pendukung Anda.</p>
-</div>
-</div>
-<!-- Step 3: Pending -->
-<div class="relative flex gap-6 pb-10 items-start opacity-40">
-<div class="z-10 bg-surface-container-high text-on-surface-variant w-12 h-12 rounded-full flex items-center justify-center">
-<span class="material-symbols-outlined" data-icon="groups">groups</span>
-</div>
-<div>
-<h3 class="font-bold text-lg text-brand-charcoal">Jadwal Wawancara</h3>
-<p class="text-sm text-on-surface-variant">Undangan wawancara akan dikirimkan melalui WhatsApp &amp; Email.</p>
-</div>
+    <div class="z-10 bg-white border-4 border-brand-yellow text-brand-yellow w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
+        <span class="material-symbols-outlined" data-icon="pending" style="font-variation-settings: 'FILL' 1;">pending</span>
+    </div>
+    <div>
+        <h3 class="font-bold text-lg text-brand-charcoal">Verifikasi Berkas</h3>
+        <p class="text-sm text-on-surface-variant">Tim administrasi sedang meninjau keaslian dokumen pendukung Anda.</p>
+        <span class="text-xs text-on-surface-variant">Selesai: 24 Mei 2024</span>
+    </div>
 </div>
 <!-- Step 4: Pending -->
 <div class="relative flex gap-6 items-start opacity-40">
-<div class="z-10 bg-surface-container-high text-on-surface-variant w-12 h-12 rounded-full flex items-center justify-center">
-<span class="material-symbols-outlined" data-icon="school">school</span>
-</div>
-<div>
-<h3 class="font-bold text-lg text-brand-charcoal">Hasil Akhir</h3>
-<p class="text-sm text-on-surface-variant">Pengumuman kelulusan dan prosedur daftar ulang.</p>
-</div>
+    <div class="z-10 bg-surface-container-high text-on-surface-variant w-12 h-12 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined" data-icon="school">school</span>
+    </div>
+    <div>
+        <h3 class="font-bold text-lg text-brand-charcoal">Hasil Akhir</h3>
+        <p class="text-sm text-on-surface-variant">Pengumuman kelulusan dan prosedur daftar ulang.</p>
+    </div>
 </div>
 </div>
 </section>
 <!-- Program Selection Summary (Bento Style) -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="bg-brand-charcoal p-8 rounded-xl text-white flex flex-col justify-between min-h-[180px]">
+<div class="bg-brand-charcoal p-8 rounded-xl text-white flex flex-col justify-between min-h-45">
 <div>
 <span class="text-brand-yellow text-xs font-bold tracking-widest uppercase mb-2 block">Pilihan Pertama</span>
 <h3 class="text-2xl font-bold">Teknik Komputer & Jaringan</h3>
@@ -106,7 +83,7 @@
                             Kuota Tersisa: 12 Kursi
                         </div>
 </div>
-<div class="bg-surface-container-high p-8 rounded-xl flex flex-col justify-between min-h-[180px]">
+<div class="bg-surface-container-high p-8 rounded-xl flex flex-col justify-between min-h-45">
 <div>
 <span class="text-brand-charcoal/50 text-xs font-bold tracking-widest uppercase mb-2 block">Pilihan Kedua</span>
 <h3 class="text-2xl font-bold text-brand-charcoal">Multimedia (DKV)</h3>
@@ -220,7 +197,7 @@
 <span class="material-symbols-outlined" data-icon="home">home</span>
 <span class="font-lexend text-[10px] font-medium">Home</span>
 </a>
-<a class="flex flex-col items-center justify-center bg-brand-yellow text-brand-charcoal rounded-2xl p-2 min-w-[64px] active:scale-90 duration-200" href="#">
+<a class="flex flex-col items-center justify-center bg-brand-yellow text-brand-charcoal rounded-2xl p-2 min-w-16 active:scale-90 duration-200" href="#">
 <span class="material-symbols-outlined" data-icon="track_changes" style="font-variation-settings: 'FILL' 1;">track_changes</span>
 <span class="font-lexend text-[10px] font-medium">Status</span>
 </a>

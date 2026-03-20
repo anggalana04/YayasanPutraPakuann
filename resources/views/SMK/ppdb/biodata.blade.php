@@ -1,38 +1,38 @@
 @extends('layouts.SMK.ppdb')
 
 @section('ppdb-content')
-<div class="pt-28 pb-20 px-4 md:px-8 max-w-5xl mx-auto">
+<div class="pt-8 pb-20 px-4 md:px-8 max-w-5xl mx-auto">
 <!-- Stepper Signature Component -->
-<section class="mb-12">
-<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative">
+<section class="pt-12 mb-12">
+<div class="flex flex-row items-center justify-between w-full">
 <!-- Step 1 (Active) -->
-<div class="flex items-center gap-4 z-10">
-<div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-xl shadow-[0_4px_20px_rgba(108,90,0,0.2)]">
-                        01
-                    </div>
-<div>
+<div class="flex flex-col items-center flex-1">
+<div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xl shadow-md">
+01
+</div>
+<div class="mt-2">
 <p class="text-xs uppercase tracking-widest text-primary font-bold">Langkah 1</p>
 <h3 class="text-lg font-bold text-on-surface">Informasi Pribadi</h3>
 </div>
 </div>
-<!-- Connecting Line (Desktop) -->
-<div class="hidden md:block flex-1 h-[2px] bg-surface-container-highest mx-4"></div>
+<div class="hidden md:block h-0.5 bg-surface-container-highest flex-1 mx-2"></div>
 <!-- Step 2 (Inactive) -->
-<div class="flex items-center gap-4 opacity-50">
+<div class="flex flex-col items-center flex-1">
 <div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold text-lg">
-                        02
-                    </div>
-<div>
+02
+</div>
+<div class="mt-2">
 <p class="text-xs uppercase tracking-widest text-on-surface-variant font-medium">Langkah 2</p>
 <h3 class="text-lg font-bold text-on-surface-variant">Pilihan Jurusan</h3>
 </div>
 </div>
+<div class="hidden md:block h-0.5 bg-surface-container-highest flex-1 mx-2"></div>
 <!-- Step 3 (Inactive) -->
-<div class="flex items-center gap-4 opacity-50">
+<div class="flex flex-col items-center flex-1">
 <div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold text-lg">
-                        03
-                    </div>
-<div>
+03
+</div>
+<div class="mt-2">
 <p class="text-xs uppercase tracking-widest text-on-surface-variant font-medium">Langkah 3</p>
 <h3 class="text-lg font-bold text-on-surface-variant">Pembayaran</h3>
 </div>
@@ -98,6 +98,11 @@
 <label class="text-sm font-semibold text-on-surface px-1">Alamat Lengkap</label>
 <textarea class="bg-surface-container-low border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-on-surface-variant/50 transition-all form-input-focus" placeholder="Jl. Nama Jalan, No. Rumah, RT/RW, Kelurahan, Kecamatan" rows="4"></textarea>
 </div>
+<!-- School Origin -->
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-on-surface px-1">Asal Sekolah</label>
+<input class="bg-surface-container-low border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-on-surface-variant/50 transition-all form-input-focus" placeholder="Nama Sekolah Asal" type="text"/>
+</div>
 <!-- Action Button -->
 <div class="pt-6 flex flex-col md:flex-row justify-end items-center gap-4">
 <button class="w-full md:w-auto px-10 py-4 bg-primary text-on-primary-fixed font-bold rounded-3xl shadow-[0_10px_30px_rgba(108,90,0,0.15)] hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-3" type="button">
@@ -113,7 +118,7 @@
 @section('ppdb-footer')
 <!-- BottomNavBar (Mobile Only) -->
 <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-4 pt-2 md:hidden bg-white/60 dark:bg-[#1c190d]/60 backdrop-blur-2xl shadow-[0_-10px_40px_rgba(28,25,13,0.06)] rounded-t-3xl z-50">
-<a class="flex flex-col items-center justify-center bg-[#f2cc0d] text-[#1c190d] rounded-2xl p-2 min-w-[64px] active:scale-90 duration-200" href="#">
+<a class="flex flex-col items-center justify-center bg-[#f2cc0d] text-[#1c190d] rounded-2xl p-2 min-w-16 active:scale-90 duration-200" href="#">
 <span class="material-symbols-outlined">home</span>
 <span class="font-lexend text-[10px] font-medium">Home</span>
 </a>

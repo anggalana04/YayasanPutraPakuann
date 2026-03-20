@@ -1,31 +1,42 @@
 @extends('layouts.SMK.ppdb')
 
 @section('ppdb-content')
-<div class="flex-grow pt-24 pb-12 px-4 md:px-8 max-w-5xl mx-auto w-full">
-<!-- Process Stepper -->
-<section class="mb-12">
-<div class="flex items-center justify-between relative max-w-2xl mx-auto">
-<div class="absolute top-1/2 left-0 w-full h-0.5 bg-surface-container-high -translate-y-1/2 -z-10"></div>
-<!-- Step 1: Done -->
-<div class="flex flex-col items-center gap-2">
-<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center shadow-lg border-4 border-white">
-<span class="material-symbols-outlined text-on-primary-fixed" data-icon="check" style="font-variation-settings: 'FILL' 1;">check</span>
+<div class="flex-grow pt-8 pb-12">
+<div class="pb-20 px-4 md:px-8 max-w-5xl mx-auto">
+<!-- Stepper Signature Component -->
+<section class="pt-12 mb-12">
+<div class="flex flex-row items-center justify-between w-full">
+<!-- Step 1 (Done) -->
+<div class="flex flex-col items-center flex-1">
+<div class="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-xl shadow-md">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">check</span>
 </div>
-<span class="text-[10px] md:text-xs font-medium text-on-surface-variant">Step 1: Bio</span>
+<div class="mt-2">
+<p class="text-xs uppercase tracking-widest text-green-500 font-bold">Langkah 1</p>
+<h3 class="text-lg font-bold text-on-surface">Informasi Pribadi</h3>
 </div>
-<!-- Step 2: Active -->
-<div class="flex flex-col items-center gap-2">
-<div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center shadow-xl border-4 border-white">
-<span class="material-symbols-outlined text-white" data-icon="description">description</span>
 </div>
-<span class="text-xs md:text-sm font-bold text-on-surface">Step 2: Jurusan &amp; Dokumen</span>
+<div class="hidden md:block h-0.5 bg-surface-container-highest flex-1 mx-2"></div>
+<!-- Step 2 (Active) -->
+<div class="flex flex-col items-center flex-1">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold text-lg shadow-md">
+02
 </div>
-<!-- Step 3: Future -->
-<div class="flex flex-col items-center gap-2">
-<div class="w-12 h-12 rounded-full bg-white/60 backdrop-blur-md flex items-center justify-center shadow-sm border-2 border-surface-container-high">
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="payments">payments</span>
+<div class="mt-2">
+<p class="text-xs uppercase tracking-widest text-primary font-bold">Langkah 2</p>
+<h3 class="text-lg font-bold text-on-surface">Pilihan Jurusan & Berkas</h3>
 </div>
-<span class="text-[10px] md:text-xs font-medium text-on-surface-variant">Step 3: Pembayaran</span>
+</div>
+<div class="hidden md:block h-0.5 bg-surface-container-highest flex-1 mx-2"></div>
+<!-- Step 3 (Inactive) -->
+<div class="flex flex-col items-center flex-1">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold text-lg">
+03
+</div>
+<div class="mt-2">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant font-medium">Langkah 3</p>
+<h3 class="text-lg font-bold text-on-surface-variant">Pembayaran</h3>
+</div>
 </div>
 </div>
 </section>
@@ -59,9 +70,9 @@
 <span class="material-symbols-outlined text-primary" data-icon="school">school</span>
 <h3 class="text-lg font-bold">Pilih Program Keahlian</h3>
 </div>
-<div class="relative group">
+<div class="relative group mb-4">
 <select class="w-full bg-surface-container-low border-none rounded-xl px-4 py-4 appearance-none focus:ring-0 focus:bg-white transition-all text-on-surface font-medium">
-<option disabled="" selected="" value="">Pilih Jurusan Utama Anda</option>
+<option disabled selected value="">Pilih Jurusan Utama Anda</option>
 <option>Teknik Kendaraan Ringan</option>
 <option>Teknik Sepeda Motor</option>
 <option>Teknik Jaringan Komputer</option>
@@ -72,7 +83,23 @@
 <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
 <span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more">expand_more</span>
 </div>
-<div class="w-full h-0.5 bg-primary transform scale-x-0 group-focus-within:scale-x-100 transition-transform duration-300 origin-left mt-[-2px]"></div>
+<div class="w-full h-0.5 bg-primary transform scale-x-0 group-focus-within:scale-x-100 transition-transform duration-300 origin-left -mt-0.5"></div>
+</div>
+<!-- Pilihan Jurusan Kedua -->
+<div class="relative group">
+<select class="w-full bg-surface-container-low border-none rounded-xl px-4 py-4 appearance-none focus:ring-0 focus:bg-white transition-all text-on-surface font-medium">
+<option disabled selected value="">Pilih Jurusan Kedua Anda</option>
+<option>Teknik Kendaraan Ringan</option>
+<option>Teknik Sepeda Motor</option>
+<option>Teknik Jaringan Komputer</option>
+<option>Multimedia/DKV</option>
+<option>Manajemen Perkantoran</option>
+<option>Akuntansi</option>
+</select>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+<div class="w-full h-0.5 bg-primary transform scale-x-0 group-focus-within:scale-x-100 transition-transform duration-300 origin-left -mt-0.5"></div>
 </div>
 </section>
 <!-- Document Upload Grid -->
@@ -115,6 +142,17 @@
 <input class="hidden" type="file"/>
 </label>
 </div>
+<!-- Upload Card 4: Raport Semester -->
+<div class="flex flex-col">
+<label class="group cursor-pointer">
+<div class="aspect-[4/5] bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant/30 flex flex-col items-center justify-center p-6 text-center group-hover:bg-primary-container/10 group-hover:border-primary transition-all duration-300">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-4 text-3xl" data-icon="folder_open">folder_open</span>
+<span class="text-xs font-bold text-on-surface mb-2">Upload Raport Semester</span>
+<span class="text-[10px] text-on-surface-variant">Klik untuk cari file</span>
+</div>
+<input class="hidden" type="file"/>
+</label>
+</div>
 </div>
 </section>
 <!-- Navigation Actions -->
@@ -139,7 +177,7 @@
 <span class="material-symbols-outlined" data-icon="home">home</span>
 <span class="font-lexend text-[10px] font-medium">Home</span>
 </div>
-<div class="flex flex-col items-center justify-center bg-[#f2cc0d] text-[#1c190d] rounded-2xl p-2 min-w-[64px]">
+<div class="flex flex-col items-center justify-center bg-[#f2cc0d] text-[#1c190d] rounded-2xl p-2 min-w-16">
 <span class="material-symbols-outlined" data-icon="track_changes" style="font-variation-settings: 'FILL' 1;">track_changes</span>
 <span class="font-lexend text-[10px] font-medium">Status</span>
 </div>
