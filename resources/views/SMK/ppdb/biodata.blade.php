@@ -116,23 +116,5 @@
 @endsection
 
 @section('ppdb-footer')
-<!-- BottomNavBar (Mobile Only) -->
-<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-4 pt-2 md:hidden bg-white/60 dark:bg-[#1c190d]/60 backdrop-blur-2xl shadow-[0_-10px_40px_rgba(28,25,13,0.06)] rounded-t-3xl z-50">
-<a class="flex flex-col items-center justify-center bg-[#f2cc0d] text-[#1c190d] rounded-2xl p-2 min-w-16 active:scale-90 duration-200" href="#">
-<span class="material-symbols-outlined">home</span>
-<span class="font-lexend text-[10px] font-medium">Home</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#1c190d]/50 dark:text-white/50 p-2 hover:bg-[#f2cc0d]/10" href="#">
-<span class="material-symbols-outlined">track_changes</span>
-<span class="font-lexend text-[10px] font-medium">Status</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#1c190d]/50 dark:text-white/50 p-2 hover:bg-[#f2cc0d]/10" href="#">
-<span class="material-symbols-outlined">help_outline</span>
-<span class="font-lexend text-[10px] font-medium">Bantuan</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#1c190d]/50 dark:text-white/50 p-2 hover:bg-[#f2cc0d]/10" href="#">
-<span class="material-symbols-outlined">person</span>
-<span class="font-lexend text-[10px] font-medium">Profil</span>
-</a>
-</nav>
+
 @endsection

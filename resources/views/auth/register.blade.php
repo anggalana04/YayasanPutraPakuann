@@ -92,7 +92,7 @@
 <nav class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl transition-all">
 <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
 <div class="flex items-center gap-2">
-<span class="text-xl font-bold text-[#1c190d] tracking-tighter">SMK Putra Pakuan</span>
+<span class="text-xl font-bold text-[#1c190d] tracking-tighter"> Putra Pakuan</span>
 </div>
 <div class="flex items-center gap-6">
 <a class="font-lexend text-sm font-medium tracking-tight text-[#1c190d]/60 hover:opacity-80 transition-opacity" href="#">Bantuan</a>

@@ -96,44 +96,7 @@
 </div>
 <!-- Right Column: Sidebar Info & Contact -->
 <div class="space-y-8">
-<!-- Profile Action Card -->
-<div class="bg-white p-6 rounded-xl shadow-[0_4px_20px_rgba(28,25,13,0.04)]">
-<div class="flex items-center gap-4 mb-6">
-<div class="w-16 h-16 rounded-full bg-brand-yellow/10 flex items-center justify-center overflow-hidden">
-<img alt="Profile Picture" class="w-full h-full object-cover" data-alt="Student profile portrait picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCix3S2dGwgPpGn8Z6mm9KUNBjFnZoEk-bL-0OCQxfc2Fp_OTyXrL2sevXNvsuDFoyrzU-Tp3arjp-K6NKKbbmdU6Zhss5HCge909XfJ0D5jDEDNFhJwHpRE9TcS8zA9RnDpCF1UZ7g5wwXLIb6WYikj8RKMB8aNiZ2Fs4JxC21fjcfcaz2RA0e1YMnasKABQkioci-ySScbs6KjfB6uwrZvpCGhPJ5UpU1V478cZ6YRlSujotZQaAvsld2Ltk692diqCDsdJKO20"/>
-</div>
-<div>
-<h4 class="font-bold text-brand-charcoal">Ahmad Syarifuddin</h4>
-<p class="text-xs text-on-surface-variant">Calon Peserta Didik</p>
-</div>
-</div>
-<div class="space-y-3">
-<button class="w-full flex items-center justify-between p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors group">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-brand-charcoal/60 group-hover:text-brand-yellow" data-icon="person_edit">person_edit</span>
-<span class="text-sm font-medium">Lengkapi Profil</span>
-</div>
-<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
-</button>
-<button class="w-full flex items-center justify-between p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors group">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-brand-charcoal/60 group-hover:text-brand-yellow" data-icon="cloud_download">cloud_download</span>
-<span class="text-sm font-medium">Unduh Kartu Peserta</span>
-</div>
-<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
-</button>
-<form method="POST" action="{{ route('ppdb.logout', ['school' => $school]) }}" class="w-full">
-    @csrf
-    <button type="submit" class="w-full flex items-center justify-between p-4 rounded-xl bg-red-50 hover:bg-red-100 transition-colors group">
-        <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-red-500" data-icon="logout">logout</span>
-            <span class="text-sm font-medium text-red-700">Keluar</span>
-        </div>
-        <span class="material-symbols-outlined text-sm text-red-500" data-icon="chevron_right">chevron_right</span>
-    </button>
-</form>
-</div>
-</div>
+
 <!-- Contact Info Card (From Image 1 context) -->
 <div class="bg-brand-yellow/5 p-8 rounded-xl border border-brand-yellow/20">
 <h3 class="text-lg font-bold text-brand-charcoal mb-6">Bantuan &amp; Informasi</h3>
@@ -191,23 +154,5 @@
 @endsection
 
 @section('ppdb-footer')
-<!-- BottomNavBar (Mobile Only) -->
-<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-4 pt-2 md:hidden bg-white/60 backdrop-blur-2xl z-50 rounded-t-3xl shadow-[0_-10px_40px_rgba(28,25,13,0.06)]">
-<a class="flex flex-col items-center justify-center text-brand-charcoal/50 p-2" href="#">
-<span class="material-symbols-outlined" data-icon="home">home</span>
-<span class="font-lexend text-[10px] font-medium">Home</span>
-</a>
-<a class="flex flex-col items-center justify-center bg-brand-yellow text-brand-charcoal rounded-2xl p-2 min-w-16 active:scale-90 duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="track_changes" style="font-variation-settings: 'FILL' 1;">track_changes</span>
-<span class="font-lexend text-[10px] font-medium">Status</span>
-</a>
-<a class="flex flex-col items-center justify-center text-brand-charcoal/50 p-2" href="#">
-<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
-<span class="font-lexend text-[10px] font-medium">Bantuan</span>
-</a>
-<a class="flex flex-col items-center justify-center text-brand-charcoal/50 p-2" href="#">
-<span class="material-symbols-outlined" data-icon="person">person</span>
-<span class="font-lexend text-[10px] font-medium">Profil</span>
-</a>
-</nav>
+
 @endsection
