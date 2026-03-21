@@ -96,7 +96,7 @@
                     <span class="material-symbols-outlined active-icon" data-icon="dashboard">dashboard</span>
                     <span x-show="open">Dashboard</span>
                 </a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-3xl mx-2 my-1 transition-all duration-300 font-medium justify-center {{ request()->is('admin/ppdb/management') ? 'bg-[#f2cc0d] text-[#1c190d]' : 'text-white/70 hover:text-[#f2cc0d] hover:bg-white/5' }}" href="{{ url('/admin/ppdb/management') }}">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-3xl mx-2 my-1 transition-all duration-300 font-medium justify-center {{ request()->is('admin/ppdb/management') ? 'bg-[#f2cc0d] text-[#1c190d]' : 'text-white/70 hover:text-[#f2cc0d] hover:bg-white/5' }}" href="{{ route('admin.ppdb.schools') }}">
                     <span class="material-symbols-outlined" data-icon="how_to_reg">how_to_reg</span>
                     <span x-show="open">PPDB Management</span>
                 </a>

@@ -13,6 +13,14 @@ Route::get('/about', function () {
     return view('yayasan/about');
 })->name('yayasan.about');
 
+Route::get('/daftar', function () {
+    return view('auth/register');
+})->name('daftar');
+
+Route::get('/login', function () {
+    return view('auth/login');
+})->name('login');
+
 Route::get('/fasilitas', function () {
     return view('yayasan/fasilitas');
 })->name('yayasan.fasilitas');
@@ -56,7 +64,12 @@ Route::get('/admin/cms/schools', function () {
 // PPDB Management
 Route::get('/admin/ppdb/management', function () {
     return view('admin.superadmin.ppdb.management');
-});
+})->name('admin.ppdb.management');
+
+// School selection page for CMS
+Route::get('/admin/cms/schools', function () {
+    return view('admin.superadmin.ppdb.schools');
+})->name('admin.ppdb.schools');
 
 // PPDB Applicant Management
 Route::get('/admin/ppdb/applicants', function () {
