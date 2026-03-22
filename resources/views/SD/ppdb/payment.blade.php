@@ -90,48 +90,22 @@
 </div>
 <!-- Upload Component -->
 <div class="md:col-span-5 bg-surface-container-low rounded-xl p-8 flex flex-col">
-<!-- Error/Success Notification -->
-@if ($errors->any())
-    <div class="mb-6">
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <strong class="font-bold">Terjadi kesalahan!</strong>
-            <ul class="mt-2 list-disc list-inside text-sm">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    </div>
-@endif
-@if (session('success'))
-    <div class="mb-6">
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-            <strong class="font-bold">Berhasil!</strong>
-            <span class="block text-sm">{{ session('success') }}</span>
-        </div>
-    </div>
-@endif
 <div class="flex items-center gap-3 mb-6">
 <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-primary">
 <span class="material-symbols-outlined">cloud_upload</span>
 </div>
 <h2 class="text-xl font-bold tracking-tight">Bukti Pembayaran</h2>
 </div>
-<form method="POST" action="{{ route('ppdb.payment.update', ['school' => $school]) }}" enctype="multipart/form-data" class="flex-1 flex flex-col">
-    @csrf
-    <label class="flex-1 border-2 border-dashed border-outline-variant/30 rounded-2xl flex flex-col items-center justify-center p-6 text-center bg-white/50 hover:bg-white transition-all cursor-pointer group">
-        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-primary text-3xl">image</span>
-        </div>
-        <p class="font-bold text-on-background mb-1">Upload Bukti Pembayaran</p>
-        <p class="text-[10px] text-on-surface-variant uppercase tracking-widest">JPG, PNG atau PDF (Max 2MB)</p>
-        <input class="hidden" type="file" name="payment_proof" accept=".jpg,.jpeg,.png,.pdf" required onchange="document.getElementById('payment_file_name').textContent = this.files[0]?.name || ''">
-        <span id="payment_file_name" class="block mt-2 text-xs text-blue-600"></span>
-    </label>
-    <button type="submit" class="mt-6 w-full bg-green-600 text-white py-4 rounded-full font-bold shadow-lg shadow-green-400/20 hover:bg-green-700 active:scale-[0.98] transition-all">
-        Konfirmasi Pembayaran
-    </button>
-</form>
+<div class="flex-1 border-2 border-dashed border-outline-variant/30 rounded-2xl flex flex-col items-center justify-center p-6 text-center bg-white/50 hover:bg-white transition-all cursor-pointer group">
+<div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">image</span>
+</div>
+<p class="font-bold text-on-background mb-1">Upload File</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">JPG, PNG atau PDF (Max 2MB)</p>
+</div>
+<button class="mt-6 w-full bg-primary text-primary-fixed py-4 rounded-full font-bold shadow-lg shadow-primary/20 hover:opacity-90 active:scale-[0.98] transition-all">
+                    Konfirmasi Pembayaran
+                </button>
 </div>
 </div>
 <!-- Confirmation Message (Appears after upload/action - shown here as state) -->
@@ -149,5 +123,23 @@
 @endsection
 
 @section('ppdb-footer')
-
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-4 pt-2 md:hidden bg-white/60 dark:bg-[#1c190d]/60 backdrop-blur-2xl z-50 rounded-t-3xl shadow-[0_-10px_40px_rgba(28,25,13,0.06)]">
+<div class="flex flex-col items-center justify-center text-[#1c190d]/50 dark:text-white/50 p-2 hover:bg-[#f2cc0d]/10 transition-all active:scale-90">
+<span class="material-symbols-outlined">home</span>
+<span class="font-lexend text-[10px] font-medium mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#f2cc0d] text-[#1c190d] rounded-2xl p-2 min-w-16 active:scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">track_changes</span>
+<span class="font-lexend text-[10px] font-medium mt-1">Status</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1c190d]/50 dark:text-white/50 p-2 hover:bg-[#f2cc0d]/10 transition-all active:scale-90">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-lexend text-[10px] font-medium mt-1">Bantuan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1c190d]/50 dark:text-white/50 p-2 hover:bg-[#f2cc0d]/10 transition-all active:scale-90">
+<span class="material-symbols-outlined">person</span>
+<span class="font-lexend text-[10px] font-medium mt-1">Profil</span>
+</div>
+</nav>
 @endsection

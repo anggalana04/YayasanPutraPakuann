@@ -32,6 +32,11 @@ class PpdbApplication extends Authenticatable
         'interview_date',
         'interview_notes',
         'admission_date',
+        'father_name',
+        'father_occupation',
+        'mother_name',
+        'mother_occupation',
+        'parent_salary_range',
     ];
 
     protected $hidden = [
@@ -70,8 +75,8 @@ class PpdbApplication extends Authenticatable
     {
         $year = date('Y');
         $count = self::where('school_type', $this->school_type)
-                    ->whereYear('created_at', $year)
-                    ->count() + 1;
+            ->whereYear('created_at', $year)
+            ->count() + 1;
 
         return 'PPDB-' . $year . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
     }
@@ -111,5 +116,15 @@ class PpdbApplication extends Authenticatable
     public function canLogin()
     {
         return !in_array($this->status, ['draft', 'rejected']);
+    }
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->photo_file) {
+            // Assume photo_file is stored in storage/app/public/...
+            // Use Laravel's asset helper to generate the public URL
+            return asset('storage/' . ltrim($this->photo_file, '/'));
+        }
+        return asset('images/default-profile.png');
     }
 }

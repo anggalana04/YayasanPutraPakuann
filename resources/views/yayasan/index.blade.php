@@ -294,18 +294,18 @@
                         <p class="text-slate-500 dark:text-slate-400 text-sm mt-2 leading-relaxed">Developing independent thinkers and future leaders.</p>
                     </div>
                 </div>
-                <div class="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-700">
+                <a href="{{ url('/smk') }}" class="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-700 focus:outline-none">
                     <div class="w-full h-48 bg-center bg-no-repeat bg-cover relative overflow-hidden" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBAvn7-fl2vBzvH4yCncCE76n2QYfGO3mWe_Yb7tz2Wx09pU6qXW39hebWHHStYZ_ohRFg266lxS0vwtO7Fr_wOEFZGyFO1FgxNFANAPKXPLfHALb4H3t8eBeut5bjPmqe9K9DgP8-OTqnOile_8p6ixdQl6sEWKwjAQ2_QCdcfYtlFuF90M5lWO1qGpNofR6oWAeQVUc6Ef91k6cM-UloSpM2uNOg6DXZyVF7WbAm4ud8PTKBnvgdYM9i3AT9UErJECPT-oRv03yc");'>
                         <div class="absolute inset-0 bg-[#FDB913]/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                             <span class="text-white font-bold tracking-widest uppercase text-sm">Explore</span>
                         </div>
                     </div>
-                    <div class="p-5 flex flex-col flex-grow gap-2">
+                    <div class="p-5 flex flex-col grow gap-2">
                         <h3 class="text-slate-900 dark:text-white text-lg font-bold">SMK</h3>
                         <p class="text-xs text-[#FDB913] font-bold uppercase tracking-wider">Vocational High</p>
                         <p class="text-slate-500 dark:text-slate-400 text-sm mt-2 leading-relaxed">Specialized training for professional career readiness.</p>
                     </div>
-                </div>
+                </a>
                 <div class="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-700">
                     <div class="w-full h-48 bg-center bg-no-repeat bg-cover relative overflow-hidden" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAv28cCiOdbqcYL-mmCVFjab8kekRh8pN5dflFgKYcEsXa1VwQCLqJsaJW1U-pizoiAqUyczOWasVKty1lqC_OUWxRFgcp63BMDahU3ZeZSvJDDQCgBbfun6FPMrVpdICMOUw0G25FBQZr8yyTIzjbgW28GIkgdq_RCwP59d4nUaxGkJPOkWy0q__GyRLpBs7CrZD9gCDgwR6NoppYTmtWTXr1jtnHHheqjrFICDIakJVFnESAwGJujTJwpbUmX8YkzmnC2rklyO6U");'>
                         <div class="absolute inset-0 bg-[#FDB913]/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">

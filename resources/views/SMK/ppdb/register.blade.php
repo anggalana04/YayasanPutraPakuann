@@ -146,7 +146,25 @@
 <h2 class="text-2xl font-bold text-[#1c190d] mb-2">Buat Akun Baru</h2>
 <p class="text-sm text-on-surface-variant">Lengkapi data di bawah ini untuk memulai pendaftaran Anda.</p>
 </div>
-<form class="space-y-5" method="POST" action="{{ isset($school) ? route('ppdb.register.post', ['school' => $school]) : '#' }}">
+@if (
+    session('success')
+)
+    <div class="mb-4 p-4 rounded-lg bg-green-100 text-green-800 font-semibold">
+        {{ session('success') }}
+    </div>
+@endif
+@if (
+    $errors->any()
+)
+    <div class="mb-4 p-4 rounded-lg bg-red-100 text-red-800 font-semibold">
+        <ul class="list-disc pl-5">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+<form class="space-y-5" method="POST" action="{{ route('ppdb.register.post', ['school' => $school]) }}">
 @csrf
 <div class="space-y-1.5">
 <label class="text-xs font-semibold text-on-surface/70 ml-2 uppercase tracking-wider">Nama Lengkap</label>

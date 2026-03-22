@@ -6,10 +6,10 @@
 <div class="bg-white p-6 rounded-xl shadow-[0_4px_20px_rgba(28,25,13,0.04)]">
 <div class="flex items-center gap-4 mb-6">
 <div class="w-16 h-16 rounded-full bg-brand-yellow/10 flex items-center justify-center overflow-hidden">
-<img alt="Profile Picture" class="w-full h-full object-cover" data-alt="Student profile portrait picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCix3S2dGwgPpGn8Z6mm9KUNBjFnZoEk-bL-0OCQxfc2Fp_OTyXrL2sevXNvsuDFoyrzU-Tp3arjp-K6NKKbbmdU6Zhss5HCge909XfJ0D5jDEDNFhJwHpRE9TcS8zA9RnDpCF1UZ7g5wwXLIb6WYikj8RKMB8aNiZ2Fs4JxC21fjcfcaz2RA0e1YMnasKABQkioci-ySScbs6KjfB6uwrZvpCGhPJ5UpU1V478cZ6YRlSujotZQaAvsld2Ltk692diqCDsdJKO20"/>
+<img alt="Profile Picture" class="w-full h-full object-cover" data-alt="Student profile portrait picture" src="{{ Auth::guard('ppdb_applications')->user()->profile_photo_url ?? asset('images/default-profile.png') }}"/>
 </div>
 <div>
-<h4 class="font-bold text-brand-charcoal">Ahmad Syarifuddin</h4>
+<h4 class="font-bold text-brand-charcoal">{{ Auth::guard('ppdb_applications')->user()->full_name ?? '-' }}</h4>
 <p class="text-xs text-on-surface-variant">Calon Peserta Didik</p>
 </div>
 </div>

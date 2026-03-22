@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 // =====================
 // YAYASAN (MAIN SITE)
@@ -87,6 +90,74 @@ Route::get('/admin/user-management', function () {
     return view('admin.superadmin.user_management');
 })->name('admin.user_management');
 
+// Google OAuth routes
+Route::get('/auth/google/redirect', function () {
+    return Socialite::driver('google')->redirect();
+})->name('google.redirect');
+
+Route::get('/auth/google/callback', function () {
+    $googleUser = Socialite::driver('google')->user();
+    // Find or create user in users table
+    $user = User::firstOrCreate(
+        ['email' => $googleUser->getEmail()],
+        [
+            'name' => $googleUser->getName() ?? $googleUser->getNickname() ?? 'User',
+            'password' => bcrypt(uniqid()),
+        ]
+    );
+    Auth::login($user);
+
+    // Also create or update PPDB application for this user (SMK by default)
+    \App\Models\PpdbApplication::firstOrCreate(
+        [
+            'email' => $user->email,
+            'school_type' => 'smk',
+        ],
+        [
+            'full_name' => $user->name,
+            'status' => 'draft',
+            'application_id' => 'PPDB-' . date('Y') . '-' . strtoupper(substr(md5($user->email), 0, 6)),
+            'password' => bcrypt(uniqid()), // Add a default password for DB constraint
+        ]
+    );
+
+    // After login, redirect to /smk/ppdb/biodata for the correct school
+    return redirect('/smk/ppdb/biodata');
+})->name('google.callback');
+
+// Google OAuth routes (now flexible by school)
+Route::get('/{school}/auth/google/redirect', function ($school) {
+    return Socialite::driver('google')->redirectUrl(url("/$school/auth/google/callback"))->redirect();
+})->where(['school' => 'sd|smp|smk'])->name('google.redirect.by.school');
+
+Route::get('/{school}/auth/google/callback', function ($school) {
+    $googleUser = Socialite::driver('google')->redirectUrl(url("/$school/auth/google/callback"))->user();
+    $user = User::firstOrCreate(
+        ['email' => $googleUser->getEmail()],
+        [
+            'name' => $googleUser->getName() ?? $googleUser->getNickname() ?? 'User',
+            'password' => bcrypt(uniqid()),
+        ]
+    );
+    // Create or update PPDB application for this user (by school)
+    $ppdb = \App\Models\PpdbApplication::firstOrCreate(
+        [
+            'email' => $user->email,
+            'school_type' => $school,
+        ],
+        [
+            'full_name' => $user->name,
+            'status' => 'draft',
+            'application_id' => 'PPDB-' . date('Y') . '-' . strtoupper(substr(md5($user->email), 0, 6)),
+            'password' => bcrypt(uniqid()),
+        ]
+    );
+    // Log in with the PPDB guard
+    Auth::guard('ppdb_applications')->login($ppdb);
+    // After login, redirect to /{school}/ppdb/biodata for the correct school
+    return redirect('/' . $school . '/ppdb/biodata');
+})->where(['school' => 'sd|smp|smk'])->name('google.callback.by.school');
+
 // =====================
 // SEKOLAH (SD / SMP / SMK)
 // =====================
@@ -119,17 +190,22 @@ Route::prefix('{school}')
 
         Route::get('/ppdb', fn($school) => $render($school, 'ppdb.index'))->name('school.ppdb');
 
-        // PPDB Authentication Routes
-        Route::get('/ppdb/login', fn($school) => view('ppdb.login', compact('school')))->name('ppdb.login');
-        Route::get('/ppdb/register', fn($school) => $render($school, 'ppdb.register'))->name('ppdb.register');
-        Route::post('/ppdb/login', [App\Http\Controllers\PpdbAuthController::class, 'login'])->name('ppdb.login.post');
-        Route::post('/ppdb/logout', [App\Http\Controllers\PpdbAuthController::class, 'logout'])->name('ppdb.logout');
+        // PPDB Authentication Routes (now per jenjang, with pretty URLs)
+        Route::get('/login', fn($school) => view(strtoupper($school) . '.ppdb.login', compact('school')))->name('ppdb.login');
+        Route::get('/daftar', fn($school) => view(strtoupper($school) . '.ppdb.register', compact('school')))->name('ppdb.register');
+        Route::post('/login', [App\Http\Controllers\PpdbAuthController::class, 'login'])->name('ppdb.login.post');
+        Route::post('/logout', [App\Http\Controllers\PpdbAuthController::class, 'logout'])->name('ppdb.logout');
+        Route::post('/daftar', [App\Http\Controllers\PpdbAuthController::class, 'register'])->name('ppdb.register.post');
 
         // PPDB Routes (Frontend Development - Auth will be added later)
-        Route::get('/ppdb/dashboard', fn($school) => $render($school, 'ppdb.dashboard'))->name('ppdb.dashboard');
+        Route::get('/ppdb/dashboard', [App\Http\Controllers\PpdbAuthController::class, 'dashboard'])->name('ppdb.dashboard');
         Route::get('/ppdb/biodata', fn($school) => $render($school, 'ppdb.biodata'))->name('ppdb.biodata');
+        // Biodata update POST route
+        Route::post('/ppdb/biodata', [App\Http\Controllers\PpdbAuthController::class, 'updateBiodata'])->name('ppdb.biodata.update');
         Route::get('/ppdb/berkas', fn($school) => $render($school, 'ppdb.berkas'))->name('ppdb.berkas');
+        Route::post('/ppdb/berkas', [App\Http\Controllers\PpdbAuthController::class, 'updateBerkas'])->name('ppdb.berkas.update');
         Route::get('/ppdb/payment', fn($school) => $render($school, 'ppdb.payment'))->name('ppdb.payment');
+        Route::post('/ppdb/payment', [App\Http\Controllers\PpdbAuthController::class, 'updatePayment'])->name('ppdb.payment.update');
         Route::get('/ppdb/profil', fn($school) => $render($school, 'ppdb.profil'))->name('ppdb.profil');
 
         Route::get('/program', fn($school) => $render($school, 'program'))->name('school.program');
