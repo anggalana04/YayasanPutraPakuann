@@ -1,5 +1,12 @@
 @extends('layouts.SMK.ppdb')
 
+@php
+    if (!Auth::guard('ppdb_applications')->check()) {
+        header('Location: ' . route('ppdb.login', ['school' => $school]));
+        exit;
+    }
+@endphp
+
 @section('ppdb-content')
 <div class="pt-8 pb-20 px-4 md:px-8 max-w-5xl mx-auto">
 <!-- Stepper Signature Component -->

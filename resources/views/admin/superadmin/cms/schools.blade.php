@@ -25,40 +25,27 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-surface-container-low/50">
+                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">ID</th>
                             <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">School Name</th>
                             <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Type</th>
                             <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#1c190d]/5">
+                        @forelse($schools as $school)
                         <tr class="hover:bg-surface-container-low/30 transition-colors group">
-                            <td class="px-6 py-6 font-bold text-[#1c190d]">SMK Putra Pakuan</td>
-                            <td class="px-6 py-6 text-on-surface-variant">SMK</td>
-                            <td class="px-6 py-6">
-                                <a href="{{ route('admin.cms.index') }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all inline-block">Manage</a>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-surface-container-low/30 transition-colors group">
-                            <td class="px-6 py-6 font-bold text-[#1c190d]">SDIT Putra Pakuan</td>
-                            <td class="px-6 py-6 text-on-surface-variant">SDIT</td>
+                            <td class="px-6 py-6 font-mono text-xs text-on-surface-variant">{{ $school->id }}</td>
+                            <td class="px-6 py-6 font-bold text-[#1c190d]">{{ $school->name }}</td>
+                            <td class="px-6 py-6 text-on-surface-variant">{{ $school->type }}</td>
                             <td class="px-6 py-6">
                                 <a href="#" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all inline-block">Manage</a>
                             </td>
                         </tr>
-                        <tr class="hover:bg-surface-container-low/30 transition-colors group">
-                            <td class="px-6 py-6 font-bold text-[#1c190d]">SMP Putra Pakuan</td>
-                            <td class="px-6 py-6 text-on-surface-variant">SMP</td>
-                            <td class="px-6 py-6">
-                                <a href="#" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all inline-block">Manage</a>
-                            </td>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-6 text-center text-on-surface-variant">No schools found.</td>
                         </tr>
-                        <tr class="hover:bg-surface-container-low/30 transition-colors group">
-                            <td class="px-6 py-6 font-bold text-[#1c190d]">Yayasan Putra Pakuan</td>
-                            <td class="px-6 py-6 text-on-surface-variant">Yayasan</td>
-                            <td class="px-6 py-6">
-                                <a href="#" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all inline-block">Manage</a>
-                            </td>
-                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

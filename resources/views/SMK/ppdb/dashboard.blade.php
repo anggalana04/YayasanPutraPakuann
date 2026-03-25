@@ -32,6 +32,17 @@
 </span>
 </div>
 <!-- Step Tracker (Vertical Editorial Style) -->
+@php
+    $status = $application->status;
+    $isAccepted = $status === 'accepted';
+    $isRejected = $status === 'rejected';
+    $isVerified = $status === 'verified';
+    $isPaymentUploaded = $status === 'payment_uploaded';
+    $step1Done = true;
+    $step2Done = $isVerified || $isAccepted || $isRejected;
+    $step3Done = $isPaymentUploaded || $isAccepted || $isRejected;
+    $stepFinal = $isAccepted || $isRejected;
+@endphp
 <div class="space-y-0 relative">
 <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-surface-container-high"></div>
 <!-- Step 1: Done -->
@@ -48,52 +59,81 @@
         <button class="bg-brand-yellow text-brand-charcoal font-bold px-4 py-2 rounded-xl shadow hover:bg-brand-yellow/80 transition-colors">Daftar Ulang</button>
     </div>
 </div>
-<!-- Step 2: Active -->
+<!-- Step 2: Verifikasi Berkas -->
 <div class="relative flex gap-6 pb-10 items-start">
-    <div class="z-10 bg-white border-4 border-brand-yellow text-brand-yellow w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
-        <span class="material-symbols-outlined" data-icon="pending" style="font-variation-settings: 'FILL' 1;">pending</span>
+    <div class="z-10 {{ $step2Done ? 'bg-brand-yellow text-brand-charcoal' : 'bg-white border-4 border-brand-yellow text-brand-yellow' }} w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
+        <span class="material-symbols-outlined" data-icon="{{ $step2Done ? 'check' : 'pending' }}" style="font-variation-settings: 'FILL' {{ $step2Done ? '1' : '0' }}; font-weight: 700;">{{ $step2Done ? 'check' : 'pending' }}</span>
     </div>
     <div>
         <h3 class="font-bold text-lg text-brand-charcoal">Verifikasi Berkas</h3>
         <p class="text-sm text-on-surface-variant">Tim administrasi sedang meninjau keaslian dokumen pendukung Anda.</p>
-        <span class="text-xs text-on-surface-variant">Selesai: 24 Mei 2024</span>
+        <span class="text-xs text-on-surface-variant">{{ $step2Done ? 'Selesai: 24 Mei 2024' : 'Menunggu verifikasi' }}</span>
     </div>
 </div>
-<!-- Step 4: Pending -->
-<div class="relative flex gap-6 items-start opacity-40">
-    <div class="z-10 bg-surface-container-high text-on-surface-variant w-12 h-12 rounded-full flex items-center justify-center">
-        <span class="material-symbols-outlined" data-icon="school">school</span>
+<!-- Step 4: Hasil Akhir -->
+<div class="relative flex gap-6 items-start {{ $stepFinal ? '' : 'opacity-40' }}">
+    <div class="z-10 w-12 h-12 rounded-full flex items-center justify-center {{ $isAccepted ? 'bg-green-500 text-white' : ($isRejected ? 'bg-red-500 text-white' : 'bg-surface-container-high text-on-surface-variant') }}">
+        <span class="material-symbols-outlined text-3xl">
+            {{ $isAccepted ? 'check_circle' : ($isRejected ? 'cancel' : 'school') }}
+        </span>
     </div>
     <div>
-        <h3 class="font-bold text-lg text-brand-charcoal">Hasil Akhir</h3>
-        <p class="text-sm text-on-surface-variant">Pengumuman kelulusan dan prosedur daftar ulang.</p>
+        <h3 class="font-bold text-2xl {{ $isAccepted ? 'text-green-600' : ($isRejected ? 'text-red-600' : 'text-brand-charcoal') }}">Hasil Akhir</h3>
+        @if($isAccepted)
+            <p class="text-lg font-bold text-green-700">Selamat! Anda <span class="uppercase">DITERIMA</span> di SMK Putra Pakuan.</p>
+            @if($application->assigned_major)
+                <p class="text-lg font-bold text-green-700 mt-2">Jurusan: <span class="uppercase">{{ $application->assigned_major }}</span></p>
+            @endif
+        @elseif($isRejected)
+            <p class="text-lg font-bold text-red-700">Mohon maaf, Anda <span class="uppercase">TIDAK DITERIMA</span>.</p>
+        @else
+            <p class="text-sm text-on-surface-variant">Pengumuman kelulusan dan prosedur daftar ulang.</p>
+        @endif
     </div>
 </div>
 </div>
 </section>
 <!-- Program Selection Summary (Bento Style) -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="bg-brand-charcoal p-8 rounded-xl text-white flex flex-col justify-between min-h-45">
-<div>
-<span class="text-brand-yellow text-xs font-bold tracking-widest uppercase mb-2 block">Pilihan Pertama</span>
-<h3 class="text-2xl font-bold">{{ $application->major_1 ?? '-' }}</h3>
-</div>
-<div class="flex items-center gap-2 text-white/60 text-sm">
-<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
-Kuota Tersisa: 12 Kursi
-</div>
-</div>
-<div class="bg-surface-container-high p-8 rounded-xl flex flex-col justify-between min-h-45">
-<div>
-<span class="text-brand-charcoal/50 text-xs font-bold tracking-widest uppercase mb-2 block">Pilihan Kedua</span>
-<h3 class="text-2xl font-bold text-brand-charcoal">{{ $application->major_2 ?? '-' }}</h3>
-</div>
-<button class="text-brand-yellow font-bold text-sm flex items-center gap-2 hover:translate-x-1 transition-transform">
-Ubah Pilihan <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
-</button>
-</div>
-</div>
-</div>
+@if($application->status === 'accepted' && $application->assigned_major)
+    <div class="grid grid-cols-1 gap-6">
+        <div class="bg-green-600 p-10 rounded-xl text-white flex flex-col justify-between min-h-45 shadow-lg border-4 border-green-700 animate-pulse">
+            <div>
+                <span class="text-white text-xs font-bold tracking-widest uppercase mb-2 block">Jurusan Diterima</span>
+                <h3 class="text-3xl font-extrabold">{{ $application->assigned_major }}</h3>
+            </div>
+            <div class="flex items-center gap-2 text-white/80 text-base mt-4">
+                <span class="material-symbols-outlined text-2xl" data-icon="check_circle">check_circle</span>
+                Selamat! Anda diterima di jurusan ini.
+            </div>
+        </div>
+    </div>
+@else
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        @if($application->major_1)
+        <div class="bg-brand-charcoal p-8 rounded-xl text-white flex flex-col justify-between min-h-45">
+            <div>
+                <span class="text-brand-yellow text-xs font-bold tracking-widest uppercase mb-2 block">Pilihan Pertama</span>
+                <h3 class="text-2xl font-bold">{{ $application->major_1 }}</h3>
+            </div>
+            <div class="flex items-center gap-2 text-white/60 text-sm">
+                <span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+                Kuota Tersisa: 12 Kursi
+            </div>
+        </div>
+        @endif
+        @if($application->major_2)
+        <div class="bg-surface-container-high p-8 rounded-xl flex flex-col justify-between min-h-45">
+            <div>
+                <span class="text-brand-charcoal/50 text-xs font-bold tracking-widest uppercase mb-2 block">Pilihan Kedua</span>
+                <h3 class="text-2xl font-bold text-brand-charcoal">{{ $application->major_2 }}</h3>
+            </div>
+            <button class="text-brand-yellow font-bold text-sm flex items-center gap-2 hover:translate-x-1 transition-transform">
+                Ubah Pilihan <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+            </button>
+        </div>
+        @endif
+    </div>
+@endif
 <!-- Right Column: Sidebar Info & Contact -->
 <div class="space-y-8">
 

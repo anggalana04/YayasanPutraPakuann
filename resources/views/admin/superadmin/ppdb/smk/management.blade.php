@@ -7,11 +7,11 @@
     <!-- Management Navigation Section -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
         <div>
-            <h2 class="text-3xl font-bold tracking-tight text-[#1c190d]">PPDB Management</h2>
-            <p class="text-on-surface-variant mt-1">Configure admission cycles, quotas, and registration phases.</p>
+            <h2 class="text-3xl font-bold tracking-tight text-[#1c190d]">PPDB Management - {{ $school->name }}</h2>
+            <p class="text-on-surface-variant mt-1">Configure admission cycles, quotas, and registration phases for <span class="font-semibold">{{ $school->name }}</span>.</p>
         </div>
         <div class="flex gap-3">
-            <a href="{{ route('admin.ppdb.applicants') }}" class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary font-bold rounded-3xl shadow-lg hover:scale-105 active:scale-95 transition-all">
+            <a href="{{ route('admin.ppdb.applicants.smk') }}" class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary font-bold rounded-3xl shadow-lg hover:scale-105 active:scale-95 transition-all">
                 <span class="material-symbols-outlined text-lg">group</span>
                 Manage Applicants
             </a>
@@ -99,30 +99,22 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @forelse($phases as $phase)
                     <tr class="bg-surface-container-low rounded-2xl">
-                        <td class="py-3 px-3 font-semibold rounded-l-2xl">Early Bird</td>
-                        <td class="py-3 px-3">2024-03-01</td>
-                        <td class="py-3 px-3">2024-04-15</td>
+                        <td class="py-3 px-3 font-semibold rounded-l-2xl">{{ $phase->phase_name }}</td>
+                        <td class="py-3 px-3">{{ $phase->start_date }}</td>
+                        <td class="py-3 px-3">{{ $phase->end_date }}</td>
                         <td class="py-3 px-3 rounded-r-2xl">
-                            <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Active</span>
+                            <span class="px-3 py-1 {{ $phase->status == 'active' ? 'bg-green-100 text-green-700' : 'bg-surface-container-high text-on-surface-variant' }} text-[10px] font-bold uppercase tracking-wider rounded-full">
+                                {{ ucfirst($phase->status) }}
+                            </span>
                         </td>
                     </tr>
-                    <tr class="bg-surface-container-low rounded-2xl">
-                        <td class="py-3 px-3 font-semibold rounded-l-2xl">Regular</td>
-                        <td class="py-3 px-3">2024-04-16</td>
-                        <td class="py-3 px-3">2024-06-30</td>
-                        <td class="py-3 px-3 rounded-r-2xl">
-                            <span class="px-3 py-1 bg-surface-container-high text-on-surface-variant text-[10px] font-bold uppercase tracking-wider rounded-full">Upcoming</span>
-                        </td>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="py-3 px-3 text-center text-on-surface-variant">No phases found.</td>
                     </tr>
-                    <tr class="bg-surface-container-low rounded-2xl">
-                        <td class="py-3 px-3 font-semibold rounded-l-2xl">Late Entry</td>
-                        <td class="py-3 px-3">2024-07-01</td>
-                        <td class="py-3 px-3">2024-07-15</td>
-                        <td class="py-3 px-3 rounded-r-2xl">
-                            <span class="px-3 py-1 bg-surface-container-high text-on-surface-variant text-[10px] font-bold uppercase tracking-wider rounded-full">Upcoming</span>
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

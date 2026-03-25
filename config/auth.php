@@ -41,6 +41,11 @@ return [
             'provider' => 'users',
         ],
 
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
         'ppdb_applications' => [
             'driver' => 'session',
             'provider' => 'ppdb_applications',

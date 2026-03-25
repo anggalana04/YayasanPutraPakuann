@@ -23,11 +23,11 @@
                     </p>
                     <div class="flex flex-col gap-4 sm:flex-row">
                         <button class="flex h-14 items-center justify-center rounded-xl bg-primary px-8 text-base font-bold text-charcoal transition-transform hover:scale-[1.02] active:scale-95"
-                            onclick="window.location.href='{{ route('daftar') }}'">
+                            onclick="window.location.href='{{ route('ppdb.register', ['school'=>'smk']) }}'">
                             Daftar Sekarang
                         </button>
                         <button class="flex h-14 items-center justify-center rounded-xl border-2 border-charcoal/10 px-8 text-base font-bold text-charcoal transition-colors hover:bg-charcoal/5 dark:border-slate-800 dark:text-slate-200"
-                            onclick="window.location.href='{{ route('login') }}'">
+                            onclick="window.location.href='{{ route('ppdb.login', ['school'=>'smk']) }}'">
                             Login Pendaftar
                         </button>
                     </div>

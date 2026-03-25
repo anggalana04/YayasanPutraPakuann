@@ -37,6 +37,14 @@ class PpdbApplication extends Authenticatable
         'mother_name',
         'mother_occupation',
         'parent_salary_range',
+        'major_1',
+        'major_2',
+        'assigned_major',
+        'kk_file',
+        'ijazah_file',
+        'photo_file',
+        'raport_file',
+        'last_registration_step',
     ];
 
     protected $hidden = [

@@ -132,7 +132,12 @@
                         <span class="material-symbols-outlined text-primary">expand_more</span>
                     </button>
                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-40 bg-white dark:bg-charcoal rounded-lg shadow-lg py-2 z-50" x-cloak>
-                        <button class="block w-full text-left px-4 py-2 text-sm text-charcoal dark:text-white hover:bg-primary/10">Logout</button>
+                        <a href="{{ route('ppdb.dashboard', ['school' => $school]) }}" class="block w-full text-left px-4 py-2 text-sm text-charcoal dark:text-white hover:bg-primary/10">Dashboard</a>
+                        <a href="{{ route('ppdb.profil', ['school' => $school]) }}" class="block w-full text-left px-4 py-2 text-sm text-charcoal dark:text-white hover:bg-primary/10">Profil</a>
+                        <form method="POST" action="{{ route('ppdb.logout', ['school' => $school]) }}">
+                            @csrf
+                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -176,17 +181,9 @@
 
 <!-- BottomNavBar (Mobile) -->
 <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-4 pt-2 md:hidden bg-white/60 dark:bg-[#1c190d]/60 backdrop-blur-2xl z-50 rounded-t-3xl shadow-[0_-10px_40px_rgba(28,25,13,0.06)]">
-    <a href="{{ route('ppdb.dashboard', ['school' => $school]) }}" class="flex flex-col items-center justify-center text-[#1c190d]/50 dark:text-white/50 p-2 hover:bg-[#f2cc0d]/10 rounded-2xl {{ request()->routeIs('ppdb.dashboard') ? 'bg-[#f2cc0d] text-[#1c190d]' : '' }}">
-        <span class="material-symbols-outlined" data-icon="home">home</span>
-        <span class="font-lexend text-[10px] font-medium">Home</span>
-    </a>
     <a href="{{ route('ppdb.dashboard', ['school' => $school]) }}" class="flex flex-col items-center justify-center {{ request()->routeIs('ppdb.dashboard') ? 'bg-[#f2cc0d] text-[#1c190d]' : 'text-[#1c190d]/50 dark:text-white/50' }} rounded-2xl p-2 min-w-16">
-        <span class="material-symbols-outlined" data-icon="track_changes" style="font-variation-settings: 'FILL' 1;">track_changes</span>
-        <span class="font-lexend text-[10px] font-medium">Status</span>
-    </a>
-    <a href="#bantuan" class="flex flex-col items-center justify-center text-[#1c190d]/50 dark:text-white/50 p-2 hover:bg-[#f2cc0d]/10 rounded-2xl">
-        <span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
-        <span class="font-lexend text-[10px] font-medium">Bantuan</span>
+        <span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+        <span class="font-lexend text-[10px] font-medium">Dashboard</span>
     </a>
     <a href="{{ route('ppdb.profil', ['school' => $school]) }}" class="flex flex-col items-center justify-center text-[#1c190d]/50 dark:text-white/50 p-2 hover:bg-[#f2cc0d]/10 rounded-2xl {{ request()->routeIs('ppdb.profil') ? 'bg-[#f2cc0d] text-[#1c190d]' : '' }}">
         <span class="material-symbols-outlined" data-icon="person">person</span>

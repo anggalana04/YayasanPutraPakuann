@@ -143,35 +143,48 @@
 <h2 class="font-headline text-3xl font-bold text-on-surface mb-2 tracking-tight">Selamat Datang di Portal PPDB</h2>
 <p class="text-on-surface-variant">Silakan masuk menggunakan akun pendaftaran Anda</p>
 </header>
-<form class="space-y-6">
-<!-- Email/NISN Input -->
-<div class="space-y-2 group">
-<label class="text-sm font-bold text-on-surface tracking-tight block ml-1" for="identifier">Email atau NISN</label>
-<div class="relative">
-<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-<span class="material-symbols-outlined text-outline text-xl" data-icon="person">person</span>
-</div>
-<input class="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:bg-surface-container-lowest focus:ring-0 rounded-t-xl transition-all font-medium text-on-surface placeholder:text-outline-variant" id="identifier" name="identifier" placeholder="nama@email.com / 10293xxxx" type="text"/>
-</div>
-</div>
-<!-- Password Input -->
-<div class="space-y-2 group">
-<div class="flex justify-between items-center ml-1">
-<label class="text-sm font-bold text-on-surface tracking-tight" for="password">Kata Sandi</label>
-<a class="text-xs font-bold text-primary hover:text-primary-dim transition-colors uppercase tracking-wider" href="#">Lupa Password?</a>
-</div>
-<div class="relative">
-<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-<span class="material-symbols-outlined text-outline text-xl" data-icon="lock">lock</span>
-</div>
-<input class="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:bg-surface-container-lowest focus:ring-0 rounded-t-xl transition-all font-medium text-on-surface placeholder:text-outline-variant" id="password" name="password" placeholder="••••••••••••" type="password"/>
-</div>
-</div>
-<!-- Login Button -->
-<button class="w-full bg-primary-container text-on-primary-fixed font-bold py-4 px-6 rounded-xl shadow-lg shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 group" type="submit">
-<span>Masuk ke Dashboard</span>
-<span class="material-symbols-outlined text-xl transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
-</button>
+<form class="space-y-6" method="POST" action="{{ route('ppdb.login.post', ['school' => 'smk']) }}">
+    @csrf
+    @if ($errors->any())
+        <div class="mb-4 p-3 rounded-xl bg-error-container text-on-error text-sm font-bold">
+            <ul class="list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+                @if(session('google'))
+                    <li>{{ session('google') }}</li>
+                @endif
+            </ul>
+        </div>
+    @endif
+    <!-- Email/NISN Input -->
+    <div class="space-y-2 group">
+        <label class="text-sm font-bold text-on-surface tracking-tight block ml-1" for="identifier">Email atau NISN</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <span class="material-symbols-outlined text-outline text-xl" data-icon="person">person</span>
+            </div>
+            <input class="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:bg-surface-container-lowest focus:ring-0 rounded-t-xl transition-all font-medium text-on-surface placeholder:text-outline-variant" id="identifier" name="application_id" placeholder="nama@email.com / 10293xxxx" type="text" value="{{ old('application_id') }}"/>
+        </div>
+    </div>
+    <!-- Password Input -->
+    <div class="space-y-2 group">
+        <div class="flex justify-between items-center ml-1">
+            <label class="text-sm font-bold text-on-surface tracking-tight" for="password">Password</label>
+            <a class="text-xs font-bold text-primary hover:text-primary-dim transition-colors uppercase tracking-wider" href="#">Lupa Password?</a>
+        </div>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <span class="material-symbols-outlined text-outline text-xl" data-icon="lock">lock</span>
+            </div>
+            <input class="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:bg-surface-container-lowest focus:ring-0 rounded-t-xl transition-all font-medium text-on-surface placeholder:text-outline-variant" id="password" name="password" placeholder="••••••••••••" type="password"/>
+        </div>
+    </div>
+    <!-- Login Button -->
+    <button class="w-full bg-primary-container text-on-primary-fixed font-bold py-4 px-6 rounded-xl shadow-lg shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 group" type="submit">
+        <span>Masuk ke Dashboard</span>
+        <span class="material-symbols-outlined text-xl transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+    </button>
 </form>
 <!-- Divider -->
 <div class="relative my-10">
@@ -192,7 +205,7 @@
 <div class="text-center">
 <p class="text-on-surface-variant text-sm">
                             Belum punya akun?
-                            <a class="text-primary font-bold hover:underline underline-offset-4 ml-1" href="{{route('daftar')}}">Daftar Sekarang</a>
+                            <a class="text-primary font-bold hover:underline underline-offset-4 ml-1" href="{{route('ppdb.register', ['school'=>'smk'])}}">Daftar Sekarang</a>
 </p>
 </div>
 <div class="mt-12 flex justify-center gap-8 text-outline-variant">

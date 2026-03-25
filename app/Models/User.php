@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin', // allow mass assignment for admin type
+        'admin_role', // for role: superadmin, sd_admin, smp_admin, smk_admin
     ];
 
     /**
@@ -43,6 +45,25 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
+    }
+
+    // Helper: check admin role
+    public function isSuperAdmin()
+    {
+        return $this->is_admin && $this->admin_role === 'superadmin';
+    }
+    public function isSdAdmin()
+    {
+        return $this->is_admin && $this->admin_role === 'sd_admin';
+    }
+    public function isSmpAdmin()
+    {
+        return $this->is_admin && $this->admin_role === 'smp_admin';
+    }
+    public function isSmkAdmin()
+    {
+        return $this->is_admin && $this->admin_role === 'smk_admin';
     }
 }

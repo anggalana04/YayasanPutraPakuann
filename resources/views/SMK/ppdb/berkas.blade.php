@@ -195,6 +195,7 @@
                 </div>
             </section>
             <!-- Navigation Actions -->
+
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
                 <a href="{{ route('ppdb.biodata', ['school' => $school]) }}" class="w-full sm:w-auto px-8 py-4 text-primary font-bold hover:bg-primary/5 rounded-3xl transition-colors order-2 sm:order-1 text-center">Kembali ke Step 1</a>
                 <button type="submit" class="w-full sm:w-auto bg-primary text-on-primary-fixed px-12 py-4 rounded-3xl font-bold text-lg shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all duration-300 order-1 sm:order-2 flex items-center justify-center gap-2">
