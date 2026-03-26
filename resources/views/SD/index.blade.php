@@ -186,29 +186,18 @@
 <div class="w-full lg:w-5/12 relative">
 <div class="absolute -top-6 -left-6 w-32 h-32 bg-primary rounded-2xl -z-10"></div>
 <div class="rounded-3xl overflow-hidden shadow-2xl">
-<img alt="Principal Portrait" class="w-full h-auto object-cover" src="{{ asset('images/KEPSEK_SMP.png') }}"/>
+<img alt="Principal Portrait" class="w-full h-auto object-cover" src="{{ $homepage->kepsek_photo_url }}"/>
 </div>
 <div class="absolute -bottom-6 -right-6 bg-primary p-6 rounded-2xl shadow-xl">
-<p class="text-charcoal font-black text-xl leading-none">Nama Kepala Sekolah SMP</p>
-<p class="text-charcoal/70 text-sm font-bold mt-1">Kepala Sekolah</p>
+<p class="text-charcoal font-black text-xl leading-none">{{ $homepage->kepsek_name }}</p>
+<p class="text-charcoal/70 text-sm font-bold mt-1">{{ $homepage->kepsek_title }}</p>
 </div>
 </div>
 <div class="w-full lg:w-7/12 space-y-6">
 <span class="material-symbols-outlined text-primary text-4xl md:text-6xl">format_quote</span>
 <h2 class="text-3xl md:text-4xl font-black text-charcoal dark:text-white">Sambutan Kepala Sekolah</h2>
 <p class="text-lg md:text-xl italic text-slate-600 dark:text-slate-300 leading-relaxed">
-                    "Bismillahirrahmanirrahim
-
-Assalamualaikum warahmatullahi wabarakatuh
-
-Alhamdulillahi rabbil'alamin kami panjatkan kehadlirat Allah SWT, bahwasannya dengan rahmat dan karunia-nya akhirnya website sekolah ini dengan alamat http://smp.putrapakuan.sch.id/ dapat kami perbaharui.
-
-Kami mengucapkan selamat datang di Website kami Sekolah Menengah Pertama Putra Pakuan yang saya tujukan untuk seluruh guru, karyawan dan siswa siswi serta khalayak umum guna dapat mengakses seluruh informasi tentang segala profil, aktivitas/kegiatan serta fasilitas  yang ada di sekolah kami.
-
-"
-                </p>
-<p class="text-slate-600 dark:text-slate-400">
-                    Kami berharap, dengan adanya media layanan informasi situs ini semoga dapat mewujudkan hubungan silaturahmi yang lebih erat lagi, menambah wawasan, mempermudah dan mempercepat proses dalam mendapatkan informasi yang dibutuhkan.
+                    {!! nl2br(e($homepage->kepsek_sambutan)) !!}
                 </p>
 </div>
 </div>
@@ -221,65 +210,51 @@ Kami mengucapkan selamat datang di Website kami Sekolah Menengah Pertama Putra P
 <h2 class="text-3xl md:text-4xl font-black text-charcoal dark:text-white">Tulisan Terbaru</h2>
 <p class="text-slate-500 mt-2">Update terkini kegiatan dan berita dari kampus kami.</p>
 </div>
-<a class="hidden lg:flex items-center gap-2 text-charcoal dark:text-primary font-bold hover:gap-4 transition-all" href="#">
+<a class="hidden lg:flex items-center gap-2 text-charcoal dark:text-primary font-bold hover:gap-4 transition-all" href="{{ route('school.berita', ['school' => $school]) }}">
                 Lihat Semua Berita <span class="material-symbols-outlined">arrow_forward</span>
 </a>
 </div>
 <div class="grid md:grid-cols-3 gap-6 md:gap-8">
-<article class="bg-white dark:bg-charcoal/40 rounded-2xl overflow-hidden shadow-md border border-charcoal/5 dark:border-white/5 hover:shadow-xl transition-shadow group">
-<div class="h-56 bg-cover bg-center overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8toQGsfwk89NSEU-59xc2y6nC5fYwJSQQkiME-9CidHOk1JivrEfj8BJcIafRLZkRziw4sz2otEoeyDad_NzeIqjiXDrZF8TZwTW4z_7yw0zO79BE4eP7Fre-7Bm64gVgbOlllp-dB9xNo_0nkaZB0tU1tU9AV3yF63PDvr57YLbPWNoDVTVQ0sbCcQyp3LfPUKH3P_ZwZfoxcBluZuBA67S_8YvlYKGhjYAdvn_xQ6mI0Ki0fveFusS7JuLR4QoPhEpnEJolIg')">
-<div class="w-full h-full bg-charcoal/20 group-hover:bg-charcoal/0 transition-colors"></div>
-</div>
-<div class="p-4 md:p-6 space-y-4">
-<div class="flex gap-4 text-xs font-bold text-slate-400">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_month</span> 24 Okt 2023</span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">person</span> Admin</span>
-</div>
-<h3 class="text-lg md:text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">Kunjungan Industri ke Perusahaan Teknologi Nasional</h3>
-<p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3">
-                        Siswa kelas VII melakukan kunjungan belajar untuk melihat langsung proses pengembangan software di industri nyata...
+    @if ($latestNews->isEmpty())
+        <div class="md:col-span-3 text-center py-10">
+            <p class="text-slate-500 dark:text-slate-400">Belum ada berita untuk saat ini.</p>
+        </div>
+    @else
+        @foreach ($latestNews as $item)
+            <article class="bg-white dark:bg-charcoal/40 rounded-2xl overflow-hidden shadow-md border border-charcoal/5 dark:border-white/5 hover:shadow-xl transition-shadow group">
+                <div
+                    class="h-56 bg-cover bg-center overflow-hidden"
+                    @if ($item->image_url)
+                        style="background-image: url('{{ $item->image_url }}')"
+                    @endif
+                >
+                    <div class="w-full h-full bg-charcoal/20 group-hover:bg-charcoal/0 transition-colors"></div>
+                </div>
+                <div class="p-4 md:p-6 space-y-4">
+                    <div class="flex gap-4 text-xs font-bold text-slate-400">
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">calendar_month</span>
+                            {{ $item->published_at ? $item->published_at->format('d M Y') : ($item->created_at?->format('d M Y') ?? '-') }}
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">person</span>
+                            {{ $item->created_by ?? 'Admin' }}
+                        </span>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                        {{ $item->title }}
+                    </h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3">
+                        {{ \Illuminate\Support\Str::limit($item->excerpt ?? strip_tags($item->content ?? ''), 140) }}
                     </p>
-<button class="text-charcoal dark:text-white font-bold text-sm flex items-center gap-1 underline decoration-primary decoration-2 underline-offset-4">
+                    <a href="{{ route('school.berita.detail', ['school' => $school, 'news' => $item->id]) }}"
+                       class="text-charcoal dark:text-white font-bold text-sm flex items-center gap-1 underline decoration-primary decoration-2 underline-offset-4">
                         Selengkapnya
-                    </button>
-</div>
-</article>
-<article class="bg-white dark:bg-charcoal/40 rounded-2xl overflow-hidden shadow-md border border-charcoal/5 dark:border-white/5 hover:shadow-xl transition-shadow group">
-<div class="h-56 bg-cover bg-center overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDDJmMhXjcr2KCkTWI-mqHWll_sluV5Nv4Tywd9nfqOg8HJs9tpwu8haBGFBP2gik28BJed5sTEcCytCNJ8QPMVNq0IBnK8Xue7BJbBQ_6UxXaKVwALHJzmPnl4VhSekWZ2RQkVBToRvmFs6_HTFbIbxBx8O8BfKwvK7Ls_EhRqLT3t7R-JHw0g7EEfbIHB2lu7BOPUGQjZwqcK_4qYw9uKNyVSaaZxgRrT4AoTPtcpY0rU-sTMO01O07FWLUpJyvhyXM6zt6v2fw')">
-<div class="w-full h-full bg-charcoal/20 group-hover:bg-charcoal/0 transition-colors"></div>
-</div>
-<div class="p-4 md:p-6 space-y-4">
-<div class="flex gap-4 text-xs font-bold text-slate-400">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_month</span> 15 Okt 2023</span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">person</span> Kesiswaan</span>
-</div>
-<h3 class="text-lg md:text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">Pemenang Lomba Keterampilan Siswa (LKS) Tingkat Kota</h3>
-<p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3">
-                        Selamat kepada tim SMP Putra Pakuan yang berhasil meraih juara 1 dalam bidang Network Support di ajang LKS tahun ini...
-                    </p>
-<button class="text-charcoal dark:text-white font-bold text-sm flex items-center gap-1 underline decoration-primary decoration-2 underline-offset-4">
-                        Selengkapnya
-                    </button>
-</div>
-</article>
-<article class="bg-white dark:bg-charcoal/40 rounded-2xl overflow-hidden shadow-md border border-charcoal/5 dark:border-white/5 hover:shadow-xl transition-shadow group">
-<div class="h-56 bg-cover bg-center overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDrs-xYRpyg0mRnIgy3Q65YVM1nHr2fo4yipt9WjNjO08pjxUJj4LNpPBprcv5P8R3fvdUYY0ik2ZWHnf3M3KuYGqBVcEb6ca0m1_1P4kY95gRBqRqX6wcBwgAO4cPsrU4DOcamSdp8aKbeo5HwIgHq3wOhpWUOm402YPRRX3aYHU-2KodZCi1wkkJoeLvnxEkZbQMtEvT-WU0MPTshLvI32GKK-BZCC9w9nLaSnCNrBwS2aYbWA38qhB_Ohj6zWp92kg7GkE0S2A')">
-<div class="w-full h-full bg-charcoal/20 group-hover:bg-charcoal/0 transition-colors"></div>
-</div>
-<div class="p-4 md:p-6 space-y-4">
-<div class="flex gap-4 text-xs font-bold text-slate-400">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_month</span> 02 Okt 2023</span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">person</span> Humas</span>
-</div>
-<h3 class="text-lg md:text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">Tips Persiapan Ujian Kompetensi Keahlian bagi Kelas IX</h3>
-<p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3">
-                        Menghadapi UKK memerlukan persiapan yang matang baik dari sisi teknis maupun mental. Berikut adalah beberapa tips dari guru pembimbing...
-                    </p>
-<button class="text-charcoal dark:text-white font-bold text-sm flex items-center gap-1 underline decoration-primary decoration-2 underline-offset-4">
-                        Selengkapnya
-                    </button>
-</div>
-</article>
+                    </a>
+                </div>
+            </article>
+        @endforeach
+    @endif
 </div>
 </div>
 </section>

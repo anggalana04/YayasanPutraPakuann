@@ -37,7 +37,7 @@ class PageController extends Controller
             'meta_description' => 'nullable',
             'meta_robots' => 'nullable',
         ]);
-        $data['last_updated_by'] = auth()->user()->name ?? 'admin';
+        $data['last_updated_by'] = auth('admin')->user()->name ?? 'admin';
         $page->update($data);
         return redirect()->route('admin.cms.pages.index')->with('success', 'Page updated successfully.');
     }

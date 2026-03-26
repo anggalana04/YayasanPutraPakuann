@@ -34,26 +34,55 @@
 
 <section class="@container">
 <div class="relative rounded-2xl overflow-hidden shadow-lg shadow-primary/10 dark:shadow-none group">
-<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
-<div class="w-full aspect-[16/9] lg:aspect-[21/9] bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="SMK students working together on a project" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBXTr5_nf4YDXijJkEYlyCT8Y7n_CVHM4HFqpNz36YAVMFWFTkE67d0k_wJf7PgIW1ENUFJ8UbLPP3oR7sF-kGzmMcaQB0pArYm_OJ5o81LtwTMnX8lry8v9_jzEHvySKUx69jpxcqUu1PR8vWnc6-Kb90yQIvO8FJfxJzXKkMRgnhSJsl3niiD75xhJ3Id8N4c9kWWDXL3fXtmyqCSilQr__Fnw1MJD4xDkSfSjCrsyGCHN0dM8CpyltuSpX-DMHVlMFEIb6McG9M");'>
-</div>
-<div class="absolute bottom-0 left-0 w-full p-6 lg:p-10 z-20 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-<div class="max-w-3xl">
-<div class="flex items-center gap-3 mb-3">
-<span class="px-3 py-1 rounded bg-primary text-charcoal text-xs font-bold uppercase tracking-wider shadow-sm">Featured Event</span>
-<span class="text-white/90 text-xs font-medium flex items-center gap-1 bg-black/30 px-2 py-1 rounded backdrop-blur-sm">
-<span class="material-symbols-outlined text-[16px]">calendar_today</span> Oct 12, 2026
-                            </span>
-</div>
-<h3 class="text-3xl lg:text-4xl font-bold leading-tight text-white mb-2">SMK Science Fair Registration Now Open</h3>
-<p class="text-white/80 text-base lg:text-lg leading-relaxed line-clamp-2 max-w-2xl">
-                                Siswa SMK diundang untuk menampilkan proyek inovatif. Tema tahun ini berfokus pada solusi energi terbarukan. Formulir pendaftaran tersedia mulai hari ini.
-                            </p>
-</div>
-<button class="flex-shrink-0 flex items-center gap-2 bg-white text-charcoal px-6 py-3 rounded-lg font-bold hover:bg-primary transition-colors shadow-lg">
-                            Baca Selengkapnya <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
-</button>
-</div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
+
+    @if ($featuredNews)
+        <div class="w-full aspect-[16/9] lg:aspect-[21/9] bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+             data-alt="{{ $featuredNews->title }}"
+             style='background-image: url("{{ $featuredNews->image_url ?? asset('images/default-hero.jpg') }}")'>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full p-6 lg:p-10 z-20 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <div class="max-w-3xl">
+                <div class="flex items-center gap-3 mb-3">
+                    @if ($featuredNews->featured)
+                        <span class="px-3 py-1 rounded bg-blue-600 text-white text-xs font-bold uppercase tracking-wider shadow-sm">Featured</span>
+                    @else
+                        <span class="px-3 py-1 rounded bg-primary text-charcoal text-xs font-bold uppercase tracking-wider shadow-sm">Top News</span>
+                    @endif
+                    <span class="text-white/90 text-xs font-medium flex items-center gap-1 bg-black/30 px-2 py-1 rounded backdrop-blur-sm">
+                        <span class="material-symbols-outlined text-[16px]">calendar_today</span> {{ $featuredNews->published_at?->format('M d, Y') ?? $featuredNews->created_at->format('M d, Y') }}
+                    </span>
+                </div>
+                <h3 class="text-3xl lg:text-4xl font-bold leading-tight text-white mb-2">{{ $featuredNews->title }}</h3>
+                <p class="text-white/80 text-base lg:text-lg leading-relaxed line-clamp-2 max-w-2xl">
+                    {{ \Illuminate\Support\Str::limit($featuredNews->excerpt ?? strip_tags($featuredNews->content ?? ''), 170) }}
+                </p>
+            </div>
+            <a href="{{ route('school.berita.detail', ['school' => $school, 'news' => $featuredNews->id]) }}"
+               class="flex-shrink-0 flex items-center gap-2 bg-white text-charcoal px-6 py-3 rounded-lg font-bold hover:bg-primary transition-colors shadow-lg">
+                Baca Selengkapnya <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+            </a>
+        </div>
+    @else
+        <div class="w-full aspect-[16/9] lg:aspect-[21/9] bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBXTr5_nf4YDXijJkEYlyCT8Y7n_CVHM4HFqpNz36YAVMFWFTkE67d0k_wJf7PgIW1ENUFJ8UbLPP3oR7sF-kGzmMcaQB0pArYm_OJ5o81LtwTMnX8lry8v9_jzEHvySKUx69jpxcqUu1PR8vWnc6-Kb90yQIvO8FJfxJzXKkMRgnhSJsl3niiD75xhJ3Id8N4c9kWWDXL3fXtmyqCSilQr__Fnw1MJD4xDkSfSjCrsyGCHN0dM8CpyltuSpX-DMHVlMFEIb6McG9M");'></div>
+        <div class="absolute bottom-0 left-0 w-full p-6 lg:p-10 z-20 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <div class="max-w-3xl">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="px-3 py-1 rounded bg-primary text-charcoal text-xs font-bold uppercase tracking-wider shadow-sm">Featured Event</span>
+                    <span class="text-white/90 text-xs font-medium flex items-center gap-1 bg-black/30 px-2 py-1 rounded backdrop-blur-sm">
+                        <span class="material-symbols-outlined text-[16px]">calendar_today</span> Oct 12, 2026
+                    </span>
+                </div>
+                <h3 class="text-3xl lg:text-4xl font-bold leading-tight text-white mb-2">SMK Science Fair Registration Now Open</h3>
+                <p class="text-white/80 text-base lg:text-lg leading-relaxed line-clamp-2 max-w-2xl">
+                    Siswa SMK diundang untuk menampilkan proyek inovatif. Tema tahun ini berfokus pada solusi energi terbarukan. Formulir pendaftaran tersedia mulai hari ini.
+                </p>
+            </div>
+            <button class="flex-shrink-0 flex items-center gap-2 bg-white text-charcoal px-6 py-3 rounded-lg font-bold hover:bg-primary transition-colors shadow-lg">
+                Baca Selengkapnya <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+            </button>
+        </div>
+    @endif
 </div>
 </section>
 
@@ -70,26 +99,36 @@
 </div>
 
 <div class="flex flex-col gap-8">
-<!-- Example Article Card -->
+@forelse ($news as $item)
 <article class="group flex flex-col md:flex-row gap-6 bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all hover:border-primary/20 cursor-pointer"
-    onclick="window.location.href='{{ route('school.berita.detail', ['school' => request()->route('school')]) }}'">
+    onclick="window.location.href='{{ route('school.berita.detail', ['school' => $school, 'news' => $item->id]) }}'">
     <div class="w-full md:w-1/3 aspect-video md:aspect-4/3 rounded-lg overflow-hidden relative">
-        <div class="w-full h-full bg-cover bg-center transform group-hover:scale-105 transition-transform duration-500" data-alt="SMK teacher helping students" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDTyPsZB5w1LUk7djUDa91BJSOF4ndR7HXwKID8V_PicCKctO3A1ofuVd23fYLSJUUAwe60TUuByvW75N0eA2h_GNHYS2BJnpshQATTJGQdoaKhBw_iZoV47NuEWPP4BplM8jRdAsIDWeiVHCC0fgqeIgzL5m0U87nRj4cOSwO8_FVqQxHnEESytitQSxvGRwD726rWA0keEiAjl3KQU7EL8DEMBA_FaimBUxyjJ01yauYcdB6k9SihvZIlL-Nu27D5q7iRz5jztqs");'>
+        <div
+            class="w-full h-full bg-cover bg-center transform group-hover:scale-105 transition-transform duration-500"
+            data-alt="{{ $item->title }}"
+            @if ($item->image_url)
+                style='background-image: url("{{ $item->image_url }}")'
+            @endif
+        >
         </div>
         <div class="absolute top-2 left-2">
-            <span class="px-2 py-1 rounded bg-primary text-white text-[10px] font-bold uppercase tracking-wider shadow-sm">Kebijakan</span>
+            <span class="px-2 py-1 rounded bg-primary text-white text-[10px] font-bold uppercase tracking-wider shadow-sm">{{ $item->category ?? 'Berita' }}</span>
         </div>
     </div>
     <div class="flex-1 flex flex-col">
         <div class="flex items-center gap-2 mb-2 text-xs font-medium text-slate-500">
-            <span class="material-symbols-outlined text-[16px]">schedule</span> Oct 10, 2026
+            <span class="material-symbols-outlined text-[16px]">schedule</span>
+            {{ $item->published_at ? $item->published_at->format('M d, Y') : ($item->created_at?->format('M d, Y') ?? '-') }}
+            @if ($item->featured)
+                <span class="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white bg-blue-600 rounded-full">Featured</span>
+            @endif
         </div>
-        <h3 class="text-xl font-bold leading-tight text-charcoal dark:text-white mb-2 group-hover:text-primary transition-colors">Protokol Baru Drop-off Siswa SMK</h3>
+        <h3 class="text-xl font-bold leading-tight text-charcoal dark:text-white mb-2 group-hover:text-primary transition-colors">{{ $item->title }}</h3>
         <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-2 mb-4">
-            Demi keamanan siswa, regulasi lalu lintas baru akan diterapkan di gerbang SMK mulai minggu depan. Silakan cek peta terbaru.
+            {{ \Illuminate\Support\Str::limit($item->excerpt ?? strip_tags($item->content ?? ''), 160) }}
         </p>
         <div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
-            <a class="text-sm font-bold text-primary flex items-center gap-1 group/link hover:text-[#E5A800]" href="{{ route('school.berita.detail', ['school' => request()->route('school')]) }}">
+            <a class="text-sm font-bold text-primary flex items-center gap-1 group/link hover:text-[#E5A800]" href="{{ route('school.berita.detail', ['school' => $school, 'news' => $item->id]) }}">
                 Baca Update <span class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform">arrow_right_alt</span>
             </a>
             <button class="text-slate-500 hover:text-primary transition-colors">
@@ -98,14 +137,13 @@
         </div>
     </div>
 </article>
-<!-- Add more article cards as needed -->
+@empty
+<div class="text-slate-600 dark:text-slate-400 text-sm">Belum ada berita yang dipublikasikan.</div>
+@endforelse
 </div>
 
 <div class="flex justify-center pt-4">
-<button class="px-8 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-charcoal dark:text-white rounded-lg font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-2 shadow-sm">
-                            Muat Lebih Banyak
-                            <span class="material-symbols-outlined text-[20px]">expand_more</span>
-</button>
+    {{ $news->links() }}
 </div>
 </div>
 

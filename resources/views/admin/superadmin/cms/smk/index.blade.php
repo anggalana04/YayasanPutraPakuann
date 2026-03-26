@@ -159,10 +159,10 @@
                                 <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Published</span>
                             </td>
                             <td class="px-6 py-6 text-right">
-                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Edit Content</button>
-                            </td>
-                        </tr>
-                        <!-- Kontak -->
+                            <a href="{{ route('admin.cms.galeri.index', ['schoolType' => 'smk']) }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Manage Galeri</a>
+                        </td>
+                    </tr>
+                    <!-- Kontak -->
                         <tr class="hover:bg-surface-container-low/30 transition-colors group">
                             <td class="px-6 py-6">
                                 <div>

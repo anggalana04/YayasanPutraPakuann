@@ -48,171 +48,106 @@
     </div>
     <!-- Directory Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <!-- Card 1: Headmaster -->
+        @forelse ($teacherStaff as $person)
         <div class="group bg-white dark:bg-charcoal rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100 dark:border-slate-800">
-            <div class="aspect-3/4 relative overflow-hidden">
-                <img alt="Hj. Siti Aminah" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Portrait of Hj. Siti Aminah, M.Pd. in formal attire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3pX_QBB3NhrxW6WGDTTVO2Fr15kRmQ7Kzs0fCv5spYBeWhMtEqGP1sHatsosC0BWPhJqhHHhg45P_8OWdaBIdQKv007TyHJRpcyQwKB4Hky6VWiHC7Oq6F_moOm-9_CdZIQkJtaLGA4CM3UvLzBfpV4cK9LjuLOuCjgDy96dionZoYrFvnu2LuiYW4TZd4tOj6QD5qDwUc1oiRAT9SP10NqqA4fQX6mg1Er7_Dxsh-q7RE_jXAEfXsC4IKZ6vf6vLaq6ks7i46Q"/>
-                <div class="absolute top-4 right-4 px-3 py-1 bg-accent-yellow text-charcoal text-[10px] font-bold rounded-full uppercase">Manajemen</div>
+            <div class="relative overflow-hidden h-40 sm:h-44 md:h-48">
+                @if ($person->photo_url)
+                    <img alt="{{ $person->name }}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="{{ $person->photo_url }}"/>
+                @else
+                    <div class="w-full h-full bg-slate-200 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-slate-400 text-6xl">person</span>
+                    </div>
+                @endif
+                <div class="absolute top-4 right-4 px-3 py-1
+                    @if($person->type === 'management') bg-accent-yellow text-charcoal
+                    @elseif($person->type === 'teacher') bg-primary text-white
+                    @elseif($person->type === 'staff') bg-slate-500 text-white
+                    @else bg-slate-400 text-white @endif
+                    text-[10px] font-bold rounded-full uppercase">
+                    @switch($person->type)
+                        @case('management') Manajemen @break
+                        @case('teacher') Guru @break
+                        @case('staff') Staf @break
+                        @default {{ ucfirst($person->type) }}
+                    @endswitch
+                </div>
             </div>
             <div class="p-5 space-y-2">
-                <h3 class="text-lg font-bold text-charcoal dark:text-white leading-tight">Hj. Siti Aminah, M.Pd.</h3>
-                <p class="text-primary text-sm font-medium">Kepala Sekolah</p>
+                <h3 class="text-lg font-bold text-charcoal dark:text-white leading-tight">{{ $person->name }}</h3>
+                <p class="text-primary text-sm font-medium">{{ $person->title }}</p>
+                @if ($person->department)
+                    <p class="text-slate-500 dark:text-slate-400 text-xs">{{ $person->department }}</p>
+                @endif
                 <div class="pt-3 flex gap-3">
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">mail</span>
-                    </a>
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">alternate_email</span>
-                    </a>
+                    @if ($person->email)
+                        <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="mailto:{{ $person->email }}" title="Email">
+                            <span class="material-symbols-outlined text-lg">mail</span>
+                        </a>
+                    @endif
+                    @if ($person->phone)
+                        <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="tel:{{ $person->phone }}" title="Telepon">
+                            <span class="material-symbols-outlined text-lg">phone</span>
+                        </a>
+                    @endif
+                    @if (!$person->email && !$person->phone)
+                        <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-400">
+                            <span class="material-symbols-outlined text-lg">contact_mail</span>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
-        <!-- Card 2: Apid Sutarno -->
-        <div class="group bg-white dark:bg-charcoal rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100 dark:border-slate-800">
-            <div class="aspect-3/4 relative overflow-hidden">
-                <img alt="Apid Sutarno" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Portrait of Apid Sutarno, S.T. wearing school uniform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSnhLpEkjBFVxSf8y7OxFHcYzhpyhcdBPzZ1ugHp58FPLERxoz5b6QQbg800T4NTg4-UYPAOtrTCwHPUN5NZIPJxh896gOjMliss854Vw-3RfeZZyyWlOUFxKpH5QA2EDxCDgJDfXjVjLuvGuXKGJo4FdkeQPC0y9leQlGPS74aXBxqkYqgRA1Urgahm8b8qOgpRDaFz-js8a60gicuDbi7BVooyr_5wEzXH6Vrn4Jyqh7DSyIZbdELghDprmqAsFcRtPGrNJRvg"/>
-                <div class="absolute top-4 right-4 px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-full uppercase">Teknik (TKJ)</div>
-            </div>
-            <div class="p-5 space-y-2">
-                <h3 class="text-lg font-bold text-charcoal dark:text-white leading-tight">Apid Sutarno, S.T.</h3>
-                <p class="text-primary text-sm font-medium">Kepala Program Keahlian TKJ</p>
-                <div class="pt-3 flex gap-3">
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">link</span>
-                    </a>
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">mail</span>
-                    </a>
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">videocam</span>
-                    </a>
+        @empty
+        <div class="col-span-full text-center py-12">
+            <div class="space-y-4">
+                <span class="material-symbols-outlined text-6xl text-slate-300">school</span>
+                <div>
+                    <h3 class="text-xl font-bold text-charcoal dark:text-white mb-2">Belum ada data guru/staff</h3>
+                    <p class="text-slate-500 dark:text-slate-400">Data tenaga pendidik dan kependidikan akan segera ditambahkan.</p>
                 </div>
             </div>
         </div>
-        <!-- Card 3: Budi Raharjo -->
-        <div class="group bg-white dark:bg-charcoal rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100 dark:border-slate-800">
-            <div class="aspect-3/4 relative overflow-hidden">
-                <img alt="Budi Raharjo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Portrait of Budi Raharjo, S.Kom. teacher of Computer Science" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0MAnRW29-TD8dugQgHfAYO0r1CaMeIqavnKjgsL44fDLvOfr5SOIgGiEdBkZQtnfCRDQGbrJE8p1KIi7JNmIq7-JciHc65rXRJB3szqZ-e0w3FmETRX0vXPWTQfG2nLdLktl5mDfOL-EEgtn1-D9uAe_i2DeQFkHEBts9RtoYwfgUp1rBUQZM7CC7BbWmIz_IUxcGGz4kSLze2jmF3TbZFOqMX6NrQRf5T4O5-1RV8ImxsHma-5PgPNDi4GfcoG81NLTVsS1GyQ"/>
-                <div class="absolute top-4 right-4 px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-full uppercase">Teknik (RPL)</div>
-            </div>
-            <div class="p-5 space-y-2">
-                <h3 class="text-lg font-bold text-charcoal dark:text-white leading-tight">Budi Raharjo, S.Kom.</h3>
-                <p class="text-primary text-sm font-medium">Guru Teknik Komputer</p>
-                <div class="pt-3 flex gap-3">
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">share</span>
-                    </a>
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">mail</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- Card 4: Dewi Lestari -->
-        <div class="group bg-white dark:bg-charcoal rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100 dark:border-slate-800">
-            <div class="aspect-3/4 relative overflow-hidden">
-                <img alt="Dewi Lestari" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Portrait of Dewi Lestari, S.Pd. English teacher" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDITP5xPyf5kYK5GnFGgmOpEbkMnfL9amOtP3Ymc0R8eey_TekDkMmVpG5TewBz-u4EsrD44lfY07mk1UghTgvrPz6ZNAk05YNgPR3c9_EdKEkSgs0DdEc9CQObu3Xu3DyGBqeWs9Qqb0R5nht7yLWhT4LukSB4PnuzodrMjS2WU2RrKmG4uV704r4orDrUi78YluAWBSDkIjZ1lnpOUZnKQY7PS5GKsJD8XCCbuohsR3EYUQQEwLDFVR_dwl331IOyUHgyscNpA"/>
-                <div class="absolute top-4 right-4 px-3 py-1 bg-slate-400 text-white text-[10px] font-bold rounded-full uppercase">Umum</div>
-            </div>
-            <div class="p-5 space-y-2">
-                <h3 class="text-lg font-bold text-charcoal dark:text-white leading-tight">Dewi Lestari, S.Pd.</h3>
-                <p class="text-primary text-sm font-medium">Guru Bahasa Inggris</p>
-                <div class="pt-3 flex gap-3">
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">mail</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- Card 5: Ahmad Fauzi -->
-        <div class="group bg-white dark:bg-charcoal rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100 dark:border-slate-800">
-            <div class="aspect-3/4 relative overflow-hidden">
-                <img alt="Ahmad Fauzi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Portrait of Ahmad Fauzi, M.T. in vice principal attire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOKRasaEeWEATbjADY85AyJumcJtm1aJcSVTkzV1e8M2VhM7IiJ_bwTeDuZ7a3goJOAolzvNUMS2epW3c4-LUIyvlwHyk97-7ioBVbUWJmuu5gq6iJhHaW2Xqlac3Q4iyf3OpfXLk5JFnt49zYW3uvdGCg2UoxBBO6GtRAfBSK0pXO8iSpEDFVKrA23D8ojMsNTloiGQUfS-FXQN_rbrIdjXh7mnVLS2dRy5dR85OB7rzEFGkrOiHsRIw9H50OCl-bJtno-Bbe7w"/>
-                <div class="absolute top-4 right-4 px-3 py-1 bg-accent-yellow text-charcoal text-[10px] font-bold rounded-full uppercase">Manajemen</div>
-            </div>
-            <div class="p-5 space-y-2">
-                <h3 class="text-lg font-bold text-charcoal dark:text-white leading-tight">Ahmad Fauzi, M.T.</h3>
-                <p class="text-primary text-sm font-medium">Waka Hubungan Industri</p>
-                <div class="pt-3 flex gap-3">
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">work</span>
-                    </a>
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">mail</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- Card 6: Rina Wijaya -->
-        <div class="group bg-white dark:bg-charcoal rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100 dark:border-slate-800">
-            <div class="aspect-3/4 relative overflow-hidden">
-                <img alt="Rina Wijaya" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Portrait of Rina Wijaya, S.E. financial officer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-lwd88qkBOt01DD13LMDPeLvhMPrx0dyShAV5Wna1gBiJa7UiCBjaI6Ov4pSfRVcXy-DObiyBsHd9kWElPSHa0W2-zVuaWy8TV9GPKRvgeQpq_bi0-Lyv5AoyxvHu6-fhv0CrLrGWWe9MNRonfPP8wKgapBiL6LGK1kKWA2HW9GpXquT1z7tnL_9rP0vXAPKW-1BZ16KfiFsbJnCgWEYxvh28FPOjOFY4lGbaEuscJc8BsoKSc8caWOFNTtTuLjyN0QwEv0ak4w"/>
-                <div class="absolute top-4 right-4 px-3 py-1 bg-slate-500 text-white text-[10px] font-bold rounded-full uppercase">Staf Admin</div>
-            </div>
-            <div class="p-5 space-y-2">
-                <h3 class="text-lg font-bold text-charcoal dark:text-white leading-tight">Rina Wijaya, S.E.</h3>
-                <p class="text-primary text-sm font-medium">Bendahara Sekolah</p>
-                <div class="pt-3 flex gap-3">
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">mail</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- Card 7: Hendra Kurniawan -->
-        <div class="group bg-white dark:bg-charcoal rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100 dark:border-slate-800">
-            <div class="aspect-3/4 relative overflow-hidden">
-                <img alt="Hendra Kurniawan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Portrait of Dr. Hendra Kurniawan mathematics teacher" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG_3d1hpOMI82hzgip4cvmQesL5kbHDJ4XE5lJPfvC2ULxiXOeIqilqVZ4RVm6k0u4D4M_u1TZs_BJymjNEZVEKYKcTR7EhxStdt2BBgwFXNou2jMdFbexhuxV-s6rpUw4W4xR7AFRO3frAc02KLcUGAK_3UHP0fL0W5z0Ke1nte317RRyEYsasLLrurCYj1CgKCBZycl5CARyX6WO5nGuQTp-DxCnE7CAjaso6FAOgyiAGTSwWzxcpvZpILVtll9HsUMVyWjBAw"/>
-                <div class="absolute top-4 right-4 px-3 py-1 bg-slate-400 text-white text-[10px] font-bold rounded-full uppercase">Umum</div>
-            </div>
-            <div class="p-5 space-y-2">
-                <h3 class="text-lg font-bold text-charcoal dark:text-white leading-tight">Dr. Hendra Kurniawan</h3>
-                <p class="text-primary text-sm font-medium">Guru Matematika</p>
-                <div class="pt-3 flex gap-3">
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">school</span>
-                    </a>
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">mail</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- Card 8: Siska Putri -->
-        <div class="group bg-white dark:bg-charcoal rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100 dark:border-slate-800">
-            <div class="aspect-3/4 relative overflow-hidden">
-                <img alt="Siska Putri" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Portrait of Siska Putri, S.Si. laboratory staff" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv_VV6NcpS43hgxbw_YwcmuZVkPida8yxp5TQwWWWftHI2bqwYYNggcBj1EUhXNCzj8MUrKFE96BlYfO8_aQyQfROSBI1O7qan3CjCcPLBx_25li5H3wik5MLFa8xi--wJHeOoq0XAvHFbNxHvf4cCSDMOfMRTF0R5F0jX_fYvtis460ddG49BofCHarBt1Ervc-xnLpBVKUOZVgcC_LhfyWUHLSPRk5N4CV_KPMtoQ7J_X7xDYCI5Ni4lC_0lzxJJy0xP-pDlNw"/>
-                <div class="absolute top-4 right-4 px-3 py-1 bg-emerald-500 text-white text-[10px] font-bold rounded-full uppercase">Laboran</div>
-            </div>
-            <div class="p-5 space-y-2">
-                <h3 class="text-lg font-bold text-charcoal dark:text-white leading-tight">Siska Putri, S.Si.</h3>
-                <p class="text-primary text-sm font-medium">Laboran Kimia Industri</p>
-                <div class="pt-3 flex gap-3">
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">science</span>
-                    </a>
-                    <a class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white transition-colors" href="#">
-                        <span class="material-symbols-outlined text-lg">mail</span>
-                    </a>
-                </div>
-            </div>
-        </div>
+        @endforelse
     </div>
     <!-- Pagination -->
     <div class="mt-16 flex flex-col items-center gap-6">
-        <p class="text-sm text-slate-500 dark:text-slate-400">Menampilkan 8 dari 124 Staf &amp; Pengajar</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+            Menampilkan {{ $teacherStaff->count() }} dari {{ method_exists($teacherStaff, 'total') ? $teacherStaff->total() : $teacherStaff->count() }} Staf &amp; Pengajar
+        </p>
         <div class="flex items-center gap-2">
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                <span class="material-symbols-outlined">chevron_left</span>
-            </button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">1</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">2</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">3</button>
-            <span class="px-2">...</span>
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">16</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                <span class="material-symbols-outlined">chevron_right</span>
-            </button>
+            @if (method_exists($teacherStaff, 'hasPages') && $teacherStaff->hasPages())
+                @if (method_exists($teacherStaff, 'onFirstPage') && $teacherStaff->onFirstPage())
+                    <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 opacity-50 cursor-not-allowed" disabled>
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                @else
+                    <a href="{{ $teacherStaff->previousPageUrl() }}" class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </a>
+                @endif
+
+                @if (method_exists($teacherStaff, 'getUrlRange'))
+                    @foreach ($teacherStaff->getUrlRange(1, $teacherStaff->lastPage()) as $page => $url)
+                        @if ($page == $teacherStaff->currentPage())
+                            <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">{{ $page }}</button>
+                        @else
+                            <a href="{{ $url }}" class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">{{ $page }}</a>
+                        @endif
+                    @endforeach
+                @endif
+
+                @if (method_exists($teacherStaff, 'hasMorePages') && $teacherStaff->hasMorePages())
+                    <a href="{{ $teacherStaff->nextPageUrl() }}" class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </a>
+                @else
+                    <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 opacity-50 cursor-not-allowed" disabled>
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                @endif
+            @else
+                <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">1</button>
+            @endif
         </div>
     </div>
 </div>

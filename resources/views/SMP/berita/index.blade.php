@@ -70,26 +70,33 @@
 </div>
 
 <div class="flex flex-col gap-8">
-<!-- Example Article Card -->
+@forelse ($news as $item)
 <article class="group flex flex-col md:flex-row gap-6 bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all hover:border-primary/20 cursor-pointer"
-    onclick="window.location.href='{{ route('school.berita.detail', ['school' => request()->route('school')]) }}'">
+    onclick="window.location.href='{{ route('school.berita.detail', ['school' => $school, 'news' => $item->id]) }}'">
     <div class="w-full md:w-1/3 aspect-video md:aspect-4/3 rounded-lg overflow-hidden relative">
-        <div class="w-full h-full bg-cover bg-center transform group-hover:scale-105 transition-transform duration-500" data-alt="SMK teacher helping students" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDTyPsZB5w1LUk7djUDa91BJSOF4ndR7HXwKID8V_PicCKctO3A1ofuVd23fYLSJUUAwe60TUuByvW75N0eA2h_GNHYS2BJnpshQATTJGQdoaKhBw_iZoV47NuEWPP4BplM8jRdAsIDWeiVHCC0fgqeIgzL5m0U87nRj4cOSwO8_FVqQxHnEESytitQSxvGRwD726rWA0keEiAjl3KQU7EL8DEMBA_FaimBUxyjJ01yauYcdB6k9SihvZIlL-Nu27D5q7iRz5jztqs");'>
+        <div
+            class="w-full h-full bg-cover bg-center transform group-hover:scale-105 transition-transform duration-500"
+            data-alt="{{ $item->title }}"
+            @if ($item->image_url)
+                style='background-image: url("{{ $item->image_url }}")'
+            @endif
+        >
         </div>
         <div class="absolute top-2 left-2">
-            <span class="px-2 py-1 rounded bg-primary text-white text-[10px] font-bold uppercase tracking-wider shadow-sm">Kebijakan</span>
+            <span class="px-2 py-1 rounded bg-primary text-white text-[10px] font-bold uppercase tracking-wider shadow-sm">{{ $item->category ?? 'Berita' }}</span>
         </div>
     </div>
     <div class="flex-1 flex flex-col">
         <div class="flex items-center gap-2 mb-2 text-xs font-medium text-slate-500">
-            <span class="material-symbols-outlined text-[16px]">schedule</span> Oct 10, 2026
+            <span class="material-symbols-outlined text-[16px]">schedule</span>
+            {{ $item->published_at ? $item->published_at->format('M d, Y') : ($item->created_at?->format('M d, Y') ?? '-') }}
         </div>
-        <h3 class="text-xl font-bold leading-tight text-charcoal dark:text-white mb-2 group-hover:text-primary transition-colors">Protokol Baru Drop-off Siswa SMK</h3>
+        <h3 class="text-xl font-bold leading-tight text-charcoal dark:text-white mb-2 group-hover:text-primary transition-colors">{{ $item->title }}</h3>
         <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-2 mb-4">
-            Demi keamanan siswa, regulasi lalu lintas baru akan diterapkan di gerbang SMK mulai minggu depan. Silakan cek peta terbaru.
+            {{ \Illuminate\Support\Str::limit($item->excerpt ?? strip_tags($item->content ?? ''), 160) }}
         </p>
         <div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
-            <a class="text-sm font-bold text-primary flex items-center gap-1 group/link hover:text-[#E5A800]" href="{{ route('school.berita.detail', ['school' => request()->route('school')]) }}">
+            <a class="text-sm font-bold text-primary flex items-center gap-1 group/link hover:text-[#E5A800]" href="{{ route('school.berita.detail', ['school' => $school, 'news' => $item->id]) }}">
                 Baca Update <span class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform">arrow_right_alt</span>
             </a>
             <button class="text-slate-500 hover:text-primary transition-colors">
@@ -98,14 +105,13 @@
         </div>
     </div>
 </article>
-<!-- Add more article cards as needed -->
+@empty
+<div class="text-slate-600 dark:text-slate-400 text-sm">Belum ada berita yang dipublikasikan.</div>
+@endforelse
 </div>
 
 <div class="flex justify-center pt-4">
-<button class="px-8 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-charcoal dark:text-white rounded-lg font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-2 shadow-sm">
-                            Muat Lebih Banyak
-                            <span class="material-symbols-outlined text-[20px]">expand_more</span>
-</button>
+    {{ $news->links() }}
 </div>
 </div>
 

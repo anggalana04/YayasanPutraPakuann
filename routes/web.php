@@ -64,7 +64,7 @@ Route::middleware(['auth:admin'])->group(function () {
 
     // CMS Management Index
     Route::get('/admin/cms', function () {
-        return view('admin.superadmin.cms.index');
+        return redirect()->route('admin.cms.schools');
     })->name('admin.cms.index');
 
     Route::resource('/admin/cms/pages', App\Http\Controllers\Admin\PageController::class)->middleware('auth:admin')->names('admin.cms.pages')->except(['show', 'destroy', 'create', 'store']);
@@ -81,13 +81,115 @@ Route::middleware(['auth:admin'])->group(function () {
         return view('admin.superadmin.cms.schools', compact('schools'));
     })->name('admin.cms.schools');
 
-    Route::get('/admin/cms/{schoolType}', function ($schoolType) {
-        $view = 'admin.superadmin.cms.' . strtolower($schoolType) . '.index';
-        if (view()->exists($view)) {
-            return view($view, ['schoolType' => $schoolType]);
-        }
-        abort(404);
-    })->where('schoolType', 'smk|sd|smp')->name('admin.cms.by_school');
+    Route::get('/admin/cms/{schoolType}', [\App\Http\Controllers\Admin\CmsController::class, 'index'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.by_school');
+
+    Route::post('/admin/cms/{schoolType}/kepsek', [\App\Http\Controllers\Admin\CmsController::class, 'updateKepsek'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.kepsek.update');
+
+    Route::get('/admin/cms/{schoolType}/berita', [\App\Http\Controllers\Admin\NewsAdminController::class, 'index'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.berita.index');
+
+    Route::get('/admin/cms/{schoolType}/berita/create', [\App\Http\Controllers\Admin\NewsAdminController::class, 'create'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.berita.create');
+
+    Route::post('/admin/cms/{schoolType}/galeri', [\App\Http\Controllers\Admin\GalleryAdminController::class, 'store'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.galeri.store');
+
+    Route::get('/admin/cms/{schoolType}/galeri', [\App\Http\Controllers\Admin\GalleryAdminController::class, 'index'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.galeri.index');
+
+    Route::get('/admin/cms/{schoolType}/galeri/create', [\App\Http\Controllers\Admin\GalleryAdminController::class, 'create'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.galeri.create');
+
+    // Carousel management for hero section
+    Route::get('/admin/cms/{schoolType}/carousel', [\App\Http\Controllers\Admin\CarouselAdminController::class, 'index'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.carousel.index');
+
+    Route::get('/admin/cms/{schoolType}/carousel/create', [\App\Http\Controllers\Admin\CarouselAdminController::class, 'create'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.carousel.create');
+
+    Route::post('/admin/cms/{schoolType}/carousel', [\App\Http\Controllers\Admin\CarouselAdminController::class, 'store'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.carousel.store');
+
+    Route::get('/admin/cms/{schoolType}/carousel/{carousel}/edit', [\App\Http\Controllers\Admin\CarouselAdminController::class, 'edit'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.carousel.edit');
+
+    Route::put('/admin/cms/{schoolType}/carousel/{carousel}', [\App\Http\Controllers\Admin\CarouselAdminController::class, 'update'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.carousel.update');
+
+    Route::delete('/admin/cms/{schoolType}/carousel/{carousel}', [\App\Http\Controllers\Admin\CarouselAdminController::class, 'destroy'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.carousel.destroy');
+
+    Route::get('/admin/cms/{schoolType}/galeri/{id}/edit', [\App\Http\Controllers\Admin\GalleryAdminController::class, 'edit'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.galeri.edit');
+
+    Route::put('/admin/cms/{schoolType}/galeri/{id}', [\App\Http\Controllers\Admin\GalleryAdminController::class, 'update'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.galeri.update');
+
+    Route::delete('/admin/cms/{schoolType}/galeri/{id}', [\App\Http\Controllers\Admin\GalleryAdminController::class, 'destroy'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.galeri.destroy');
+
+    Route::post('/admin/cms/{schoolType}/berita', [\App\Http\Controllers\Admin\NewsAdminController::class, 'store'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.berita.store');
+
+    Route::get('/admin/cms/{schoolType}/berita/{news}/edit', [\App\Http\Controllers\Admin\NewsAdminController::class, 'edit'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.berita.edit');
+
+    Route::put('/admin/cms/{schoolType}/berita/{news}', [\App\Http\Controllers\Admin\NewsAdminController::class, 'update'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.berita.update');
+
+    Route::post('/admin/cms/{schoolType}/berita/{news}/toggle-featured', [\App\Http\Controllers\Admin\NewsAdminController::class, 'toggleFeatured'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.berita.toggle_featured');
+
+    Route::delete('/admin/cms/{schoolType}/berita/{news}', [\App\Http\Controllers\Admin\NewsAdminController::class, 'destroy'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.berita.destroy');
+
+    // Teacher & Staff Management Routes
+    Route::get('/admin/cms/{schoolType}/guru', [\App\Http\Controllers\Admin\TeacherStaffAdminController::class, 'index'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.guru.index');
+
+    Route::get('/admin/cms/{schoolType}/guru/create', [\App\Http\Controllers\Admin\TeacherStaffAdminController::class, 'create'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.guru.create');
+
+    Route::post('/admin/cms/{schoolType}/guru', [\App\Http\Controllers\Admin\TeacherStaffAdminController::class, 'store'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.guru.store');
+
+    Route::get('/admin/cms/{schoolType}/guru/{guru}/edit', [\App\Http\Controllers\Admin\TeacherStaffAdminController::class, 'edit'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.guru.edit');
+
+    Route::put('/admin/cms/{schoolType}/guru/{guru}', [\App\Http\Controllers\Admin\TeacherStaffAdminController::class, 'update'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.guru.update');
+
+    Route::delete('/admin/cms/{schoolType}/guru/{guru}', [\App\Http\Controllers\Admin\TeacherStaffAdminController::class, 'destroy'])
+        ->where('schoolType', 'smk|sd|smp')
+        ->name('admin.cms.guru.destroy');
 
     // PPDB Management for selected school (per jenjang view)
     Route::get('/admin/ppdb/management/{school}', function ($school) {
@@ -270,7 +372,7 @@ Route::prefix('{school}')
             abort(404);
         };
 
-        Route::get('/', fn($school) => $render($school, 'index'))->name('school.home');
+        Route::get('/', [\App\Http\Controllers\SchoolHomeController::class, 'index'])->name('school.home');
 
         Route::get('/visi', fn($school) => $render($school, 'visi'))->name('school.visi');
 
@@ -300,23 +402,16 @@ Route::prefix('{school}')
 
         Route::get('/kesiswaan', fn($school) => $render($school, 'kesiswaan'))->name('school.kesiswaan');
 
-        Route::get('/galeri', fn($school) => $render($school, 'galeri'))->name('school.galeri');
+        Route::get('/galeri', [\App\Http\Controllers\GalleryController::class, 'index'])->name('school.galeri');
+        Route::get('/galeri/load-more', [\App\Http\Controllers\GalleryController::class, 'loadMore'])->name('school.galeri.load-more');
 
         Route::get('/kontak', fn($school) => $render($school, 'kontak'))->name('school.kontak');
 
-        Route::get('/berita', fn($school) => $render($school, 'berita.index'))->name('school.berita');
+        Route::get('/berita', [\App\Http\Controllers\SchoolNewsController::class, 'index'])->name('school.berita');
 
-        Route::get('/berita/detail', fn($school) => $render($school, 'berita.detail'))->name('school.berita.detail');
+        Route::get('/berita/detail/{news}', [\App\Http\Controllers\SchoolNewsController::class, 'show'])->name('school.berita.detail');
 
-        Route::get('/direktori/guru', function ($school) {
-            $view = strtoupper($school) . '.direktori_guru';
-
-            if (view()->exists($view)) {
-                return view($view, compact('school'));
-            }
-
-            abort(404);
-        })->name('school.direktori.guru');
+        Route::get('/direktori/guru', [\App\Http\Controllers\SchoolHomeController::class, 'teacherDirectory'])->name('school.direktori.guru');
 
         Route::get('/direktori/siswa', function ($school) {
             $view = strtoupper($school) . '.direktori_siswa';
