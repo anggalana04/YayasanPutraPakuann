@@ -38,7 +38,7 @@
                             <td class="px-6 py-6 font-bold text-[#1c190d]">{{ $school->name }}</td>
                             <td class="px-6 py-6 text-on-surface-variant">{{ $school->type }}</td>
                             <td class="px-6 py-6">
-                                <a href="#" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all inline-block">Manage</a>
+                                <a href="{{ url('/admin/cms/' . strtolower($school->type)) }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all inline-block">Manage</a>
                             </td>
                         </tr>
                         @empty

@@ -67,16 +67,27 @@ Route::middleware(['auth:admin'])->group(function () {
         return view('admin.superadmin.cms.index');
     })->name('admin.cms.index');
 
+    Route::resource('/admin/cms/pages', App\Http\Controllers\Admin\PageController::class)->middleware('auth:admin')->names('admin.cms.pages')->except(['show', 'destroy', 'create', 'store']);
+
     // CMS Detail Page
     Route::get('/admin/cms/detail', function () {
         return view('admin.superadmin.cms.detail');
     })->name('admin.cms.detail');
 
     // School selection page for CMS
+    //smk
     Route::get('/admin/cms/schools', function () {
         $schools = School::all();
         return view('admin.superadmin.cms.schools', compact('schools'));
     })->name('admin.cms.schools');
+
+    Route::get('/admin/cms/{schoolType}', function ($schoolType) {
+        $view = 'admin.superadmin.cms.' . strtolower($schoolType) . '.index';
+        if (view()->exists($view)) {
+            return view($view, ['schoolType' => $schoolType]);
+        }
+        abort(404);
+    })->where('schoolType', 'smk|sd|smp')->name('admin.cms.by_school');
 
     // PPDB Management for selected school (per jenjang view)
     Route::get('/admin/ppdb/management/{school}', function ($school) {
@@ -133,7 +144,7 @@ Route::middleware(['auth:admin'])->group(function () {
     // Route::get('/admin/ppdb/applicants/{id}', function ($id) {
     //     // You can replace this with controller logic as needed
     //     return view('admin.superadmin.ppdb.applicant_detail');
-    // })->name('admin.ppdb.applicant_detail');    
+    // })->name('admin.ppdb.applicant_detail');
 
     // PPDB Applicant Management by School (per jenjang view)
     Route::get('/admin/ppdb/applicants/{school}', function ($school) {
