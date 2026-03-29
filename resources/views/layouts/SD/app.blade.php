@@ -1,4 +1,4 @@
-﻿<!-- resources/views/layouts/SD/app.blade.php -->
+<!-- resources/views/layouts/SD/app.blade.php -->
 <!DOCTYPE html>
 <html lang="id" style="margin:0; padding:0; background:#1e293b;">
 <head>
@@ -114,10 +114,52 @@
         }
 
         body { font-family: 'Lexend', sans-serif; }
+
+        .site-loading-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.35);
+            backdrop-filter: blur(2px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 180ms ease;
+        }
+
+        .site-loading-overlay.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .site-loading-spinner {
+            width: 52px;
+            height: 52px;
+            border-radius: 9999px;
+            border: 4px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #dc2626;
+            animation: site-loading-spin 0.85s linear infinite;
+        }
+
+        @keyframes site-loading-spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
     @stack('head')
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@2.0.4" defer></script>
 </head>
-<body class="m-0 p-0 bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100">
+<body class="m-0 p-0 bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100"
+    hx-boost="true"
+    hx-target="#main-content"
+    hx-select="#main-content"
+    hx-swap="outerHTML transition:true"
+    hx-push-url="true">
+    <div id="site-loading-overlay" class="site-loading-overlay" aria-hidden="true">
+        <div class="site-loading-spinner" role="status" aria-label="Memuat halaman"></div>
+    </div>
     <!-- Navbar -->
     <nav style="box-shadow: 0 -24px 0 #1e293b;" class="sticky top-0 z-50 w-full bg-charcoal text-white border-b border-primary/20">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -144,8 +186,8 @@
                     </button>
                     <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="absolute left-0 mt-2 w-64 bg-white text-charcoal rounded-lg shadow-lg border border-primary/10 z-50">
                         <a href="{{ route('school.direktori.guru', ['school' => 'sd']) }}" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold border-b border-slate-100">Direktori Guru & Tenaga Kependidikan</a>
-                        <a href="{{ route('school.direktori.siswa', ['school' => 'sd']) }}" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold border-b border-slate-100">Direktori Peserta Didik</a>
-                        <a href="#" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold">Tracer Study</a>
+                        {{-- <a href="{{ route('school.direktori.siswa', ['school' => 'sd']) }}" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold border-b border-slate-100">Direktori Peserta Didik</a> --}}
+                        {{-- <a href="#" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold">Tracer Study</a> --}}
                     </div>
                 </div>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.galeri', ['school' => 'sd']) }}">GALERI</a>
@@ -192,8 +234,8 @@
                 </button>
                 <div id="mobile-direktori-dropdown" class="ml-4 flex-col gap-1 hidden">
                     <a href="{{ route('school.direktori.guru', ['school' => 'sd']) }}" class="block py-2 text-sm font-semibold">Direktori Guru & Tenaga Kependidikan</a>
-                    <a href="{{ route('school.direktori.siswa', ['school' => 'sd']) }}" class="block py-2 text-sm font-semibold">Direktori Peserta Didik</a>
-                    <a href="#" class="block py-2 text-sm font-semibold">Tracer Study</a>
+                    {{-- <a href="{{ route('school.direktori.siswa', ['school' => 'sd']) }}" class="block py-2 text-sm font-semibold">Direktori Peserta Didik</a> --}}
+                    {{-- <a href="#" class="block py-2 text-sm font-semibold">Tracer Study</a> --}}
                 </div>
             </div>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.galeri', ['school' => 'sd']) }}">GALERI</a>
@@ -201,6 +243,36 @@
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.ppdb', ['school' => 'sd']) }}">{{ $ppdbLabel }} @if(!($ppdbLive ?? false)) (Segera Hadir) @endif</a>
         </div>
         <script>
+            function setSiteLoadingState(isLoading) {
+                const overlay = document.getElementById('site-loading-overlay');
+                if (!overlay) return;
+                overlay.classList.toggle('is-active', isLoading);
+                overlay.setAttribute('aria-hidden', isLoading ? 'false' : 'true');
+            }
+
+            document.addEventListener('click', (event) => {
+                const link = event.target.closest('a[href]');
+                if (!link) return;
+                const href = link.getAttribute('href') || '';
+                if (!href || href.startsWith('#') || link.target === '_blank' || event.ctrlKey || event.metaKey) {
+                    return;
+                }
+                setSiteLoadingState(true);
+            });
+
+            document.addEventListener('submit', () => setSiteLoadingState(true));
+            document.addEventListener('htmx:beforeRequest', () => setSiteLoadingState(true));
+            document.addEventListener('htmx:beforeHistorySave', () => setSiteLoadingState(false));
+            document.addEventListener('htmx:historyRestore', () => setSiteLoadingState(false));
+            document.addEventListener('htmx:afterSettle', () => {
+                setSiteLoadingState(false);
+                closeMobileMenuInstant();
+            });
+            document.addEventListener('htmx:responseError', () => setSiteLoadingState(false));
+            document.addEventListener('htmx:sendError', () => setSiteLoadingState(false));
+            window.addEventListener('pagehide', () => setSiteLoadingState(false));
+            window.addEventListener('pageshow', () => setSiteLoadingState(false));
+
             // Mobile menu toggle with robust guards
             const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -223,6 +295,15 @@
                     mobileMenu.style.display = 'none';
                     mobileMenu.removeEventListener('transitionend', hideMenu);
                 });
+            };
+
+            const closeMobileMenuInstant = () => {
+                if (!mobileMenu) return;
+                mobileMenu.style.display = 'none';
+                mobileMenu.style.transform = 'translateX(100%)';
+                if (mobileDirektoriDropdown) {
+                    mobileDirektoriDropdown.classList.add('hidden');
+                }
             };
 
             if (mobileMenuToggle) {
@@ -254,10 +335,18 @@
                     e.stopPropagation();
                 });
             }
+
+            if (mobileMenu) {
+                mobileMenu.querySelectorAll('a[href]').forEach((link) => {
+                    link.addEventListener('click', () => {
+                        closeMobileMenu();
+                    });
+                });
+            }
         </script>
     </nav>
     <!-- End Navbar -->
-    <main>
+    <main id="main-content">
         @yield('content')
     </main>
     <!-- Footer -->

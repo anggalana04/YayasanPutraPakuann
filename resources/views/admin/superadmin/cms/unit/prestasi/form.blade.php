@@ -3,16 +3,12 @@
 @section('title', ($mode === 'create' ? 'Tambah' : 'Ubah') . ' Prestasi - ' . strtoupper($schoolType))
 
 @section('content')
-<div class="p-10 max-w-4xl mx-auto">
-    <div class="mb-8 flex items-center justify-between">
-        <h2 class="text-3xl font-bold">{{ $mode === 'create' ? 'Tambah' : 'Ubah' }} Prestasi</h2>
-        <a href="{{ route('admin.cms.prestasi.index', ['schoolType' => $schoolType]) }}" class="px-5 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold">Kembali</a>
-    </div>
-
-    @if (session('success'))
-        <div class="mb-4 p-3 rounded-lg bg-green-50 border border-green-200 text-green-800">{{ session('success') }}</div>
-    @endif
-
+<x-admin.cms-form-shell
+    eyebrow="Prestasi"
+    :title="$mode === 'create' ? 'Tambah Prestasi' : 'Ubah Prestasi'"
+    :subtitle="$school->name . ' (' . strtoupper($schoolType) . ')'"
+    :back-url="route('admin.cms.prestasi.index', ['schoolType' => $schoolType])"
+>
     <form action="{{ $mode === 'create' ? route('admin.cms.prestasi.store', ['schoolType' => $schoolType]) : route('admin.cms.prestasi.update', ['schoolType' => $schoolType, 'prestasi' => $prestasiItem->id]) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
         @csrf
         @if($mode === 'edit')
@@ -56,9 +52,10 @@
             <div>
                 <label class="block text-xs font-bold uppercase text-slate-500">Status</label>
                 <select name="status" class="w-full border rounded-xl px-3 py-2" required>
-                    <option value="Draf" {{ old('status',$prestasiItem->status ?? 'draft') === 'draft' ? 'selected' : '' }}>Draf</option>
-                    <option value="Diterbitkan" {{ old('status',$prestasiItem->status ?? '') === 'published' ? 'selected' : '' }}>Diterbitkan</option>
+                    <option value="draft" {{ old('status', $prestasiItem->status ?? 'draft') === 'draft' ? 'selected' : '' }}>Draf</option>
+                    <option value="published" {{ old('status', $prestasiItem->status ?? '') === 'published' ? 'selected' : '' }}>Diterbitkan</option>
                 </select>
+                @error('status') <p class="text-red-600 text-xs">{{ $message }}</p> @enderror
             </div>
         </div>
 
@@ -75,7 +72,7 @@
 
         <button type="submit" class="px-6 py-3 bg-primary text-charcoal font-bold rounded-xl">Simpan</button>
     </form>
-</div>
+</x-admin.cms-form-shell>
 @endsection
 
 

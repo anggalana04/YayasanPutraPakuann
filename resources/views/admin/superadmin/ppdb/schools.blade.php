@@ -4,13 +4,7 @@
 
 @section('content')
 <div class="p-10 flex-1">
-    <!-- Breadcrumbs / Header -->
     <div class="mb-12">
-        <div class="flex items-center gap-2 text-on-surface-variant text-sm mb-4">
-            <span>PPDB</span>
-            <span class="material-symbols-outlined text-xs">chevron_right</span>
-            <span class="text-[#f2cc0d] font-medium">Pilih Sekolah</span>
-        </div>
         <div class="flex justify-between items-end">
             <div>
                 <h3 class="text-4xl font-bold tracking-tight text-[#1c190d] mb-2">Pilih Unit Sekolah</h3>
@@ -38,7 +32,14 @@
                             <td class="px-6 py-6 font-bold text-[#1c190d]">{{ $school->name }}</td>
                             <td class="px-6 py-6 text-on-surface-variant">{{ $school->type }}</td>
                             <td class="px-6 py-6">
-                                <a href="{{ route('admin.ppdb.management', $school->slug) }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all inline-block">Kelola</a>
+                                <a href="{{ route('admin.ppdb.management', $school->slug) }}"
+                                   data-admin-nav
+                                   hx-boost="true"
+                                   hx-target="#admin-page-shell"
+                                   hx-select="#admin-page-shell"
+                                   hx-swap="outerHTML transition:true"
+                                   hx-push-url="true"
+                                   class="inline-block rounded-xl bg-[#f2cc0d] px-4 py-2 text-sm font-bold text-[#1c190d] shadow-sm transition-all hover:scale-[1.02] active:scale-95">Kelola</a>
                             </td>
                         </tr>
                         @empty

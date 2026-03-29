@@ -115,7 +115,7 @@
 <label class="text-[10px] font-bold uppercase text-on-surface-variant ml-2">Cari</label>
 <div class="relative">
 <input id="searchFilter" type="search" placeholder="Ketik nama/email/ID" class="w-full bg-surface-container-low border-none rounded-2xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#f2cc0d]" />
-<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" data-icon="search">Cari</span>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" data-icon="search">search</span>
 </div>
 </div>
 
@@ -206,9 +206,9 @@ Reset
 </div>
 </div>
 
-@push('scripts')
+@section('page_scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    (() => {
         const majorFilter = document.getElementById('majorFilter');
         const statusFilter = document.getElementById('statusFilter');
         const yearFilter = document.getElementById('yearFilter');
@@ -234,13 +234,20 @@ Reset
 
         function renderApplicantRows(applicants, page = 1) {
             if (!applicants.length) {
-                applicantTableBody.innerHTML = '<tr><td colspan="9" class="py-3 px-3 text-center text-on-surface-variant">Tidak ada pendaftar ditemukan for this filter set.</td></tr>';
+                applicantTableBody.innerHTML = '<tr><td colspan="9" class="py-3 px-3 text-center text-on-surface-variant">Tidak ada pendaftar ditemukan untuk filter yang dipilih.</td></tr>';
                 return;
             }
             const offset = (page - 1) * perPage;
 
             applicantTableBody.innerHTML = applicants.map((app, idx) => {
-                const statusClass = app.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : (app.status === 'accepted' ? 'bg-green-100 text-green-700' : (app.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-700'));
+                const statusClass = ['pending', 'payment_uploaded'].includes(app.status)
+                    ? 'bg-yellow-100 text-yellow-700'
+                    : (app.status === 'accepted'
+                        ? 'bg-green-100 text-green-700'
+                        : (app.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-700'));
+                const statusLabel = ['pending', 'payment_uploaded'].includes(app.status)
+                    ? 'Pembayaran Diunggah'
+                    : (app.status ? app.status.charAt(0).toUpperCase() + app.status.slice(1) : '-');
 
                 return `
                     <tr class="bg-surface-container-low rounded-2xl">
@@ -250,7 +257,7 @@ Reset
                         <td class="py-3 px-3">${app.major_1 || '-'} </td>
                         <td class="py-3 px-3">${app.major_2 || '-'} </td>
                         <td class="py-3 px-3">${app.assigned_major || '-'} </td>
-                        <td class="py-3 px-3"><span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${statusClass}">${app.status ? app.status.charAt(0).toUpperCase() + app.status.slice(1) : '-'}</span></td>
+                        <td class="py-3 px-3"><span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${statusClass}">${statusLabel}</span></td>
                         <td class="py-3 px-3">${app.created_at}</td>
                         <td class="py-3 px-3 rounded-r-2xl">
                             <a href="{{ url('/admin/ppdb/applicants/smk') }}/${app.id}" class="inline-flex items-center px-4 py-2 bg-primary text-on-primary rounded-2xl text-xs font-bold hover:bg-primary/90 transition-colors">
@@ -412,9 +419,9 @@ Reset
         });
 
         loadFilteredData(1);
-    });
+    })();
 </script>
-@endpush
+@endsection
 @endsection
 
 

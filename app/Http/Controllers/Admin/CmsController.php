@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Models\School;
 use App\Models\SchoolHomepageSetting;
+use App\Traits\ResolvesSchool;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class CmsController extends Controller
 {
+    use ResolvesSchool;
     public function index(string $schoolType)
     {
         $schoolTypeUpper = strtoupper($schoolType);
@@ -101,6 +103,8 @@ class CmsController extends Controller
 
         $homepage->save();
 
+        $this->flushSchoolCache($school);
+
         return redirect()
             ->route('admin.cms.by_school', ['schoolType' => strtolower($schoolTypeUpper)])
             ->with('success', 'Konten Kepala Sekolah berhasil diperbarui.');
@@ -155,6 +159,8 @@ class CmsController extends Controller
         }
         $homepage->save();
 
+        $this->flushSchoolCache($school);
+
         return redirect()
             ->route('admin.cms.by_school', ['schoolType' => strtolower($schoolTypeUpper)])
             ->with('success', 'Informasi kontak berhasil diperbarui.');
@@ -176,8 +182,10 @@ class CmsController extends Controller
             'principals.*.name' => ['required', 'string', 'max:255'],
             'principals.*.title' => ['required', 'string', 'max:255'],
             'principals.*.description' => ['required', 'string', 'max:500'],
-            'principals.*.photo_url' => ['required', 'string', 'max:1000'],
-            'principals.*.video_url' => ['nullable', 'url', 'max:1000'],
+            'principals.*.photo_existing' => ['nullable', 'string', 'max:1000'],
+            'principals.*.video_existing' => ['nullable', 'string', 'max:1000'],
+            'principals.*.photo' => ['nullable', 'image', 'max:4096'],
+            'principals.*.video' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm,video/ogg,video/quicktime', 'max:51200'],
         ]);
 
         $homepage = SchoolHomepageSetting::firstOrCreate(
@@ -191,8 +199,63 @@ class CmsController extends Controller
             ]
         );
 
-        $homepage->yayasan_principals = $this->normalizeYayasanPrincipals($validated['principals']);
+        $principalsPayload = collect($validated['principals'])
+            ->map(function ($item, $index) use ($request) {
+                $photoUrl = trim((string)($item['photo_existing'] ?? ''));
+                $videoUrl = trim((string)($item['video_existing'] ?? ''));
+
+                if ($request->hasFile("principals.$index.photo")) {
+                    $file = $request->file("principals.$index.photo");
+                    $ext = strtolower($file->getClientOriginalExtension() ?: 'jpg');
+                    $filename = 'principal_photo_' . Str::uuid()->toString() . '.' . $ext;
+
+                    $targetDir = public_path('images/cms/yayasan/principals');
+                    if (!is_dir($targetDir)) {
+                        mkdir($targetDir, 0755, true);
+                    }
+
+                    $file->move($targetDir, $filename);
+                    $photoUrl = '/images/cms/yayasan/principals/' . $filename;
+                }
+
+                if ($request->hasFile("principals.$index.video")) {
+                    $file = $request->file("principals.$index.video");
+                    $ext = strtolower($file->getClientOriginalExtension() ?: 'mp4');
+                    $filename = 'principal_video_' . Str::uuid()->toString() . '.' . $ext;
+
+                    $targetDir = public_path('video/cms/yayasan/principals');
+                    if (!is_dir($targetDir)) {
+                        mkdir($targetDir, 0755, true);
+                    }
+
+                    $file->move($targetDir, $filename);
+                    $videoUrl = '/video/cms/yayasan/principals/' . $filename;
+                }
+
+                return [
+                    'unit' => trim((string)($item['unit'] ?? '')),
+                    'name' => trim((string)($item['name'] ?? '')),
+                    'title' => trim((string)($item['title'] ?? '')),
+                    'description' => trim((string)($item['description'] ?? '')),
+                    'photo_url' => $photoUrl,
+                    'video_url' => $videoUrl,
+                ];
+            })
+            ->filter(fn($item) => $item['unit'] !== '' && $item['name'] !== '' && $item['photo_url'] !== '')
+            ->values()
+            ->all();
+
+        if (count($principalsPayload) === 0) {
+            return redirect()
+                ->route('admin.cms.by_school', ['schoolType' => strtolower($schoolTypeUpper)])
+                ->withErrors(['principals' => 'Minimal satu data pimpinan harus memiliki unit, nama, dan foto.'])
+                ->withInput();
+        }
+
+        $homepage->yayasan_principals = $this->normalizeYayasanPrincipals($principalsPayload);
         $homepage->save();
+
+        $this->flushSchoolCache($school);
 
         return redirect()
             ->route('admin.cms.by_school', ['schoolType' => strtolower($schoolTypeUpper)])

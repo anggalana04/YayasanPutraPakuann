@@ -17,8 +17,14 @@ class PpdbAuthController extends Controller
 
         // Accept either email or NISN as identifier
         $identifier = $request->application_id;
-        $application = PpdbApplication::where('email', $identifier)
-            ->orWhere('nisn', $identifier)
+        $schoolType = strtoupper((string) $request->route('school'));
+
+        $application = PpdbApplication::whereRaw('UPPER(school_type) = ?', [$schoolType])
+            ->where(function ($query) use ($identifier) {
+                $query->where('application_id', $identifier)
+                    ->orWhere('email', $identifier)
+                    ->orWhere('nisn', $identifier);
+            })
             ->first();
 
         if (!$application) {
@@ -137,7 +143,7 @@ class PpdbAuthController extends Controller
         ]);
         $application = new PpdbApplication();
         $application->application_id = 'PPDB-' . date('Y') . '-' . strtoupper(substr(md5($validated['email']), 0, 6));
-        $application->school_type = $request->route('school');
+        $application->school_type = strtoupper((string) $request->route('school'));
         $application->full_name = $validated['full_name'];
         $application->email = $validated['email'];
         $application->phone = $validated['phone'] ?? null;

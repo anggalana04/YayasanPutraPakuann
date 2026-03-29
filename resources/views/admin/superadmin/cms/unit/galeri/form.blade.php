@@ -3,31 +3,21 @@
 @section('title', ($mode === 'create' ? 'Tambah' : 'Ubah') . ' Galeri - ' . strtoupper($schoolType))
 
 @section('content')
-<div class="p-10 max-w-3xl mx-auto space-y-6">
-    <div class="mb-6 flex justify-between items-end">
-        <div>
-            <p class="text-primary font-bold tracking-widest text-xs uppercase">{{ $mode === 'create' ? 'Tambah' : 'Ubah' }} Item Galeri</p>
-            <h2 class="text-3xl font-extrabold tracking-tight text-[#1c190d]">{{ strtoupper($schoolType) }}</h2>
-        </div>
-        <a href="{{ route('admin.cms.galeri.index', ['schoolType' => $schoolType]) }}"
-           class="px-5 py-2 bg-white border border-primary/20 text-primary font-bold rounded-2xl hover:bg-primary/10 transition-all shadow-sm text-sm">
-            Kembali ke List
-        </a>
-    </div>
-
-    @if (session('success'))
-        <div class="px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-800 text-sm font-bold">
-            {{ session('success') }}
-        </div>
-    @endif
-
+<x-admin.cms-form-shell
+    width="max-w-3xl"
+    eyebrow="Galeri"
+    :title="$mode === 'create' ? 'Tambah Item Galeri' : 'Ubah Item Galeri'"
+    :subtitle="$school->name . ' (' . strtoupper($schoolType) . ')'"
+    :back-url="route('admin.cms.galeri.index', ['schoolType' => $schoolType])"
+    back-label="Kembali ke daftar"
+>
     <form method="POST" action="{{ $mode === 'create' ? route('admin.cms.galeri.store', ['schoolType' => $schoolType]) : route('admin.cms.galeri.update', ['schoolType' => $schoolType, 'id' => $item->id]) }}" enctype="multipart/form-data">
         @csrf
         @if ($mode === 'edit')
             @method('PUT')
         @endif
 
-        <div class="bg-surface-container-lowest rounded-3xl p-6 shadow-sm ring-1 ring-[#1c190d]/5 space-y-5">
+        <div class="space-y-5">
             <div class="space-y-2">
                 <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Judul</label>
                 <input type="text" name="title" value="{{ old('title', $item->title ?? '') }}" required
@@ -43,8 +33,8 @@
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Status</label>
                     <select name="status" class="w-full border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
-                        <option value="Diterbitkan" {{ old('status', $item->status ?? 'published') === 'published' ? 'selected' : '' }}>Diterbitkan</option>
-                        <option value="Draf" {{ old('status', $item->status ?? '') === 'draft' ? 'selected' : '' }}>Draf</option>
+                        <option value="published" {{ old('status', $item->status ?? 'published') === 'published' ? 'selected' : '' }}>Diterbitkan</option>
+                        <option value="draft" {{ old('status', $item->status ?? '') === 'draft' ? 'selected' : '' }}>Draf</option>
                     </select>
                 </div>
             </div>
@@ -74,7 +64,7 @@
             </div>
         </div>
     </form>
-</div>
+    </x-admin.cms-form-shell>
 @endsection
 
 

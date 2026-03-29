@@ -118,10 +118,52 @@
         }
 
         body { font-family: 'Lexend', sans-serif; }
+
+        .site-loading-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.35);
+            backdrop-filter: blur(2px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 180ms ease;
+        }
+
+        .site-loading-overlay.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .site-loading-spinner {
+            width: 52px;
+            height: 52px;
+            border-radius: 9999px;
+            border: 4px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #f2cc0d;
+            animation: site-loading-spin 0.85s linear infinite;
+        }
+
+        @keyframes site-loading-spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
     @stack('head')
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@2.0.4" defer></script>
 </head>
-<body style="margin:0; padding:0;" class="m-0 p-0 bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100">
+<body style="margin:0; padding:0;" class="m-0 p-0 bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100"
+    hx-boost="true"
+    hx-target="#main-content"
+    hx-select="#main-content"
+    hx-swap="outerHTML transition:true"
+    hx-push-url="true">
+    <div id="site-loading-overlay" class="site-loading-overlay" aria-hidden="true">
+        <div class="site-loading-spinner" role="status" aria-label="Memuat halaman"></div>
+    </div>
     <!-- Navbar -->
     <nav style="margin-top:0; box-shadow: 0 -24px 0 #1c190d;" class="sticky top-0 z-50 w-full bg-charcoal text-white border-b border-primary/20">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -151,8 +193,8 @@
                         class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold border-b border-slate-100">
                         Direktori Guru & Tenaga Kependidikan
                         </a>
-                        <a href="{{ route('school.direktori.siswa', ['school' => 'smk']) }}" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold border-b border-slate-100">Direktori Peserta Didik</a>
-                        <a href="#" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold">Tracer Study</a>
+                        {{-- <a href="{{ route('school.direktori.siswa', ['school' => 'smk']) }}" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold border-b border-slate-100">Direktori Peserta Didik</a> --}}
+                        {{-- <a href="#" class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold">Tracer Study</a> --}}
                     </div>
                 </div>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.galeri', ['school' => 'smk']) }}">GALERI</a>
@@ -199,13 +241,13 @@
                     <span class="material-symbols-outlined text-xs">expand_more</span>
                 </button>
                 <div id="mobile-direktori-dropdown" class="ml-4 flex-col gap-1 hidden">
-                    <a href="#" class="block py-2 text-sm font-semibold">Direktori Guru & Tenaga Kependidikan</a>
-                    <a href="#" class="block py-2 text-sm font-semibold">Direktori Peserta Didik</a>
-                    <a href="#" class="block py-2 text-sm font-semibold">Tracer Study</a>
+                    <a href="{{ route('school.direktori.guru', ['school' => 'smk']) }}" class="block py-2 text-sm font-semibold">Direktori Guru & Tenaga Kependidikan</a>
+                    {{-- <a href="#" class="block py-2 text-sm font-semibold">Direktori Peserta Didik</a> --}}
+                    {{-- <a href="#" class="block py-2 text-sm font-semibold">Tracer Study</a> --}}
                 </div>
             </div>
-            <a class="text-base font-semibold hover:text-primary transition-colors" href="#">GALERI</a>
-            <a class="text-base font-semibold hover:text-primary transition-colors" href="#">HUBUNGI KAMI</a>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.galeri', ['school' => 'smk']) }}">GALERI</a>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.kontak', ['school' => 'smk']) }}">HUBUNGI KAMI</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.ppdb', ['school' => 'smk']) }}">{{ $ppdbLabel }} @if(!$ppdbLive) (Segera Hadir) @endif</a>
         </div>
         <script>
@@ -231,6 +273,15 @@
                     mobileMenu.style.display = 'none';
                     mobileMenu.removeEventListener('transitionend', hideMenu);
                 });
+            };
+
+            const closeMobileMenuInstant = () => {
+                if (!mobileMenu) return;
+                mobileMenu.style.display = 'none';
+                mobileMenu.style.transform = 'translateX(100%)';
+                if (mobileDirektoriDropdown) {
+                    mobileDirektoriDropdown.classList.add('hidden');
+                }
             };
 
             if (mobileMenuToggle) {
@@ -264,11 +315,19 @@
                     e.stopPropagation();
                 });
             }
+
+            if (mobileMenu) {
+                mobileMenu.querySelectorAll('a[href]').forEach((link) => {
+                    link.addEventListener('click', () => {
+                        closeMobileMenu();
+                    });
+                });
+            }
         </script>
     </nav>
     <!-- End Navbar -->
 
-    <main>
+    <main id="main-content">
         @yield('content')
     </main>
 
@@ -359,6 +418,36 @@
     </div>
 
     <script>
+        function setSiteLoadingState(isLoading) {
+            const overlay = document.getElementById('site-loading-overlay');
+            if (!overlay) return;
+            overlay.classList.toggle('is-active', isLoading);
+            overlay.setAttribute('aria-hidden', isLoading ? 'false' : 'true');
+        }
+
+        document.addEventListener('click', (event) => {
+            const link = event.target.closest('a[href]');
+            if (!link) return;
+            const href = link.getAttribute('href') || '';
+            if (!href || href.startsWith('#') || link.target === '_blank' || event.ctrlKey || event.metaKey) {
+                return;
+            }
+            setSiteLoadingState(true);
+        });
+
+        document.addEventListener('submit', () => setSiteLoadingState(true));
+        document.addEventListener('htmx:beforeRequest', () => setSiteLoadingState(true));
+        document.addEventListener('htmx:beforeHistorySave', () => setSiteLoadingState(false));
+        document.addEventListener('htmx:historyRestore', () => setSiteLoadingState(false));
+        document.addEventListener('htmx:afterSettle', () => {
+            setSiteLoadingState(false);
+            closeMobileMenuInstant();
+        });
+        document.addEventListener('htmx:responseError', () => setSiteLoadingState(false));
+        document.addEventListener('htmx:sendError', () => setSiteLoadingState(false));
+        window.addEventListener('pagehide', () => setSiteLoadingState(false));
+        window.addEventListener('pageshow', () => setSiteLoadingState(false));
+
         const smkFabButton = document.getElementById('smk-fab');
         const smkFabMenu = document.getElementById('smk-fab-menu');
 

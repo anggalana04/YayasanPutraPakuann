@@ -9,6 +9,7 @@ use App\Models\SchoolHomepageSetting;
 use App\Models\TeacherStaff;
 use App\Models\PpdbManagementPhase;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
 class SchoolHomeController extends Controller
@@ -17,11 +18,15 @@ class SchoolHomeController extends Controller
     {
         $schoolTypeUpper = strtoupper($school);
         $schoolModel = School::where('type', $schoolTypeUpper)->firstOrFail();
+        $cachePrefix = 'school.home.' . strtolower($schoolTypeUpper) . '.' . $schoolModel->id;
 
-        $homepage = null;
-        if (Schema::hasTable('school_homepage_settings')) {
-            $homepage = SchoolHomepageSetting::where('school_id', $schoolModel->id)->first();
-        }
+        $homepage = Cache::remember($cachePrefix . '.homepage', 120, function () use ($schoolModel) {
+            if (!Schema::hasTable('school_homepage_settings')) {
+                return null;
+            }
+
+            return SchoolHomepageSetting::where('school_id', $schoolModel->id)->first();
+        });
 
         if (!$homepage) {
             $homepage = new SchoolHomepageSetting([
@@ -33,31 +38,40 @@ class SchoolHomeController extends Controller
             ]);
         }
 
-        $latestNews = collect();
-        if (Schema::hasTable('news')) {
-            $latestNews = News::where('school_id', $schoolModel->id)
+        $latestNews = Cache::remember($cachePrefix . '.latest_news', 120, function () use ($schoolModel) {
+            if (!Schema::hasTable('news')) {
+                return collect();
+            }
+
+            return News::where('school_id', $schoolModel->id)
                 ->published()
                 ->take(3)
                 ->get();
-        }
+        });
 
-        $latestGallery = collect();
-        if (Schema::hasTable('gallery_items')) {
-            $latestGallery = GalleryItem::where('school_id', $schoolModel->id)
+        $latestGallery = Cache::remember($cachePrefix . '.latest_gallery', 120, function () use ($schoolModel) {
+            if (!Schema::hasTable('gallery_items')) {
+                return collect();
+            }
+
+            return GalleryItem::where('school_id', $schoolModel->id)
                 ->where('status', 'published')
                 ->orderByDesc('published_at')
                 ->orderByDesc('created_at')
                 ->take(3)
                 ->get();
-        }
+        });
 
-        $carouselImages = collect();
-        if (Schema::hasTable('carousel_images')) {
-            $carouselImages = \App\Models\CarouselImage::where('school_id', $schoolModel->id)
+        $carouselImages = Cache::remember($cachePrefix . '.carousel', 120, function () use ($schoolModel) {
+            if (!Schema::hasTable('carousel_images')) {
+                return collect();
+            }
+
+            return \App\Models\CarouselImage::where('school_id', $schoolModel->id)
                 ->where('status', 'active')
                 ->ordered()
                 ->get();
-        }
+        });
 
         // Fetch PPDB Live Data and phase countdown info
         $ppdbLive = false;
@@ -66,9 +80,11 @@ class SchoolHomeController extends Controller
         $ppdbPeriod = null;
 
         if (Schema::hasTable('ppdb_management_phases')) {
-            $phases = PpdbManagementPhase::where('school_id', $schoolModel->id)
-                ->orderBy('start_date')
-                ->get();
+            $phases = Cache::remember($cachePrefix . '.phases', 120, function () use ($schoolModel) {
+                return PpdbManagementPhase::where('school_id', $schoolModel->id)
+                    ->orderBy('start_date')
+                    ->get();
+            });
 
             $ppdbLive = $phases->where('is_live', true)->isNotEmpty();
 

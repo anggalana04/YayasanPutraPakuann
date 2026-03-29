@@ -612,8 +612,15 @@ class GalleryLightbox {
     }
 }
 
-// Initialize lightbox when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
+function initSmkGalleryPage() {
+    const dataElement = document.getElementById('galleryData');
+    const metaElement = document.getElementById('galleryMeta');
+    const galleryGrid = document.querySelector('.masonry-grid');
+
+    if (!dataElement || !metaElement || !galleryGrid) {
+        return;
+    }
+
     // Initialize lightbox
     const galleryLightbox = new GalleryLightbox();
 
@@ -710,10 +717,17 @@ class GalleryLoadMore {
     }
 }
 
-// Initialize load more functionality
-const galleryLoadMore = new GalleryLoadMore();
+    // Initialize load more functionality
+    new GalleryLoadMore();
+}
 
-});
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSmkGalleryPage, { once: true });
+} else {
+    initSmkGalleryPage();
+}
+
+document.addEventListener('htmx:afterSettle', initSmkGalleryPage);
 </script>
 @endsection
 

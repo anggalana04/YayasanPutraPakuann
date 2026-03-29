@@ -121,12 +121,52 @@
         body {
             font-family: 'Lexend', sans-serif;
         }
+
+        .page-loading-overlay {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.38);
+            backdrop-filter: blur(2px);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 180ms ease;
+        }
+
+        .page-loading-overlay.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .page-loading-spinner {
+            width: 52px;
+            height: 52px;
+            border-radius: 9999px;
+            border: 4px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #FDB913;
+            animation: page-loading-spin 0.85s linear infinite;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        @keyframes page-loading-spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@2.0.4" defer></script>
     @stack('styles')
 </head>
-<body style="margin:0; padding:0;" class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 transition-colors duration-200">
+<body style="margin:0; padding:0;" class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 transition-colors duration-200"
+    hx-boost="true" hx-target="#main-content" hx-select="#main-content" hx-swap="outerHTML transition:true">
+    <div id="page-loading-overlay" class="page-loading-overlay" aria-hidden="true">
+        <div class="page-loading-spinner" role="status" aria-label="Memuat halaman"></div>
+    </div>
     <div class="relative flex min-h-screen w-full flex-col group/design-root">
         <!-- Top Navigation -->
         <header style="box-shadow: 0 -24px 0 rgba(255, 255, 255, 0.95);" class="sticky top-0 z-50 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-slate-200 dark:border-white/10 w-full shadow-sm">
@@ -143,12 +183,12 @@
                     </div>
                     <div class="hidden md:flex items-center gap-8">
                         <nav class="flex items-center gap-6">
-                            <a class="text-sm font-medium {{ Request::is('/') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.home') }}">Beranda</a>
-                            <a class="text-sm font-medium {{ Request::is('about') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.about') }}">Tentang Kami</a>
-                            <a class="text-sm font-medium {{ Request::is('fasilitas') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.fasilitas') }}">Fasilitas</a>
-                            <a class="text-sm font-medium {{ Request::is('akreditasi') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.akreditasi') }}">Prestasi</a>
-                            <a class="text-sm font-medium {{ Request::is('berita') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.berita') }}">Berita</a>
-                            <a class="text-sm font-medium {{ Request::is('kontak') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.kontak') }}">Kontak</a>
+                            <a data-nav-path="/" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.home') }}">Beranda</a>
+                            <a data-nav-path="/about" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.about') }}">Tentang Kami</a>
+                            <a data-nav-path="/fasilitas" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.fasilitas') }}">Fasilitas</a>
+                            <a data-nav-path="/akreditasi" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.akreditasi') }}">Prestasi</a>
+                            <a data-nav-path="/berita" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.berita') }}">Berita</a>
+                            <a data-nav-path="/kontak" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.kontak') }}">Kontak</a>
                         </nav>
                         {{-- <button class="flex items-center justify-center rounded-xl h-10 px-6 bg-[#FDB913] hover:bg-[#E5A800] text-slate-900 text-sm font-bold transition-all shadow-lg shadow-[#FDB913]/20">
                             Masuk
@@ -164,12 +204,12 @@
             <!-- Mobile Menu hidden -->
             <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white dark:bg-background-dark border-b border-slate-200 dark:border-white/10 p-4 flex flex-col gap-4 shadow-lg">
                 <nav class="flex flex-col gap-4">
-                    <a class="text-sm font-medium {{ Request::is('/') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.home') }}">Beranda</a>
-                    <a class="text-sm font-medium {{ Request::is('about') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.about') }}">Tentang Kami</a>
-                    <a class="text-sm font-medium {{ Request::is('fasilitas') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.fasilitas') }}">Fasilitas</a>
-                    <a class="text-sm font-medium {{ Request::is('akreditasi') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.akreditasi') }}">Prestasi</a>
-                    <a class="text-sm font-medium {{ Request::is('berita') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.berita') }}">Berita</a>
-                    <a class="text-sm font-medium {{ Request::is('kontak') ? 'text-[#FDB913] font-bold' : 'hover:text-[#FDB913] transition-colors' }}" href="{{ route('yayasan.kontak') }}">Kontak</a>
+                    <a data-nav-path="/" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.home') }}">Beranda</a>
+                    <a data-nav-path="/about" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.about') }}">Tentang Kami</a>
+                    <a data-nav-path="/fasilitas" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.fasilitas') }}">Fasilitas</a>
+                    <a data-nav-path="/akreditasi" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.akreditasi') }}">Prestasi</a>
+                    <a data-nav-path="/berita" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.berita') }}">Berita</a>
+                    <a data-nav-path="/kontak" class="nav-link text-sm font-medium hover:text-[#FDB913] transition-colors" href="{{ route('yayasan.kontak') }}">Kontak</a>
 
                 </nav>
                 {{-- <button class="flex items-center justify-center rounded-xl h-10 px-6 bg-[#FDB913] hover:bg-[#E5A800] text-slate-900 text-sm font-bold transition-all shadow-lg shadow-[#FDB913]/20 w-full">
@@ -206,7 +246,7 @@
         </div>
 
         <!-- Main Content Wrapper -->
-        <main class="flex flex-col items-center w-full">
+        <main id="main-content" class="flex flex-col items-center w-full">
             @yield('content')
         </main>
 
@@ -265,46 +305,102 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        function setPageLoadingState(isLoading) {
+            const overlay = document.getElementById('page-loading-overlay');
+            if (!overlay) {
+                return;
+            }
+            overlay.classList.toggle('is-active', isLoading);
+            overlay.setAttribute('aria-hidden', isLoading ? 'false' : 'true');
+        }
+
+        function applyYayasanNavActiveState() {
+            const normalizePath = (path) => {
+                const cleaned = (path || '/').toLowerCase().replace(/\/+$/, '');
+                return cleaned === '' ? '/' : cleaned;
+            };
+
+            const currentPath = normalizePath(window.location.pathname);
+
+            document.querySelectorAll('.nav-link[data-nav-path]').forEach((link) => {
+                const targetPath = normalizePath(link.getAttribute('data-nav-path'));
+                const isActive = targetPath === '/'
+                    ? currentPath === '/'
+                    : (currentPath === targetPath || currentPath.startsWith(targetPath + '/'));
+
+                link.classList.toggle('text-[#FDB913]', isActive);
+                link.classList.toggle('font-bold', isActive);
+            });
+        }
+
+        function initMobileMenu() {
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuBtn && mobileMenu && !mobileMenuBtn._htmxInit) {
+                mobileMenuBtn._htmxInit = true;
+                mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            }
 
-            if (mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
+            if (mobileMenu && !mobileMenu._htmxInit) {
+                mobileMenu._htmxInit = true;
+                mobileMenu.querySelectorAll('a[href]').forEach((link) => {
+                    link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
                 });
             }
-        });
+        }
 
-        // Floating Action Button logic
-        document.addEventListener('DOMContentLoaded', () => {
+        function closeYayasanMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu) {
+                mobileMenu.classList.add('hidden');
+            }
+        }
+        function initFab() {
             const fabMain = document.getElementById('fab-main');
             const fabActions = document.getElementById('fab-actions');
             const fabOverlay = document.getElementById('fab-overlay');
             const fabIcon = document.getElementById('fab-icon');
+            if (!fabMain || fabMain._htmxInit) return;
+            fabMain._htmxInit = true;
             let expanded = false;
-
-            function openFab() {
-                fabActions.classList.remove('hidden');
-                fabOverlay.classList.remove('hidden');
-                fabIcon.textContent = 'close';
-                expanded = true;
-            }
-            function closeFab() {
-                fabActions.classList.add('hidden');
-                fabOverlay.classList.add('hidden');
-                fabIcon.textContent = 'menu';
-                expanded = false;
-            }
-            fabMain.addEventListener('click', () => {
-                if (expanded) {
-                    closeFab();
-                } else {
-                    openFab();
-                }
-            });
+            function openFab() { fabActions.classList.remove('hidden'); fabOverlay.classList.remove('hidden'); fabIcon.textContent = 'close'; expanded = true; }
+            function closeFab() { fabActions.classList.add('hidden'); fabOverlay.classList.add('hidden'); fabIcon.textContent = 'menu'; expanded = false; }
+            fabMain.addEventListener('click', () => expanded ? closeFab() : openFab());
             fabOverlay.addEventListener('click', closeFab);
+        }
+
+        function refreshAosIfAvailable() {
+            if (typeof AOS !== 'undefined') {
+                AOS.refreshHard();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyYayasanNavActiveState();
+            initMobileMenu();
+            initFab();
+            refreshAosIfAvailable();
         });
+
+        document.addEventListener('htmx:beforeRequest', (event) => {
+            if (event.target && event.target.closest('a, form')) {
+                setPageLoadingState(true);
+            }
+        });
+
+        document.addEventListener('htmx:afterSettle', () => {
+            setPageLoadingState(false);
+            closeYayasanMobileMenu();
+            applyYayasanNavActiveState();
+            initMobileMenu();
+            initFab();
+            refreshAosIfAvailable();
+        });
+
+        document.addEventListener('htmx:responseError', () => setPageLoadingState(false));
+        document.addEventListener('htmx:sendError', () => setPageLoadingState(false));
+        window.addEventListener('beforeunload', () => setPageLoadingState(true));
+        window.addEventListener('popstate', applyYayasanNavActiveState);
     </script>
 
     <!-- AOS Animation Library JS -->

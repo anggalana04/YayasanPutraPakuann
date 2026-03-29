@@ -55,7 +55,7 @@
         <p class="text-sm text-on-surface-variant">Dokumen telah kami terima secara digital pada 20 Mei 2024.</p>
         <span class="text-xs text-on-surface-variant">Selesai: 20 Mei 2024</span>
     </div>
-    
+
 </div>
 <!-- Step 2: Verifikasi Berkas -->
 <div class="relative flex gap-6 pb-10 items-start">
@@ -113,10 +113,6 @@
                 <span class="text-brand-yellow text-xs font-bold tracking-widest uppercase mb-2 block">Pilihan Pertama</span>
                 <h3 class="text-2xl font-bold">{{ $application->major_1 }}</h3>
             </div>
-            <div class="flex items-center gap-2 text-white/60 text-sm">
-                <span class="material-symbols-outlined text-sm" data-icon="info">info</span>
-                Kuota Tersisa: 12 Kursi
-            </div>
         </div>
         @endif
         @if($application->major_2)
@@ -125,9 +121,6 @@
                 <span class="text-brand-charcoal/50 text-xs font-bold tracking-widest uppercase mb-2 block">Pilihan Kedua</span>
                 <h3 class="text-2xl font-bold text-brand-charcoal">{{ $application->major_2 }}</h3>
             </div>
-            <button class="text-brand-yellow font-bold text-sm flex items-center gap-2 hover:translate-x-1 transition-transform">
-                Ubah Pilihan <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
-            </button>
         </div>
         @endif
     </div>

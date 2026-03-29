@@ -77,11 +77,16 @@
                 </div>
 
                 @if ($isYayasan)
-                    <form method="POST" action="{{ route('admin.cms.yayasan.principals.update', ['schoolType' => $schoolType]) }}">
+                    <form method="POST" action="{{ route('admin.cms.yayasan.principals.update', ['schoolType' => $schoolType]) }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="space-y-6">
                             @foreach (($yayasanPrincipals ?? []) as $index => $principal)
+                                @php
+                                    $currentPhoto = old('principals.' . $index . '.photo_existing', $principal['photo_url'] ?? '');
+                                    $currentVideo = old('principals.' . $index . '.video_existing', $principal['video_url'] ?? '');
+                                    $currentPhotoPreview = $currentPhoto ?: asset('images/logo-putrapakuan.png');
+                                @endphp
                                 <div class="rounded-2xl border border-[#1c190d]/10 p-4 bg-white/70 space-y-4">
                                     <h4 class="text-sm font-extrabold text-[#1c190d] uppercase tracking-wider">Kartu {{ $index + 1 }}</h4>
 
@@ -116,20 +121,33 @@
                                                    required>
                                         </div>
 
-                                        <div class="col-span-12 md:col-span-6">
-                                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">URL Foto</label>
-                                            <input type="text" name="principals[{{ $index }}][photo_url]"
-                                                   value="{{ old('principals.' . $index . '.photo_url', $principal['photo_url'] ?? '') }}"
-                                                   class="mt-2 w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                                                   placeholder="Contoh: /images/KEPSEK_SDIT.jpg"
-                                                   required>
+                                        <div class="col-span-12 md:col-span-6 space-y-3">
+                                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Foto Pimpinan</label>
+                                            <div class="w-24 h-24 rounded-xl border border-[#1c190d]/10 overflow-hidden bg-white">
+                                                <img src="{{ $currentPhotoPreview }}"
+                                                     alt="Preview foto pimpinan"
+                                                     class="w-full h-full object-cover">
+                                            </div>
+                                            <input type="hidden" name="principals[{{ $index }}][photo_existing]" value="{{ $currentPhoto }}">
+                                            <input type="file" name="principals[{{ $index }}][photo]" accept="image/*"
+                                                   class="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#f2cc0d] file:text-[#1c190d]">
+                                            <p class="text-xs text-on-surface-variant">Kosongkan jika tidak ingin mengganti foto saat ini.</p>
                                         </div>
-                                        <div class="col-span-12 md:col-span-6">
-                                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">URL Video (opsional)</label>
-                                            <input type="url" name="principals[{{ $index }}][video_url]"
-                                                   value="{{ old('principals.' . $index . '.video_url', $principal['video_url'] ?? '') }}"
-                                                   class="mt-2 w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                                                   placeholder="https://...">
+                                        <div class="col-span-12 md:col-span-6 space-y-3">
+                                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Video Profil (opsional)</label>
+                                            @if (!empty($currentVideo))
+                                                <video class="w-full h-24 rounded-xl border border-[#1c190d]/10 bg-black/80 object-cover" muted controls playsinline>
+                                                    <source src="{{ $currentVideo }}" type="video/mp4">
+                                                </video>
+                                            @else
+                                                <div class="w-full h-24 rounded-xl border border-dashed border-[#1c190d]/20 bg-white flex items-center justify-center text-xs text-on-surface-variant">
+                                                    Belum ada video
+                                                </div>
+                                            @endif
+                                            <input type="hidden" name="principals[{{ $index }}][video_existing]" value="{{ $currentVideo }}">
+                                            <input type="file" name="principals[{{ $index }}][video]" accept="video/mp4,video/webm,video/ogg,video/quicktime"
+                                                   class="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#f2cc0d] file:text-[#1c190d]">
+                                            <p class="text-xs text-on-surface-variant">Kosongkan jika tidak ingin mengganti video saat ini.</p>
                                         </div>
                                     </div>
                                 </div>

@@ -10,9 +10,16 @@ use App\Models\School;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class PpdbManagementController extends Controller
 {
+    private function flushPpdbViewCaches(School $school): void
+    {
+        Cache::forget('admin.dashboard.metrics.v2');
+        Cache::forget('ppdb.layout.' . strtolower((string) $school->type));
+    }
+
     private function defaultMajorsBySchool($schoolType)
     {
         $map = [
@@ -72,6 +79,8 @@ class PpdbManagementController extends Controller
         $notHandledCount = 0;
 
         if (!$mustSelectYear) {
+            $schoolType = strtoupper((string) $schoolModel->type);
+
             $selectedPhases = $phases->filter(function ($phase) use ($selectedYear) {
                 $startYear = Carbon::parse($phase->start_date)->year;
                 return ($startYear . '/' . ($startYear + 1)) === $selectedYear;
@@ -81,7 +90,7 @@ class PpdbManagementController extends Controller
             $startDate = Carbon::create($yearStart, 1, 1);
             $endDate = Carbon::create($yearStart + 1, 12, 31);
 
-            $applicants = PpdbApplication::whereRaw('LOWER(school_type) = ?', [strtolower($schoolModel->type)])
+            $applicants = PpdbApplication::where('school_type', $schoolType)
                 ->whereNotIn('status', ['draft'])
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->get();
@@ -192,6 +201,8 @@ class PpdbManagementController extends Controller
             $phase->save();
         }
 
+        $this->flushPpdbViewCaches($schoolModel);
+
         return redirect()->route('admin.ppdb.management', ['school' => $school, 'year' => $validated['year']])->with('success', 'Tanggal 3 periode berhasil disimpan.');
     }
 
@@ -209,6 +220,8 @@ class PpdbManagementController extends Controller
         $validated['school_id'] = $schoolModel->id;
 
         PpdbManagementPhase::create($validated);
+
+        $this->flushPpdbViewCaches($schoolModel);
 
         return redirect()->route('admin.ppdb.management', ['school' => $school])->with('success', 'Phase added successfully.');
     }
@@ -230,6 +243,8 @@ class PpdbManagementController extends Controller
 
         $phase->update($validated);
 
+        $this->flushPpdbViewCaches($schoolModel);
+
         return redirect()->route('admin.ppdb.management', ['school' => $school])->with('success', 'Phase updated successfully.');
     }
 
@@ -243,12 +258,15 @@ class PpdbManagementController extends Controller
 
         $phase->delete();
 
+        $this->flushPpdbViewCaches($schoolModel);
+
         return redirect()->route('admin.ppdb.management', ['school' => $school])->with('success', 'Phase deleted successfully.');
     }
 
     public function capacityIndex(Request $request, $school)
     {
         $schoolModel = School::where('slug', $school)->firstOrFail();
+        $schoolType = strtoupper((string) $schoolModel->type);
         $year = $request->query('year') ?: (date('Y') . '/' . (date('Y') + 1));
 
         $capacities = PpdbMajorCapacity::where('school_id', $schoolModel->id)
@@ -257,7 +275,7 @@ class PpdbManagementController extends Controller
 
         $defaultMajors = $this->defaultMajorsBySchool($schoolModel->type);
 
-        $applicantMajors = PpdbApplication::whereRaw('LOWER(school_type) = ?', [strtolower($schoolModel->type)])
+        $applicantMajors = PpdbApplication::where('school_type', $schoolType)
             ->whereYear('created_at', intval(substr($year, 0, 4)))
             ->get(['major_1', 'major_2', 'assigned_major'])
             ->flatMap(function ($application) {
@@ -285,7 +303,7 @@ class PpdbManagementController extends Controller
         $yearStart = intval(substr($year, 0, 4));
         $yearEnd = intval(substr($year, 5, 4));
 
-        $applicantCountByMajor = PpdbApplication::whereRaw('LOWER(school_type) = ?', [strtolower($schoolModel->type)])
+        $applicantCountByMajor = PpdbApplication::where('school_type', $schoolType)
             ->whereIn('status', ['accepted', 'accepted_major_1', 'accepted_major_2'])
             ->where(function ($query) use ($yearStart, $yearEnd) {
                 $query->whereBetween('admission_date', ["{$yearStart}-01-01", "{$yearEnd}-12-31"])
@@ -324,6 +342,8 @@ class PpdbManagementController extends Controller
                 }
             }
 
+            $this->flushPpdbViewCaches($schoolModel);
+
             return redirect()->route('admin.ppdb.management.capacity', ['school' => $school, 'year' => $validated['year']])->with('success', 'Kapasitas jurusan berhasil diperbarui secara massal.');
         }
 
@@ -342,6 +362,8 @@ class PpdbManagementController extends Controller
             ['capacity' => $validated['capacity']]
         );
 
+        $this->flushPpdbViewCaches($schoolModel);
+
         return redirect()->route('admin.ppdb.management.capacity', ['school' => $school, 'year' => $validated['year']])->with('success', 'Kapasitas jurusan disimpan.');
     }
 
@@ -359,6 +381,8 @@ class PpdbManagementController extends Controller
 
         $capacity->update(['capacity' => $validated['capacity']]);
 
+        $this->flushPpdbViewCaches($schoolModel);
+
         return redirect()->route('admin.ppdb.management.capacity', ['school' => $school, 'year' => $capacity->year])->with('success', 'Kapasitas jurusan diperbarui.');
     }
 
@@ -373,6 +397,8 @@ class PpdbManagementController extends Controller
 
         $year = $capacity->year;
         $capacity->delete();
+
+        $this->flushPpdbViewCaches($schoolModel);
 
         return redirect()->route('admin.ppdb.management.capacity', ['school' => $school, 'year' => $year])->with('success', 'Kapasitas jurusan dihapus.');
     }
@@ -390,6 +416,8 @@ class PpdbManagementController extends Controller
 
         $phase->status = 'active';
         $phase->save();
+
+        $this->flushPpdbViewCaches($schoolModel);
 
         return redirect()->route('admin.ppdb.management', ['school' => $school])->with('success', 'Phase activated successfully.');
     }
@@ -420,6 +448,8 @@ class PpdbManagementController extends Controller
             $phase->is_live = !$isCurrentlyLive;
             $phase->save();
         }
+
+        $this->flushPpdbViewCaches($schoolModel);
 
         $status = !$isCurrentlyLive ? 'dibuka' : 'ditutup';
         return redirect()->route('admin.ppdb.management', ['school' => $school, 'year' => $year])->with('success', 'PPDB untuk tahun ' . $year . ' telah ' . $status . '.');

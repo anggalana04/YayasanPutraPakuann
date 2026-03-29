@@ -246,7 +246,7 @@
 <!-- BottomNavBar (Mobile) -->
 <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-4 pt-2 md:hidden bg-white/60 dark:bg-[#1c190d]/60 backdrop-blur-2xl z-50 rounded-t-3xl shadow-[0_-10px_40px_rgba(28,25,13,0.06)]">
     <a href="{{ route('ppdb.dashboard', ['school' => $school]) }}" class="flex flex-col items-center justify-center {{ request()->routeIs('ppdb.dashboard') ? 'bg-[#f2cc0d] text-[#1c190d]' : 'text-[#1c190d]/50 dark:text-white/50' }} rounded-2xl p-2 min-w-16">
-        <span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">Dasbor</span>
+        <span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
         <span class="font-lexend text-[10px] font-medium">Dasbor</span>
     </a>
     <a href="{{ route('ppdb.profil', ['school' => $school]) }}" class="flex flex-col items-center justify-center text-[#1c190d]/50 dark:text-white/50 p-2 hover:bg-[#f2cc0d]/10 rounded-2xl {{ request()->routeIs('ppdb.profil') ? 'bg-[#f2cc0d] text-[#1c190d]' : '' }}">
@@ -256,7 +256,7 @@
     <form method="POST" action="{{ route('ppdb.logout', ['school' => $school]) }}" class="inline">
         @csrf
         <button type="submit" class="flex flex-col items-center justify-center text-red-500 p-2 hover:bg-red-100 rounded-2xl">
-            <span class="material-symbols-outlined" data-icon="logout">Keluar</span>
+            <span class="material-symbols-outlined" data-icon="logout">logout</span>
             <span class="font-lexend text-[10px] font-medium">Keluar</span>
         </button>
     </form>

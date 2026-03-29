@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html class="light" lang="id" style="margin:0; padding:0; background:#1c190d;">
+<html class="light" lang="id" style="margin:0; padding:0; background:#f7f7f4;">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -88,8 +88,56 @@
             margin: 0;
             padding: 0;
         }
+
+        .site-loading-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(28, 25, 13, 0.32);
+            backdrop-filter: blur(2px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 180ms ease;
+        }
+
+        .site-loading-overlay.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .site-loading-spinner {
+            width: 50px;
+            height: 50px;
+            border-radius: 9999px;
+            border: 4px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #f2cc0d;
+            animation: site-loading-spin 0.85s linear infinite;
+        }
+
+        .admin-nav-link {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .admin-nav-link:hover {
+            color: #f2cc0d;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-nav-link.is-active {
+            background: #f2cc0d;
+            color: #1c190d;
+        }
+
+        @keyframes site-loading-spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
     @stack('head')
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@2.0.4" defer></script>
 </head>
 @php
     $adminUser    = Auth::guard('admin')->user();
@@ -107,6 +155,9 @@
     $isCmsActive  = request()->is('admin/cms*');
 @endphp
 <body style="margin:0; padding:0;" class="bg-background font-body text-on-background antialiased overflow-x-hidden">
+<div id="site-loading-overlay" class="site-loading-overlay" aria-hidden="true">
+    <div class="site-loading-spinner" role="status" aria-label="Memuat halaman"></div>
+</div>
 <div x-data="{ open: true }" :class="open ? 'ml-64' : 'ml-20'" class="transition-all duration-300">
     <!-- SideNavBar -->
     <aside x-cloak x-show="true" x-data="{ open: true }" :class="open ? 'w-64' : 'w-20'" class="fixed left-0 top-0 flex flex-col h-screen transition-all duration-300 border-r-0 bg-[#1c190d] dark:bg-[#0a0905] shadow-2xl z-50">
@@ -121,21 +172,21 @@
             </div>
             <nav class="space-y-2 w-full" :class="open ? '' : 'items-center'">
                 @if($isSuperAdmin)
-                <a class="flex items-center gap-3 px-4 py-3 rounded-3xl mx-2 my-1 transition-all duration-300 font-medium justify-center {{ request()->is('admin') && !request()->is('admin/*') ? 'bg-[#f2cc0d] text-[#1c190d]' : 'text-white/70 hover:text-[#f2cc0d] hover:bg-white/5' }}" href="{{ url('/admin') }}">
-                    <span class="material-symbols-outlined active-icon" data-icon="dashboard">Dasbor</span>
+                <a data-admin-nav data-admin-section="dashboard" class="admin-nav-link {{ request()->is('admin') && !request()->is('admin/*') ? 'is-active' : '' }} flex items-center gap-3 px-4 py-3 rounded-3xl mx-2 my-1 transition-all duration-300 font-medium justify-center" href="{{ url('/admin') }}">
+                    <span class="material-symbols-outlined active-icon" data-icon="dashboard">dashboard</span>
                     <span x-show="open">Dasbor</span>
                 </a>
                 @endif
-                <a class="flex items-center gap-3 px-4 py-3 rounded-3xl mx-2 my-1 transition-all duration-300 font-medium justify-center {{ $isPpdbActive ? 'bg-[#f2cc0d] text-[#1c190d]' : 'text-white/70 hover:text-[#f2cc0d] hover:bg-white/5' }}" href="{{ $ppdbLink }}">
+                <a data-admin-nav data-admin-section="ppdb" class="admin-nav-link {{ $isPpdbActive ? 'is-active' : '' }} flex items-center gap-3 px-4 py-3 rounded-3xl mx-2 my-1 transition-all duration-300 font-medium justify-center" href="{{ $ppdbLink }}">
                     <span class="material-symbols-outlined" data-icon="how_to_reg">how_to_reg</span>
                     <span x-show="open">Manajemen PPDB</span>
                 </a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-3xl mx-2 my-1 transition-all duration-300 font-medium justify-center {{ $isCmsActive ? 'bg-[#f2cc0d] text-[#1c190d]' : 'text-white/70 hover:text-[#f2cc0d] hover:bg-white/5' }}" href="{{ $cmsLink }}">
+                <a data-admin-nav data-admin-section="cms" class="admin-nav-link {{ $isCmsActive ? 'is-active' : '' }} flex items-center gap-3 px-4 py-3 rounded-3xl mx-2 my-1 transition-all duration-300 font-medium justify-center" href="{{ $cmsLink }}">
                     <span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
                     <span x-show="open">Manajemen Konten</span>
                 </a>
                 @if($isSuperAdmin)
-                <a class="flex items-center gap-3 px-4 py-3 text-white/70 hover:text-[#f2cc0d] transition-colors mx-2 my-1 font-medium hover:bg-white/5 rounded-3xl justify-center {{ request()->is('admin/user-management') ? 'bg-[#f2cc0d] text-[#1c190d]' : '' }}" href="{{ url('/admin/user-management') }}">
+                <a data-admin-nav data-admin-section="users" class="admin-nav-link {{ request()->is('admin/user-management') ? 'is-active' : '' }} flex items-center gap-3 px-4 py-3 transition-colors mx-2 my-1 font-medium rounded-3xl justify-center" href="{{ url('/admin/user-management') }}">
                     <span class="material-symbols-outlined" data-icon="group">group</span>
                     <span x-show="open">Manajemen Pengguna</span>
                 </a>
@@ -147,7 +198,7 @@
             <form method="POST" action="{{ route('admin.logout') }}">
                 @csrf
                 <button type="submit" class="w-full bg-white/10 hover:bg-white/20 text-[#f2cc0d] py-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95">
-                    <span class="material-symbols-outlined" data-icon="logout">Keluar</span>
+                    <span class="material-symbols-outlined" data-icon="logout">logout</span>
                     <span class="font-semibold text-sm" x-show="open">Keluar</span>
                 </button>
             </form>
@@ -181,14 +232,112 @@
             </div>
         </header>
         <!-- Main Content -->
-        <div class="p-8 max-w-7xl mx-auto">
-            @yield('content')
+        <div id="admin-page-shell" class="p-8 max-w-7xl mx-auto">
+            @include('layouts.admin.partials.navigation-strip')
+            <div id="admin-page-content">
+                @yield('content')
+            </div>
+            @yield('page_scripts')
         </div>
         <footer class="mt-12 p-8 border-t-0 bg-surface-container-low/30 text-center">
             <p class="text-xs text-outline font-medium tracking-wide">© 2024 SMK PUTRA PAKUAN BOGOR • VERSI SISTEM 2.4.0</p>
         </footer>
     </main>
 </div>
+<script>
+    function setSiteLoadingState(isLoading) {
+        const overlay = document.getElementById('site-loading-overlay');
+        if (!overlay) return;
+        overlay.classList.toggle('is-active', isLoading);
+        overlay.setAttribute('aria-hidden', isLoading ? 'false' : 'true');
+    }
+
+    function processAdminNavigation(root = document) {
+        if (typeof htmx === 'undefined') {
+            return;
+        }
+
+        root.querySelectorAll('a[href]').forEach((link) => {
+            const href = link.getAttribute('href') || '';
+            const isAdminPath = href.startsWith('/admin') || href.startsWith(window.location.origin + '/admin');
+
+            if (!isAdminPath || link.target === '_blank' || link.closest('[data-admin-nav-disabled]') || link.hasAttribute('download')) {
+                return;
+            }
+
+            link.setAttribute('hx-boost', 'true');
+            link.setAttribute('hx-target', '#admin-page-shell');
+            link.setAttribute('hx-select', '#admin-page-shell');
+            link.setAttribute('hx-swap', 'outerHTML transition:true');
+            link.setAttribute('hx-push-url', 'true');
+        });
+
+        htmx.process(root.body || root);
+        syncAdminNavState();
+    }
+
+    function syncAdminNavState() {
+        const path = window.location.pathname;
+        const currentSection = path.startsWith('/admin/cms')
+            ? 'cms'
+            : path.startsWith('/admin/ppdb')
+                ? 'ppdb'
+                : path.startsWith('/admin/user-management') || path.startsWith('/admin/users')
+                    ? 'users'
+                    : 'dashboard';
+
+        document.querySelectorAll('[data-admin-section]').forEach((link) => {
+            const isActive = link.dataset.adminSection === currentSection;
+            link.classList.toggle('is-active', isActive);
+            link.setAttribute('aria-current', isActive ? 'page' : 'false');
+        });
+    }
+
+    function clearSiteLoadingState() {
+        setSiteLoadingState(false);
+    }
+
+    document.addEventListener('click', (event) => {
+        const link = event.target.closest('a[href]');
+        if (!link) return;
+        const href = link.getAttribute('href') || '';
+        if (!href || href.startsWith('#') || link.target === '_blank' || event.ctrlKey || event.metaKey) {
+            return;
+        }
+
+        if (link.hasAttribute('download') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+            return;
+        }
+
+        setSiteLoadingState(true);
+    });
+
+    document.addEventListener('submit', () => setSiteLoadingState(true));
+    document.addEventListener('DOMContentLoaded', () => {
+        clearSiteLoadingState();
+        processAdminNavigation(document);
+        syncAdminNavState();
+    });
+    document.addEventListener('htmx:beforeRequest', () => setSiteLoadingState(true));
+    document.addEventListener('htmx:beforeHistorySave', () => clearSiteLoadingState());
+    document.addEventListener('htmx:historyRestore', () => clearSiteLoadingState());
+    document.addEventListener('htmx:afterSwap', (event) => {
+        clearSiteLoadingState();
+        processAdminNavigation(event.target || document);
+    });
+    document.addEventListener('htmx:afterSettle', () => setSiteLoadingState(false));
+    document.addEventListener('htmx:responseError', () => setSiteLoadingState(false));
+    document.addEventListener('htmx:sendError', () => setSiteLoadingState(false));
+    window.addEventListener('load', clearSiteLoadingState);
+    window.addEventListener('pagehide', clearSiteLoadingState);
+    window.addEventListener('pageshow', clearSiteLoadingState);
+    window.addEventListener('popstate', clearSiteLoadingState);
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            clearSiteLoadingState();
+        }
+    });
+</script>
 @stack('scripts')
 </body>
 </html>

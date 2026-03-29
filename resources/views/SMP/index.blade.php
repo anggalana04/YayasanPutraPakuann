@@ -576,12 +576,23 @@
     });
 
     // Hero Carousel
-    document.addEventListener('DOMContentLoaded', () => {
-        const slides = document.querySelectorAll('.hero-slide');
-        const dots = document.querySelectorAll('.carousel-dot');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const progress = document.getElementById('carouselProgress');
+    function initHeroCarousel(root = document) {
+        const carouselRoot = root.querySelector('.hero-carousel-container');
+        if (!carouselRoot || carouselRoot.dataset.carouselInitialized === 'true') {
+            return;
+        }
+
+        carouselRoot.dataset.carouselInitialized = 'true';
+
+        const slides = carouselRoot.querySelectorAll('.hero-slide');
+        const dots = carouselRoot.querySelectorAll('.carousel-dot');
+        const prevBtn = carouselRoot.querySelector('#prevBtn');
+        const nextBtn = carouselRoot.querySelector('#nextBtn');
+        const progress = carouselRoot.querySelector('#carouselProgress');
+
+        if (!slides.length || !dots.length || !prevBtn || !nextBtn) {
+            return;
+        }
 
         let currentIndex = 0;
         let autoplayTimeout;
@@ -629,6 +640,9 @@
         }
 
         function resetProgress() {
+            if (!progress) {
+                return;
+            }
             progress.classList.remove('active');
             void progress.offsetWidth; // Trigger reflow
             progress.classList.add('active');
@@ -662,7 +676,9 @@
                     }
                 }, durationMs);
 
-                progress.classList.remove('active');
+                if (progress) {
+                    progress.classList.remove('active');
+                }
             } else {
                 stopVideoPlayback();
                 resetProgress();
@@ -683,7 +699,9 @@
                 activeVideo.pause();
             }
 
-            progress.classList.remove('active');
+            if (progress) {
+                progress.classList.remove('active');
+            }
         }
 
         function resumeAutoplay() {
@@ -710,7 +728,9 @@
                     }
                 }, remainingMs);
 
-                progress.classList.remove('active');
+                if (progress) {
+                    progress.classList.remove('active');
+                }
             } else {
                 startAutoplay();
             }
@@ -722,7 +742,9 @@
                 autoplayTimeout = null;
             }
             stopVideoPlayback();
-            progress.classList.remove('active');
+            if (progress) {
+                progress.classList.remove('active');
+            }
         }
 
         // Event listeners
@@ -745,6 +767,11 @@
 
         // Start autoplay (no hover pause)
         startAutoplay();
+    }
+
+    initHeroCarousel(document);
+    document.addEventListener('htmx:load', (event) => {
+        initHeroCarousel(event.detail?.elt || document);
     });
 
     // Countdown Timer
