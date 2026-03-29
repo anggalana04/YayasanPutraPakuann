@@ -1,9 +1,26 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
-<html class="light" lang="id"><head>
+<html class="light" lang="id" style="margin:0; padding:0; background:#f7f7f4;"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Login  -  Putra Pakuan</title>
+<title>Masuk PPDB SMK Putra Pakuan</title>
+<meta name="description" content="Masuk ke portal PPDB SMK Putra Pakuan untuk melihat status seleksi, pembayaran, dan kelengkapan berkas." />
+<meta name="keywords" content="masuk ppdb smk putra pakuan, login smk bogor, portal ppdb smk" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<link rel="canonical" href="{{ url()->current() }}" />
+<link rel="icon" type="image/png" href="{{ asset('images/logo-putrapakuan.png') }}" />
+<link rel="shortcut icon" type="image/png" href="{{ asset('images/logo-putrapakuan.png') }}" />
+<link rel="apple-touch-icon" href="{{ asset('images/logo-putrapakuan.png') }}" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="id_ID" />
+<meta property="og:title" content="Masuk PPDB SMK Putra Pakuan" />
+<meta property="og:description" content="Masuk ke portal PPDB SMK Putra Pakuan untuk melihat status seleksi, pembayaran, dan kelengkapan berkas." />
+<meta property="og:url" content="{{ url()->current() }}" />
+<meta property="og:image" content="{{ asset('images/logo-putrapakuan.png') }}" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Masuk PPDB SMK Putra Pakuan" />
+<meta name="twitter:description" content="Masuk ke portal PPDB SMK Putra Pakuan untuk melihat status seleksi, pembayaran, dan kelengkapan berkas." />
+<meta name="twitter:image" content="{{ asset('images/logo-putrapakuan.png') }}" />
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -89,7 +106,7 @@
       }
     </style>
 </head>
-<body class="bg-background font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<body style="margin:0; padding:0;" class="bg-background font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
 <main class="min-h-screen flex items-center justify-center p-4 md:p-8">
 <!-- Main Layout Container -->
 <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_10px_40px_rgba(28,25,13,0.06)] min-h-[720px]">
@@ -170,8 +187,8 @@
     <!-- Password Input -->
     <div class="space-y-2 group">
         <div class="flex justify-between items-center ml-1">
-            <label class="text-sm font-bold text-on-surface tracking-tight" for="password">Password</label>
-            <a class="text-xs font-bold text-primary hover:text-primary-dim transition-colors uppercase tracking-wider" href="#">Lupa Password?</a>
+            <label class="text-sm font-bold text-on-surface tracking-tight" for="password">Kata Sandi</label>
+            <a class="text-xs font-bold text-primary hover:text-primary-dim transition-colors uppercase tracking-wider" href="#">Lupa Kata Sandi?</a>
         </div>
         <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -229,3 +246,9 @@
 </button>
 </div>
 </body></html>
+
+
+
+
+
+

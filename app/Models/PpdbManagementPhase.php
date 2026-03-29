@@ -10,9 +10,21 @@ class PpdbManagementPhase extends Model
     use HasFactory;
 
     protected $fillable = [
+        'school_id',
         'phase_name',
         'start_date',
         'end_date',
         'status',
+        'is_live',
     ];
+
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+    ];
+
+    public function school()
+    {
+        return $this->belongsTo(\App\Models\School::class);
+    }
 }

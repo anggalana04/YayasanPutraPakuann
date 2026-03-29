@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+﻿@extends('admin.layouts.app')
 
 @section('content')
 <main class="min-h-screen flex items-center justify-center p-4 md:p-8 bg-background">
@@ -9,7 +9,7 @@
                 <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-4">
                     <span class="material-symbols-outlined text-primary text-4xl" data-icon="admin_panel_settings">admin_panel_settings</span>
                 </div>
-                <h2 class="text-2xl font-extrabold tracking-tighter text-primary mb-2">Admin Panel</h2>
+                <h2 class="text-2xl font-extrabold tracking-tighter text-primary mb-2">Panel Admin</h2>
                 <p class="text-sm text-primary-dim text-center">Yayasan Putra Pakuan</p>
             </div>
         </div>
@@ -17,7 +17,7 @@
         <div class="flex flex-col justify-center px-8 py-12 md:px-10 bg-white">
             <div class="max-w-md mx-auto w-full">
                 <header class="mb-8 text-center">
-                    <h2 class="text-2xl font-bold text-charcoal mb-2 tracking-tight">Login Admin</h2>
+                    <h2 class="text-2xl font-bold text-charcoal mb-2 tracking-tight">Masuk Admin</h2>
                     <p class="text-on-surface-variant text-sm">Masuk ke dashboard admin Anda</p>
                 </header>
                 @if($errors->any())
@@ -49,7 +49,7 @@
                     </div>
                     <div class="mb-4 flex items-center">
                         <input type="checkbox" name="remember" id="remember" class="mr-2">
-                        <label for="remember" class="text-sm text-gray-600">Remember Me</label>
+                        <label for="remember" class="text-sm text-gray-600">Ingat Saya</label>
                     </div>
                     <button type="submit" class="w-full bg-primary-container text-on-primary-fixed font-bold py-4 px-6 rounded-xl shadow-lg shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 group">
                         <span>Masuk ke Dashboard</span>
@@ -61,3 +61,8 @@
     </div>
 </main>
 @endsection
+
+
+
+
+

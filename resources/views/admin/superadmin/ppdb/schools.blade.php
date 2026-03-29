@@ -1,6 +1,6 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
-@section('title', 'Select School - Yayasan Putra Pakuan')
+@section('title', 'Pilih Sekolah - Yayasan Putra Pakuan')
 
 @section('content')
 <div class="p-10 flex-1">
@@ -9,12 +9,12 @@
         <div class="flex items-center gap-2 text-on-surface-variant text-sm mb-4">
             <span>PPDB</span>
             <span class="material-symbols-outlined text-xs">chevron_right</span>
-            <span class="text-[#f2cc0d] font-medium">Select School</span>
+            <span class="text-[#f2cc0d] font-medium">Pilih Sekolah</span>
         </div>
         <div class="flex justify-between items-end">
             <div>
-                <h3 class="text-4xl font-bold tracking-tight text-[#1c190d] mb-2">Select School Unit</h3>
-                <p class="text-on-surface-variant max-w-xl">Choose a school unit below to manage its PPDB data and settings.</p>
+                <h3 class="text-4xl font-bold tracking-tight text-[#1c190d] mb-2">Pilih Unit Sekolah</h3>
+                <p class="text-on-surface-variant max-w-xl">Pilih unit sekolah di bawah untuk mengelola data PPDB dan pengaturannya.</p>
             </div>
         </div>
     </div>
@@ -26,9 +26,9 @@
                     <thead>
                         <tr class="bg-surface-container-low/50">
                             <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">ID</th>
-                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">School Name</th>
-                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Type</th>
-                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Actions</th>
+                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Nama Sekolah</th>
+                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Jenis</th>
+                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#1c190d]/5">
@@ -38,12 +38,12 @@
                             <td class="px-6 py-6 font-bold text-[#1c190d]">{{ $school->name }}</td>
                             <td class="px-6 py-6 text-on-surface-variant">{{ $school->type }}</td>
                             <td class="px-6 py-6">
-                                <a href="{{ route('admin.ppdb.management', $school->slug) }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all inline-block">Manage</a>
+                                <a href="{{ route('admin.ppdb.management', $school->slug) }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all inline-block">Kelola</a>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-6 text-center text-on-surface-variant">No schools found.</td>
+                            <td colspan="4" class="px-6 py-6 text-center text-on-surface-variant">Tidak ada sekolah ditemukan.</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -53,3 +53,8 @@
     </div>
 </div>
 @endsection
+
+
+
+
+

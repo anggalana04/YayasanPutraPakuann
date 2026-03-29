@@ -1,24 +1,31 @@
-@extends('layouts.sd.app')
+﻿@extends('layouts.SD.app')
 
 @section('title', 'Visi dan Misi - SDIT Putra Pakuan')
 
 @push('head')
-{{-- Remove duplicate Tailwind/Font/Script includes, as they are in the layout --}}
+<style>
+    body {
+        font-family: 'Lexend', sans-serif;
+    }
+    .vision-gradient {
+        background: linear-gradient(135deg, #101c22 0%, #1a2e38 100%);
+    }
+</style>
 @endpush
 
 @section('content')
 <main class="max-w-7xl mx-auto px-6 py-12">
     <!-- Breadcrumbs -->
     <nav class="flex items-center gap-2 text-sm font-medium text-slate-400 mb-8">
-        <a class="hover:text-primary" href="#">Beranda</a>
+        <a class="hover:text-primary" href="{{ route('school.home', ['school' => 'sd']) }}">Beranda</a>
         <span class="material-symbols-outlined text-xs">chevron_right</span>
-        <a class="hover:text-primary" href="#">Profil</a>
+        <a class="hover:text-primary" href="{{ route('school.profil', ['school' => 'sd']) }}">Profil</a>
         <span class="material-symbols-outlined text-xs">chevron_right</span>
         <span class="text-charcoal">Visi &amp; Misi</span>
     </nav>
     <!-- Page Intro -->
     <div class="mb-16">
-        <h2 class="text-4xl md:text-5xl font-black text-charcoal mb-4 tracking-tight">Visi dan Misi SMP Putra Pakuan</h2>
+        <h2 class="text-4xl md:text-5xl font-black text-charcoal mb-4 tracking-tight">Visi dan Misi SDIT Putra Pakuan</h2>
         <div class="w-20 h-2 bg-primary rounded-full mb-6"></div>
         <!-- Removed duplicate Visi & Misi content here -->
     </div>
@@ -123,3 +130,7 @@
     </section>
 </main>
 @endsection
+
+
+
+

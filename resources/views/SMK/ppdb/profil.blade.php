@@ -1,4 +1,4 @@
-@extends('layouts.SMK.ppdb')
+﻿@extends('layouts.SMK.ppdb')
 
 @section('ppdb-content')
 
@@ -47,3 +47,7 @@
 @section('ppdb-footer')
 
 @endsection
+
+
+
+

@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
 @section('title', 'CMS Berita - ' . strtoupper($schoolType))
 
@@ -8,7 +8,7 @@
         <div>
             <p class="text-primary font-bold tracking-widest text-xs uppercase">Berita Management</p>
             <h2 class="text-4xl font-extrabold tracking-tight text-[#1c190d]">{{ strtoupper($schoolType) }}</h2>
-            <p class="text-on-surface-variant max-w-2xl">Buat, edit, dan hapus berita per sekolah.</p>
+            <p class="text-on-surface-variant max-w-2xl">Buat, ubah, dan hapus berita per sekolah.</p>
         </div>
         <div class="flex gap-3">
             <a href="{{ route('admin.cms.by_school', ['schoolType' => $schoolType]) }}"
@@ -34,7 +34,7 @@
                 <tr class="bg-surface-container-low/50">
                     <th class="px-4 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Judul</th>
                     <th class="px-4 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Kategori</th>
-                    <th class="px-4 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Pinned</th>
+                    <th class="px-4 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Disematkan</th>
                     <th class="px-4 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Status</th>
                     <th class="px-4 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Tanggal</th>
                     <th class="px-4 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70 text-right">Aksi</th>
@@ -59,20 +59,20 @@
                         <td class="px-4 py-4 text-on-surface-variant">{{ $item->category ?? '-' }}</td>
                         <td class="px-4 py-4">
                             @if ($item->featured)
-                                <span class="px-3 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Pinned</span>
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Disematkan</span>
                             @else
-                                <span class="px-3 py-1 bg-surface-container-lowest text-on-surface-variant text-[10px] font-bold uppercase tracking-wider rounded-full">No</span>
+                                <span class="px-3 py-1 bg-surface-container-lowest text-on-surface-variant text-[10px] font-bold uppercase tracking-wider rounded-full">Tidak</span>
                             @endif
                         </td>
                         <td class="px-4 py-4">
                             @if ($item->status === 'published')
-                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Published</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             @else
-                                <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Draft</span>
+                                <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Draf</span>
                             @endif
                         </td>
                         <td class="px-4 py-4 text-on-surface-variant">
-                            {{ $item->published_at ? $item->published_at->format('d M Y') : '-' }}
+                            {{ $item->published_at ? $item->published_at->format('d M Y') : $item->created_at->format('d M Y') }}
                         </td>
                         <td class="px-4 py-4 text-right">
                             <div class="flex justify-end gap-2 items-center">
@@ -113,4 +113,9 @@
     </div>
 </div>
 @endsection
+
+
+
+
+
 

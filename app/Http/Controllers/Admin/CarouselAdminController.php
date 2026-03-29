@@ -12,9 +12,9 @@ class CarouselAdminController extends Controller
 {
     public function index(string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $carouselImages = CarouselImage::where('school_id', $school->id)
             ->ordered()
@@ -29,9 +29,9 @@ class CarouselAdminController extends Controller
 
     public function create(string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         return view('admin.superadmin.cms.unit.carousel.form', [
             'mode' => 'create',
@@ -43,11 +43,13 @@ class CarouselAdminController extends Controller
 
     public function store(Request $request, string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $request->validate([
+            'title' => 'nullable|string|max:100',
+            'description' => 'nullable|string|max:350',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -61,8 +63,8 @@ class CarouselAdminController extends Controller
         }
 
         $baseData = [
-            'title' => 'Carousel Image',
-            'description' => null,
+            'title' => $request->input('title', 'Carousel Image'),
+            'description' => $request->input('description', null),
             'sort_order' => $request->input('sort_order', 0),
             'status' => 'active',
             'video_url' => null,
@@ -104,9 +106,9 @@ class CarouselAdminController extends Controller
 
     public function edit(string $schoolType, int $carousel)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $item = CarouselImage::findOrFail($carousel);
 
@@ -125,9 +127,9 @@ class CarouselAdminController extends Controller
 
     public function update(Request $request, string $schoolType, int $carousel)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $item = CarouselImage::findOrFail($carousel);
 
@@ -143,6 +145,8 @@ class CarouselAdminController extends Controller
         ]);
 
         $data = [
+            'title' => $request->input('title', $item->title),
+            'description' => $request->input('description', $item->description),
             'updated_by' => auth('admin')->user()->name ?? 'System',
         ];
 
@@ -167,9 +171,9 @@ class CarouselAdminController extends Controller
 
     public function destroy(string $schoolType, int $carousel)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $item = CarouselImage::findOrFail($carousel);
 
@@ -214,10 +218,10 @@ class CarouselAdminController extends Controller
         return '/videos/cms/' . $schoolType . '/carousel/' . $filename;
     }
 
-    private function abortUnlessSuperAdmin(): void
+    private function abortUnlessAdmin(): void
     {
         $user = auth('admin')->user();
-        if (!$user || !$user->isSuperAdmin()) {
+        if (!$user || !$user->is_admin) {
             abort(403);
         }
     }

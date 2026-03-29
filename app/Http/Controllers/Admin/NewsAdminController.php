@@ -12,9 +12,9 @@ class NewsAdminController extends Controller
 {
     public function index(string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
         $news = News::where('school_id', $school->id)
             ->orderByDesc('created_at')
             ->paginate(10);
@@ -28,9 +28,9 @@ class NewsAdminController extends Controller
 
     public function create(string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         return view('admin.superadmin.cms.unit.news.form', [
             'mode' => 'create',
@@ -42,9 +42,9 @@ class NewsAdminController extends Controller
 
     public function store(Request $request, string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -52,7 +52,6 @@ class NewsAdminController extends Controller
             'excerpt' => ['nullable', 'string', 'max:2000'],
             'content' => ['required', 'string'],
             'status' => ['required', 'in:draft,published'],
-            'published_at' => ['nullable', 'date'],
             'featured' => ['nullable', 'boolean'],
             'image' => ['nullable', 'image', 'max:4096'],
         ]);
@@ -64,10 +63,7 @@ class NewsAdminController extends Controller
             $imageUrl = $this->storeNewsImage($request->file('image'), strtolower($schoolType), $slug);
         }
 
-        $publishedAt = $validated['published_at'] ?? null;
-        if ($validated['status'] === 'published' && !$publishedAt) {
-            $publishedAt = now();
-        }
+        $publishedAt = $validated['status'] === 'published' ? now() : null;
 
         News::create([
             'school_id' => $school->id,
@@ -91,9 +87,9 @@ class NewsAdminController extends Controller
 
     public function edit(string $schoolType, int $news)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
         $newsItem = News::where('school_id', $school->id)->findOrFail($news);
 
         return view('admin.superadmin.cms.unit.news.form', [
@@ -106,9 +102,9 @@ class NewsAdminController extends Controller
 
     public function update(Request $request, string $schoolType, int $news)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
         $newsItem = News::where('school_id', $school->id)->findOrFail($news);
 
         $validated = $request->validate([
@@ -117,7 +113,6 @@ class NewsAdminController extends Controller
             'excerpt' => ['nullable', 'string', 'max:2000'],
             'content' => ['required', 'string'],
             'status' => ['required', 'in:draft,published'],
-            'published_at' => ['nullable', 'date'],
             'featured' => ['nullable', 'boolean'],
             'image' => ['nullable', 'image', 'max:4096'],
         ]);
@@ -135,11 +130,11 @@ class NewsAdminController extends Controller
             $newsItem->image_url = $this->storeNewsImage($request->file('image'), strtolower($schoolType), $newsItem->slug);
         }
 
-        $publishedAt = $validated['published_at'] ?? null;
-        if ($validated['status'] === 'published' && !$publishedAt) {
-            $publishedAt = now();
+        if ($validated['status'] === 'published') {
+            $newsItem->published_at = $newsItem->published_at ?? now();
+        } else {
+            $newsItem->published_at = null;
         }
-        $newsItem->published_at = $publishedAt;
         $newsItem->updated_by = auth('admin')->user()->name ?? 'admin';
         $newsItem->save();
 
@@ -150,9 +145,9 @@ class NewsAdminController extends Controller
 
     public function destroy(string $schoolType, int $news)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
         $newsItem = News::where('school_id', $school->id)->findOrFail($news);
 
         $newsItem->delete();
@@ -164,9 +159,9 @@ class NewsAdminController extends Controller
 
     public function toggleFeatured(string $schoolType, int $news)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
         $newsItem = News::where('school_id', $school->id)->findOrFail($news);
 
         $newsItem->featured = !$newsItem->featured;
@@ -178,10 +173,10 @@ class NewsAdminController extends Controller
             ->with('success', 'Status fitur berita berhasil diperbarui.');
     }
 
-    private function abortUnlessSuperAdmin(): void
+    private function abortUnlessAdmin(): void
     {
         $user = auth('admin')->user();
-        if (!$user || !$user->isSuperAdmin()) {
+        if (!$user || !$user->is_admin) {
             abort(403);
         }
     }

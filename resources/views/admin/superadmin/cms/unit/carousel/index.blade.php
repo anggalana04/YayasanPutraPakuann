@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
 @section('title', 'CMS Carousel - ' . strtoupper($schoolType))
 
@@ -39,8 +39,20 @@
             <tbody class="divide-y divide-[#1c190d]/5">
                 @forelse ($carouselImages as $item)
                     <tr class="hover:bg-surface-container-low/30 transition-colors">
-                        <td class="px-4 py-4">
-                            <img src="{{ $item->image_url }}" alt="Carousel" class="w-32 h-20 object-cover rounded-xl border border-[#1c190d]/10 bg-white" />
+                        <td class="px-4 py-4 space-y-2">
+                            <div class="text-xs font-bold text-slate-600">{{ $item->title ?? 'No title' }}</div>
+                            <div class="text-xs text-slate-500 line-clamp-2">{{ $item->description ?? 'No description' }}</div>
+                            @if ($item->video_url)
+                                <video controls width="200" class="rounded-xl border border-[#1c190d]/10 bg-black">
+                                    <source src="{{ $item->video_url }}" type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                                <p class="text-[10px] text-slate-400">Pratinjau Video</p>
+                            @elseif($item->image_url)
+                                <img src="{{ $item->image_url }}" alt="Carousel" class="w-32 h-20 object-cover rounded-xl border border-[#1c190d]/10 bg-white" />
+                            @else
+                                <span class="text-xs text-slate-400">Tidak ada media</span>
+                            @endif
                         </td>
                         <td class="px-4 py-4 text-right">
                             <div class="flex justify-end gap-2 items-center">
@@ -70,3 +82,10 @@
     </div>
 </div>
 @endsection
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-@extends('layouts.SMK.ppdb')
+﻿@extends('layouts.SMK.ppdb')
 
 @section('ppdb-content')
 <div class="flex-grow pt-8 pb-12">
@@ -137,7 +137,7 @@
                         <label class="group cursor-pointer">
                             <div class="aspect-[4/5] bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant/30 flex flex-col items-center justify-center p-6 text-center group-hover:bg-primary-container/10 group-hover:border-primary transition-all duration-300">
                                 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-4 text-3xl" data-icon="family_history">family_history</span>
-                                <span class="text-xs font-bold text-on-surface mb-2">Upload Kartu Keluarga</span>
+                                <span class="text-xs font-bold text-on-surface mb-2">Unggah Kartu Keluarga</span>
                                 <span class="text-[10px] text-on-surface-variant">Klik untuk cari file</span>
                                 @if(isset($application->kk_file) && $application->kk_file)
                                     <span class="block mt-2 text-xs text-green-600">{{ basename($application->kk_file) }}</span>
@@ -152,7 +152,7 @@
                         <label class="group cursor-pointer">
                             <div class="aspect-[4/5] bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant/30 flex flex-col items-center justify-center p-6 text-center group-hover:bg-primary-container/10 group-hover:border-primary transition-all duration-300">
                                 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-4 text-3xl" data-icon="article">article</span>
-                                <span class="text-xs font-bold text-on-surface mb-2">Upload Ijazah/SKL</span>
+                                <span class="text-xs font-bold text-on-surface mb-2">Unggah Ijazah/SKL</span>
                                 <span class="text-[10px] text-on-surface-variant">Klik untuk cari file</span>
                                 @if(isset($application->ijazah_file) && $application->ijazah_file)
                                     <span class="block mt-2 text-xs text-green-600">{{ basename($application->ijazah_file) }}</span>
@@ -167,7 +167,7 @@
                         <label class="group cursor-pointer">
                             <div class="aspect-[4/5] bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant/30 flex flex-col items-center justify-center p-6 text-center group-hover:bg-primary-container/10 group-hover:border-primary transition-all duration-300">
                                 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-4 text-3xl" data-icon="account_circle">account_circle</span>
-                                <span class="text-xs font-bold text-on-surface mb-2">Upload Pas Foto</span>
+                                <span class="text-xs font-bold text-on-surface mb-2">Unggah Pas Foto</span>
                                 <span class="text-[10px] text-on-surface-variant">Format 3x4 (Latar Merah)</span>
                                 @if(isset($application->photo_file) && $application->photo_file)
                                     <span class="block mt-2 text-xs text-green-600">{{ basename($application->photo_file) }}</span>
@@ -182,7 +182,7 @@
                         <label class="group cursor-pointer">
                             <div class="aspect-[4/5] bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant/30 flex flex-col items-center justify-center p-6 text-center group-hover:bg-primary-container/10 group-hover:border-primary transition-all duration-300">
                                 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-4 text-3xl" data-icon="folder_open">folder_open</span>
-                                <span class="text-xs font-bold text-on-surface mb-2">Upload Raport Semester</span>
+                                <span class="text-xs font-bold text-on-surface mb-2">Unggah Raport Semester</span>
                                 <span class="text-[10px] text-on-surface-variant">Klik untuk cari file</span>
                                 @if(isset($application->raport_file) && $application->raport_file)
                                     <span class="block mt-2 text-xs text-green-600">{{ basename($application->raport_file) }}</span>
@@ -190,6 +190,21 @@
                                 <span id="raport_file_name" class="block mt-2 text-xs text-blue-600"></span>
                             </div>
                             <input class="hidden" type="file" name="raport_file" accept=".jpg,.jpeg,.png,.pdf" onchange="document.getElementById('raport_file_name').textContent = this.files[0]?.name || ''">
+                        </label>
+                    </div>
+                    <!-- Upload Card 5: Prestasi / Sertifikat -->
+                    <div class="flex flex-col">
+                        <label class="group cursor-pointer">
+                            <div class="aspect-[4/5] bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant/30 flex flex-col items-center justify-center p-6 text-center group-hover:bg-primary-container/10 group-hover:border-primary transition-all duration-300">
+                                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-4 text-3xl" data-icon="workspace_premium">workspace_premium</span>
+                                <span class="text-xs font-bold text-on-surface mb-2">Unggah Dokumen Prestasi</span>
+                                <span class="text-[10px] text-on-surface-variant">Sertifikat / piagam (opsional)</span>
+                                @if(isset($application->prestasi_file) && $application->prestasi_file)
+                                    <span class="block mt-2 text-xs text-green-600">{{ basename($application->prestasi_file) }}</span>
+                                @endif
+                                <span id="prestasi_file_name" class="block mt-2 text-xs text-blue-600"></span>
+                            </div>
+                            <input class="hidden" type="file" name="prestasi_file" accept=".jpg,.jpeg,.png,.pdf" onchange="document.getElementById('prestasi_file_name').textContent = this.files[0]?.name || ''">
                         </label>
                     </div>
                 </div>
@@ -213,3 +228,7 @@
 @section('ppdb-footer')
 
 @endsection
+
+
+
+

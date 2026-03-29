@@ -1,4 +1,4 @@
-@extends('layouts.SMK.app')
+﻿@extends('layouts.SMK.app')
 
 @section('title', 'SMK Putra Pakuan - Unggul, Berkarakter, Berdaya Saing')
 
@@ -51,7 +51,8 @@
     transition: transform 0.35s ease-out;
 }
 
-.hero-slide.active .hero-image {
+.hero-slide.active .hero-image,
+.hero-slide.active .hero-media {
     transform: scale(1.02);
 }
 
@@ -79,6 +80,56 @@
     inset: 0;
     background: linear-gradient(135deg, rgba(28, 25, 13, 0.25) 0%, rgba(28, 25, 13, 0.15) 50%, rgba(242, 204, 13, 0.1) 100%);
     z-index: 2;
+}
+
+.hero-text-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.hero-overlay-title,
+.hero-overlay-description {
+    color: #ffffff;
+    text-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.hero-overlay-title {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    transform: translate(0, 0);
+    font-size: clamp(1.8rem, 3.6vw, 4rem);
+    font-weight: 900;
+    max-width: 55%;
+    line-height: 1.08;
+    text-align: left;
+    font-family: 'Playfair Display', 'Georgia', serif;
+    letter-spacing: 0.02em;
+    text-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+.hero-overlay-description {
+    position: absolute;
+    bottom: 14%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    font-size: clamp(1.05rem, 1.4vw, 1.45rem);
+    font-weight: 500;
+    max-width: 70%;
+    text-align: center;
+    line-height: 1.4;
+    color: #fefcf7;
+}
+
+.hero-slide.active .hero-overlay-title,
+.hero-slide.active .hero-overlay-description {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .hero-content {
@@ -349,20 +400,24 @@
             @if (!empty($slide['video_url']))
                 <video class="hero-media" autoplay muted loop playsinline>
                     <source src="{{ $slide['video_url'] }}" type="video/mp4">
-                    Your browser does not support the video tag.
+                    Browser Anda tidak mendukung video.
                 </video>
             @else
                 <img src="{{ $slide['image'] }}" alt="Hero {{ $index + 1 }}" class="hero-image">
             @endif
             <div class="hero-overlay"></div>
+            <div class="hero-text-overlay">
+                <h2 class="hero-overlay-title">{{ $slide['title'] }}</h2>
+                <p class="hero-overlay-description">{{ $slide['description'] }}</p>
+            </div>
         </div>
         @endforeach
 
         <!-- Navigation Buttons -->
-        <button class="carousel-nav-btn prev" id="prevBtn" title="Previous">
+        <button class="carousel-nav-btn prev" id="prevBtn" title="Sebelumnya">
             <span class="material-symbols-outlined text-3xl">chevron_left</span>
         </button>
-        <button class="carousel-nav-btn next" id="nextBtn" title="Next">
+        <button class="carousel-nav-btn next" id="nextBtn" title="Berikutnya">
             <span class="material-symbols-outlined text-3xl">chevron_right</span>
         </button>
 
@@ -376,6 +431,7 @@
 </section>
 
 <!-- PPDB CTA Section -->
+@if($ppdbLive)
 <section class="bg-white dark:bg-charcoal py-16 md:py-20 relative overflow-hidden">
     <!-- Decorative elements -->
     <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
@@ -390,21 +446,21 @@
 
             <!-- Content -->
             <div class="relative z-10 flex-1 text-center lg:text-left">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FDB913] text-charcoal text-sm font-black mb-6 shadow-lg">
+                {{-- <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FDB913] text-charcoal text-sm font-black mb-6 shadow-lg">
                     <span class="material-symbols-outlined animate-pulse">campaign</span>
-                    PENDAFTARAN DIBUKA
-                </div>
+                    PPDB DINAMIS READY
+                </div> --}}
                 <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight">
-                    PPDB 2024/2025 <br class="hidden md:block"/>
-                    <span class="text-[#FDB913]">Sudah Dibuka!</span>
+                    PPDB {{ $ppdbPeriod ?? '2024/2025' }} <br class="hidden md:block"/>
+                    <span class="text-[#FDB913]">{{ $ppdbCurrentPhase ?? 'TBA' }}</span>
                 </h2>
                 <p class="text-slate-300 text-lg md:text-xl max-w-2xl mb-8 leading-relaxed">
-                    Segera daftarkan diri Anda dan menjadi bagian dari keluarga besar SMK Putra Pakuan. Kuota terbatas untuk setiap jurusan!
+                    Pendaftaran masih dibuka ! Segera Daftar & Perhatikan batas waktu dan siapkan berkas.
                 </p>
-                <button class="bg-[#FDB913] text-charcoal px-10 py-4 rounded-xl font-black text-xl hover:bg-white hover:scale-105 transition-all duration-300 shadow-xl shadow-[#FDB913]/30 inline-flex items-center gap-3">
+                <a href="{{ route('school.ppdb', ['school' => $school]) }}" class="bg-[#FDB913] text-charcoal px-10 py-4 rounded-xl font-black text-xl hover:bg-white hover:scale-105 transition-all duration-300 shadow-xl shadow-[#FDB913]/30 inline-flex items-center gap-3">
                     <span class="material-symbols-outlined">edit_note</span>
                     DAFTAR ONLINE SEKARANG
-                </button>
+                </a>
             </div>
 
             <!-- Countdown Timer -->
@@ -412,20 +468,24 @@
                 <div class="flex flex-col gap-4">
                     <p class="text-white/70 font-bold text-center uppercase tracking-widest text-sm flex items-center justify-center gap-2">
                         <span class="material-symbols-outlined text-[#FDB913]">schedule</span>
-                        Pendaftaran Ditutup Dalam
+                        Fase Ini Berakhir Dalam:
                     </p>
                     <div class="flex flex-wrap justify-center gap-4">
                         <div class="flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl p-6 min-w-[100px] backdrop-blur-lg hover:bg-white/20 transition-all">
-                            <span class="text-5xl font-black text-[#FDB913] mb-2" id="countdownDays">12</span>
+                            <span class="text-5xl font-black text-[#FDB913] mb-2" id="countdownDays">--</span>
                             <span class="text-white/70 text-xs font-bold uppercase tracking-wider">Hari</span>
                         </div>
                         <div class="flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl p-6 min-w-[100px] backdrop-blur-lg hover:bg-white/20 transition-all">
-                            <span class="text-5xl font-black text-[#FDB913] mb-2" id="countdownHours">08</span>
+                            <span class="text-5xl font-black text-[#FDB913] mb-2" id="countdownHours">--</span>
                             <span class="text-white/70 text-xs font-bold uppercase tracking-wider">Jam</span>
                         </div>
                         <div class="flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl p-6 min-w-[100px] backdrop-blur-lg hover:bg-white/20 transition-all">
-                            <span class="text-5xl font-black text-[#FDB913] mb-2" id="countdownMinutes">45</span>
+                            <span class="text-5xl font-black text-[#FDB913] mb-2" id="countdownMinutes">--</span>
                             <span class="text-white/70 text-xs font-bold uppercase tracking-wider">Menit</span>
+                        </div>
+                        <div class="flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl p-6 min-w-[100px] backdrop-blur-lg hover:bg-white/20 transition-all">
+                            <span class="text-5xl font-black text-[#FDB913] mb-2" id="countdownSeconds">--</span>
+                            <span class="text-white/70 text-xs font-bold uppercase tracking-wider">Detik</span>
                         </div>
                     </div>
                 </div>
@@ -433,13 +493,23 @@
         </div>
     </div>
 </section>
+@else
+<!-- PPDB Offline Message -->
+<section class="bg-gradient-to-r from-slate-100 to-slate-50 dark:from-charcoal/50 dark:to-charcoal/30 py-16 md:py-20">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <span class="material-symbols-outlined text-6xl text-slate-400 inline-block mb-4">pause_circle</span>
+        <h2 class="text-3xl md:text-4xl font-black text-charcoal dark:text-white mb-2">PPDB Belum Dibuka</h2>
+        <p class="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">Pendaftaran pelajar baru untuk SMK Putra Pakuan belum dibuka. Mohon menunggu pengumuman lebih lanjut.</p>
+    </div>
+</section>
+@endif
 
 
 
 
 
 <!-- Sambutan Kepala Sekolah -->
-<section class="py-16 md:py-24 bg-white dark:bg-charcoal/30"> <div class="max-w-7xl mx-auto px-6"> <div class="flex flex-col lg:flex-row gap-8 md:gap-16 items-center"> <div class="w-full lg:w-5/12 relative"> <div class="absolute -top-6 -left-6 w-32 h-32 bg-primary rounded-2xl -z-10"></div> <div class="rounded-3xl overflow-hidden shadow-2xl"> <img alt="Principal Portrait" class="w-full h-auto object-cover" src="{{ $homepage->kepsek_photo_url }}"/> </div> <div class="absolute -bottom-6 -right-6 bg-primary p-6 rounded-2xl shadow-xl"> <p class="text-charcoal font-black text-xl leading-none">{{ $homepage->kepsek_name }}</p> <p class="text-charcoal/70 text-sm font-bold mt-1">{{ $homepage->kepsek_title }}</p> </div> </div> <div class="w-full lg:w-7/12 space-y-6"> <span class="material-symbols-outlined text-primary text-4xl md:text-6xl">format_quote</span> <h2 class="text-3xl md:text-4xl font-black text-charcoal dark:text-white">Sambutan Kepala Sekolah</h2> <p class="text-lg md:text-xl italic text-slate-600 dark:text-slate-300 leading-relaxed"> {!! nl2br(e($homepage->kepsek_sambutan)) !!} </p> </div> </div> </div> </section> <section class="py-16 md:py-24 bg-background-light dark:bg-background-dark"> <div class="max-w-7xl mx-auto px-6"> <div class="flex justify-between items-end mb-8 md:mb-12"> <div> <h2 class="text-3xl md:text-4xl font-black text-charcoal dark:text-white">Tulisan Terbaru</h2> <p class="text-slate-500 mt-2">Update terkini kegiatan dan berita dari kampus kami.</p> </div> <a class="hidden lg:flex items-center gap-2 text-charcoal dark:text-primary font-bold hover:gap-4 transition-all" href="{{ route('school.berita', ['school' => $school]) }}"> Lihat Semua Berita <span class="material-symbols-outlined">arrow_forward</span> </a> </div> <div class="grid md:grid-cols-3 gap-6 md:gap-8"> @if ($latestNews->isEmpty()) <div class="md:col-span-3 text-center py-10"> <p class="text-slate-500 dark:text-slate-400">Belum ada berita untuk saat ini.</p> </div> @else @foreach ($latestNews as $item) <article class="bg-white dark:bg-charcoal/40 rounded-2xl overflow-hidden shadow-md border border-charcoal/5 dark:border-white/5 hover:shadow-xl transition-shadow group"> <div class="h-56 bg-cover bg-center overflow-hidden" @if ($item->image_url) style="background-image: url('{{ $item->image_url }}')" @endif > <div class="w-full h-full bg-charcoal/20 group-hover:bg-charcoal/0 transition-colors"></div> </div> <div class="p-4 md:p-6 space-y-4"> <div class="flex gap-4 text-xs font-bold text-slate-400"> <span class="flex items-center gap-1"> <span class="material-symbols-outlined text-sm">calendar_month</span> {{ $item->published_at ? $item->published_at->format('d M Y') : ($item->created_at?->format('d M Y') ?? '-') }} </span> <span class="flex items-center gap-1"> <span class="material-symbols-outlined text-sm">person</span> {{ $item->created_by ?? 'Admin' }} </span> </div> <h3 class="text-lg md:text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2"> {{ $item->title }} </h3> <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3"> {{ \Illuminate\Support\Str::limit($item->excerpt ?? strip_tags($item->content ?? ''), 140) }} </p> <a href="{{ route('school.berita.detail', ['school' => $school, 'news' => $item->id]) }}" class="text-charcoal dark:text-white font-bold text-sm flex items-center gap-1 underline decoration-primary decoration-2 underline-offset-4"> Selengkapnya </a> </div> </article> @endforeach @endif </div> </div> </section>
+<section class="py-16 md:py-24 bg-white dark:bg-charcoal/30"> <div class="max-w-7xl mx-auto px-6"> <div class="flex flex-col lg:flex-row gap-8 md:gap-16 items-center"> <div class="w-full lg:w-5/12 relative"> <div class="absolute -top-6 -left-6 w-32 h-32 bg-primary rounded-2xl -z-10"></div> <div class="rounded-3xl overflow-hidden shadow-2xl"> <img alt="Potret Kepala Sekolah" class="w-full h-auto object-cover" src="{{ $homepage->kepsek_photo_url }}"/> </div> <div class="absolute -bottom-6 -right-6 bg-primary p-6 rounded-2xl shadow-xl"> <p class="text-charcoal font-black text-xl leading-none">{{ $homepage->kepsek_name }}</p> <p class="text-charcoal/70 text-sm font-bold mt-1">{{ $homepage->kepsek_title }}</p> </div> </div> <div class="w-full lg:w-7/12 space-y-6"> <span class="material-symbols-outlined text-primary text-4xl md:text-6xl">format_quote</span> <h2 class="text-3xl md:text-4xl font-black text-charcoal dark:text-white">Sambutan Kepala Sekolah</h2> <p class="text-lg md:text-xl italic text-slate-600 dark:text-slate-300 leading-relaxed"> {!! nl2br(e($homepage->kepsek_sambutan)) !!} </p> </div> </div> </div> </section> <section class="py-16 md:py-24 bg-background-light dark:bg-background-dark"> <div class="max-w-7xl mx-auto px-6"> <div class="flex justify-between items-end mb-8 md:mb-12"> <div> <h2 class="text-3xl md:text-4xl font-black text-charcoal dark:text-white">Tulisan Terbaru</h2> <p class="text-slate-500 mt-2">Update terkini kegiatan dan berita dari kampus kami.</p> </div> <a class="hidden lg:flex items-center gap-2 text-charcoal dark:text-primary font-bold hover:gap-4 transition-all" href="{{ route('school.berita', ['school' => $school]) }}"> Lihat Semua Berita <span class="material-symbols-outlined">arrow_forward</span> </a> </div> <div class="grid md:grid-cols-3 gap-6 md:gap-8"> @if ($latestNews->isEmpty()) <div class="md:col-span-3 text-center py-10"> <p class="text-slate-500 dark:text-slate-400">Belum ada berita untuk saat ini.</p> </div> @else @foreach ($latestNews as $item) <article class="bg-white dark:bg-charcoal/40 rounded-2xl overflow-hidden shadow-md border border-charcoal/5 dark:border-white/5 hover:shadow-xl transition-shadow group"> <div class="h-56 bg-cover bg-center overflow-hidden" @if ($item->image_url) style="background-image: url('{{ $item->image_url }}')" @endif > <div class="w-full h-full bg-charcoal/20 group-hover:bg-charcoal/0 transition-colors"></div> </div> <div class="p-4 md:p-6 space-y-4"> <div class="flex gap-4 text-xs font-bold text-slate-400"> <span class="flex items-center gap-1"> <span class="material-symbols-outlined text-sm">calendar_month</span> {{ $item->published_at ? $item->published_at->format('d M Y') : ($item->created_at?->format('d M Y') ?? '-') }} </span> <span class="flex items-center gap-1"> <span class="material-symbols-outlined text-sm">person</span> {{ $item->created_by ?? 'Admin' }} </span> </div> <h3 class="text-lg md:text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2"> {{ $item->title }} </h3> <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3"> {{ \Illuminate\Support\Str::limit($item->excerpt ?? strip_tags($item->content ?? ''), 140) }} </p> <a href="{{ route('school.berita.detail', ['school' => $school, 'news' => $item->id]) }}" class="text-charcoal dark:text-white font-bold text-sm flex items-center gap-1 underline decoration-primary decoration-2 underline-offset-4"> Selengkapnya </a> </div> </article> @endforeach @endif </div> </div> </section>
 
 <!-- Rest of content... -->
 
@@ -469,7 +539,7 @@
                 @foreach ($latestGallery as $item)
                     <article class="bg-white dark:bg-charcoal/40 rounded-3xl overflow-hidden shadow-lg border border-charcoal/5 dark:border-white/5 hover:shadow-lg hover:-translate-y-1 transition-transform duration-200 group cursor-pointer" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="h-64 overflow-hidden relative">
-                            <img src="{{ $item->image_url ?? 'https://via.placeholder.com/640x480?text=No+Image' }}" alt="{{ $item->title ?? 'Foto Terbaru' }}" class="w-full h-full object-cover transition-transform duration-300 ease-out transform group-hover:scale-105" />
+                            <img src="{{ $item->image_url ?? 'https://via.placeholder.com/640x480?text=Tanpa+Gambar' }}" alt="{{ $item->title ?? 'Foto Terbaru' }}" class="w-full h-full object-cover transition-transform duration-300 ease-out transform group-hover:scale-105" />
                             <div class="absolute inset-0 bg-black/20 transition-opacity duration-300 ease-out group-hover:bg-black/30"></div>
                             <div class="absolute inset-0 bg-gradient-to-t from-charcoal/70 to-transparent opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-90"></div>
                         </div>
@@ -677,28 +747,52 @@
         startAutoplay();
     });
 
-    // Countdown Timer (example)
+    // Countdown Timer
     function updateCountdown() {
-        // This is a demo - replace with actual end date
-        const endDate = new Date();
-        endDate.setDate(endDate.getDate() + 12);
-        endDate.setHours(endDate.getHours() + 8);
-        endDate.setMinutes(endDate.getMinutes() + 45);
+        @if($ppdbLive && $ppdbCountdownDate)
+            const endDate = new Date('{{ $ppdbCountdownDate->format('Y-m-d H:i:s') }}');
+        @else
+            const endDate = null;
+        @endif
+
+        if (!endDate) {
+            document.getElementById('countdownDays').textContent = '00';
+            document.getElementById('countdownHours').textContent = '00';
+            document.getElementById('countdownMinutes').textContent = '00';
+            document.getElementById('countdownSeconds').textContent = '00';
+            return;
+        }
 
         const now = new Date();
         const diff = endDate - now;
 
+        if (diff <= 0) {
+            document.getElementById('countdownDays').textContent = '00';
+            document.getElementById('countdownHours').textContent = '00';
+            document.getElementById('countdownMinutes').textContent = '00';
+            document.getElementById('countdownSeconds').textContent = '00';
+            return;
+        }
+
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
         document.getElementById('countdownDays').textContent = String(days).padStart(2, '0');
         document.getElementById('countdownHours').textContent = String(hours).padStart(2, '0');
         document.getElementById('countdownMinutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('countdownSeconds').textContent = String(seconds).padStart(2, '0');
     }
 
-    // Update countdown every minute
-    setInterval(updateCountdown, 60000);
+    // Update countdown every second
+    setInterval(updateCountdown, 1000);
     updateCountdown();
 </script>
 @endsection
+
+
+
+
+
+

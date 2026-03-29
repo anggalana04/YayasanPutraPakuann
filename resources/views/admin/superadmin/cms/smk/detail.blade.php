@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
 @section('title', 'Content Management - SMK Putra Pakuan CMS')
 
@@ -7,12 +7,12 @@
 <!-- Header Section -->
 <section class="flex justify-between items-end">
     <div class="space-y-2">
-        <p class="text-primary font-bold tracking-widest text-xs uppercase">Editor Suite</p>
-        <h2 class="text-4xl font-extrabold tracking-tight text-[#1c190d]">Web Presence</h2>
+        <p class="text-primary font-bold tracking-widest text-xs uppercase">Suite Editor</p>
+        <h2 class="text-4xl font-extrabold tracking-tight text-[#1c190d]">Kehadiran Web</h2>
     </div>
     <div class="flex gap-3">
-        <button class="px-6 py-3 text-primary font-bold hover:bg-primary/10 rounded-full transition-all text-sm bg-white border border-primary/20">Discard Changes</button>
-        <button class="px-8 py-3 bg-primary text-on-primary font-bold rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all text-sm">Publish Updates</button>
+        <button class="px-6 py-3 text-primary font-bold hover:bg-primary/10 rounded-full transition-all text-sm bg-white border border-primary/20">Buang Perubahan</button>
+        <button class="px-8 py-3 bg-primary text-on-primary font-bold rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all text-sm">Terbitkan Pembaruan</button>
     </div>
 </section>
 <!-- Content Grid (Asymmetric) -->
@@ -99,7 +99,7 @@
                         <input class="w-full bg-white border-none rounded-xl p-3 text-sm focus:ring-0 border-b-2 border-transparent focus:border-primary transition-all text-[#1c190d]" type="text" value="/images/KEPSEK_SMK.png" placeholder="URL Foto" oninput="document.getElementById('kepsek-preview').src = this.value"/>
                         <label class="mt-2 inline-flex items-center gap-2 px-4 py-2 bg-[#f2cc0d] text-[#1c190d] rounded-xl font-bold text-xs cursor-pointer hover:bg-[#ffe066] transition-all shadow-sm border border-[#e6b800]">
                             <span class="material-symbols-outlined text-base">upload</span>
-                            <span>Upload Foto</span>
+                            <span>Unggah Foto</span>
                             <input type="file" accept="image/*" class="hidden" onchange="if(this.files[0]){const reader=new FileReader();reader.onload=e=>{document.getElementById('kepsek-preview').src=e.target.result;};reader.readAsDataURL(this.files[0]);}" />
                         </label>
                     </div>
@@ -168,3 +168,8 @@ Juara Lomba Desain Grafis Nasional</textarea>
 <div class="h-12"></div>
 </div>
 @endsection
+
+
+
+
+

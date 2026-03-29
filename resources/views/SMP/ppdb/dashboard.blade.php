@@ -1,4 +1,4 @@
-@extends('layouts.SMK.ppdb')
+﻿@extends('layouts.SMP.ppdb')
 
 @section('ppdb-content')
 <div class="pt-28 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
@@ -7,11 +7,11 @@
 <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
 <div>
 <p class="text-brand-yellow font-bold text-lg mb-1">Selamat Datang,</p>
-<h1 class="text-4xl md:text-5xl font-extrabold text-brand-charcoal tracking-tighter leading-none">Ahmad Syarifuddin</h1>
+<h1 class="text-4xl md:text-5xl font-extrabold text-brand-charcoal tracking-tighter leading-none">{{ $application->full_name ?? '-' }}</h1>
 </div>
 <div class="bg-surface-container-low px-6 py-4 rounded-2xl border-l-4 border-brand-yellow">
-<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Application ID</p>
-<p class="text-2xl font-black text-brand-charcoal font-headline">#PPDB-2024-0892</p>
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">ID Pendaftaran</p>
+<p class="text-2xl font-black text-brand-charcoal font-headline">#{{ $application->application_id ?? '-' }}</p>
 </div>
 </div>
 </div>
@@ -25,13 +25,24 @@
 <div class="flex items-center justify-between mb-8">
 <div>
 <h2 class="text-2xl font-bold text-brand-charcoal">Status Pendaftaran</h2>
-<p class="text-on-surface-variant">Update terakhir: 24 Mei 2024</p>
+<p class="text-on-surface-variant">Update terakhir: {{ $application->updated_at ? $application->updated_at->format('d M Y') : '-' }}</p>
 </div>
 <span class="bg-brand-yellow/20 text-brand-charcoal px-4 py-2 rounded-full text-sm font-bold animate-pulse">
-                            Sedang Diverifikasi
-                        </span>
+    {{ $application->status === 'payment_uploaded' ? 'Menunggu Verifikasi Pembayaran' : ($application->status ?? '-') }}
+</span>
 </div>
 <!-- Step Tracker (Vertical Editorial Style) -->
+@php
+    $status = $application->status;
+    $isAccepted = $status === 'accepted';
+    $isRejected = $status === 'rejected';
+    $isVerified = $status === 'verified';
+    $isPaymentUploaded = $status === 'payment_uploaded';
+    $step1Done = true;
+    $step2Done = $isVerified || $isAccepted || $isRejected;
+    $step3Done = $isPaymentUploaded || $isAccepted || $isRejected;
+    $stepFinal = $isAccepted || $isRejected;
+@endphp
 <div class="space-y-0 relative">
 <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-surface-container-high"></div>
 <!-- Step 1: Done -->
@@ -44,96 +55,42 @@
         <p class="text-sm text-on-surface-variant">Dokumen telah kami terima secara digital pada 20 Mei 2024.</p>
         <span class="text-xs text-on-surface-variant">Selesai: 20 Mei 2024</span>
     </div>
-    <div class="flex items-center">
-        <button class="bg-brand-yellow text-brand-charcoal font-bold px-4 py-2 rounded-xl shadow hover:bg-brand-yellow/80 transition-colors">Daftar Ulang</button>
-    </div>
+
 </div>
-<!-- Step 2: Active -->
+<!-- Step 2: Verifikasi Berkas -->
 <div class="relative flex gap-6 pb-10 items-start">
-    <div class="z-10 bg-white border-4 border-brand-yellow text-brand-yellow w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
-        <span class="material-symbols-outlined" data-icon="pending" style="font-variation-settings: 'FILL' 1;">pending</span>
+    <div class="z-10 {{ $step2Done ? 'bg-brand-yellow text-brand-charcoal' : 'bg-white border-4 border-brand-yellow text-brand-yellow' }} w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
+        <span class="material-symbols-outlined" data-icon="{{ $step2Done ? 'check' : 'pending' }}" style="font-variation-settings: 'FILL' {{ $step2Done ? '1' : '0' }}; font-weight: 700;">{{ $step2Done ? 'check' : 'pending' }}</span>
     </div>
     <div>
         <h3 class="font-bold text-lg text-brand-charcoal">Verifikasi Berkas</h3>
         <p class="text-sm text-on-surface-variant">Tim administrasi sedang meninjau keaslian dokumen pendukung Anda.</p>
-        <span class="text-xs text-on-surface-variant">Selesai: 24 Mei 2024</span>
+        <span class="text-xs text-on-surface-variant">{{ $step2Done ? 'Selesai: 24 Mei 2024' : 'Menunggu verifikasi' }}</span>
     </div>
 </div>
-<!-- Step 4: Pending -->
-<div class="relative flex gap-6 items-start opacity-40">
-    <div class="z-10 bg-surface-container-high text-on-surface-variant w-12 h-12 rounded-full flex items-center justify-center">
-        <span class="material-symbols-outlined" data-icon="school">school</span>
+<!-- Step 4: Hasil Akhir -->
+<div class="relative flex gap-6 items-start {{ $stepFinal ? '' : 'opacity-40' }}">
+    <div class="z-10 w-12 h-12 rounded-full flex items-center justify-center {{ $isAccepted ? 'bg-green-500 text-white' : ($isRejected ? 'bg-red-500 text-white' : 'bg-surface-container-high text-on-surface-variant') }}">
+        <span class="material-symbols-outlined text-3xl">
+            {{ $isAccepted ? 'check_circle' : ($isRejected ? 'cancel' : 'school') }}
+        </span>
     </div>
     <div>
-        <h3 class="font-bold text-lg text-brand-charcoal">Hasil Akhir</h3>
-        <p class="text-sm text-on-surface-variant">Pengumuman kelulusan dan prosedur daftar ulang.</p>
+        <h3 class="font-bold text-2xl {{ $isAccepted ? 'text-green-600' : ($isRejected ? 'text-red-600' : 'text-brand-charcoal') }}">Hasil Akhir</h3>
+        @if($isAccepted)
+            <p class="text-lg font-bold text-green-700">Selamat! Anda <span class="uppercase">DITERIMA</span> di SMP Putra Pakuan.</p>
+        @elseif($isRejected)
+            <p class="text-lg font-bold text-red-700">Mohon maaf, Anda <span class="uppercase">TIDAK DITERIMA</span>.</p>
+        @else
+            <p class="text-sm text-on-surface-variant">Pengumuman kelulusan dan prosedur daftar ulang.</p>
+        @endif
     </div>
 </div>
 </div>
 </section>
-<!-- Program Selection Summary (Bento Style) -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="bg-brand-charcoal p-8 rounded-xl text-white flex flex-col justify-between min-h-45">
-<div>
-<span class="text-brand-yellow text-xs font-bold tracking-widest uppercase mb-2 block">Pilihan Pertama</span>
-<h3 class="text-2xl font-bold">Teknik Komputer & Jaringan</h3>
-</div>
-<div class="flex items-center gap-2 text-white/60 text-sm">
-<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
-                            Kuota Tersisa: 12 Kursi
-                        </div>
-</div>
-<div class="bg-surface-container-high p-8 rounded-xl flex flex-col justify-between min-h-45">
-<div>
-<span class="text-brand-charcoal/50 text-xs font-bold tracking-widest uppercase mb-2 block">Pilihan Kedua</span>
-<h3 class="text-2xl font-bold text-brand-charcoal">Multimedia (DKV)</h3>
-</div>
-<button class="text-brand-yellow font-bold text-sm flex items-center gap-2 hover:translate-x-1 transition-transform">
-                            Ubah Pilihan <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
-</button>
-</div>
-</div>
-</div>
 <!-- Right Column: Sidebar Info & Contact -->
 <div class="space-y-8">
-<!-- Profile Action Card -->
-<div class="bg-white p-6 rounded-xl shadow-[0_4px_20px_rgba(28,25,13,0.04)]">
-<div class="flex items-center gap-4 mb-6">
-<div class="w-16 h-16 rounded-full bg-brand-yellow/10 flex items-center justify-center overflow-hidden">
-<img alt="Profile Picture" class="w-full h-full object-cover" data-alt="Student profile portrait picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCix3S2dGwgPpGn8Z6mm9KUNBjFnZoEk-bL-0OCQxfc2Fp_OTyXrL2sevXNvsuDFoyrzU-Tp3arjp-K6NKKbbmdU6Zhss5HCge909XfJ0D5jDEDNFhJwHpRE9TcS8zA9RnDpCF1UZ7g5wwXLIb6WYikj8RKMB8aNiZ2Fs4JxC21fjcfcaz2RA0e1YMnasKABQkioci-ySScbs6KjfB6uwrZvpCGhPJ5UpU1V478cZ6YRlSujotZQaAvsld2Ltk692diqCDsdJKO20"/>
-</div>
-<div>
-<h4 class="font-bold text-brand-charcoal">Ahmad Syarifuddin</h4>
-<p class="text-xs text-on-surface-variant">Calon Peserta Didik</p>
-</div>
-</div>
-<div class="space-y-3">
-<button class="w-full flex items-center justify-between p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors group">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-brand-charcoal/60 group-hover:text-brand-yellow" data-icon="person_edit">person_edit</span>
-<span class="text-sm font-medium">Lengkapi Profil</span>
-</div>
-<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
-</button>
-<button class="w-full flex items-center justify-between p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors group">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-brand-charcoal/60 group-hover:text-brand-yellow" data-icon="cloud_download">cloud_download</span>
-<span class="text-sm font-medium">Unduh Kartu Peserta</span>
-</div>
-<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
-</button>
-<form method="POST" action="{{ route('ppdb.logout', ['school' => $school]) }}" class="w-full">
-    @csrf
-    <button type="submit" class="w-full flex items-center justify-between p-4 rounded-xl bg-red-50 hover:bg-red-100 transition-colors group">
-        <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-red-500" data-icon="logout">logout</span>
-            <span class="text-sm font-medium text-red-700">Keluar</span>
-        </div>
-        <span class="material-symbols-outlined text-sm text-red-500" data-icon="chevron_right">chevron_right</span>
-    </button>
-</form>
-</div>
-</div>
+
 <!-- Contact Info Card (From Image 1 context) -->
 <div class="bg-brand-yellow/5 p-8 rounded-xl border border-brand-yellow/20">
 <h3 class="text-lg font-bold text-brand-charcoal mb-6">Bantuan &amp; Informasi</h3>
@@ -191,23 +148,10 @@
 @endsection
 
 @section('ppdb-footer')
-<!-- BottomNavBar (Mobile Only) -->
-<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-4 pt-2 md:hidden bg-white/60 backdrop-blur-2xl z-50 rounded-t-3xl shadow-[0_-10px_40px_rgba(28,25,13,0.06)]">
-<a class="flex flex-col items-center justify-center text-brand-charcoal/50 p-2" href="#">
-<span class="material-symbols-outlined" data-icon="home">home</span>
-<span class="font-lexend text-[10px] font-medium">Home</span>
-</a>
-<a class="flex flex-col items-center justify-center bg-brand-yellow text-brand-charcoal rounded-2xl p-2 min-w-16 active:scale-90 duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="track_changes" style="font-variation-settings: 'FILL' 1;">track_changes</span>
-<span class="font-lexend text-[10px] font-medium">Status</span>
-</a>
-<a class="flex flex-col items-center justify-center text-brand-charcoal/50 p-2" href="#">
-<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
-<span class="font-lexend text-[10px] font-medium">Bantuan</span>
-</a>
-<a class="flex flex-col items-center justify-center text-brand-charcoal/50 p-2" href="#">
-<span class="material-symbols-outlined" data-icon="person">person</span>
-<span class="font-lexend text-[10px] font-medium">Profil</span>
-</a>
-</nav>
+
 @endsection
+
+
+
+
+

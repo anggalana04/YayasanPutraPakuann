@@ -1,14 +1,91 @@
-<!-- resources/views/layouts/SMK/app.blade.php -->
+﻿<!-- resources/views/layouts/SMK/app.blade.php -->
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" style="margin:0; padding:0; background:#1c190d;">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>@yield('title', 'SMK Putra Pakuan')</title>
+    @php
+        $seoTitle = trim($__env->yieldContent('title', 'SMK Putra Pakuan | Sekolah Vokasi Unggul di Bogor'));
+        $seoDescription = trim($__env->yieldContent('meta_description', 'SMK Putra Pakuan menghadirkan pendidikan vokasi unggul dengan jurusan relevan industri, prestasi siswa, dan layanan PPDB online.'));
+        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'smk putra pakuan, smk bogor, ppdb smk, sekolah vokasi, jurusan smk'));
+        $seoImage = trim($__env->yieldContent('meta_image', asset('images/logo-putrapakuan.png')));
+        $seoUrl = url()->current();
+    @endphp
+    <title>{{ $seoTitle }}</title>
+    <meta name="description" content="{{ $seoDescription }}" />
+    <meta name="keywords" content="{{ $seoKeywords }}" />
+    <meta name="author" content="SMK Putra Pakuan" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="{{ $seoUrl }}" />
+    <link rel="alternate" hreflang="id-ID" href="{{ $seoUrl }}" />
+    <link rel="alternate" hreflang="x-default" href="{{ $seoUrl }}" />
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-putrapakuan.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo-putrapakuan.png') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('images/logo-putrapakuan.png') }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:site_name" content="SMK Putra Pakuan" />
+    <meta property="og:title" content="{{ $seoTitle }}" />
+    <meta property="og:description" content="{{ $seoDescription }}" />
+    <meta property="og:url" content="{{ $seoUrl }}" />
+    <meta property="og:image" content="{{ $seoImage }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ $seoTitle }}" />
+    <meta name="twitter:description" content="{{ $seoDescription }}" />
+    <meta name="twitter:image" content="{{ $seoImage }}" />
+    @php
+        $orgSchema = [
+            '@type' => 'EducationalOrganization',
+            '@id' => route('school.home', ['school' => 'smk']) . '#organization',
+            'name' => 'SMK Putra Pakuan',
+            'url' => route('school.home', ['school' => 'smk']),
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => asset('images/logo-putrapakuan.png'),
+            ],
+        ];
+
+        $websiteSchema = [
+            '@type' => 'WebSite',
+            '@id' => route('school.home', ['school' => 'smk']) . '#website',
+            'url' => route('school.home', ['school' => 'smk']),
+            'name' => 'SMK Putra Pakuan',
+            'inLanguage' => 'id-ID',
+            'publisher' => [
+                '@id' => route('school.home', ['school' => 'smk']) . '#organization',
+            ],
+        ];
+
+        $webpageSchema = [
+            '@type' => 'WebPage',
+            '@id' => $seoUrl . '#webpage',
+            'url' => $seoUrl,
+            'name' => $seoTitle,
+            'description' => $seoDescription,
+            'inLanguage' => 'id-ID',
+            'isPartOf' => [
+                '@id' => route('school.home', ['school' => 'smk']) . '#website',
+            ],
+        ];
+
+        $seoJsonLd = [
+            '@context' => 'https://schema.org',
+            '@graph' => [$orgSchema, $websiteSchema, $webpageSchema],
+        ];
+    @endphp
+    <script type="application/ld+json">{!! json_encode($seoJsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @stack('structured_data')
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        html,
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    </style>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -34,29 +111,35 @@
         }
     </script>
     <style type="text/tailwindcss">
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
         body { font-family: 'Lexend', sans-serif; }
     </style>
     @stack('head')
 </head>
-<body class="bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100">
+<body style="margin:0; padding:0;" class="m-0 p-0 bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100">
     <!-- Navbar -->
-    <nav class="sticky top-0 z-50 w-full bg-charcoal text-white border-b border-primary/20">
+    <nav style="margin-top:0; box-shadow: 0 -24px 0 #1c190d;" class="sticky top-0 z-50 w-full bg-charcoal text-white border-b border-primary/20">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <a href="{{ route('school.home', ['school'=> 'smk']) }}">
                     <div class="size-10">
-                        <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="Logo">
+                        <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="Logo SMK Putra Pakuan">
                     </div>
                 </a>
                 <div>
                     <h1 class="text-lg font-bold leading-none tracking-tight text-white">SMK PUTRA PAKUAN</h1>
-                    <p class="text-[10px] text-primary font-medium tracking-widest uppercase">Vocational High School</p>
+                    <p class="text-[10px] text-primary font-medium tracking-widest uppercase">Sekolah Menengah Kejuruan</p>
                 </div>
             </div>
             <div class="hidden lg:flex items-center gap-6">
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.profil', ['school' => 'smk']) }}">PROFIL</a>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.visi', ['school' => 'smk']) }}">VISI DAN MISI</a>
-                <a class="text-xs font-semibold hover:text-primary transition-colors" href="#">KATEGORI</a>
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.prestasi', ['school' => request()->route('school') ?? 'smk']) }}">PRESTASI</a>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.berita', ['school' => request()->route('school') ?? 'smk']) }}">BERITA</a>
                 <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
                     <button type="button" class="text-xs font-semibold hover:text-primary transition-colors flex items-center gap-1 focus:outline-none" @click.prevent="open = !open" @focus="open = true" tabindex="0">
@@ -74,8 +157,13 @@
                 </div>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.galeri', ['school' => 'smk']) }}">GALERI</a>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.kontak', ['school' => 'smk']) }}">HUBUNGI KAMI</a>
+                @php
+                    // Always show the PPDB action; hide logic should be governed by UI label instead.
+                    $ppdbLive = $ppdbLive ?? false;
+                    $ppdbLabel = ($ppdbPeriod ?? null) ? 'PPDB ' . $ppdbPeriod : 'PPDB';
+                @endphp
                 <button class="bg-primary hover:bg-primary/90 text-charcoal px-5 py-2.5 rounded-lg text-xs font-bold transition-all ml-4" onclick="window.location.href='{{ route('school.ppdb', ['school' => 'smk']) }}'">
-                    PPDB 2024
+                    {{ $ppdbLabel }} @if(!$ppdbLive) (Segera Hadir) @endif
                 </button>
             </div>
             <!-- Mobile menu button -->
@@ -89,7 +177,7 @@
                 <div class="flex items-center gap-3">
                     <a href="{{ route('school.home', ['school'=> 'smk']) }}">
                         <div class="size-10">
-                            <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="Logo">
+                            <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="Logo SMK Putra Pakuan">
                         </div>
                     </a>
                     <div>
@@ -97,12 +185,13 @@
                     </div>
                 </div>
                 <button class="text-primary text-2xl" id="mobile-menu-close" aria-label="Close menu">
-                    <span class="material-symbols-outlined">close</span>
+                    <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                    <span aria-hidden="true" class="sr-only">Close</span>
                 </button>
             </div>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.profil', ['school' => 'smk']) }}">PROFIL</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.visi', ['school' => 'smk']) }}">VISI DAN MISI</a>
-            <a class="text-base font-semibold hover:text-primary transition-colors" href="#">KATEGORI</a>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.prestasi', ['school' => request()->route('school') ?? 'smk']) }}">PRESTASI</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.berita', ['school' => request()->route('school') ?? 'smk']) }}">BERITA</a>
             <div class="flex flex-col gap-2">
                 <button class="text-base font-semibold hover:text-primary transition-colors flex items-center gap-1 focus:outline-none" id="mobile-direktori-toggle">
@@ -117,38 +206,64 @@
             </div>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="#">GALERI</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="#">HUBUNGI KAMI</a>
-            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.ppdb', ['school' => 'smk']) }}">PPDB 2024</a>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.ppdb', ['school' => 'smk']) }}">{{ $ppdbLabel }} @if(!$ppdbLive) (Segera Hadir) @endif</a>
         </div>
         <script>
-            // Mobile menu toggle
+            // Mobile menu toggle with robust guards
             const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
             const mobileMenu = document.getElementById('mobile-menu');
             const mobileMenuClose = document.getElementById('mobile-menu-close');
-            mobileMenuToggle.addEventListener('click', () => {
-                mobileMenu.style.display = 'flex';
-                setTimeout(() => mobileMenu.style.transform = 'translateX(0)', 10);
-            });
-            mobileMenuClose.addEventListener('click', () => {
-                mobileMenu.style.transform = 'translateX(100%)';
-                setTimeout(() => mobileMenu.style.display = 'none', 300);
-            });
-            // Mobile direktori dropdown
             const mobileDirektoriToggle = document.getElementById('mobile-direktori-toggle');
             const mobileDirektoriDropdown = document.getElementById('mobile-direktori-dropdown');
-            mobileDirektoriToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                mobileDirektoriDropdown.classList.toggle('hidden');
-            });
-            // Close mobile dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!mobileDirektoriToggle.contains(e.target) && !mobileDirektoriDropdown.contains(e.target)) {
-                    mobileDirektoriDropdown.classList.add('hidden');
-                }
-            });
-            // Prevent menu from closing when clicking inside dropdown
-            mobileDirektoriDropdown.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
+
+            const openMobileMenu = () => {
+                if (!mobileMenu) return;
+                mobileMenu.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    mobileMenu.style.transform = 'translateX(0)';
+                });
+            };
+
+            const closeMobileMenu = () => {
+                if (!mobileMenu) return;
+                mobileMenu.style.transform = 'translateX(100%)';
+                mobileMenu.addEventListener('transitionend', function hideMenu() {
+                    mobileMenu.style.display = 'none';
+                    mobileMenu.removeEventListener('transitionend', hideMenu);
+                });
+            };
+
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openMobileMenu();
+                });
+            }
+
+            if (mobileMenuClose) {
+                mobileMenuClose.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    closeMobileMenu();
+                });
+            }
+
+            // Mobile direktori dropdown
+            if (mobileDirektoriToggle && mobileDirektoriDropdown) {
+                mobileDirektoriToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    mobileDirektoriDropdown.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!mobileDirektoriToggle.contains(e.target) && !mobileDirektoriDropdown.contains(e.target)) {
+                        mobileDirektoriDropdown.classList.add('hidden');
+                    }
+                });
+
+                mobileDirektoriDropdown.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
         </script>
     </nav>
     <!-- End Navbar -->
@@ -163,8 +278,9 @@
             <div class="grid lg:grid-cols-4 gap-12 mb-16">
                 <div class="col-span-1 lg:col-span-1 space-y-6">
                     <div class="flex items-center gap-3">
-                        <div class="size-10 bg-primary rounded-lg flex items-center justify-center text-charcoal">
-                            <span class="material-symbols-outlined font-bold">school</span>
+                        <div class="relative w-10 h-10 rounded-lg overflow-hidden border border-white/30">
+                            <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="SMK Putra Pakuan" class="w-full h-full object-cover" />
+                            <span class="absolute -top-2 -right-2 bg-white text-charcoal rounded-full w-5 h-5 grid place-items-center text-xs font-bold border border-charcoal">×</span>
                         </div>
                         <h2 class="text-xl font-black tracking-tight">SMK PUTRA PAKUAN</h2>
                     </div>
@@ -224,13 +340,45 @@
             <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-xs font-medium">
                 <p>© 2024 SMK Putra Pakuan. All rights reserved.</p>
                 <div class="flex gap-6">
-                    <a class="hover:text-white" href="#">Privacy Policy</a>
-                    <a class="hover:text-white" href="#">Terms of Service</a>
+                    <a class="hover:text-white" href="#">Kebijakan Privasi</a>
+                    <a class="hover:text-white" href="#">Syarat Layanan</a>
                 </div>
             </div>
         </div>
     </footer>
+    <!-- Floating Quick Info FAB -->
+    <div id="smk-fab-container" class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+        <button id="smk-fab" class="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-charcoal shadow-2xl hover:bg-primary/90 focus:outline-none" aria-label="Quick Info">
+            <span class="material-symbols-outlined text-2xl">help</span>
+        </button>
+        <div id="smk-fab-menu" class="hidden w-64 rounded-xl bg-charcoal/95 text-white shadow-2xl p-3 space-y-2">
+            <a href="{{ route('school.ppdb', ['school' => 'smk']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Daftar PPDB</a>
+            <a href="{{ route('yayasan.akreditasi') }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Lihat Prestasi</a>
+            <a href="{{ route('school.kontak', ['school' => 'smk']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Kontak Sekolah</a>
+        </div>
+    </div>
+
+    <script>
+        const smkFabButton = document.getElementById('smk-fab');
+        const smkFabMenu = document.getElementById('smk-fab-menu');
+
+        smkFabButton.addEventListener('click', function () {
+            smkFabMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!smkFabButton.contains(event.target) && !smkFabMenu.contains(event.target)) {
+                smkFabMenu.classList.add('hidden');
+            }
+        });
+    </script>
+
     <!-- End Footer -->
     @stack('scripts')
 </body>
 </html>
+
+
+
+
+

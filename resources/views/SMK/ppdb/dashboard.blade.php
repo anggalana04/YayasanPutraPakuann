@@ -1,4 +1,4 @@
-@extends('layouts.SMK.ppdb')
+﻿@extends('layouts.SMK.ppdb')
 
 @section('ppdb-content')
 <div class="pt-28 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
@@ -10,7 +10,7 @@
 <h1 class="text-4xl md:text-5xl font-extrabold text-brand-charcoal tracking-tighter leading-none">{{ $application->full_name ?? '-' }}</h1>
 </div>
 <div class="bg-surface-container-low px-6 py-4 rounded-2xl border-l-4 border-brand-yellow">
-<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Application ID</p>
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">ID Pendaftaran</p>
 <p class="text-2xl font-black text-brand-charcoal font-headline">#{{ $application->application_id ?? '-' }}</p>
 </div>
 </div>
@@ -55,9 +55,7 @@
         <p class="text-sm text-on-surface-variant">Dokumen telah kami terima secara digital pada 20 Mei 2024.</p>
         <span class="text-xs text-on-surface-variant">Selesai: 20 Mei 2024</span>
     </div>
-    <div class="flex items-center">
-        <button class="bg-brand-yellow text-brand-charcoal font-bold px-4 py-2 rounded-xl shadow hover:bg-brand-yellow/80 transition-colors">Daftar Ulang</button>
-    </div>
+    
 </div>
 <!-- Step 2: Verifikasi Berkas -->
 <div class="relative flex gap-6 pb-10 items-start">
@@ -196,3 +194,8 @@
 @section('ppdb-footer')
 
 @endsection
+
+
+
+
+

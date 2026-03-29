@@ -36,8 +36,13 @@ class PpdbAuthController extends Controller
 
         Auth::guard('ppdb_applications')->login($application);
         // Redirect to last incomplete registration step if not done
-        if ($application->last_registration_step && $application->last_registration_step !== 'done') {
-            switch ($application->last_registration_step) {
+        $nextStep = $application->last_registration_step;
+        if (!$nextStep && in_array($application->status, ['draft', 'payment_uploaded', 'verified'])) {
+            $nextStep = 'biodata';
+        }
+
+        if ($nextStep && $nextStep !== 'done') {
+            switch ($nextStep) {
                 case 'jurusan_berkas':
                     return redirect()->route('ppdb.berkas', ['school' => $request->route('school')]);
                 case 'payment':
@@ -46,6 +51,7 @@ class PpdbAuthController extends Controller
                     return redirect()->route('ppdb.biodata', ['school' => $request->route('school')]);
             }
         }
+
         return redirect()->route('ppdb.dashboard', ['school' => $request->route('school')]);
     }
 
@@ -67,8 +73,13 @@ class PpdbAuthController extends Controller
         }
 
         // Redirect to last incomplete registration step if not done
-        if ($application->last_registration_step && $application->last_registration_step !== 'done') {
-            switch ($application->last_registration_step) {
+        $nextStep = $application->last_registration_step;
+        if (!$nextStep && in_array($application->status, ['draft', 'payment_uploaded', 'verified'])) {
+            $nextStep = 'biodata';
+        }
+
+        if ($nextStep && $nextStep !== 'done') {
+            switch ($nextStep) {
                 case 'jurusan_berkas':
                     return redirect()->route('ppdb.berkas', ['school' => $request->route('school')]);
                 case 'payment':
@@ -79,7 +90,12 @@ class PpdbAuthController extends Controller
         }
 
         $school = $request->route('school');
-        return view('SMK.ppdb.dashboard', compact('application', 'school'));
+        $viewName = strtoupper($school) . '.ppdb.dashboard';
+        // Fallback to SMK if school-specific view doesn't exist
+        if (!view()->exists($viewName)) {
+            $viewName = 'SMK.ppdb.dashboard';
+        }
+        return view($viewName, compact('application', 'school'));
     }
 
     public function updateBiodata(Request $request)
@@ -138,18 +154,21 @@ class PpdbAuthController extends Controller
         if (!$application) {
             return redirect()->route('ppdb.login', ['school' => $request->route('school')]);
         }
+        $schoolRoute = strtolower((string) $request->route('school'));
+        $isSmk = in_array($schoolRoute, ['smk', 'smk-putra-pakuan'], true);
         $validated = $request->validate([
-            'major_1' => 'required|string|max:255',
+            'major_1' => $isSmk ? 'required|string|max:255' : 'nullable|string|max:255',
             'major_2' => 'nullable|string|max:255',
             'kk_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'ijazah_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'photo_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'raport_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'prestasi_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
-        $application->major_1 = $validated['major_1'];
+        $application->major_1 = $validated['major_1'] ?? null;
         $application->major_2 = $validated['major_2'] ?? null;
         // Handle file uploads
-        $fileFields = ['kk_file', 'ijazah_file', 'photo_file', 'raport_file'];
+        $fileFields = ['kk_file', 'ijazah_file', 'photo_file', 'raport_file', 'prestasi_file'];
         foreach ($fileFields as $field) {
             if ($request->hasFile($field)) {
                 $file = $request->file($field);
@@ -157,10 +176,10 @@ class PpdbAuthController extends Controller
                 $application->$field = $path;
             }
         }
-        $application->save();
+        $application->status = 'pending';
         $application->last_registration_step = 'payment';
         $application->save();
-        return redirect()->route('ppdb.payment', ['school' => $request->route('school')])->with('success', 'Berkas berhasil diunggah dan jurusan disimpan.');
+        return redirect()->route('ppdb.payment', ['school' => $request->route('school')])->with('success', 'Berkas berhasil diunggah.');
     }
 
     public function updatePayment(Request $request)
@@ -177,7 +196,6 @@ class PpdbAuthController extends Controller
             $path = $file->store('ppdb/payments/' . $application->application_id, 'public');
             $application->payment_proof = $path;
             $application->status = 'payment_uploaded';
-            $application->save();
             $application->last_registration_step = 'done';
             $application->save();
         }

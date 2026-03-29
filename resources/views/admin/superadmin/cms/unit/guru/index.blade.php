@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
 @php
     use Illuminate\Support\Str;
@@ -122,3 +122,8 @@
     @endif
 </div>
 @endsection
+
+
+
+
+

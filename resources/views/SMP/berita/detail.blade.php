@@ -1,12 +1,59 @@
-@extends('layouts.smp.app')
+﻿@extends('layouts.SMP.app')
+
+@php
+    $newsExcerpt = trim(strip_tags((string) ($newsItem->excerpt ?? $newsItem->content ?? 'Berita terbaru dari SMP Putra Pakuan.')));
+    $newsDescription = \Illuminate\Support\Str::limit($newsExcerpt, 160);
+    $newsImageRaw = trim((string) ($newsItem->image_url ?? ''));
+    $newsImage = \Illuminate\Support\Str::startsWith($newsImageRaw, ['http://', 'https://'])
+        ? $newsImageRaw
+        : ($newsImageRaw !== '' ? asset(ltrim($newsImageRaw, '/')) : asset('images/yayasan-logo.jfif'));
+    $schoolSlug = request()->route('school') ?? 'smp';
+    $newsUrl = route('school.berita.detail', ['school' => $schoolSlug, 'news' => $newsItem->id]);
+@endphp
+
+@section('title', ($newsItem->title ?? 'Detail Berita') . ' | SMP Putra Pakuan')
+@section('meta_description', $newsDescription)
+@section('meta_keywords', 'berita smp putra pakuan, info smp bogor, kegiatan siswa smp')
+@section('meta_image', $newsImage)
+
+@push('structured_data')
+@php
+    $articleSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Article',
+        'headline' => $newsItem->title,
+        'description' => $newsDescription,
+        'image' => [$newsImage],
+        'datePublished' => optional($newsItem->published_at ?? $newsItem->created_at)->toAtomString(),
+        'dateModified' => optional($newsItem->updated_at ?? $newsItem->published_at ?? $newsItem->created_at)->toAtomString(),
+        'mainEntityOfPage' => [
+            '@type' => 'WebPage',
+            '@id' => $newsUrl,
+        ],
+        'author' => [
+            '@type' => 'Organization',
+            'name' => 'SMP Putra Pakuan',
+        ],
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'SMP Putra Pakuan',
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => asset('images/yayasan-logo.jfif'),
+            ],
+        ],
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($articleSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endpush
 
 @section('content')
 <!-- Breadcrumb -->
 <div class="w-full max-w-7xl mx-auto px-4 sm:px-8 pt-6">
     <div class="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 mb-4">
-        <a class="hover:text-slate-900 dark:hover:text-white transition-colors" href="{{ route('school.home', ['school' => request()->route('school') ?? 'smk']) }}">Beranda</a>
+        <a class="hover:text-slate-900 dark:hover:text-white transition-colors" href="{{ route('school.home', ['school' => request()->route('school') ?? 'smp']) }}">Beranda</a>
         <span>/</span>
-        <a class="hover:text-slate-900 dark:hover:text-white transition-colors" href="{{ route('school.berita', ['school' => request()->route('school') ?? 'smk']) }}">Berita</a>
+        <a class="hover:text-slate-900 dark:hover:text-white transition-colors" href="{{ route('school.berita', ['school' => request()->route('school') ?? 'smp']) }}">Berita</a>
         <span>/</span>
         <span class="text-slate-900 dark:text-white">Detail Berita</span>
     </div>
@@ -25,7 +72,7 @@
             <span class="px-3 py-1 rounded bg-primary text-charcoal text-xs font-bold uppercase tracking-wider shadow-sm">{{ $newsItem->category ?? 'Berita' }}</span>
             <span class="text-slate-500 dark:text-slate-400 text-xs font-medium flex items-center gap-1">
                 <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                {{ $newsItem->published_at ? $newsItem->published_at->format('M d, Y') : ($newsItem->created_at?->format('M d, Y') ?? '-') }}
+                {{ $newsItem->published_at ? $newsItem->published_at->format('d M Y') : ($newsItem->created_at?->format('d M Y') ?? '-') }}
             </span>
         </div>
         <h1 class="text-3xl lg:text-4xl font-black leading-tight tracking-tight text-charcoal dark:text-white mb-4">{{ $newsItem->title }}</h1>
@@ -51,3 +98,8 @@
 </div>
 </main>
 @endsection
+
+
+
+
+

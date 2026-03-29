@@ -1,9 +1,26 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
-<html class="light" lang="id"><head>
+<html class="light" lang="id" style="margin:0; padding:0; background:#f7f7f4;"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Daftar Akun PPDB - SMK Putra Pakuan</title>
+<title>Daftar Akun PPDB SMK Putra Pakuan</title>
+<meta name="description" content="Registrasi akun PPDB SMK Putra Pakuan untuk memulai pendaftaran peserta didik baru secara online." />
+<meta name="keywords" content="daftar ppdb smk putra pakuan, registrasi smk bogor, ppdb online smk" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<link rel="canonical" href="{{ url()->current() }}" />
+<link rel="icon" type="image/png" href="{{ asset('images/logo-putrapakuan.png') }}" />
+<link rel="shortcut icon" type="image/png" href="{{ asset('images/logo-putrapakuan.png') }}" />
+<link rel="apple-touch-icon" href="{{ asset('images/logo-putrapakuan.png') }}" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="id_ID" />
+<meta property="og:title" content="Daftar Akun PPDB SMK Putra Pakuan" />
+<meta property="og:description" content="Registrasi akun PPDB SMK Putra Pakuan untuk memulai pendaftaran peserta didik baru secara online." />
+<meta property="og:url" content="{{ url()->current() }}" />
+<meta property="og:image" content="{{ asset('images/logo-putrapakuan.png') }}" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Daftar Akun PPDB SMK Putra Pakuan" />
+<meta name="twitter:description" content="Registrasi akun PPDB SMK Putra Pakuan untuk memulai pendaftaran peserta didik baru secara online." />
+<meta name="twitter:image" content="{{ asset('images/logo-putrapakuan.png') }}" />
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -87,9 +104,9 @@
         }
     </style>
 </head>
-<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
+<body style="margin:0; padding:0;" class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
 <!-- Top Navigation Bar (Shared Component Strategy) -->
-<nav class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl transition-all">
+<nav style="box-shadow: 0 -24px 0 rgba(255, 255, 255, 0.7);" class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl transition-all">
 <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
 <div class="flex items-center gap-2">
 <span class="text-xl font-bold text-[#1c190d] tracking-tighter"> Putra Pakuan</span>
@@ -188,7 +205,7 @@
 </div>
 </div>
 <div class="space-y-1.5">
-<label class="text-xs font-semibold text-on-surface/70 ml-2 uppercase tracking-wider">Password</label>
+<label class="text-xs font-semibold text-on-surface/70 ml-2 uppercase tracking-wider">Kata Sandi</label>
 <div class="relative group">
 <input name="password" class="w-full bg-surface-container-low border-none rounded-2xl px-5 py-4 text-sm focus:ring-0 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant" placeholder="Min. 8 karakter" type="password" required/>
 <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary transition-all group-focus-within:w-full"></div>
@@ -247,3 +264,9 @@
 </div>
 </footer>
 </body></html>
+
+
+
+
+
+

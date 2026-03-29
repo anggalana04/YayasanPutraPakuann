@@ -50,20 +50,51 @@ class User extends Authenticatable
     }
 
     // Helper: check admin role
-    public function isSuperAdmin()
+    public function isSuperAdmin(): bool
     {
         return $this->is_admin && $this->admin_role === 'superadmin';
     }
-    public function isSdAdmin()
+    public function isSdAdmin(): bool
     {
         return $this->is_admin && $this->admin_role === 'sd_admin';
     }
-    public function isSmpAdmin()
+    public function isSmpAdmin(): bool
     {
         return $this->is_admin && $this->admin_role === 'smp_admin';
     }
-    public function isSmkAdmin()
+    public function isSmkAdmin(): bool
     {
         return $this->is_admin && $this->admin_role === 'smk_admin';
+    }
+
+    /** School slug used in PPDB/management URLs, e.g. smk-putra-pakuan */
+    public function getSchoolSlug(): string
+    {
+        return [
+            'smk_admin' => 'smk-putra-pakuan',
+            'smp_admin' => 'smp-putra-pakuan',
+            'sd_admin'  => 'sdit-putra-pakuan',
+        ][$this->admin_role] ?? '';
+    }
+
+    /** Short school type used in CMS URLs: smk | smp | sd */
+    public function getCmsType(): string
+    {
+        return [
+            'smk_admin' => 'smk',
+            'smp_admin' => 'smp',
+            'sd_admin'  => 'sd',
+        ][$this->admin_role] ?? '';
+    }
+
+    /** Human-readable role label */
+    public function getRoleLabel(): string
+    {
+        return [
+            'superadmin' => 'Superadmin',
+            'smk_admin'  => 'Admin SMK',
+            'smp_admin'  => 'Admin SMP',
+            'sd_admin'   => 'Admin SD/SDIT',
+        ][$this->admin_role] ?? ucfirst($this->admin_role ?? 'Admin');
     }
 }

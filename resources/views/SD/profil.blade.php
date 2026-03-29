@@ -1,9 +1,16 @@
-@extends('layouts.sd.app')
+﻿@extends('layouts.SD.app')
 
 @section('title', 'Profil Sekolah | SDIT Putra Pakuan')
 
 @push('head')
-{{-- Remove duplicate Tailwind/Font/Script includes, as they are in the layout --}}
+<style>
+    body {
+        font-family: 'Lexend', sans-serif;
+    }
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -21,35 +28,43 @@
                 </h2>
                 <div class="prose prose-lg text-slate-600 space-y-4">
                     <p class="leading-relaxed">
-                        Sekolah Menengah Pertama (SMP) Putra Pakuan berdiri tahun 2008 dan berlokasi di Provinsi Jawa Barat, Kabupaten Bogor, tepatnya di kota Bogor dengan alamat <span class="font-semibold text-charcoal">Jl. Ruko Megapolitan Kebon Kelapa No.5, Desa, RT.03/RW.04, Cimandala, Kec. Sukaraja, Bogor, Jawa Barat 16710</span>.
+                        Sekolah Dasar Islam Terpadu (SDIT) Putra Pakuan berdiri tahun 2008 dan berlokasi di Provinsi Jawa Barat, Kabupaten Bogor, tepatnya di kota Bogor dengan alamat <span class="font-semibold text-charcoal">Jl. Ruko Megapolitan Kebon Kelapa No.5, Desa, RT.03/RW.04, Cimandala, Kec. Sukaraja, Bogor, Jawa Barat 16710</span>.
                     </p>
                     <p class="leading-relaxed mt-4">
-                        SMP Putra Pakuan didukung oleh tenaga pendidik profesional yang sangat memahami kebutuhan dan potensi setiap peserta didik. Dengan lingkungan belajar yang inspiratif dan fasilitas lengkap, kami berkomitmen mencetak lulusan yang siap bersaing di dunia pendidikan maupun melanjutkan ke jenjang yang lebih tinggi.
+                        SDIT Putra Pakuan didukung oleh tenaga pendidik profesional yang sangat memahami kebutuhan dan potensi setiap peserta didik. Dengan lingkungan belajar yang inspiratif dan fasilitas lengkap, kami berkomitmen mencetak lulusan yang siap melanjutkan pendidikan ke jenjang yang lebih tinggi.
                     </p>
                 </div>
             </div>
-            <!-- Jurusan Section -->
-            <section id="jurusan" class="mb-12">
+            <!-- Program Unggulan Section -->
+            <section id="program" class="mb-12">
                 <h2 class="text-2xl font-bold text-primary mb-6 flex items-center gap-3">
-                    <span class="material-symbols-outlined text-primary">school</span>
+                    <span class="material-symbols-outlined text-primary">menu_book</span>
                     Program Unggulan
                 </h2>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div class="bg-white border-l-4 border-primary p-6 rounded-xl shadow flex items-center gap-4">
-                        <span class="material-symbols-outlined text-primary text-3xl">book</span>
-                        <span class="font-semibold text-charcoal">Program Literasi</span>
-                    </div>
-                    <div class="bg-white border-l-4 border-primary p-6 rounded-xl shadow flex items-center gap-4">
                         <span class="material-symbols-outlined text-primary text-3xl">science</span>
-                        <span class="font-semibold text-charcoal">Program Sains</span>
+                        <span class="font-semibold text-charcoal">Sains & Matematika</span>
                     </div>
                     <div class="bg-white border-l-4 border-primary p-6 rounded-xl shadow flex items-center gap-4">
-                        <span class="material-symbols-outlined text-primary text-3xl">sports</span>
-                        <span class="font-semibold text-charcoal">Program Olahraga</span>
+                        <span class="material-symbols-outlined text-primary text-3xl">language</span>
+                        <span class="font-semibold text-charcoal">Bahasa Indonesia & Bahasa Inggris</span>
+                    </div>
+                    <div class="bg-white border-l-4 border-primary p-6 rounded-xl shadow flex items-center gap-4">
+                        <span class="material-symbols-outlined text-primary text-3xl">computer</span>
+                        <span class="font-semibold text-charcoal">Teknologi Informasi & Komputer</span>
                     </div>
                     <div class="bg-white border-l-4 border-primary p-6 rounded-xl shadow flex items-center gap-4">
                         <span class="material-symbols-outlined text-primary text-3xl">palette</span>
-                        <span class="font-semibold text-charcoal">Program Seni</span>
+                        <span class="font-semibold text-charcoal">Seni Budaya & Prakarya</span>
+                    </div>
+                    <div class="bg-white border-l-4 border-primary p-6 rounded-xl shadow flex items-center gap-4">
+                        <span class="material-symbols-outlined text-primary text-3xl">sports_soccer</span>
+                        <span class="font-semibold text-charcoal">Pendidikan Jasmani & Olahraga</span>
+                    </div>
+                    <div class="bg-white border-l-4 border-primary p-6 rounded-xl shadow flex items-center gap-4">
+                        <span class="material-symbols-outlined text-primary text-3xl">church</span>
+                        <span class="font-semibold text-charcoal">Pendidikan Agama & Budi Pekerti</span>
                     </div>
                 </div>
             </section>
@@ -70,6 +85,15 @@
                         <span class="material-symbols-outlined text-primary">computer</span> Lab Komputer
                     </div>
                     <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">biotech</span> Lab IPA
+                    </div>
+                    <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">record_voice_over</span> Lab Bahasa
+                    </div>
+                    <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">ac_unit</span> AC di setiap ruang kelas
+                    </div>
+                    <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
                         <span class="material-symbols-outlined text-primary">meeting_room</span> Aula
                     </div>
                     <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
@@ -77,6 +101,24 @@
                     </div>
                     <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
                         <span class="material-symbols-outlined text-primary">restaurant</span> Kantin Sekolah
+                    </div>
+                    <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">menu_book</span> Perpustakaan
+                    </div>
+                    <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">local_parking</span> Lapangan Parkir
+                    </div>
+                    <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">videocam</span> CCTV & LCD TV
+                    </div>
+                    <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">devices</span> Pembelajaran Berbasis IT
+                    </div>
+                    <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">science</span> Lab IPA
+                    </div>
+                    <div class="bg-white border border-primary/10 rounded-xl p-4 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">park</span> Taman
                     </div>
                 </div>
             </section>
@@ -99,7 +141,7 @@
                         <div class="absolute -left-10.25 top-0 size-5 bg-primary rounded-full ring-4 ring-white shadow-sm"></div>
                         <span class="text-primary font-black text-lg">2010</span>
                         <h3 class="text-xl font-bold mt-1">Angkatan Pertama</h3>
-                        <p class="text-slate-600 mt-2">Membuka pendaftaran pertama untuk program unggulan dengan total 120 siswa perdana.</p>
+                        <p class="text-slate-600 mt-2">Membuka pendaftaran pertama untuk mata pelajaran pilihan dengan total 120 siswa perdana.</p>
                     </div>
                     <!-- Timeline Item -->
                     <div class="relative">
@@ -136,7 +178,7 @@
                             <span class="material-symbols-outlined font-bold">handshake</span>
                         </div>
                         <h4 class="font-bold text-lg mb-2">Kolaborasi</h4>
-                        <p class="text-sm text-slate-500">Membangun kerja sama yang harmonis antara sekolah, siswa, dan dunia pendidikan.</p>
+                        <p class="text-sm text-slate-500">Membangun kerja sama yang harmonis antara sekolah, siswa, dan dunia industri.</p>
                     </div>
                 </div>
             </div>
@@ -152,7 +194,7 @@
                 <div class="space-y-6">
                     <div>
                         <h3 class="text-primary font-bold text-sm uppercase tracking-widest mb-2">Visi</h3>
-                        <p class="text-slate-300 italic">"Menjadi pusat pendidikan unggulan yang menghasilkan lulusan berakhlak mulia, kompeten, dan mandiri."</p>
+                        <p class="text-slate-300 italic">"Menjadi pusat pendidikan vokasi unggulan yang menghasilkan lulusan berakhlak mulia, kompeten, dan mandiri."</p>
                     </div>
                     <hr class="border-white/10"/>
                     <div>
@@ -160,7 +202,7 @@
                         <ul class="space-y-3">
                             <li class="flex gap-3 text-sm text-slate-300 leading-relaxed">
                                 <span class="text-primary font-bold">1.</span>
-                                Menyelenggarakan pembelajaran berbasis kompetensi sesuai standar pendidikan.
+                                Menyelenggarakan pembelajaran berbasis kompetensi sesuai standar industri.
                             </li>
                             <li class="flex gap-3 text-sm text-slate-300 leading-relaxed">
                                 <span class="text-primary font-bold">2.</span>
@@ -168,7 +210,7 @@
                             </li>
                             <li class="flex gap-3 text-sm text-slate-300 leading-relaxed">
                                 <span class="text-primary font-bold">3.</span>
-                                Memperkuat jejaring dengan dunia pendidikan secara global.
+                                Memperkuat jejaring dengan dunia usaha dan industri secara global.
                             </li>
                         </ul>
                     </div>
@@ -176,10 +218,10 @@
             </div>
             <!-- Campus Image/Identity -->
             <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/10">
-                <div class="aspect-video bg-slate-200" data-alt="University campus walkway with green trees and buildings" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDB3xAIQ-Op2E1ckgImglHSYCMGIw52P9GNV-AGL6rt4W9KzlcX_Jmqv_DSkVLm-jcJJFzRRSpU5Emj_EhhnPAn4p6dodkCuDy41Lyo-unCw7TMDCwkY8PiQEXsr5sTyMZ3Zb_t3G0fStezDWk_WuD4mfyqTdmR9PYqwpBuEAX-mbgMa0PqbEK3Z8kK4gv0bot73JhFcMehqb8bbhSktLC0alYqWJsr4mq6cruTxtSFskjRh3rjUFweaqf82piO-ZcgpPJgDpiuSw')"></div>
+                <div class="aspect-video bg-slate-200" data-alt="Jalur kampus dengan pepohonan hijau dan gedung" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDB3xAIQ-Op2E1ckgImglHSYCMGIw52P9GNV-AGL6rt4W9KzlcX_Jmqv_DSkVLm-jcJJFzRRSpU5Emj_EhhnPAn4p6dodkCuDy41Lyo-unCw7TMDCwkY8PiQEXsr5sTyMZ3Zb_t3G0fStezDWk_WuD4mfyqTdmR9PYqwpBuEAX-mbgMa0PqbEK3Z8kK4gv0bot73JhFcMehqb8bbhSktLC0alYqWJsr4mq6cruTxtSFskjRh3rjUFweaqf82piO-ZcgpPJgDpiuSw')"></div>
                 <div class="p-6">
                     <h3 class="font-bold text-lg mb-1">Identitas Sekolah</h3>
-                    <p class="text-sm text-slate-500 mb-4">NPSN: 87654321 | Akreditasi: A</p>
+                    <p class="text-sm text-slate-500 mb-4">NPSN: 12345678 | Akreditasi: A</p>
                     <div class="flex flex-col gap-3">
                         <div class="flex items-center gap-3 text-sm">
                             <span class="material-symbols-outlined text-primary text-xl">location_on</span>
@@ -196,23 +238,11 @@
                     </div>
                 </div>
             </div>
-            <!-- Social Feed Placeholder/Call to action -->
-            <div class="bg-primary p-8 rounded-2xl text-charcoal">
-                <h3 class="font-black text-xl mb-2">Ingin tahu lebih banyak?</h3>
-                <p class="text-sm font-medium mb-6">Kunjungi media sosial kami untuk update kegiatan terbaru siswa SMP Putra Pakuan.</p>
-                <div class="flex gap-4">
-                    <a class="size-10 bg-white/30 rounded-lg flex items-center justify-center hover:bg-white/50 transition-colors" href="#">
-                        <span class="material-symbols-outlined">share</span>
-                    </a>
-                    <a class="size-10 bg-white/30 rounded-lg flex items-center justify-center hover:bg-white/50 transition-colors" href="#">
-                        <span class="material-symbols-outlined">play_circle</span>
-                    </a>
-                    <a class="size-10 bg-white/30 rounded-lg flex items-center justify-center hover:bg-white/50 transition-colors" href="#">
-                        <span class="material-symbols-outlined">camera</span>
-                    </a>
-                </div>
-            </div>
         </aside>
     </div>
 </section>
 @endsection
+
+
+
+

@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
 @php
     use Illuminate\Support\Str;
@@ -59,9 +59,9 @@
                         </td>
                         <td class="px-4 py-4">
                             @if ($item->status === 'published')
-                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Published</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             @else
-                                <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Draft</span>
+                                <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Draf</span>
                             @endif
                         </td>
                         <td class="px-4 py-4 text-on-surface-variant">
@@ -80,7 +80,7 @@
                                 <form method="POST" action="{{ route('admin.cms.galeri.destroy', ['schoolType' => $schoolType, 'id' => $item->id]) }}" onsubmit="return confirm('Hapus item galeri ini?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="px-3 py-2 bg-[#1c190d] text-white rounded-xl text-xs font-bold hover:opacity-90 transition-all">Delete</button>
+                                    <button type="submit" class="px-3 py-2 bg-[#1c190d] text-white rounded-xl text-xs font-bold hover:opacity-90 transition-all">Hapus</button>
                                 </form>
                             </div>
                         </td>
@@ -99,3 +99,8 @@
     </div>
 </div>
 @endsection
+
+
+
+
+

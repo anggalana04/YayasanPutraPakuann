@@ -1,9 +1,79 @@
-<!DOCTYPE html>
-<html class="light" lang="en">
+﻿<!DOCTYPE html>
+<html class="light" lang="id" style="margin:0; padding:0; background:#0f172a;">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>@yield('title', 'Yayasan Putra Pakuan')</title>
+    @php
+        $seoTitle = trim($__env->yieldContent('title', 'Yayasan Putra Pakuan | Pendidikan Berkualitas di Bogor'));
+        $seoDescription = trim($__env->yieldContent('meta_description', 'Yayasan Putra Pakuan menaungi unit pendidikan berkualitas untuk membentuk generasi berkarakter, unggul, dan siap masa depan.'));
+        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'yayasan putra pakuan, sekolah bogor, pendidikan bogor, sd, smp, smk, ppdb'));
+        $seoImage = trim($__env->yieldContent('meta_image', asset('images/yayasan-logo.jfif')));
+        $seoUrl = url()->current();
+    @endphp
+    <title>{{ $seoTitle }}</title>
+    <meta name="description" content="{{ $seoDescription }}" />
+    <meta name="keywords" content="{{ $seoKeywords }}" />
+    <meta name="author" content="Yayasan Putra Pakuan" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="{{ $seoUrl }}" />
+    <link rel="alternate" hreflang="id-ID" href="{{ $seoUrl }}" />
+    <link rel="alternate" hreflang="x-default" href="{{ $seoUrl }}" />
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/yayasan-logo.jfif') }}" />
+    <link rel="shortcut icon" type="image/jpeg" href="{{ asset('images/yayasan-logo.jfif') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('images/yayasan-logo.jfif') }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:site_name" content="Yayasan Putra Pakuan" />
+    <meta property="og:title" content="{{ $seoTitle }}" />
+    <meta property="og:description" content="{{ $seoDescription }}" />
+    <meta property="og:url" content="{{ $seoUrl }}" />
+    <meta property="og:image" content="{{ $seoImage }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ $seoTitle }}" />
+    <meta name="twitter:description" content="{{ $seoDescription }}" />
+    <meta name="twitter:image" content="{{ $seoImage }}" />
+    @php
+        $orgSchema = [
+            '@type' => 'Organization',
+            '@id' => url('/') . '#organization',
+            'name' => 'Yayasan Putra Pakuan',
+            'url' => url('/'),
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => asset('images/yayasan-logo.jfif'),
+            ],
+        ];
+
+        $websiteSchema = [
+            '@type' => 'WebSite',
+            '@id' => url('/') . '#website',
+            'url' => url('/'),
+            'name' => 'Yayasan Putra Pakuan',
+            'inLanguage' => 'id-ID',
+            'publisher' => [
+                '@id' => url('/') . '#organization',
+            ],
+        ];
+
+        $webpageSchema = [
+            '@type' => 'WebPage',
+            '@id' => $seoUrl . '#webpage',
+            'url' => $seoUrl,
+            'name' => $seoTitle,
+            'description' => $seoDescription,
+            'inLanguage' => 'id-ID',
+            'isPartOf' => [
+                '@id' => url('/') . '#website',
+            ],
+        ];
+
+        $seoJsonLd = [
+            '@context' => 'https://schema.org',
+            '@graph' => [$orgSchema, $websiteSchema, $webpageSchema],
+        ];
+    @endphp
+    <script type="application/ld+json">{!! json_encode($seoJsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @stack('structured_data')
     <!-- Google Fonts: Lexend -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -42,6 +112,12 @@
         }
     </script>
     <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Lexend', sans-serif;
         }
@@ -50,17 +126,17 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     @stack('styles')
 </head>
-<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 transition-colors duration-200">
+<body style="margin:0; padding:0;" class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 transition-colors duration-200">
     <div class="relative flex min-h-screen w-full flex-col group/design-root">
         <!-- Top Navigation -->
-        <header class="sticky top-0 z-50 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-slate-200 dark:border-white/10 w-full shadow-sm">
+        <header style="box-shadow: 0 -24px 0 rgba(255, 255, 255, 0.95);" class="sticky top-0 z-50 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-slate-200 dark:border-white/10 w-full shadow-sm">
             <div class="layout-container flex justify-center w-full">
                 <div class="flex max-w-[1280px] w-full px-4 md:px-10 py-3 items-center justify-between">
 
                     <div class="flex items-center gap-4 text-text-main dark:text-white">
                         <a href="{{ route('yayasan.home') }}">
                         <div class="size-10 text-primary">
-                            <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="Logo">
+                            <img src="{{ asset('images/yayasan-logo.jfif') }}" alt="Logo Yayasan Putra Pakuan">
                         </div>
                     </a>
                             <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Yayasan Putra Pakuan</h2>
@@ -114,7 +190,7 @@
                     <span class="material-symbols-outlined">mail</span> Gmail
                 </a>
                 <a href="/brochure.pdf" download class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white shadow-lg hover:bg-sky-600 transition-all">
-                    <span class="material-symbols-outlined">download</span> Download Brochure
+                    <span class="material-symbols-outlined">download</span> Unduh Brosur
                 </a>
                 <a href="{{ route('yayasan.kontak') }}" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#FDB913] text-slate-900 shadow-lg hover:bg-[#E5A800] transition-all">
                     <span class="material-symbols-outlined">call</span> Kontak Sekolah
@@ -141,7 +217,7 @@
                     <div class="md:col-span-1 flex flex-col gap-4">
                         <div class="flex items-center gap-3 text-text-main dark:text-white">
                             <div class="size-6 text-primary">
-                                                            <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="Logo">
+                                                            <img src="{{ asset('images/yayasan-logo.jfif') }}" alt="Logo Yayasan Putra Pakuan">
 
                             </div>
                             <h2 class="text-base font-bold">Yayasan Putra Pakuan</h2>
@@ -174,7 +250,7 @@
                     </div>
                 </div>
                 <div class="max-w-[1280px] w-full border-t border-slate-100 dark:border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p class="text-slate-400 text-xs text-center md:text-left">© 2024 Yayasan Putra Pakuan. All rights reserved.</p>
+                    <p class="text-slate-400 text-xs text-center md:text-left">© 2024 Yayasan Putra Pakuan. Hak cipta dilindungi.</p>
                     <div class="flex gap-4">
                         <a class="text-slate-400 hover:text-[#FDB913] transition-colors" href="#">
                             <svg class="w-4 h-4 fill-current" viewbox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
@@ -241,3 +317,7 @@
     </script>
 </body>
 </html>
+
+
+
+

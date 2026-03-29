@@ -1,4 +1,51 @@
-@extends('layouts.SMK.app')
+﻿@extends('layouts.SMK.app')
+
+@php
+    $newsExcerpt = trim(strip_tags((string) ($newsItem->excerpt ?? $newsItem->content ?? 'Berita terbaru dari SMK Putra Pakuan.')));
+    $newsDescription = \Illuminate\Support\Str::limit($newsExcerpt, 160);
+    $newsImageRaw = trim((string) ($newsItem->image_url ?? ''));
+    $newsImage = \Illuminate\Support\Str::startsWith($newsImageRaw, ['http://', 'https://'])
+        ? $newsImageRaw
+        : ($newsImageRaw !== '' ? asset(ltrim($newsImageRaw, '/')) : asset('images/logo-putrapakuan.png'));
+    $schoolSlug = request()->route('school') ?? 'smk';
+    $newsUrl = route('school.berita.detail', ['school' => $schoolSlug, 'news' => $newsItem->id]);
+@endphp
+
+@section('title', ($newsItem->title ?? 'Detail Berita') . ' | SMK Putra Pakuan')
+@section('meta_description', $newsDescription)
+@section('meta_keywords', 'berita smk putra pakuan, info smk bogor, kegiatan siswa smk')
+@section('meta_image', $newsImage)
+
+@push('structured_data')
+@php
+    $articleSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Article',
+        'headline' => $newsItem->title,
+        'description' => $newsDescription,
+        'image' => [$newsImage],
+        'datePublished' => optional($newsItem->published_at ?? $newsItem->created_at)->toAtomString(),
+        'dateModified' => optional($newsItem->updated_at ?? $newsItem->published_at ?? $newsItem->created_at)->toAtomString(),
+        'mainEntityOfPage' => [
+            '@type' => 'WebPage',
+            '@id' => $newsUrl,
+        ],
+        'author' => [
+            '@type' => 'Organization',
+            'name' => 'SMK Putra Pakuan',
+        ],
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'SMK Putra Pakuan',
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => asset('images/logo-putrapakuan.png'),
+            ],
+        ],
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($articleSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endpush
 
 @section('content')
 <!-- Breadcrumb -->
@@ -25,7 +72,7 @@
             <span class="px-3 py-1 rounded bg-primary text-charcoal text-xs font-bold uppercase tracking-wider shadow-sm">{{ $newsItem->category ?? 'Berita' }}</span>
             <span class="text-slate-500 dark:text-slate-400 text-xs font-medium flex items-center gap-1">
                 <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                {{ $newsItem->published_at ? $newsItem->published_at->format('M d, Y') : ($newsItem->created_at?->format('M d, Y') ?? '-') }}
+                {{ $newsItem->published_at ? $newsItem->published_at->format('d M Y') : ($newsItem->created_at?->format('d M Y') ?? '-') }}
             </span>
         </div>
         <h1 class="text-3xl lg:text-4xl font-black leading-tight tracking-tight text-charcoal dark:text-white mb-4">{{ $newsItem->title }}</h1>
@@ -51,3 +98,8 @@
 </div>
 </main>
 @endsection
+
+
+
+
+

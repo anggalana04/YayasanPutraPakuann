@@ -15,6 +15,16 @@ class SchoolHomepageSetting extends Model
         'kepsek_name',
         'kepsek_title',
         'kepsek_sambutan',
+        'contact_whatsapp',
+        'contact_email',
+        'contact_phone',
+        'contact_address',
+        'contact_map_url',
+        'yayasan_principals',
+    ];
+
+    protected $casts = [
+        'yayasan_principals' => 'array',
     ];
 
     public function school(): BelongsTo
@@ -22,4 +32,3 @@ class SchoolHomepageSetting extends Model
         return $this->belongsTo(School::class);
     }
 }
-

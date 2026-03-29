@@ -1,4 +1,4 @@
-@extends('layouts.SMK.ppdb')
+﻿@extends('layouts.SMK.ppdb')
 
 @section('ppdb-content')
 
@@ -50,7 +50,7 @@
 <!-- Header Editorial -->
 <div class="mb-10 text-center">
 <h1 class="font-headline text-4xl md:text-5xl font-bold tracking-tighter text-on-background mb-4">Finalisasi Pendaftaran</h1>
-<p class="text-on-surface-variant max-w-lg mx-auto">Silakan melakukan pembayaran via transfer bank dan upload bukti transaksi untuk menyelesaikan proses registrasi.</p>
+<p class="text-on-surface-variant max-w-lg mx-auto">Silakan melakukan pembayaran via transfer bank dan unggah bukti transaksi untuk menyelesaikan proses registrasi.</p>
 </div>
 <!-- Asymmetric Bento Grid for Payment Info -->
 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -123,7 +123,7 @@
         <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <span class="material-symbols-outlined text-primary text-3xl">image</span>
         </div>
-        <p class="font-bold text-on-background mb-1">Upload Bukti Pembayaran</p>
+        <p class="font-bold text-on-background mb-1">Unggah Bukti Pembayaran</p>
         <p class="text-[10px] text-on-surface-variant uppercase tracking-widest">JPG, PNG atau PDF (Max 2MB)</p>
         <input class="hidden" type="file" name="payment_proof" accept=".jpg,.jpeg,.png,.pdf" required onchange="document.getElementById('payment_file_name').textContent = this.files[0]?.name || ''">
         <span id="payment_file_name" class="block mt-2 text-xs text-blue-600"></span>
@@ -142,7 +142,7 @@
 <h3 class="text-2xl font-bold mb-3">Terima kasih telah mendaftar!</h3>
 <p class="text-on-surface-variant max-w-md mx-auto mb-8">Admin kami akan segera memverifikasi data dan pembayaran Anda. Status pendaftaran dapat dipantau melalui dashboard siswa.</p>
 <a class="inline-flex items-center gap-2 px-8 py-3 bg-on-surface text-white rounded-full font-bold hover:bg-on-surface/90 transition-all active:scale-95" href="#">
-                Go to Dashboard
+                Ke Dasbor
                 <span class="material-symbols-outlined">arrow_forward</span>
 </a>
 </div>
@@ -151,3 +151,8 @@
 @section('ppdb-footer')
 
 @endsection
+
+
+
+
+

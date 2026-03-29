@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
 @section('title', ($mode === 'create' ? 'Tambah Berita' : 'Edit Berita') . ' - ' . strtoupper($schoolType))
 
@@ -37,7 +37,6 @@
     @php
         $isEdit = $mode === 'edit';
         $item = $newsItem;
-        $publishedAtValue = $item?->published_at ? $item->published_at->format('Y-m-d\TH:i') : '';
     @endphp
 
     <form method="POST"
@@ -68,8 +67,8 @@
                     <select name="status"
                             class="mt-2 w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                             required>
-                        <option value="draft" @selected(old('status', $item?->status) === 'draft')>Draft</option>
-                        <option value="published" @selected(old('status', $item?->status) === 'published')>Published</option>
+                        <option value="Draf" @selected(old('status', $item?->status) === 'draft')>Draf</option>
+                        <option value="Diterbitkan" @selected(old('status', $item?->status) === 'published')>Diterbitkan</option>
                     </select>
                 </div>
 
@@ -78,20 +77,16 @@
                     <input type="checkbox" id="featured" name="featured" value="1"
                            @checked(old('featured', $item?->featured ?? false))
                            class="accent-primary" />
-                    <label for="featured" class="text-sm font-medium">Featured / Pin</label>
+                    <label for="featured" class="text-sm font-medium">Unggulan / Sematkan</label>
                 </div>
             </div>
 
-            <div class="space-y-2">
-                <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Tanggal Publish</label>
-                <input type="datetime-local" name="published_at"
-                       value="{{ old('published_at', $publishedAtValue) }}"
-                       class="w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
-                <p class="text-xs text-on-surface-variant">Jika status `published` dan kosong, sistem akan pakai `now()`.</p>
+            <div class="px-4 py-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-sm">
+                Tanggal publish diisi otomatis saat status diubah ke <span class="font-bold">Diterbitkan</span>.
             </div>
 
             <div class="space-y-2">
-                <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Excerpt</label>
+                <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Ringkasan</label>
                 <textarea name="excerpt" rows="3"
                           class="w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">{{ old('excerpt', $item?->excerpt) }}</textarea>
             </div>
@@ -112,7 +107,7 @@
                     @endif
                 </div>
                 <div class="flex-1 space-y-2">
-                    <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Ganti/Upload Gambar</label>
+                    <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Ganti/Unggah Gambar</label>
                     <input type="file" name="image" accept="image/*"
                            class="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#f2cc0d] file:text-[#1c190d]">
                     <p class="text-xs text-on-surface-variant">Kosongkan jika tidak ingin mengganti gambar.</p>
@@ -129,4 +124,9 @@
     </form>
 </div>
 @endsection
+
+
+
+
+
 

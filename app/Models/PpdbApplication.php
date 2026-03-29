@@ -44,6 +44,7 @@ class PpdbApplication extends Authenticatable
         'ijazah_file',
         'photo_file',
         'raport_file',
+        'prestasi_file',
         'last_registration_step',
     ];
 
@@ -116,14 +117,23 @@ class PpdbApplication extends Authenticatable
         return $this->status === 'draft';
     }
 
+    public static function cleanupOldDrafts(): int
+    {
+        return self::where('status', 'draft')
+            ->where('updated_at', '<', now()->subWeek())
+            ->delete();
+    }
+
     public function isCompleted()
     {
-        return in_array($this->status, ['payment_completed', 'verified', 'accepted']);
+        return in_array($this->status, ['payment_uploaded', 'payment_completed', 'verified', 'accepted']);
     }
 
     public function canLogin()
     {
-        return !in_array($this->status, ['draft', 'rejected']);
+        // Allow all applicants to log in so they can continue, complete, or check status.
+        // If additional block rules are needed later, add them explicitly.
+        return true;
     }
 
     public function getProfilePhotoUrlAttribute()

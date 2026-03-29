@@ -7,7 +7,9 @@ use App\Models\GalleryItem;
 use App\Models\School;
 use App\Models\SchoolHomepageSetting;
 use App\Models\TeacherStaff;
+use App\Models\PpdbManagementPhase;
 use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 
 class SchoolHomeController extends Controller
 {
@@ -57,6 +59,38 @@ class SchoolHomeController extends Controller
                 ->get();
         }
 
+        // Fetch PPDB Live Data and phase countdown info
+        $ppdbLive = false;
+        $ppdbCountdownDate = null;
+        $ppdbCurrentPhase = null;
+        $ppdbPeriod = null;
+
+        if (Schema::hasTable('ppdb_management_phases')) {
+            $phases = PpdbManagementPhase::where('school_id', $schoolModel->id)
+                ->orderBy('start_date')
+                ->get();
+
+            $ppdbLive = $phases->where('is_live', true)->isNotEmpty();
+
+            $now = Carbon::now();
+            $activePhase = $phases->first(function ($phase) use ($now) {
+                $start = Carbon::parse($phase->start_date)->startOfDay();
+                $end = Carbon::parse($phase->end_date)->endOfDay();
+                return $now->between($start, $end);
+            });
+
+            $nextPhase = $phases->where('start_date', '>', $now->toDateString())->sortBy('start_date')->first();
+            $phaseForCountdown = $activePhase ?? $nextPhase ?? $phases->last();
+
+            if ($phaseForCountdown) {
+                $ppdbCurrentPhase = $activePhase ? $activePhase->phase_name : ($nextPhase ? "Upcoming: {$nextPhase->phase_name}" : $phaseForCountdown->phase_name);
+                $ppdbCountdownDate = Carbon::parse($phaseForCountdown->end_date)->endOfDay();
+
+                $yearStart = Carbon::parse($phaseForCountdown->start_date)->year;
+                $ppdbPeriod = $yearStart . '/' . ($yearStart + 1);
+            }
+        }
+
         $view = strtoupper($school) . '.index';
 
         return view($view, [
@@ -65,6 +99,10 @@ class SchoolHomeController extends Controller
             'latestNews' => $latestNews,
             'latestGallery' => $latestGallery,
             'carouselImages' => $carouselImages,
+            'ppdbLive' => $ppdbLive,
+            'ppdbCountdownDate' => $ppdbCountdownDate,
+            'ppdbCurrentPhase' => $ppdbCurrentPhase,
+            'ppdbPeriod' => $ppdbPeriod,
         ]);
     }
 

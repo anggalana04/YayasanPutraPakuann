@@ -1,4 +1,4 @@
-@extends('layouts.SMK.app')
+﻿@extends('layouts.SMK.app')
 
 @section('title', 'Profil Sekolah | SMK Putra Pakuan')
 
@@ -247,7 +247,7 @@
             </div>
             <!-- Campus Image/Identity -->
             <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/10">
-                <div class="aspect-video bg-slate-200" data-alt="University campus walkway with green trees and buildings" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDB3xAIQ-Op2E1ckgImglHSYCMGIw52P9GNV-AGL6rt4W9KzlcX_Jmqv_DSkVLm-jcJJFzRRSpU5Emj_EhhnPAn4p6dodkCuDy41Lyo-unCw7TMDCwkY8PiQEXsr5sTyMZ3Zb_t3G0fStezDWk_WuD4mfyqTdmR9PYqwpBuEAX-mbgMa0PqbEK3Z8kK4gv0bot73JhFcMehqb8bbhSktLC0alYqWJsr4mq6cruTxtSFskjRh3rjUFweaqf82piO-ZcgpPJgDpiuSw')"></div>
+                <div class="aspect-video bg-slate-200" data-alt="Jalur kampus dengan pepohonan hijau dan gedung" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDB3xAIQ-Op2E1ckgImglHSYCMGIw52P9GNV-AGL6rt4W9KzlcX_Jmqv_DSkVLm-jcJJFzRRSpU5Emj_EhhnPAn4p6dodkCuDy41Lyo-unCw7TMDCwkY8PiQEXsr5sTyMZ3Zb_t3G0fStezDWk_WuD4mfyqTdmR9PYqwpBuEAX-mbgMa0PqbEK3Z8kK4gv0bot73JhFcMehqb8bbhSktLC0alYqWJsr4mq6cruTxtSFskjRh3rjUFweaqf82piO-ZcgpPJgDpiuSw')"></div>
                 <div class="p-6">
                     <h3 class="font-bold text-lg mb-1">Identitas Sekolah</h3>
                     <p class="text-sm text-slate-500 mb-4">NPSN: 12345678 | Akreditasi: A</p>
@@ -267,23 +267,11 @@
                     </div>
                 </div>
             </div>
-            <!-- Social Feed Placeholder/Call to action -->
-            <div class="bg-primary p-8 rounded-2xl text-charcoal">
-                <h3 class="font-black text-xl mb-2">Ingin tahu lebih banyak?</h3>
-                <p class="text-sm font-medium mb-6">Kunjungi media sosial kami untuk update kegiatan terbaru siswa SMK Putra Pakuan.</p>
-                <div class="flex gap-4">
-                    <a class="size-10 bg-white/30 rounded-lg flex items-center justify-center hover:bg-white/50 transition-colors" href="#">
-                        <span class="material-symbols-outlined">share</span>
-                    </a>
-                    <a class="size-10 bg-white/30 rounded-lg flex items-center justify-center hover:bg-white/50 transition-colors" href="#">
-                        <span class="material-symbols-outlined">play_circle</span>
-                    </a>
-                    <a class="size-10 bg-white/30 rounded-lg flex items-center justify-center hover:bg-white/50 transition-colors" href="#">
-                        <span class="material-symbols-outlined">camera</span>
-                    </a>
-                </div>
-            </div>
         </aside>
     </div>
 </section>
 @endsection
+
+
+
+

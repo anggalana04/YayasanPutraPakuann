@@ -12,9 +12,9 @@ class GalleryAdminController extends Controller
 {
     public function index(string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $galleryItems = GalleryItem::where('school_id', $school->id)
             ->orderByDesc('published_at')
@@ -30,9 +30,9 @@ class GalleryAdminController extends Controller
 
     public function create(string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         return view('admin.superadmin.cms.unit.galeri.form', [
             'mode' => 'create',
@@ -44,15 +44,14 @@ class GalleryAdminController extends Controller
 
     public function store(Request $request, string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'status' => ['required', 'in:draft,published'],
-            'published_at' => ['nullable', 'date'],
             'image' => ['required', 'image', 'max:8192'],
         ]);
 
@@ -61,10 +60,7 @@ class GalleryAdminController extends Controller
             $imageUrl = $this->storeGalleryImage($request->file('image'), strtolower($schoolType));
         }
 
-        $publishedAt = $validated['published_at'] ?? null;
-        if ($validated['status'] === 'published' && !$publishedAt) {
-            $publishedAt = now();
-        }
+        $publishedAt = $validated['status'] === 'published' ? now() : null;
 
         GalleryItem::create([
             'school_id' => $school->id,
@@ -83,9 +79,9 @@ class GalleryAdminController extends Controller
 
     public function edit(string $schoolType, int $id)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
         $item = GalleryItem::where('school_id', $school->id)->findOrFail($id);
 
         return view('admin.superadmin.cms.unit.galeri.form', [
@@ -98,16 +94,15 @@ class GalleryAdminController extends Controller
 
     public function update(Request $request, string $schoolType, int $id)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
         $item = GalleryItem::where('school_id', $school->id)->findOrFail($id);
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'status' => ['required', 'in:draft,published'],
-            'published_at' => ['nullable', 'date'],
             'image' => ['nullable', 'image', 'max:8192'],
         ]);
 
@@ -119,12 +114,11 @@ class GalleryAdminController extends Controller
             $item->image_url = $this->storeGalleryImage($request->file('image'), strtolower($schoolType));
         }
 
-        $publishedAt = $validated['published_at'] ?? null;
-        if ($validated['status'] === 'published' && !$publishedAt) {
-            $publishedAt = now();
+        if ($validated['status'] === 'published') {
+            $item->published_at = $item->published_at ?? now();
+        } else {
+            $item->published_at = null;
         }
-
-        $item->published_at = $publishedAt;
         $item->updated_by = auth('admin')->user()->name ?? 'admin';
         $item->save();
 
@@ -134,9 +128,9 @@ class GalleryAdminController extends Controller
 
     public function destroy(string $schoolType, int $id)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
         $item = GalleryItem::where('school_id', $school->id)->findOrFail($id);
         $item->delete();
 
@@ -159,10 +153,10 @@ class GalleryAdminController extends Controller
         return '/images/cms/' . $schoolTypeLower . '/galeri/' . $filename;
     }
 
-    private function abortUnlessSuperAdmin(): void
+    private function abortUnlessAdmin(): void
     {
         $user = auth('admin')->user();
-        if (!$user || !$user->isSuperAdmin()) {
+        if (!$user || !$user->is_admin) {
             abort(403);
         }
     }

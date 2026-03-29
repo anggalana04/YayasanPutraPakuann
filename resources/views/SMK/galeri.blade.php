@@ -1,4 +1,4 @@
-@extends('layouts.SMK.app')
+﻿@extends('layouts.SMK.app')
 
 @section('content')
 <style>
@@ -358,15 +358,15 @@
     <div class="gallery-overlay"></div>
     <div class="gallery-container">
         <!-- Close Button -->
-        <button id="closeLightboxBtn" class="gallery-close-btn" title="Close (ESC)">
+        <button id="closeLightboxBtn" class="gallery-close-btn" title="Tutup (ESC)">
             <span class="material-symbols-outlined">close</span>
         </button>
 
         <!-- Navigation Arrows -->
-        <button id="prevImageBtn" class="gallery-nav-btn gallery-nav-left" title="Previous (←)">
+        <button id="prevImageBtn" class="gallery-nav-btn gallery-nav-left" title="Sebelumnya (←)">
             <span class="material-symbols-outlined">chevron_left</span>
         </button>
-        <button id="nextImageBtn" class="gallery-nav-btn gallery-nav-right" title="Next (→)">
+        <button id="nextImageBtn" class="gallery-nav-btn gallery-nav-right" title="Berikutnya (→)">
             <span class="material-symbols-outlined">chevron_right</span>
         </button>
 
@@ -383,16 +383,16 @@
                 <p id="lightboxCounter" class="gallery-counter"></p>
             </div>
             <div class="gallery-actions">
-                <button id="zoomInBtn" class="gallery-action-btn" title="Zoom In (+)">
+                <button id="zoomInBtn" class="gallery-action-btn" title="Perbesar (+)">
                     <span class="material-symbols-outlined">zoom_in</span>
                 </button>
-                <button id="zoomOutBtn" class="gallery-action-btn" title="Zoom Out (-)">
+                <button id="zoomOutBtn" class="gallery-action-btn" title="Perkecil (-)">
                     <span class="material-symbols-outlined">zoom_out</span>
                 </button>
-                <button id="resetZoomBtn" class="gallery-action-btn" title="Reset Zoom (0)">
+                <button id="resetZoomBtn" class="gallery-action-btn" title="Reset (0)">
                     <span class="material-symbols-outlined">fit_screen</span>
                 </button>
-                <a id="downloadBtn" class="gallery-action-btn" download title="Download">
+                <a id="downloadBtn" class="gallery-action-btn" download title="Unduh">
                     <span class="material-symbols-outlined">download</span>
                 </a>
             </div>
@@ -716,3 +716,8 @@ const galleryLoadMore = new GalleryLoadMore();
 });
 </script>
 @endsection
+
+
+
+
+

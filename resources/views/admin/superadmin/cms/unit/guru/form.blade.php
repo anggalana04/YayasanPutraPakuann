@@ -1,12 +1,12 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
-@section('title', ($mode === 'create' ? 'Tambah' : 'Edit') . ' Guru & Staff - ' . strtoupper($schoolType))
+@section('title', ($mode === 'create' ? 'Tambah' : 'Ubah') . ' Guru & Staff - ' . strtoupper($schoolType))
 
 @section('content')
 <div class="p-10 max-w-4xl mx-auto space-y-6">
     <div class="mb-6 flex justify-between items-end">
         <div>
-            <p class="text-primary font-bold tracking-widest text-xs uppercase">{{ $mode === 'create' ? 'Tambah' : 'Edit' }} Guru & Staff</p>
+            <p class="text-primary font-bold tracking-widest text-xs uppercase">{{ $mode === 'create' ? 'Tambah' : 'Ubah' }} Guru & Staff</p>
             <h2 class="text-3xl font-extrabold tracking-tight text-[#1c190d]">{{ strtoupper($schoolType) }}</h2>
         </div>
         <a href="{{ route('admin.cms.guru.index', ['schoolType' => $schoolType]) }}"
@@ -108,7 +108,7 @@
                 @if ($mode === 'edit' && $item->photo_url)
                     <div class="mt-2">
                         <img src="{{ $item->photo_url }}" alt="Current photo" class="w-24 h-24 object-cover rounded-xl border" />
-                        <p class="text-xs text-on-surface-variant/70 mt-1">Foto saat ini. Upload foto baru untuk mengganti.</p>
+                        <p class="text-xs text-on-surface-variant/70 mt-1">Foto saat ini. Unggah foto baru untuk mengganti.</p>
                     </div>
                 @endif
                 <p class="text-xs text-on-surface-variant/70">Format: JPG, PNG, GIF. Maksimal 2MB.</p>
@@ -127,3 +127,8 @@
     </form>
 </div>
 @endsection
+
+
+
+
+

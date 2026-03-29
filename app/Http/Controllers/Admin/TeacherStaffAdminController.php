@@ -12,9 +12,9 @@ class TeacherStaffAdminController extends Controller
 {
     public function index(string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $teacherStaff = TeacherStaff::where('school_id', $school->id)
             ->ordered()
@@ -29,9 +29,9 @@ class TeacherStaffAdminController extends Controller
 
     public function create(string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         return view('admin.superadmin.cms.unit.guru.form', [
             'mode' => 'create',
@@ -43,9 +43,9 @@ class TeacherStaffAdminController extends Controller
 
     public function store(Request $request, string $schoolType)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -85,9 +85,9 @@ class TeacherStaffAdminController extends Controller
 
     public function edit(string $schoolType, int $guru)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $person = TeacherStaff::findOrFail($guru);
 
@@ -106,9 +106,9 @@ class TeacherStaffAdminController extends Controller
 
     public function update(Request $request, string $schoolType, int $guru)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $person = TeacherStaff::findOrFail($guru);
 
@@ -156,9 +156,9 @@ class TeacherStaffAdminController extends Controller
 
     public function destroy(string $schoolType, int $guru)
     {
-        $this->abortUnlessSuperAdmin();
+        $this->abortUnlessAdmin();
 
-        $school = School::where('type', strtoupper($schoolType))->firstOrFail();
+        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
 
         $person = TeacherStaff::findOrFail($guru);
 
@@ -188,10 +188,10 @@ class TeacherStaffAdminController extends Controller
         return '/images/cms/' . $schoolType . '/guru/' . $filename;
     }
 
-    private function abortUnlessSuperAdmin(): void
+    private function abortUnlessAdmin(): void
     {
         $user = auth('admin')->user();
-        if (!$user || !$user->isSuperAdmin()) {
+        if (!$user || !$user->is_admin) {
             abort(403);
         }
     }

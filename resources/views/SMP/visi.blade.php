@@ -1,9 +1,16 @@
-@extends('layouts.SMP.app')
+﻿@extends('layouts.SMP.app')
 
 @section('title', 'Visi dan Misi - SMP Putra Pakuan')
 
 @push('head')
-{{-- Remove duplicate Tailwind/Font/Script includes, as they are in the layout --}}
+<style>
+    body {
+        font-family: 'Lexend', sans-serif;
+    }
+    .vision-gradient {
+        background: linear-gradient(135deg, #101c22 0%, #1a2e38 100%);
+    }
+</style>
 @endpush
 
 @section('content')
@@ -123,3 +130,7 @@
     </section>
 </main>
 @endsection
+
+
+
+

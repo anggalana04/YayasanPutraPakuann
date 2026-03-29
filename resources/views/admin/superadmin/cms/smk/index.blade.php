@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
 @section('content')
 <div class="p-10 flex-1">
@@ -7,16 +7,16 @@
         <div class="flex items-center gap-2 text-on-surface-variant text-sm mb-4">
             <span>CMS</span>
             <span class="material-symbols-outlined text-xs">chevron_right</span>
-            <span class="text-[#f2cc0d] font-medium">Page Selection</span>
+            <span class="text-[#f2cc0d] font-medium">Pemilihan Halaman</span>
         </div>
         <div class="flex justify-between items-end">
             <div>
-                <h3 class="text-4xl font-bold tracking-tight text-[#1c190d] mb-2">Web Content</h3>
-                <p class="text-on-surface-variant max-w-xl">Select a page module to manage its editorial content, media assets, and SEO configurations.</p>
+                <h3 class="text-4xl font-bold tracking-tight text-[#1c190d] mb-2">Konten Web</h3>
+                <p class="text-on-surface-variant max-w-xl">Pilih modul halaman untuk mengelola konten editorial, aset media, dan konfigurasi SEO.</p>
             </div>
             <button class="flex items-center gap-2 bg-[#1c190d] text-white px-6 py-3 rounded-2xl hover:bg-[#1c190d]/90 transition-all font-medium">
                 <span class="material-symbols-outlined">add</span>
-                <span>Create New Page</span>
+                <span>Buat Halaman Baru</span>
             </button>
         </div>
     </div>
@@ -27,10 +27,10 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-surface-container-low/50">
-                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Page Identity</th>
-                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Last Updated</th>
+                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Identitas Halaman</th>
+                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Terakhir Diperbarui</th>
                             <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Status</th>
-                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70 text-right">Actions</th>
+                            <th class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-on-surface-variant/70 text-right">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#1c190d]/5">
@@ -44,10 +44,10 @@
                             </td>
                             <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 24, 2023 · 14:20</td>
                             <td class="px-6 py-6">
-                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Published</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
                             <td class="px-6 py-6 text-right">
-                                <a href="{{ url('/admin/cms/detail') }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all inline-block">Edit Content</a>
+                                <a href="{{ url('/admin/cms/detail') }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all inline-block">Ubah Konten</a>
                             </td>
                         </tr>
                         <!-- Profil -->
@@ -60,10 +60,10 @@
                             </td>
                             <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 20, 2023 · 09:15</td>
                             <td class="px-6 py-6">
-                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Published</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
                             <td class="px-6 py-6 text-right">
-                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Edit Content</button>
+                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Ubah Konten</button>
                             </td>
                         </tr>
                         <!-- Visi & Misi -->
@@ -76,10 +76,10 @@
                             </td>
                             <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 18, 2023 · 10:00</td>
                             <td class="px-6 py-6">
-                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Published</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
                             <td class="px-6 py-6 text-right">
-                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Edit Content</button>
+                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Ubah Konten</button>
                             </td>
                         </tr>
                         <!-- Kategori/Jurusan -->
@@ -92,10 +92,10 @@
                             </td>
                             <td class="px-6 py-6 text-sm text-on-surface-variant">Yesterday · 16:45</td>
                             <td class="px-6 py-6">
-                                <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Draft</span>
+                                <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Draf</span>
                             </td>
                             <td class="px-6 py-6 text-right">
-                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Edit Content</button>
+                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Ubah Konten</button>
                             </td>
                         </tr>
                         <!-- Direktori Guru & Tenaga Kependidikan -->
@@ -108,10 +108,10 @@
                             </td>
                             <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 15, 2023 · 13:30</td>
                             <td class="px-6 py-6">
-                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Published</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
                             <td class="px-6 py-6 text-right">
-                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Edit Content</button>
+                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Ubah Konten</button>
                             </td>
                         </tr>
                         <!-- Direktori Peserta Didik -->
@@ -124,10 +124,10 @@
                             </td>
                             <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 14, 2023 · 12:00</td>
                             <td class="px-6 py-6">
-                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Published</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
                             <td class="px-6 py-6 text-right">
-                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Edit Content</button>
+                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Ubah Konten</button>
                             </td>
                         </tr>
                         <!-- Berita -->
@@ -140,10 +140,26 @@
                             </td>
                             <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 13, 2023 · 15:45</td>
                             <td class="px-6 py-6">
-                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Published</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
                             <td class="px-6 py-6 text-right">
-                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Edit Content</button>
+                                <a href="{{ route('admin.cms.berita.index', ['schoolType' => 'smk']) }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Kelola Berita</a>
+                            </td>
+                        </tr>
+                        <!-- Prestasi -->
+                        <tr class="hover:bg-surface-container-low/30 transition-colors group">
+                            <td class="px-6 py-6">
+                                <div>
+                                    <div class="font-bold text-[#1c190d]">Prestasi</div>
+                                    <div class="text-xs text-on-surface-variant">/prestasi</div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-6 text-sm text-on-surface-variant">Baru</td>
+                            <td class="px-6 py-6">
+                                <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Draf</span>
+                            </td>
+                            <td class="px-6 py-6 text-right">
+                                <a href="{{ route('admin.cms.prestasi.index', ['schoolType' => 'smk']) }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Kelola Prestasi</a>
                             </td>
                         </tr>
                         <!-- Galeri -->
@@ -156,10 +172,10 @@
                             </td>
                             <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 12, 2023 · 11:00</td>
                             <td class="px-6 py-6">
-                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Published</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
                             <td class="px-6 py-6 text-right">
-                            <a href="{{ route('admin.cms.galeri.index', ['schoolType' => 'smk']) }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Manage Galeri</a>
+                            <a href="{{ route('admin.cms.galeri.index', ['schoolType' => 'smk']) }}" class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Kelola Galeri</a>
                         </td>
                     </tr>
                     <!-- Kontak -->
@@ -172,10 +188,10 @@
                             </td>
                             <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 11, 2023 · 10:30</td>
                             <td class="px-6 py-6">
-                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Published</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
                             <td class="px-6 py-6 text-right">
-                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Edit Content</button>
+                                <button class="bg-[#f2cc0d] text-[#1c190d] px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Ubah Konten</button>
                             </td>
                         </tr>
                     </tbody>
@@ -195,3 +211,10 @@
     </div>
 </div>
 @endsection
+
+
+
+
+
+
+

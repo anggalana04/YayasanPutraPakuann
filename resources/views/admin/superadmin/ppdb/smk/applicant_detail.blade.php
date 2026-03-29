@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
 @section('title', 'Applicant Details - SMK Putra Pakuan')
 
@@ -20,16 +20,16 @@
                 </div>
                 <h1 class="text-4xl font-bold font-headline text-on-surface tracking-tight">{{ $applicant->full_name }}</h1>
                 <p class="text-on-surface-variant flex items-center gap-2 mt-1">
-                    <span class="material-symbols-outlined text-sm">location_on</span> {{ $applicant->address ?? '-' }} • Submitted on {{ $applicant->created_at ? $applicant->created_at->format('d M Y') : '-' }}
+                    <span class="material-symbols-outlined text-sm">location_on</span> {{ $applicant->address ?? '-' }} • Dikirim pada {{ $applicant->created_at ? $applicant->created_at->format('d M Y') : '-' }}
                 </p>
             </div>
         </div>
         <div class="flex gap-3">
-            <button class="px-6 py-3 rounded-3xl border border-outline-variant text-on-surface font-bold text-sm hover:bg-surface-container-low transition-colors">Print Summary</button>
-            <a href="mailto:{{ $applicant->email }}" class="px-6 py-3 rounded-3xl bg-primary text-on-primary font-bold text-sm shadow-md hover:shadow-xl transition-all">Contact Applicant</a>
+            <button class="px-6 py-3 rounded-3xl border border-outline-variant text-on-surface font-bold text-sm hover:bg-surface-container-low transition-colors">Cetak Ringkasan</button>
+            <a href="mailto:{{ $applicant->email }}" class="px-6 py-3 rounded-3xl bg-primary text-on-primary font-bold text-sm shadow-md hover:shadow-xl transition-all">Hubungi Pendaftar</a>
         </div>
     </div>
-    
+
     <!-- Bento Layout -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
         <!-- Left Column: Personal Data & Majors -->
@@ -39,76 +39,124 @@
                 <div class="flex items-center justify-between mb-8">
                     <div>
                         <span class="text-primary font-black text-sm uppercase tracking-tighter block mb-1">Pilihan Jurusan</span>
-                        <h3 class="text-xl font-bold font-headline">Vocational Preferences</h3>
+                        <h3 class="text-xl font-bold font-headline">Preferensi Jurusan</h3>
                     </div>
                     <span class="material-symbols-outlined text-primary-dim">school</span>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    @if($applicant->major_1)
-                    <div class="bg-surface-container-low p-6 rounded-2xl relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-primary-container/20 rounded-full -mr-8 -mt-8 group-hover:scale-110 transition-transform"></div>
-                        <span class="text-xs font-bold text-primary mb-2 block">1st Priority</span>
-                        <h4 class="text-lg font-bold">{{ $applicant->major_1 }}</h4>
-                    </div>
-                    @endif
-                    @if($applicant->major_2)
-                    <div class="bg-surface-container-low p-6 rounded-2xl relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-secondary-container/30 rounded-full -mr-8 -mt-8 group-hover:scale-110 transition-transform"></div>
-                        <span class="text-xs font-bold text-secondary mb-2 block">2nd Priority</span>
-                        <h4 class="text-lg font-bold">{{ $applicant->major_2 }}</h4>
-                    </div>
-                    @endif
+                    @foreach([['label'=>'Prioritas 1', 'major'=>$applicant->major_1, 'accent'=>'primary'], ['label'=>'Prioritas 2', 'major'=>$applicant->major_2, 'accent'=>'secondary']] as $item)
+                        @if($item['major'])
+                            @php
+                                $majorKey = trim(strtolower($item['major']));
+                                $cap = $capacities[$majorKey] ?? null;
+                                $filled = $assignedCounts[$majorKey] ?? 0;
+                                $capacityValue = $cap ? $cap->capacity : null;
+                                $percent = $capacityValue ? min(100, round(($filled / max($capacityValue, 1)) * 100)) : 0;
+                            @endphp
+                            <div class="bg-white dark:bg-surface-container-low p-6 rounded-2xl border border-outline">
+                                <span class="text-xs font-bold text-{{ $item['accent'] }} mb-2 block">{{ $item['label'] }}</span>
+                                <h4 class="text-lg font-bold mb-3">{{ $item['major'] }}</h4>
+
+                                <div class="text-xs text-on-surface-variant mb-2">Capacity: {{ $capacityValue ?? 'N/A' }} • Filled: {{ $filled }}</div>
+                                <div class="w-full h-2 rounded-full bg-surface-variant overflow-hidden mb-1">
+                                    <div class="h-full bg-{{ $item['accent'] }}-container" style="width: {{ $capacityValue ? $percent : 0 }}%;"></div>
+                                </div>
+                                <div class="text-[11px] text-on-surface-variant">{{ $capacityValue ? $percent . '% terisi' : 'Data kapasitas tidak tersedia' }}</div>
+                            </div>
+                        @endif
+                    @endforeach
                 </div>
             </section>
-            
+
             <!-- Personal Data Section -->
             <section class="bg-surface-container-lowest rounded-3xl p-8 shadow-sm">
                 <div class="flex items-center gap-3 mb-8">
                     <span class="w-10 h-10 bg-surface-container-high rounded-full flex items-center justify-center text-primary-dim font-bold">01</span>
-                    <h3 class="text-xl font-bold font-headline">Personal Information</h3>
+                    <h3 class="text-xl font-bold font-headline">Informasi Pribadi</h3>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
                     <div class="space-y-1">
-                        <label class="text-xs font-bold text-outline-variant uppercase">Full Name</label>
+                        <label class="text-xs font-bold text-outline-variant uppercase">ID Pendaftaran</label>
+                        <p class="text-on-surface font-medium">{{ $applicant->application_id ?? '-' }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-outline-variant uppercase">Email</label>
+                        <p class="text-on-surface font-medium">{{ $applicant->email ?? '-' }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-outline-variant uppercase">Nama Lengkap</label>
                         <p class="text-on-surface font-medium">{{ $applicant->full_name }}</p>
                     </div>
                     <div class="space-y-1">
-                        <label class="text-xs font-bold text-outline-variant uppercase">NISN (National ID)</label>
+                        <label class="text-xs font-bold text-outline-variant uppercase">NISN (Nomor Induk Siswa Nasional)</label>
                         <p class="text-on-surface font-medium">{{ $applicant->nisn ?? '-' }}</p>
                     </div>
                     <div class="space-y-1">
-                        <label class="text-xs font-bold text-outline-variant uppercase">Phone Number</label>
+                        <label class="text-xs font-bold text-outline-variant uppercase">Nomor Telepon</label>
                         <p class="text-on-surface font-medium">{{ $applicant->phone ?? '-' }}</p>
                     </div>
                     <div class="space-y-1">
-                        <label class="text-xs font-bold text-outline-variant uppercase">Household Income</label>
-                        <p class="text-on-surface font-medium">{{ $applicant->parent_salary_range ?? '-' }}</p>
-                    </div>
-                    <div class="sm:col-span-2 space-y-1">
-                        <label class="text-xs font-bold text-outline-variant uppercase">Residential Address</label>
-                        <p class="text-on-surface font-medium">{{ $applicant->address ?? '-' }}</p>
+                        <label class="text-xs font-bold text-outline-variant uppercase">Jenis Kelamin</label>
+                        <p class="text-on-surface font-medium">{{ $applicant->gender ?? '-' }}</p>
                     </div>
                     <div class="space-y-1">
-                        <label class="text-xs font-bold text-outline-variant uppercase">Father's Name</label>
+                        <label class="text-xs font-bold text-outline-variant uppercase">Tempat Lahir</label>
+                        <p class="text-on-surface font-medium">{{ $applicant->place_of_birth ?? '-' }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-outline-variant uppercase">Tanggal Lahir</label>
+                        <p class="text-on-surface font-medium">{{ $applicant->date_of_birth ? \Carbon\Carbon::parse($applicant->date_of_birth)->format('d M Y') : '-' }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-outline-variant uppercase">Sekolah Asal</label>
+                        <p class="text-on-surface font-medium">{{ $applicant->previous_school ?? '-' }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-outline-variant uppercase">Pendapatan Rumah Tangga</label>
+                        <p class="text-on-surface font-medium">{{ $applicant->parent_salary_range ?? '-' }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-outline-variant uppercase">Nama Ayah</label>
                         <p class="text-on-surface font-medium">{{ $applicant->father_name ?? '-' }}</p>
                     </div>
                     <div class="space-y-1">
-                        <label class="text-xs font-bold text-outline-variant uppercase">Mother's Name</label>
+                        <label class="text-xs font-bold text-outline-variant uppercase">Pekerjaan Ayah</label>
+                        <p class="text-on-surface font-medium">{{ $applicant->father_occupation ?? '-' }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-outline-variant uppercase">Nama Ibu</label>
                         <p class="text-on-surface font-medium">{{ $applicant->mother_name ?? '-' }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-outline-variant uppercase">Pekerjaan Ibu</label>
+                        <p class="text-on-surface font-medium">{{ $applicant->mother_occupation ?? '-' }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-outline-variant uppercase">Status</label>
+                        <p class="text-on-surface font-medium uppercase">{{ $applicant->status ?? '-' }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-outline-variant uppercase">Langkah Pendaftaran Terakhir</label>
+                        <p class="text-on-surface font-medium">{{ $applicant->last_registration_step ?? '-' }}</p>
+                    </div>
+                    <div class="sm:col-span-2 space-y-1">
+                        <label class="text-xs font-bold text-outline-variant uppercase">Alamat Tinggal</label>
+                        <p class="text-on-surface font-medium">{{ $applicant->address ?? '-' }}</p>
                     </div>
                 </div>
             </section>
-            
+
             <!-- Documents Section -->
             <section class="bg-surface-container-lowest rounded-3xl p-8 shadow-sm">
                 <div class="flex items-center gap-3 mb-8">
                     <span class="w-10 h-10 bg-surface-container-high rounded-full flex items-center justify-center text-primary-dim font-bold">02</span>
-                    <h3 class="text-xl font-bold font-headline">Document Vault</h3>
+                    <h3 class="text-xl font-bold font-headline">Brankas Dokumen</h3>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
                     @foreach ([
                         ['file' => $applicant->kk_file, 'label' => 'Kartu Keluarga / AKTA'],
                         ['file' => $applicant->ijazah_file, 'label' => 'Ijazah SMP'],
+                        ['file' => $applicant->prestasi_file, 'label' => 'Dokumen Prestasi / Sertifikat'],
                         ['file' => $applicant->raport_file, 'label' => 'Rapor Semester 1-5'],
                     ] as $doc)
                         @if(!empty($doc['file']))
@@ -118,13 +166,15 @@
                                 $isPdf = $ext === 'pdf';
                                 $fileUrl = asset('storage/' . $doc['file']);
                             @endphp
+                            <div class="flex flex-col gap-2">
+                                <p class="text-xs font-bold text-on-surface line-clamp-2">{{ $doc['label'] }}</p>
                             <div class="group relative aspect-3/4 bg-surface-container-low rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all flex flex-col justify-end cursor-pointer" onclick="openDocViewer('{{ $fileUrl }}', '{{ addslashes($doc['label']) }}', '{{ $ext }}')">
                                 @if($isImage)
                                     <img alt="{{ $doc['label'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" src="{{ $fileUrl }}"/>
                                 @elseif($isPdf)
                                     <div class="flex flex-col items-center justify-center h-full p-4">
                                         <svg class="w-16 h-16 mb-2 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10.1,11.4C10.08,11.44 9.81,13.16 8,16.09C8,16.09 4.5,17.91 5.33,19.27C6,20.35 7.65,19.23 9.07,16.59C9.07,16.59 10.89,15.95 13.31,15.77C13.31,15.77 17.17,17.5 17.7,15.66C18.22,13.8 14.64,14.22 14,14.41C14,14.41 12,13.06 11.5,11.2C11.5,11.2 12.64,7.25 10.89,7.3C9.14,7.35 9.8,10.43 10.1,11.4Z"/></svg>
-                                        <span class="text-xs font-bold text-on-surface">PDF Document</span>
+                                        <span class="text-xs font-bold text-on-surface">Dokumen PDF</span>
                                     </div>
                                 @else
                                     <div class="flex flex-col items-center justify-center h-full p-4">
@@ -132,145 +182,107 @@
                                         <span class="text-xs font-bold text-on-surface">{{ strtoupper($ext) }} File</span>
                                     </div>
                                 @endif
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
-                                    <p class="text-yellow-300 text-xs font-bold mb-2">{{ $doc['label'] }}</p>
-                                    <div class="bg-white text-charcoal py-2 px-3 rounded-xl text-[10px] font-black uppercase flex items-center justify-center gap-1">
+                                <div class="absolute inset-0 bg-linear-to-t from-black/95 via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                                    <p class="text-white text-xs font-extrabold mb-2 [text-shadow:0_1px_2px_rgba(0,0,0,0.8)]">{{ $doc['label'] }}</p>
+                                    <div class="bg-white/95 text-black py-2 px-3 rounded-xl text-[10px] font-black uppercase flex items-center justify-center gap-1">
                                         <span class="material-symbols-outlined text-sm">visibility</span> Preview
                                     </div>
                                 </div>
+                            </div>
                             </div>
                         @endif
                     @endforeach
                 </div>
             </section>
         </div>
-        
+
         <!-- Right Column: Review Panel -->
         <div class="md:col-span-4">
-            <div class="sticky top-24 space-y-6">
-                <!-- Action Panel -->
-                <section class="bg-inverse-surface text-white rounded-3xl p-8 shadow-2xl">
-                    <div class="flex items-center gap-3 mb-6">
-                        <span class="material-symbols-outlined text-primary-container">rate_review</span>
-                        <h3 class="text-xl font-bold font-headline">Review Decision</h3>
+    <div class="sticky top-24 space-y-6">
+
+        <!-- ACTION PANEL -->
+        <section class="bg-white rounded-3xl p-6 shadow border">
+
+            <h3 class="text-lg font-bold mb-4">Keputusan Tinjauan</h3>
+
+            @php
+                $major1 = $applicant->major_1;
+                $major2 = $applicant->major_2;
+
+                $m1 = $majorStats[$major1] ?? ['capacity' => 0, 'accepted' => 0];
+                $m2 = $majorStats[$major2] ?? ['capacity' => 0, 'accepted' => 0];
+
+                function percent($a, $c) {
+                    return $c ? ($a / $c) * 100 : 0;
+                }
+
+                function barColor($a, $c) {
+                    if ($c == 0) return 'bg-gray-300';
+                    $p = ($a / $c) * 100;
+                    if ($p >= 100) return 'bg-red-500';
+                    if ($p >= 80) return 'bg-yellow-400';
+                    return 'bg-green-500';
+                }
+            @endphp
+
+            <form id="decisionForm" class="space-y-4">
+                @csrf
+
+                <!-- MAJOR 1 -->
+                <button type="button"
+                    class="decision-btn w-full p-4 rounded-2xl border text-left transition
+                    {{ $m1['accepted'] >= $m1['capacity'] ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02]' }}"
+                    data-status="accepted_major_1"
+                    {{ $m1['accepted'] >= $m1['capacity'] ? 'disabled' : '' }}>
+
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold">{{ $major1 }}</span>
+                        <span class="text-xs text-gray-500">Pilihan Pertama</span>
                     </div>
-                    <div class="space-y-6">
-                        <div>
-                            <label class="text-[10px] font-bold text-outline-variant uppercase tracking-widest block mb-2">Change Status</label>
-                            <form id="decisionForm" class="space-y-3">
-                                <div class="grid grid-cols-1 gap-2">
-                                    <button type="button" class="decision-btn flex items-center justify-between w-full px-4 py-3 bg-primary/20 border border-primary/40 rounded-2xl text-sm font-bold text-primary-container transition-colors" data-status="accepted_major_1">
-                                        <span class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-primary-container"></span> Approve for 1st Choice ({{ $applicant->major_1 }})</span>
-                                        <span class="material-symbols-outlined text-sm">check_circle</span>
-                                    </button>
-                                    <button type="button" class="decision-btn flex items-center justify-between w-full px-4 py-3 bg-primary/10 border border-primary/20 rounded-2xl text-sm font-bold text-primary transition-colors" data-status="accepted_major_2">
-                                        <span class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-primary"></span> Approve for 2nd Choice ({{ $applicant->major_2 }})</span>
-                                        <span class="material-symbols-outlined text-sm">check_circle</span>
-                                    </button>
-                                    <button type="button" class="decision-btn flex items-center justify-between w-full px-4 py-3 bg-error/10 hover:bg-error/20 rounded-2xl text-sm font-bold text-error-container transition-colors" data-status="rejected">
-                                        <span class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-error"></span> Reject</span>
-                                        <span class="material-symbols-outlined text-sm">cancel</span>
-                                    </button>
-                                </div>
-                                <div>
-                                    <label class="text-[10px] font-bold text-outline-variant uppercase tracking-widest block mb-2">Internal Note</label>
-                                    <textarea name="note" id="decisionNote" class="w-full bg-white/5 border-none rounded-2xl text-sm focus:ring-2 focus:ring-primary-container placeholder:text-gray-500" placeholder="Add a note for the admissions committee..." rows="4"></textarea>
-                                </div>
-                                <input type="hidden" name="status" id="decisionStatus" value="">
-                                <button type="submit" class="w-full bg-primary-container text-on-primary-container py-4 rounded-3xl font-black uppercase text-sm tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-lg">Submit Decision</button>
-                            </form>
-                            <div id="decisionResult" class="mt-3 text-xs font-bold"></div>
-                        </div>
-                        <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const form = document.getElementById('decisionForm');
-                            const statusInput = document.getElementById('decisionStatus');
-                            const noteInput = document.getElementById('decisionNote');
-                            const resultDiv = document.getElementById('decisionResult');
-                            document.querySelectorAll('.decision-btn').forEach(btn => {
-                                btn.addEventListener('click', function() {
-                                    statusInput.value = this.getAttribute('data-status');
-                                    form.querySelectorAll('.decision-btn').forEach(b => b.classList.remove('ring-2', 'ring-primary'));
-                                    this.classList.add('ring-2', 'ring-primary');
-                                });
-                            });
-                            form.addEventListener('submit', function(e) {
-                                e.preventDefault();
-                                if (!statusInput.value) {
-                                    resultDiv.textContent = 'Please select a status.';
-                                    resultDiv.className = 'text-xs font-bold text-red-500 mt-3';
-                                    return;
-                                }
-                                resultDiv.textContent = 'Submitting...';
-                                resultDiv.className = 'text-xs font-bold text-blue-500 mt-3';
-                                fetch(`{{ route('admin.ppdb.applicants.smk.decision', $applicant->id) }}`, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                        'Accept': 'application/json',
-                                    },
-                                    body: JSON.stringify({
-                                        status: statusInput.value,
-                                        note: noteInput.value
-                                    })
-                                })
-                                .then(res => res.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        resultDiv.textContent = 'Decision saved!';
-                                        resultDiv.className = 'text-xs font-bold text-green-500 mt-3';
-                                        setTimeout(() => window.location.reload(), 1000);
-                                    } else {
-                                        resultDiv.textContent = 'Failed to save decision.';
-                                        resultDiv.className = 'text-xs font-bold text-red-500 mt-3';
-                                    }
-                                })
-                                .catch(() => {
-                                    resultDiv.textContent = 'Failed to save decision.';
-                                    resultDiv.className = 'text-xs font-bold text-red-500 mt-3';
-                                });
-                            });
-                        });
-                        </script>
+
+                    <p class="text-xs mt-2 text-gray-600">Pilih ini untuk menerima ke jurusan {{ $major1 }}.</p>
+                </button>
+
+                <!-- MAJOR 2 -->
+                <button type="button"
+                    class="decision-btn w-full p-4 rounded-2xl border text-left transition
+                    {{ $m2['accepted'] >= $m2['capacity'] ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02]' }}"
+                    data-status="accepted_major_2"
+                    {{ $m2['accepted'] >= $m2['capacity'] ? 'disabled' : '' }}>
+
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold">{{ $major2 }}</span>
+                        <span class="text-xs text-gray-500">Pilihan Kedua</span>
                     </div>
-                </section>
-                
-                <!-- Timeline Card -->
-                <section class="bg-surface-container-low rounded-3xl p-6">
-                    <h4 class="text-sm font-bold mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-sm">history</span> Application Timeline
-                    </h4>
-                    <div class="space-y-4 relative before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-px before:bg-outline-variant/30">
-                        <div class="pl-6 relative">
-                            <span class="absolute left-0 top-1 w-4 h-4 rounded-full bg-primary border-4 border-surface-container-low"></span>
-                            <p class="text-xs font-bold">Registration Started</p>
-                            <p class="text-[10px] text-on-surface-variant">{{ $applicant->created_at ? $applicant->created_at->format('d M Y, H:i') : '-' }}</p>
-                        </div>
-                        @if($applicant->documents_uploaded_at)
-                        <div class="pl-6 relative">
-                            <span class="absolute left-0 top-1 w-4 h-4 rounded-full bg-primary border-4 border-surface-container-low"></span>
-                            <p class="text-xs font-bold">Documents Uploaded</p>
-                            <p class="text-[10px] text-on-surface-variant">{{ $applicant->documents_uploaded_at->format('d M Y, H:i') }}</p>
-                        </div>
-                        @endif
-                        <div class="pl-6 relative">
-                            <span class="absolute left-0 top-1 w-4 h-4 rounded-full {{ $applicant->status == 'accepted' ? 'bg-green-500' : ($applicant->status == 'rejected' ? 'bg-error' : 'bg-outline-variant/50') }} border-4 border-surface-container-low"></span>
-                            <p class="text-xs font-bold text-on-surface-variant">Final Verification</p>
-                            <p class="text-[10px] text-on-surface-variant">
-                                @if($applicant->status == 'accepted' && $applicant->admission_date)
-                                    {{ $applicant->admission_date->format('d M Y, H:i') }}
-                                @elseif($applicant->status == 'rejected' && $applicant->updated_at)
-                                    {{ $applicant->updated_at->format('d M Y, H:i') }}
-                                @else
-                                    Waiting...
-                                @endif
-                            </p>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
+
+                    <p class="text-xs mt-2 text-gray-600">Pilih ini untuk menerima ke jurusan {{ $major2 }}.</p>
+                </button>
+
+                <!-- REJECT -->
+                <button type="button"
+                    class="decision-btn w-full p-4 rounded-2xl bg-red-50 text-red-600 font-bold"
+                    data-status="rejected">
+                    Tolak Pendaftar
+                </button>
+
+                <!-- NOTE -->
+                <textarea id="decisionNote"
+                    class="w-full border rounded-xl p-3 text-sm"
+                    placeholder="Catatan internal..."></textarea>
+
+                <input type="hidden" id="decisionStatus">
+
+                <button type="submit"
+                    class="w-full bg-black text-white py-3 rounded-xl font-bold">
+                    Kirim Keputusan
+                </button>
+
+                <div id="decisionResult" class="text-sm font-semibold"></div>
+            </form>
+        </section>
+
+    </div>
+</div>
     </div>
 </div>
 
@@ -282,29 +294,29 @@
         <div class="doc-viewer-header">
             <h2 id="docViewerTitle" class="doc-viewer-title"></h2>
             <div class="doc-viewer-actions">
-                <button id="downloadBtn" class="doc-btn doc-btn-secondary" title="Download">
+                <button id="downloadBtn" class="doc-btn doc-btn-secondary" title="Unduh">
                     <span class="material-symbols-outlined">download</span>
                 </button>
-                <button id="closeViewerBtn" class="doc-btn doc-btn-close" title="Close (ESC)">
+                <button id="closeViewerBtn" class="doc-btn doc-btn-close" title="Tutup (ESC)">
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
         </div>
-        
+
         <!-- Controls (for images and PDFs) -->
         <div id="docViewerControls" class="doc-viewer-controls">
             <!-- Zoom controls -->
-            <button id="zoomOutBtn" class="doc-btn" title="Zoom Out (-)">
+            <button id="zoomOutBtn" class="doc-btn" title="Perkecil (-)">
                 <span class="material-symbols-outlined">zoom_out</span>
             </button>
             <span id="zoomLevel" class="doc-zoom-level">100%</span>
-            <button id="zoomInBtn" class="doc-btn" title="Zoom In (+)">
+            <button id="zoomInBtn" class="doc-btn" title="Perbesar (+)">
                 <span class="material-symbols-outlined">zoom_in</span>
             </button>
-            <button id="resetZoomBtn" class="doc-btn" title="Reset Zoom">
+            <button id="resetZoomBtn" class="doc-btn" title="Reset">
                 <span class="material-symbols-outlined">fit_screen</span>
             </button>
-            
+
             <!-- PDF navigation -->
             <div id="pdfNavigation" class="doc-pdf-nav" style="display: none;">
                 <button id="prevPageBtn" class="doc-btn">
@@ -316,13 +328,13 @@
                 </button>
             </div>
         </div>
-        
+
         <!-- Loading spinner -->
         <div id="docViewerLoader" class="doc-viewer-loader">
             <div class="doc-spinner"></div>
-            <p>Loading document...</p>
+            <p>Memuat dokumen...</p>
         </div>
-        
+
         <!-- Content area -->
         <div id="docViewerContent" class="doc-viewer-content"></div>
     </div>
@@ -548,6 +560,16 @@
 .doc-viewer-content::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.3);
 }
+.decision-btn.selected {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+    transform: scale(1.01);
+}
+
+.decision-btn.selected .font-bold {
+    color: #1d4ed8;
+}
+
 </style>
 
 <script>
@@ -560,42 +582,42 @@ class DocumentViewer {
         this.loader = document.getElementById('docViewerLoader');
         this.controls = document.getElementById('docViewerControls');
         this.pdfNavigation = document.getElementById('pdfNavigation');
-        
+
         this.currentZoom = 1;
         this.minZoom = 0.5;
         this.maxZoom = 3;
         this.zoomStep = 0.2;
-        
+
         this.isDragging = false;
         this.startX = 0;
         this.startY = 0;
         this.scrollLeft = 0;
         this.scrollTop = 0;
-        
+
         this.currentUrl = '';
         this.currentType = '';
-        
+
         this.initEventListeners();
     }
-    
+
     initEventListeners() {
         // Close button
         document.getElementById('closeViewerBtn').addEventListener('click', () => this.close());
-        
+
         // Download button
         document.getElementById('downloadBtn').addEventListener('click', () => this.download());
-        
+
         // Zoom controls
         document.getElementById('zoomInBtn').addEventListener('click', () => this.zoom(this.zoomStep));
         document.getElementById('zoomOutBtn').addEventListener('click', () => this.zoom(-this.zoomStep));
         document.getElementById('resetZoomBtn').addEventListener('click', () => this.resetZoom());
-        
+
         // Click overlay to close
         this.modal.querySelector('.doc-viewer-overlay').addEventListener('click', () => this.close());
-        
+
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => this.handleKeyboard(e));
-        
+
         // Prevent body scroll when modal is open
         this.modal.addEventListener('transitionend', () => {
             if (this.modal.classList.contains('active')) {
@@ -603,11 +625,11 @@ class DocumentViewer {
             }
         });
     }
-    
+
     open(url, title, type) {
         this.currentUrl = url;
         this.currentType = type;
-        
+
         this.modal.classList.add('active');
         this.title.textContent = title;
         this.content.innerHTML = '';
@@ -616,9 +638,9 @@ class DocumentViewer {
         this.pdfNavigation.style.display = 'none';
         this.currentZoom = 1;
         this.updateZoomDisplay();
-        
+
         document.body.style.overflow = 'hidden';
-        
+
         // Load content based on type
         setTimeout(() => {
             if (this.isImage(type)) {
@@ -630,45 +652,45 @@ class DocumentViewer {
             }
         }, 100);
     }
-    
+
     isImage(type) {
         return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(type.toLowerCase());
     }
-    
+
     loadImage(url) {
         const img = document.createElement('img');
         img.src = url;
         img.alt = 'Document preview';
-        
+
         img.onload = () => {
             this.loader.style.display = 'none';
             this.content.appendChild(img);
             this.enableImagePan(img);
             console.log('✅ Image loaded successfully');
         };
-        
+
         img.onerror = () => {
             this.showError('Failed to load image');
         };
     }
-    
+
     loadPDF(url) {
         this.controls.style.display = 'none';
         this.loader.style.display = 'none';
-        
+
         const iframe = document.createElement('iframe');
         iframe.src = url;
         iframe.style.width = '100%';
         iframe.style.height = '100%';
         this.content.appendChild(iframe);
-        
+
         console.log('✅ PDF loaded in iframe');
     }
-    
+
     loadOther(url, type) {
         this.loader.style.display = 'none';
         this.controls.style.display = 'none';
-        
+
         this.content.innerHTML = `
             <div style="text-align: center; color: white;">
                 <span class="material-symbols-outlined" style="font-size: 80px; margin-bottom: 20px; display: block;">description</span>
@@ -680,7 +702,7 @@ class DocumentViewer {
             </div>
         `;
     }
-    
+
     showError(message) {
         this.loader.style.display = 'none';
         this.content.innerHTML = `
@@ -691,7 +713,7 @@ class DocumentViewer {
             </div>
         `;
     }
-    
+
     enableImagePan(img) {
         this.content.addEventListener('mousedown', (e) => {
             if (e.target !== img) return;
@@ -701,7 +723,7 @@ class DocumentViewer {
             this.scrollLeft = this.content.scrollLeft;
             this.scrollTop = this.content.scrollTop;
         });
-        
+
         this.content.addEventListener('mousemove', (e) => {
             if (!this.isDragging) return;
             e.preventDefault();
@@ -712,61 +734,61 @@ class DocumentViewer {
             this.content.scrollLeft = this.scrollLeft - walkX;
             this.content.scrollTop = this.scrollTop - walkY;
         });
-        
+
         this.content.addEventListener('mouseup', () => {
             this.isDragging = false;
         });
-        
+
         this.content.addEventListener('mouseleave', () => {
             this.isDragging = false;
         });
     }
-    
+
     zoom(delta) {
         if (this.currentType === 'pdf') return;
-        
+
         const img = this.content.querySelector('img');
         if (!img) return;
-        
+
         this.currentZoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.currentZoom + delta));
         img.style.transform = `scale(${this.currentZoom})`;
         this.updateZoomDisplay();
     }
-    
+
     resetZoom() {
         if (this.currentType === 'pdf') return;
-        
+
         const img = this.content.querySelector('img');
         if (!img) return;
-        
+
         this.currentZoom = 1;
         img.style.transform = 'scale(1)';
         this.updateZoomDisplay();
         this.content.scrollLeft = 0;
         this.content.scrollTop = 0;
     }
-    
+
     updateZoomDisplay() {
         document.getElementById('zoomLevel').textContent = Math.round(this.currentZoom * 100) + '%';
     }
-    
+
     download() {
         const a = document.createElement('a');
         a.href = this.currentUrl;
         a.download = this.title.textContent || 'document';
         a.click();
     }
-    
+
     close() {
         this.modal.classList.remove('active');
         this.content.innerHTML = '';
         document.body.style.overflow = '';
         this.currentZoom = 1;
     }
-    
+
     handleKeyboard(e) {
         if (!this.modal.classList.contains('active')) return;
-        
+
         if (e.key === 'Escape') {
             this.close();
         } else if (e.key === '+' || e.key === '=') {
@@ -787,5 +809,97 @@ function openDocViewer(url, title, type) {
     console.log('📄 Opening document:', title, type);
     docViewer.open(url, title, type);
 }
+
+// Keputusan Tinjauan interactions
+document.addEventListener('DOMContentLoaded', function () {
+    const decisionButtons = document.querySelectorAll('.decision-btn');
+    const decisionStatusInput = document.getElementById('decisionStatus');
+    const decisionForm = document.getElementById('decisionForm');
+    const decisionResult = document.getElementById('decisionResult');
+    const decisionNote = document.getElementById('decisionNote');
+    const decisionUrl = '{{ route("admin.ppdb.applicants.smk.decision", $applicant->id) }}';
+
+    async function submitDecision(status, note) {
+        decisionResult.textContent = 'Submitting decision...';
+        decisionResult.style.color = '';
+
+        const token = document.querySelector('meta[name="csrf-token"]')?.content || decisionForm.querySelector('input[name="_token"]')?.value;
+
+        try {
+            const response = await fetch(decisionUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: status,
+                    note: note || ''
+                })
+            });
+
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.message || 'Failed to save decision');
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                decisionResult.textContent = 'Decision saved: ' + (data.status === 'rejected' ? 'Rejected' : 'Accepted') + '.';
+                decisionResult.style.color = '#047857';
+                setTimeout(() => {
+                    window.location.reload();
+                }, 800);
+            } else {
+                throw new Error('Decision saving failed');
+            }
+        } catch (error) {
+            console.error('Decision submit error:', error);
+            decisionResult.textContent = 'Error: ' + (error.message || 'Unable to send decision');
+            decisionResult.style.color = '#b91c1c';
+        }
+    }
+
+    decisionButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            if (button.disabled) return;
+            decisionButtons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+            const status = button.getAttribute('data-status');
+            decisionStatusInput.value = status;
+            decisionResult.textContent = '';
+
+            if (status === 'rejected') {
+                const confirmed = confirm('Are you sure you want to reject this applicant? This action cannot be undone.');
+                if (!confirmed) {
+                    button.classList.remove('selected');
+                    decisionStatusInput.value = '';
+                    return;
+                }
+                await submitDecision(status, decisionNote?.value || '');
+            }
+        });
+    });
+
+    decisionForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const selectedStatus = decisionStatusInput.value;
+        if (!selectedStatus) {
+            decisionResult.textContent = 'Please select a decision before submitting.';
+            return;
+        }
+
+        await submitDecision(selectedStatus, decisionNote?.value || '');
+    });
+});
 </script>
 @endpush
+
+
+
+
+
+
+

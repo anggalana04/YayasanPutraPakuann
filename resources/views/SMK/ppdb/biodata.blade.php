@@ -1,4 +1,4 @@
-@extends('layouts.SMK.ppdb')
+﻿@extends('layouts.SMK.ppdb')
 
 @php
     if (!Auth::guard('ppdb_applications')->check()) {
@@ -152,3 +152,7 @@
 @section('ppdb-footer')
 
 @endsection
+
+
+
+

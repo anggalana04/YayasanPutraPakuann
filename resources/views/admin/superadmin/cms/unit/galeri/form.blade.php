@@ -1,12 +1,12 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
-@section('title', ($mode === 'create' ? 'Tambah' : 'Edit') . ' Galeri - ' . strtoupper($schoolType))
+@section('title', ($mode === 'create' ? 'Tambah' : 'Ubah') . ' Galeri - ' . strtoupper($schoolType))
 
 @section('content')
 <div class="p-10 max-w-3xl mx-auto space-y-6">
     <div class="mb-6 flex justify-between items-end">
         <div>
-            <p class="text-primary font-bold tracking-widest text-xs uppercase">{{ $mode === 'create' ? 'Tambah' : 'Edit' }} Item Galeri</p>
+            <p class="text-primary font-bold tracking-widest text-xs uppercase">{{ $mode === 'create' ? 'Tambah' : 'Ubah' }} Item Galeri</p>
             <h2 class="text-3xl font-extrabold tracking-tight text-[#1c190d]">{{ strtoupper($schoolType) }}</h2>
         </div>
         <a href="{{ route('admin.cms.galeri.index', ['schoolType' => $schoolType]) }}"
@@ -39,19 +39,18 @@
                 <textarea name="description" rows="4" class="w-full border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">{{ old('description', $item->description ?? '') }}</textarea>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4">
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Status</label>
                     <select name="status" class="w-full border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
-                        <option value="published" {{ old('status', $item->status ?? 'published') === 'published' ? 'selected' : '' }}>Published</option>
-                        <option value="draft" {{ old('status', $item->status ?? '') === 'draft' ? 'selected' : '' }}>Draft</option>
+                        <option value="Diterbitkan" {{ old('status', $item->status ?? 'published') === 'published' ? 'selected' : '' }}>Diterbitkan</option>
+                        <option value="Draf" {{ old('status', $item->status ?? '') === 'draft' ? 'selected' : '' }}>Draf</option>
                     </select>
                 </div>
-                <div class="space-y-2">
-                    <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Tanggal Publikasi</label>
-                    <input type="date" name="published_at" value="{{ old('published_at', $item?->published_at?->format('Y-m-d') ?? '') }}"
-                           class="w-full border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" />
-                </div>
+            </div>
+
+            <div class="px-4 py-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-sm">
+                Tanggal publish diisi otomatis saat status diubah ke <span class="font-bold">Diterbitkan</span>.
             </div>
 
             <div class="space-y-2">
@@ -77,3 +76,8 @@
     </form>
 </div>
 @endsection
+
+
+
+
+
