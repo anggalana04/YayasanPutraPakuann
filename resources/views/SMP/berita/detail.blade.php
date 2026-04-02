@@ -1,4 +1,4 @@
-﻿@extends('layouts.SMP.app')
+@extends('layouts.SMP.app')
 
 @php
     $newsExcerpt = trim(strip_tags((string) ($newsItem->excerpt ?? $newsItem->content ?? 'Berita terbaru dari SMP Putra Pakuan.')));
@@ -6,9 +6,9 @@
     $newsImageRaw = trim((string) ($newsItem->image_url ?? ''));
     $newsImage = \Illuminate\Support\Str::startsWith($newsImageRaw, ['http://', 'https://'])
         ? $newsImageRaw
-        : ($newsImageRaw !== '' ? asset(ltrim($newsImageRaw, '/')) : asset('images/yayasan-logo.jfif'));
+        : ($newsImageRaw !== '' ? asset(ltrim($newsImageRaw, '/')) : asset('images/logo-yayasan.png'));
     $schoolSlug = request()->route('school') ?? 'smp';
-    $newsUrl = route('school.berita.detail', ['school' => $schoolSlug, 'news' => $newsItem->id]);
+    $newsUrl = route('school.berita.detail', ['school' => $schoolSlug, 'slug' => $newsItem->slug]);
 @endphp
 
 @section('title', ($newsItem->title ?? 'Detail Berita') . ' | SMP Putra Pakuan')
@@ -39,7 +39,7 @@
             'name' => 'SMP Putra Pakuan',
             'logo' => [
                 '@type' => 'ImageObject',
-                'url' => asset('images/yayasan-logo.jfif'),
+                'url' => asset('images/logo-yayasan.png'),
             ],
         ],
     ];

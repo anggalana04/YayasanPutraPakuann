@@ -1,5 +1,5 @@
-﻿<!DOCTYPE html>
-<html class="light" lang="id" style="margin:0; padding:0; background:#0f172a;">
+<!DOCTYPE html>
+<html class="light" lang="id" style="margin:0; padding:0; background:#f8fafc;">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -7,7 +7,7 @@
         $seoTitle = trim($__env->yieldContent('title', 'Yayasan Putra Pakuan | Pendidikan Berkualitas di Bogor'));
         $seoDescription = trim($__env->yieldContent('meta_description', 'Yayasan Putra Pakuan menaungi unit pendidikan berkualitas untuk membentuk generasi berkarakter, unggul, dan siap masa depan.'));
         $seoKeywords = trim($__env->yieldContent('meta_keywords', 'yayasan putra pakuan, sekolah bogor, pendidikan bogor, sd, smp, smk, ppdb'));
-        $seoImage = trim($__env->yieldContent('meta_image', asset('images/yayasan-logo.jfif')));
+        $seoImage = trim($__env->yieldContent('meta_image', asset('images/logo-yayasan.png')));
         $seoUrl = url()->current();
     @endphp
     <title>{{ $seoTitle }}</title>
@@ -18,9 +18,9 @@
     <link rel="canonical" href="{{ $seoUrl }}" />
     <link rel="alternate" hreflang="id-ID" href="{{ $seoUrl }}" />
     <link rel="alternate" hreflang="x-default" href="{{ $seoUrl }}" />
-    <link rel="icon" type="image/jpeg" href="{{ asset('images/yayasan-logo.jfif') }}" />
-    <link rel="shortcut icon" type="image/jpeg" href="{{ asset('images/yayasan-logo.jfif') }}" />
-    <link rel="apple-touch-icon" href="{{ asset('images/yayasan-logo.jfif') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('images/logo-yayasan.png') }}" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="id_ID" />
     <meta property="og:site_name" content="Yayasan Putra Pakuan" />
@@ -40,7 +40,7 @@
             'url' => url('/'),
             'logo' => [
                 '@type' => 'ImageObject',
-                'url' => asset('images/yayasan-logo.jfif'),
+                'url' => asset('images/logo-yayasan.png'),
             ],
         ];
 
@@ -74,14 +74,10 @@
     @endphp
     <script type="application/ld+json">{!! json_encode($seoJsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @stack('structured_data')
-    <!-- Google Fonts: Lexend -->
-    <link href="https://fonts.googleapis.com" rel="preconnect"/>
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
-    <!-- Material Symbols -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Local Fonts -->
+    <link href="{{ asset('fonts/fonts.css') }}" rel="stylesheet"/>
+    <!-- Vite CSS & JS -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Theme Configuration -->
     <script id="tailwind-config">
         tailwind.config = {
@@ -122,51 +118,15 @@
             font-family: 'Lexend', sans-serif;
         }
 
-        .page-loading-overlay {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(15, 23, 42, 0.38);
-            backdrop-filter: blur(2px);
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 180ms ease;
-        }
-
-        .page-loading-overlay.is-active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .page-loading-spinner {
-            width: 52px;
-            height: 52px;
-            border-radius: 9999px;
-            border: 4px solid rgba(255, 255, 255, 0.35);
-            border-top-color: #FDB913;
-            animation: page-loading-spin 0.85s linear infinite;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        @keyframes page-loading-spin {
-            to { transform: rotate(360deg); }
-        }
     </style>
     <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="{{ asset('js/aos.css') }}" rel="stylesheet">
     <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@2.0.4" defer></script>
+    <script src="{{ asset('js/htmx.min.js') }}" defer></script>
     @stack('styles')
 </head>
 <body style="margin:0; padding:0;" class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 transition-colors duration-200"
     hx-boost="true" hx-target="#main-content" hx-select="#main-content" hx-swap="outerHTML transition:true">
-    <div id="page-loading-overlay" class="page-loading-overlay" aria-hidden="true">
-        <div class="page-loading-spinner" role="status" aria-label="Memuat halaman"></div>
-    </div>
     <div class="relative flex min-h-screen w-full flex-col group/design-root">
         <!-- Top Navigation -->
         <header style="box-shadow: 0 -24px 0 rgba(255, 255, 255, 0.95);" class="sticky top-0 z-50 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-slate-200 dark:border-white/10 w-full shadow-sm">
@@ -176,7 +136,7 @@
                     <div class="flex items-center gap-4 text-text-main dark:text-white">
                         <a href="{{ route('yayasan.home') }}">
                         <div class="size-10 text-primary">
-                            <img src="{{ asset('images/yayasan-logo.jfif') }}" alt="Logo Yayasan Putra Pakuan">
+                            <img src="{{ asset('images/logo-yayasan.png') }}" alt="Logo Yayasan Putra Pakuan">
                         </div>
                     </a>
                             <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Yayasan Putra Pakuan</h2>
@@ -257,7 +217,7 @@
                     <div class="md:col-span-1 flex flex-col gap-4">
                         <div class="flex items-center gap-3 text-text-main dark:text-white">
                             <div class="size-6 text-primary">
-                                                            <img src="{{ asset('images/yayasan-logo.jfif') }}" alt="Logo Yayasan Putra Pakuan">
+                                                            <img src="{{ asset('images/logo-yayasan.png') }}" alt="Logo Yayasan Putra Pakuan">
 
                             </div>
                             <h2 class="text-base font-bold">Yayasan Putra Pakuan</h2>
@@ -290,7 +250,7 @@
                     </div>
                 </div>
                 <div class="max-w-[1280px] w-full border-t border-slate-100 dark:border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p class="text-slate-400 text-xs text-center md:text-left">© 2024 Yayasan Putra Pakuan. Hak cipta dilindungi.</p>
+                    <p class="text-slate-400 text-xs text-center md:text-left">� 2024 Yayasan Putra Pakuan. Hak cipta dilindungi.</p>
                     <div class="flex gap-4">
                         <a class="text-slate-400 hover:text-[#FDB913] transition-colors" href="#">
                             <svg class="w-4 h-4 fill-current" viewbox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
@@ -305,15 +265,6 @@
     </div>
 
     <script>
-        function setPageLoadingState(isLoading) {
-            const overlay = document.getElementById('page-loading-overlay');
-            if (!overlay) {
-                return;
-            }
-            overlay.classList.toggle('is-active', isLoading);
-            overlay.setAttribute('aria-hidden', isLoading ? 'false' : 'true');
-        }
-
         function applyYayasanNavActiveState() {
             const normalizePath = (path) => {
                 const cleaned = (path || '/').toLowerCase().replace(/\/+$/, '');
@@ -382,34 +333,30 @@
             refreshAosIfAvailable();
         });
 
-        document.addEventListener('htmx:beforeRequest', (event) => {
-            if (event.target && event.target.closest('a, form')) {
-                setPageLoadingState(true);
-            }
-        });
-
         document.addEventListener('htmx:afterSettle', () => {
-            setPageLoadingState(false);
             closeYayasanMobileMenu();
             applyYayasanNavActiveState();
             initMobileMenu();
             initFab();
             refreshAosIfAvailable();
         });
-
-        document.addEventListener('htmx:responseError', () => setPageLoadingState(false));
-        document.addEventListener('htmx:sendError', () => setPageLoadingState(false));
-        window.addEventListener('beforeunload', () => setPageLoadingState(true));
         window.addEventListener('popstate', applyYayasanNavActiveState);
     </script>
 
     <!-- AOS Animation Library JS -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{{ asset('js/aos.js') }}"></script>
     <script>
-        AOS.init({
-            duration: 1000,
-            once: true,
-        });
+        // Consolidated AOS initialization - prevent duplicate init
+        if (!window.__aosInitialized) {
+            window.__aosInitialized = true;
+            AOS.init({
+                duration: 1000,
+                once: true,
+            });
+        } else if (typeof AOS !== 'undefined' && AOS.refresh) {
+            // Refresh AOS if page content changes (e.g., via HTMX navigation)
+            AOS.refresh();
+        }
     </script>
 </body>
 </html>

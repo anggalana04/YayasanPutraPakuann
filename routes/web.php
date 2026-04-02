@@ -20,11 +20,14 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PrestasiAdminController;
 use App\Http\Controllers\Admin\PpdbManagementController;
 use App\Http\Controllers\Admin\TeacherStaffAdminController;
+use App\Http\Controllers\Admin\JurusanAdminController;
 use App\Http\Controllers\YayasanPublicController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserManagementController;
 use App\Http\Controllers\Admin\AdminPpdbApplicantsController;
+use App\Http\Controllers\Admin\ArchiveController;
+use App\Http\Controllers\Admin\StudentController;
 
 // =====================
 // YAYASAN (MAIN SITE)
@@ -184,7 +187,7 @@ Route::get('/sitemap.xml', function () {
             }
 
             $urls->push([
-                'loc' => route('school.berita.detail', ['school' => $newsItem->school->slug, 'news' => $newsItem->id]),
+                'loc' => route('school.berita.detail', ['school' => $newsItem->school->slug, 'slug' => $newsItem->slug]),
                 'lastmod' => optional($newsItem->updated_at ?? $newsItem->published_at)->toAtomString() ?? now()->toAtomString(),
                 'changefreq' => 'weekly',
                 'priority' => '0.7',
@@ -222,7 +225,7 @@ Route::get('/kontak',        [YayasanPublicController::class, 'kontak'])->name('
 
 // Admin Auth
 Route::get('/admin/login', [App\Http\Controllers\AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-Route::post('/admin/login', [App\Http\Controllers\AdminAuthController::class, 'login'])->name('admin.login.post');
+Route::post('/admin/login', [App\Http\Controllers\AdminAuthController::class, 'login'])->middleware('throttle:5,1')->name('admin.login.post');
 Route::post('/admin/logout', [App\Http\Controllers\AdminAuthController::class, 'logout'])->name('admin.logout');
 
 // Admin-protected routes
@@ -289,7 +292,18 @@ Route::middleware(['auth:admin', 'admin.access'])->group(function () {
             Route::get('/guru/{guru}/edit', [TeacherStaffAdminController::class, 'edit'])->name('admin.cms.guru.edit');
             Route::put('/guru/{guru}', [TeacherStaffAdminController::class, 'update'])->name('admin.cms.guru.update');
             Route::delete('/guru/{guru}', [TeacherStaffAdminController::class, 'destroy'])->name('admin.cms.guru.destroy');
+
+            // Jurusan (SMK only)
+            Route::get('/jurusan', [JurusanAdminController::class, 'index'])->name('admin.cms.jurusan.index');
+            Route::get('/jurusan/create', [JurusanAdminController::class, 'create'])->name('admin.cms.jurusan.create');
+            Route::post('/jurusan', [JurusanAdminController::class, 'store'])->name('admin.cms.jurusan.store');
+            Route::get('/jurusan/{jurusan}/edit', [JurusanAdminController::class, 'edit'])->name('admin.cms.jurusan.edit');
+            Route::put('/jurusan/{jurusan}', [JurusanAdminController::class, 'update'])->name('admin.cms.jurusan.update');
+            Route::delete('/jurusan/{jurusan}', [JurusanAdminController::class, 'destroy'])->name('admin.cms.jurusan.destroy');
         });
+
+    // Media upload for Quill editor (jurusan rich content)
+    Route::post('/admin/cms/media/upload', [JurusanAdminController::class, 'uploadMedia'])->name('admin.cms.jurusan.media.upload');
 
     // PPDB Management for selected school (per jenjang view)
     Route::prefix('/admin/ppdb/management/{school}')->group(function () {
@@ -357,6 +371,40 @@ Route::middleware(['auth:admin', 'admin.access'])->group(function () {
     Route::patch('/admin/users/{user}', [AdminUserManagementController::class, 'update'])->name('admin.users.update');
 
     Route::delete('/admin/users/{user}', [AdminUserManagementController::class, 'destroy'])->name('admin.users.destroy');
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // ARSIP DIGITAL — School Archive & Student Records
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    // Archive — school selector
+    Route::get('/admin/archive', [ArchiveController::class, 'index'])->name('admin.archive.index');
+
+    // Archive — year view for a school
+    Route::get('/admin/archive/{school}/{year}/export/excel', [ArchiveController::class, 'exportExcel'])
+        ->where('year', '.+')
+        ->name('admin.archive.export.excel');
+
+    Route::get('/admin/archive/{school}/{year}/export/zip', [ArchiveController::class, 'exportZip'])
+        ->where('year', '.+')
+        ->name('admin.archive.export.zip');
+
+    Route::get('/admin/archive/{school}/{year}/{student}/print', [ArchiveController::class, 'printCard'])
+        ->where('year', '.+')
+        ->name('admin.archive.student.print');
+
+    Route::get('/admin/archive/{school}/{year}/{student}', [ArchiveController::class, 'studentDetail'])
+        ->where('year', '.+')
+        ->name('admin.archive.student');
+
+    Route::get('/admin/archive/{school}/{year}', [ArchiveController::class, 'yearView'])
+        ->where('year', '.+')
+        ->name('admin.archive.year');
+
+    // Students — CRUD
+    Route::post('/admin/students/promote', [StudentController::class, 'promote'])->name('admin.students.promote');
+    Route::post('/admin/students', [StudentController::class, 'store'])->name('admin.students.store');
+    Route::patch('/admin/students/{student}', [StudentController::class, 'update'])->name('admin.students.update');
+    Route::delete('/admin/students/{student}', [StudentController::class, 'destroy'])->name('admin.students.destroy');
 });
 
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
@@ -410,7 +458,7 @@ Route::prefix('{school}')
 
         Route::get('/', [\App\Http\Controllers\SchoolHomeController::class, 'index'])->name('school.home');
 
-        Route::get('/visi', fn($school) => $render($school, 'visi'))->name('school.visi');
+        Route::get('/visi', fn($school) => redirect()->to(route('school.profil', ['school' => $school]) . '#visi-misi'))->name('school.visi');
 
         Route::get('/profil', fn($school) => $render($school, 'profil'))->name('school.profil');
 
@@ -419,27 +467,28 @@ Route::prefix('{school}')
         // PPDB Authentication Routes (now per jenjang, with pretty URLs)
         Route::get('/login', fn($school) => view(strtoupper($school) . '.ppdb.login', compact('school')))->name('ppdb.login');
         Route::get('/daftar', fn($school) => view(strtoupper($school) . '.ppdb.register', compact('school')))->name('ppdb.register');
-        Route::post('/login', [App\Http\Controllers\PpdbAuthController::class, 'login'])->name('ppdb.login.post');
+        Route::post('/login', [App\Http\Controllers\PpdbAuthController::class, 'login'])->middleware('throttle:10,1')->name('ppdb.login.post');
         Route::post('/logout', [App\Http\Controllers\PpdbAuthController::class, 'logout'])->name('ppdb.logout');
         Route::post('/daftar', [App\Http\Controllers\PpdbAuthController::class, 'register'])->name('ppdb.register.post');
 
-        // PPDB Routes (Frontend Development - Auth will be added later)
-        Route::get('/ppdb/dashboard', [App\Http\Controllers\PpdbAuthController::class, 'dashboard'])->name('ppdb.dashboard');
-        Route::get('/ppdb/biodata', fn($school) => $render($school, 'ppdb.biodata'))->name('ppdb.biodata');
-        // Biodata update POST route
-        Route::post('/ppdb/biodata', [App\Http\Controllers\PpdbAuthController::class, 'updateBiodata'])->name('ppdb.biodata.update');
-        Route::get('/ppdb/berkas', fn($school) => $render($school, 'ppdb.berkas'))->name('ppdb.berkas');
-        Route::post('/ppdb/berkas', [App\Http\Controllers\PpdbAuthController::class, 'updateBerkas'])->name('ppdb.berkas.update');
-        Route::get('/ppdb/payment', fn($school) => $render($school, 'ppdb.payment'))->name('ppdb.payment');
-        Route::post('/ppdb/payment', [App\Http\Controllers\PpdbAuthController::class, 'updatePayment'])->name('ppdb.payment.update');
-        Route::get('/ppdb/profil', fn($school) => $render($school, 'ppdb.profil'))->name('ppdb.profil');
+        // PPDB authenticated routes (middleware enforced at routing layer)
+        Route::middleware('ppdb.auth')->group(function () use ($render) {
+            Route::get('/ppdb/dashboard', [App\Http\Controllers\PpdbAuthController::class, 'dashboard'])->name('ppdb.dashboard');
+            Route::get('/ppdb/biodata', fn($school) => $render($school, 'ppdb.biodata'))->name('ppdb.biodata');
+            Route::post('/ppdb/biodata', [App\Http\Controllers\PpdbAuthController::class, 'updateBiodata'])->name('ppdb.biodata.update');
+            Route::get('/ppdb/berkas', fn($school) => $render($school, 'ppdb.berkas'))->name('ppdb.berkas');
+            Route::post('/ppdb/berkas', [App\Http\Controllers\PpdbAuthController::class, 'updateBerkas'])->name('ppdb.berkas.update');
+            Route::get('/ppdb/payment', fn($school) => $render($school, 'ppdb.payment'))->name('ppdb.payment');
+            Route::post('/ppdb/payment', [App\Http\Controllers\PpdbAuthController::class, 'updatePayment'])->name('ppdb.payment.update');
+            Route::get('/ppdb/profil', fn($school) => $render($school, 'ppdb.profil'))->name('ppdb.profil');
+        });
 
         Route::get('/program', fn($school) => $render($school, 'program'))->name('school.program');
 
         Route::get('/kesiswaan', fn($school) => $render($school, 'kesiswaan'))->name('school.kesiswaan');
 
         Route::get('/prestasi', function ($school) {
-            $schoolModel = \App\Models\School::where('type', strtoupper($school))->firstOrFail();
+            $schoolModel = \App\Models\School::where('type', \App\Models\School::resolveDbType($school))->firstOrFail();
 
             $prestasi = \App\Models\Prestasi::where('school_id', $schoolModel->id)
                 ->published()
@@ -460,8 +509,7 @@ Route::prefix('{school}')
         Route::get('/galeri/load-more', [\App\Http\Controllers\GalleryController::class, 'loadMore'])->name('school.galeri.load-more');
 
         Route::get('/kontak', function ($school) {
-            $schoolType = strtoupper($school);
-            $schoolModel = School::where('type', $schoolType)->firstOrFail();
+            $schoolModel = School::where('type', School::resolveDbType($school))->firstOrFail();
 
             $contactDefaults = [
                 'contact_whatsapp' => '6282112345678',
@@ -486,7 +534,7 @@ Route::prefix('{school}')
 
         Route::get('/berita', [\App\Http\Controllers\SchoolNewsController::class, 'index'])->name('school.berita');
 
-        Route::get('/berita/detail/{news}', [\App\Http\Controllers\SchoolNewsController::class, 'show'])->name('school.berita.detail');
+        Route::get('/berita/{slug}', [\App\Http\Controllers\SchoolNewsController::class, 'show'])->name('school.berita.detail')->where('slug', '[a-z0-9\-]+');
 
         Route::get('/direktori/guru', [\App\Http\Controllers\SchoolHomeController::class, 'teacherDirectory'])->name('school.direktori.guru');
 
@@ -499,4 +547,41 @@ Route::prefix('{school}')
 
             abort(404);
         })->name('school.direktori.siswa');
+
+        // ── Jurusan (SMK only) ─────────────────────────────────────────────────
+        Route::get('/jurusan', function ($school) {
+            abort_unless($school === 'smk', 404);
+
+            $schoolModel = \App\Models\School::where('type', \App\Models\School::resolveDbType($school))->firstOrFail();
+
+            $jurusans = \App\Models\SmkJurusan::where('school_id', $schoolModel->id)
+                ->active()
+                ->get();
+
+            return view('SMK.jurusan.index', compact('school', 'schoolModel', 'jurusans'));
+        })->name('school.jurusan.index');
+
+        Route::get('/jurusan/{slug}', function ($school, $slug) {
+            abort_unless($school === 'smk', 404);
+
+            $schoolModel = \App\Models\School::where('type', \App\Models\School::resolveDbType($school))->firstOrFail();
+
+            $jurusan = \App\Models\SmkJurusan::where('school_id', $schoolModel->id)
+                ->where('slug', $slug)
+                ->where('is_active', true)
+                ->firstOrFail();
+
+            $otherJurusans = \App\Models\SmkJurusan::where('school_id', $schoolModel->id)
+                ->where('is_active', true)
+                ->where('id', '!=', $jurusan->id)
+                ->orderBy('order_column')
+                ->get();
+
+            $prestasi = \App\Models\Prestasi::where('school_id', $schoolModel->id)
+                ->published()
+                ->take(12)
+                ->get();
+
+            return view('SMK.jurusan.show', compact('school', 'schoolModel', 'jurusan', 'otherJurusans', 'prestasi'));
+        })->name('school.jurusan.show');
     });

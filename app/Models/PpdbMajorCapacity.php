@@ -24,7 +24,7 @@ class PpdbMajorCapacity extends Model
 
     public function getRemainingAttribute()
     {
-        $count = PpdbApplication::where('school_type', $this->school->type)
+        $count = PpdbApplication::where('school_id', $this->school_id)
             ->where('assigned_major', $this->major)
             ->where('status', 'accepted')
             ->whereYear('created_at', intval(substr($this->year, 0, 4)))

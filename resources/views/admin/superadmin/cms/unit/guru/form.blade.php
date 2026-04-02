@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('title', ($mode === 'create' ? 'Tambah' : 'Ubah') . ' Guru & Staff - ' . strtoupper($schoolType))
 
@@ -82,14 +82,15 @@
                 <div class="space-y-2">
                 <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Foto Profil</label>
                 <input type="file" name="photo" accept="image/*"
-                       class="w-full border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary/90" />
+                       class="w-full border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary/90"
+                       onchange="validateFileSize(this, 1)" />
                 @if ($mode === 'edit' && $item->photo_url)
                     <div class="mt-2">
                         <img src="{{ $item->photo_url }}" alt="Current photo" class="w-24 h-24 object-cover rounded-xl border" />
                         <p class="text-xs text-on-surface-variant/70 mt-1">Foto saat ini. Unggah foto baru untuk mengganti.</p>
                     </div>
                 @endif
-                <p class="text-xs text-on-surface-variant/70">Format: JPG, PNG, GIF. Maksimal 2MB.</p>
+                <p class="text-xs text-on-surface-variant/70">Format: JPG, PNG, GIF. <strong>Maksimal 1 MB.</strong></p>
             </div>
             </div>
         </div>

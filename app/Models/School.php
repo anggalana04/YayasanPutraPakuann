@@ -44,4 +44,21 @@ class School extends Model
     {
         return $this->hasMany(Prestasi::class);
     }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    /**
+     * Maps a URL route slug (e.g. "sd") to the actual DB type (e.g. "SDIT").
+     * All lookups on School::where('type', ...) must go through this method.
+     */
+    public static function resolveDbType(string $slug): string
+    {
+        return match (strtoupper($slug)) {
+            'SD' => 'SDIT',
+            default => strtoupper($slug),
+        };
+    }
 }

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html class="light" lang="id" style="margin:0; padding:0; background:#f7f7f4;"><head>
 <meta charset="utf-8"/>
@@ -255,7 +255,7 @@
 <footer class="py-12 px-6 border-t border-surface-container-high/30">
 <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
 <div class="flex flex-col items-center md:items-start">
-<p class="text-xs text-on-surface-variant font-medium">© 2024 SDIT Putra Pakuan Bogor. Seluruh Hak Cipta Dilindungi.</p>
+<p class="text-xs text-on-surface-variant font-medium">� 2024 SDIT Putra Pakuan Bogor. Seluruh Hak Cipta Dilindungi.</p>
 </div>
 <div class="flex gap-8">
 <a class="text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Syarat &amp; Ketentuan</a>

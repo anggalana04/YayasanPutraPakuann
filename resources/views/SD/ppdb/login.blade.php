@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html class="light" lang="id" style="margin:0; padding:0; background:#f7f7f4;"><head>
 <meta charset="utf-8"/>
@@ -104,6 +104,9 @@
       .tonal-transition {
         transition: background-color 0.3s ease;
       }
+      input[type="password"] {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      }
     </style>
 </head>
 <body style="margin:0; padding:0;" class="bg-background font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
@@ -138,10 +141,6 @@
 <div class="px-6 py-4 glass-effect rounded-2xl border border-white/20">
 <p class="text-xs font-bold uppercase tracking-widest text-on-primary-fixed mb-1">Status PPDB</p>
 <p class="text-sm font-medium text-on-primary-fixed-variant">Gelombang 1 : Terbuka</p>
-</div>
-<div class="px-6 py-4 glass-effect rounded-2xl border border-white/20">
-<p class="text-xs font-bold uppercase tracking-widest text-on-primary-fixed mb-1">Kuota Terisi</p>
-<p class="text-sm font-medium text-on-primary-fixed-variant">65% Kapasitas</p>
 </div>
 </div>
 </div>
@@ -194,7 +193,7 @@
             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <span class="material-symbols-outlined text-outline text-xl" data-icon="lock">lock</span>
             </div>
-            <input class="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:bg-surface-container-lowest focus:ring-0 rounded-t-xl transition-all font-medium text-on-surface placeholder:text-outline-variant" id="password" name="password" placeholder="••••••••••••" type="password"/>
+            <input class="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:bg-surface-container-lowest focus:ring-0 rounded-t-xl transition-all font-medium text-on-surface placeholder:text-outline-variant" id="password" name="password" placeholder="Kata sandi" type="password"/>
         </div>
     </div>
     <!-- Login Button -->

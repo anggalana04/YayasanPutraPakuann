@@ -39,7 +39,7 @@
 </div>
 </div>
 <div class="bg-[#f2cc0d] p-6 rounded-3xl flex flex-col justify-between">
-<span class="text-[#1c190d]/60 text-xs font-bold uppercase tracking-tighter">Perlu Direview ❗</span>
+<span class="text-[#1c190d]/60 text-xs font-bold uppercase tracking-tighter">Perlu Direview ?</span>
 <div class="flex items-end justify-between">
 <span id="pendingApplicantsValue" class="text-3xl font-black text-[#1c190d]">{{ $pendingCount ?? $applicants->whereIn('status', ['pending', 'payment_uploaded'])->count() }}</span>
 <span class="material-symbols-outlined text-[#1c190d]/40" data-icon="pending_actions">pending_actions</span>
@@ -52,10 +52,10 @@
 <!-- Capacity Overview - General (No Programs) -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     @php
-        $acceptedCount = \App\Models\PpdbApplication::whereRaw('LOWER(school_type) = ?', [strtolower($schoolModel->type)])
+        $acceptedCount = \App\Models\PpdbApplication::where('school_id', $schoolModel->id)
             ->where('status', 'accepted')
             ->count();
-        $rejectedCount = \App\Models\PpdbApplication::whereRaw('LOWER(school_type) = ?', [strtolower($schoolModel->type)])
+        $rejectedCount = \App\Models\PpdbApplication::where('school_id', $schoolModel->id)
             ->where('status', 'rejected')
             ->count();
     @endphp

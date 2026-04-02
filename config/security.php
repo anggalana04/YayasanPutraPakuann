@@ -42,4 +42,25 @@ return [
     'referrer_policy' => 'strict-origin-when-cross-origin',
     'permissions_policy' => "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=()",
     'x_permitted_cross_domain_policies' => 'none',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Content Security Policy
+    |--------------------------------------------------------------------------
+    |
+    | Set via CONTENT_SECURITY_POLICY env var. Omit the header (null) by
+    | default to avoid breaking existing CDN scripts during rollout. Switch to
+    | report-only mode first to test before enforcing.
+    |
+    | Example value:
+    |   "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com"
+    |
+    */
+    'content_security_policy' => env('CONTENT_SECURITY_POLICY', null),
+
+    /*
+    | Set to true to apply as Content-Security-Policy-Report-Only instead of
+    | enforcing. Useful for auditing without breaking the live site.
+    */
+    'csp_report_only' => env('CSP_REPORT_ONLY', false),
 ];

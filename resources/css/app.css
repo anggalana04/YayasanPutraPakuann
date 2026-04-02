@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Keep dark utilities class-based so pages stay in light mode by default. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
@@ -8,4 +11,118 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Default brand tokens (Yayasan). School layouts override these via CSS variables. */
+    --color-primary: #13a4ec;
+    --color-secondary: #d12d16;
+    --color-accent: #0f172a;
+    --color-background-light: #f8fafc;
+    --color-background-dark: #0f172a;
+    --color-background-subtle: #fffbeb;
+    --color-charcoal: #1e293b;
+    --color-text-main: #334155;
+    --color-text-muted: #64748b;
+    --color-primary-soft: #fee2e2;
+    --color-secondary-soft: #dcfce7;
+
+    /* PPDB / Material Design color tokens (used in PPDB dashboard views) */
+    --color-brand-yellow: #f2cc0d;
+    --color-brand-charcoal: #1c190d;
+    --color-surface: #f7f7f4;
+    --color-surface-dim: #d3d5d1;
+    --color-surface-bright: #f7f7f4;
+    --color-surface-container-lowest: #ffffff;
+    --color-surface-container-low: #f0f1ee;
+    --color-surface-container: #e8e8e5;
+    --color-surface-container-high: #e2e3df;
+    --color-surface-container-highest: #dcddda;
+    --color-surface-variant: #dcddda;
+    --color-surface-tint: #6c5a00;
+    --color-on-surface: #2d2f2d;
+    --color-on-surface-variant: #5a5c5a;
+    --color-on-background: #2d2f2d;
+    --color-on-primary: #fff2cd;
+    --color-on-secondary: #faf2de;
+    --color-on-tertiary: #faf2da;
+    --color-on-error: #ffefec;
+    --color-on-primary-container: #594a00;
+    --color-on-secondary-container: #565242;
+    --color-on-tertiary-container: #5f5a47;
+    --color-on-error-container: #520c00;
+    --color-on-primary-fixed: #433700;
+    --color-on-primary-fixed-variant: #645300;
+    --color-on-secondary-fixed: #433f31;
+    --color-on-secondary-fixed-variant: #605b4c;
+    --color-on-tertiary-fixed: #4c4836;
+    --color-on-tertiary-fixed-variant: #696451;
+    --color-primary-fixed: #fbd51d;
+    --color-primary-fixed-dim: #ecc700;
+    --color-primary-container: #fbd51d;
+    --color-primary-dim: #5f4e00;
+    --color-secondary-fixed: #eae2ce;
+    --color-secondary-fixed-dim: #dbd4c0;
+    --color-secondary-container: #eae2ce;
+    --color-secondary-dim: #544f40;
+    --color-tertiary: #605c49;
+    --color-tertiary-fixed: #f8f1d8;
+    --color-tertiary-fixed-dim: #eae2ca;
+    --color-tertiary-container: #f8f1d8;
+    --color-tertiary-dim: #54503e;
+    --color-error-ppdb: #b02500;
+    --color-error-container: #f95630;
+    --color-error-dim: #b92902;
+    --color-outline-color: #767775;
+    --color-outline-variant: #acadab;
+    --color-inverse-surface: #0d0f0d;
+    --color-inverse-primary: #fbd51d;
+    --color-inverse-on-surface: #9c9d9b;
+}
+
+.htmx-route-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    z-index: 9999;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 150ms ease;
+}
+
+.htmx-route-loader::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -45%;
+    width: 45%;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent 0%, var(--color-primary) 35%, var(--color-secondary) 100%);
+}
+
+body.is-htmx-loading .htmx-route-loader {
+    opacity: 1;
+}
+
+body.is-htmx-loading .htmx-route-loader::before {
+    animation: htmxRouteSweep 1s cubic-bezier(.4, 0, .2, 1) infinite;
+}
+
+@keyframes htmxRouteSweep {
+    0% {
+        left: -45%;
+        width: 30%;
+    }
+
+    50% {
+        left: 35%;
+        width: 42%;
+    }
+
+    100% {
+        left: 100%;
+        width: 30%;
+    }
 }

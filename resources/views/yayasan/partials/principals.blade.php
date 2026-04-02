@@ -44,9 +44,43 @@
             ],
         ];
 
-        $leaders = (isset($yayasanPrincipals) && is_array($yayasanPrincipals) && count($yayasanPrincipals) > 0)
-            ? $yayasanPrincipals
-            : $defaultLeaders;
+        $normalizeUnit = function ($value) {
+            $unit = strtoupper(trim((string) $value));
+
+            return match (true) {
+                str_contains($unit, 'PAUD') => 'PAUD',
+                str_contains($unit, 'PKBM') => 'PKBM',
+                str_contains($unit, 'SDIT'), $unit === 'SD' => 'SDIT',
+                str_contains($unit, 'SMP') => 'SMP',
+                str_contains($unit, 'SMK') => 'SMK',
+                default => $unit,
+            };
+        };
+
+        $savedLeaders = collect(isset($yayasanPrincipals) && is_array($yayasanPrincipals) ? $yayasanPrincipals : [])
+            ->keyBy(fn ($leader) => $normalizeUnit($leader['unit'] ?? ''));
+
+        // Keep the fixed 5-card structure, but let CMS-edited values override the defaults per unit.
+        $leaders = collect($defaultLeaders)
+            ->map(function ($defaultLeader) use ($savedLeaders, $normalizeUnit) {
+                $savedLeader = $savedLeaders->get($normalizeUnit($defaultLeader['unit'] ?? ''));
+
+                return is_array($savedLeader)
+                    ? array_merge($defaultLeader, $savedLeader)
+                    : $defaultLeader;
+            });
+
+        $unitOrder = [
+            'PAUD' => 1,
+            'SDIT' => 2,
+            'SMP' => 3,
+            'SMK' => 4,
+            'PKBM' => 5,
+        ];
+
+        $leaders = $leaders
+            ->sortBy(fn ($leader) => $unitOrder[$normalizeUnit($leader['unit'] ?? '')] ?? 99)
+            ->values();
     @endphp
 
     <div class="max-w-[1920px] w-full px-4 md:px-10 flex flex-col gap-12">
@@ -67,7 +101,7 @@
                     $photoValue = trim((string)($leader['photo_url'] ?? ''));
                     $videoValue = trim((string)($leader['video_url'] ?? ''));
                     $imageSrc = $photoValue === ''
-                        ? asset('images/logo-putrapakuan.png')
+                        ? asset('images/logo-yayasan.png')
                         : ((\Illuminate\Support\Str::startsWith($photoValue, ['http://', 'https://', '/'])) ? $photoValue : asset($photoValue));
                     $hasVideo = $videoValue !== '';
                 @endphp

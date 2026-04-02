@@ -27,6 +27,13 @@ class ApplySecurityHeaders
         $response->headers->set('Permissions-Policy', (string) config('security.permissions_policy', 'camera=(), microphone=(), geolocation=(), payment=()'));
         $response->headers->set('X-Permitted-Cross-Domain-Policies', (string) config('security.x_permitted_cross_domain_policies', 'none'));
 
+        if ($csp = config('security.content_security_policy')) {
+            $headerName = config('security.csp_report_only', false)
+                ? 'Content-Security-Policy-Report-Only'
+                : 'Content-Security-Policy';
+            $response->headers->set($headerName, (string) $csp);
+        }
+
         if ($request->isSecure() && config('security.hsts_enabled', false)) {
             $hsts = 'max-age=' . max(0, (int) config('security.hsts_max_age', 31536000));
 

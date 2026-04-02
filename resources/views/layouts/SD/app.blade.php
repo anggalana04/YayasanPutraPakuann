@@ -1,6 +1,6 @@
 <!-- resources/views/layouts/SD/app.blade.php -->
 <!DOCTYPE html>
-<html lang="id" style="margin:0; padding:0; background:#1e293b;">
+<html lang="id" style="margin:0; padding:0; background:#f8f8f5;">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -75,10 +75,20 @@
     @endphp
     <script type="application/ld+json">{!! json_encode($seoJsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @stack('structured_data')
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="{{ asset('fonts/fonts.css') }}" rel="stylesheet"/>
+    <script src="{{ asset('js/alpine.min.js') }}" defer></script>
+    <style>
+        :root {
+            --color-primary: #dc2626;
+            --color-secondary: #16a34a;
+            --color-primary-soft: #fee2e2;
+            --color-secondary-soft: #dcfce7;
+            --color-charcoal: #1e293b;
+            --color-background-light: #f8f8f5;
+            --color-background-dark: #1e293b;
+        }
+    </style>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -115,41 +125,10 @@
 
         body { font-family: 'Lexend', sans-serif; }
 
-        .site-loading-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(15, 23, 42, 0.35);
-            backdrop-filter: blur(2px);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 180ms ease;
-        }
-
-        .site-loading-overlay.is-active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .site-loading-spinner {
-            width: 52px;
-            height: 52px;
-            border-radius: 9999px;
-            border: 4px solid rgba(255, 255, 255, 0.35);
-            border-top-color: #dc2626;
-            animation: site-loading-spin 0.85s linear infinite;
-        }
-
-        @keyframes site-loading-spin {
-            to { transform: rotate(360deg); }
-        }
     </style>
     @stack('head')
     <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@2.0.4" defer></script>
+    <script src="{{ asset('js/htmx.min.js') }}" defer></script>
 </head>
 <body class="m-0 p-0 bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100"
     hx-boost="true"
@@ -157,11 +136,8 @@
     hx-select="#main-content"
     hx-swap="outerHTML transition:true"
     hx-push-url="true">
-    <div id="site-loading-overlay" class="site-loading-overlay" aria-hidden="true">
-        <div class="site-loading-spinner" role="status" aria-label="Memuat halaman"></div>
-    </div>
     <!-- Navbar -->
-    <nav style="box-shadow: 0 -24px 0 #1e293b;" class="sticky top-0 z-50 w-full bg-charcoal text-white border-b border-primary/20">
+    <nav id="school-nav" class="fixed top-0 z-50 w-full bg-charcoal text-white border-b border-primary/20 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <a href="{{ route('school.home', ['school'=> 'sd']) }}">
@@ -175,8 +151,8 @@
                 </div>
             </div>
             <div class="hidden lg:flex items-center gap-6">
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.home', ['school' => 'sd']) }}">BERANDA</a>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.profil', ['school' => 'sd']) }}">PROFIL</a>
-                <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.visi', ['school' => 'sd']) }}">VISI DAN MISI</a>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="#">KATEGORI</a>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.berita', ['school' => request()->route('school') ?? 'sd']) }}">BERITA</a>
                 <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
@@ -196,9 +172,11 @@
                     $ppdbLive = $ppdbLive ?? false;
                     $ppdbLabel = ($ppdbPeriod ?? null) ? 'PPDB ' . $ppdbPeriod : 'PPDB';
                 @endphp
+                @if($ppdbLive)
                 <button class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all ml-4" onclick="window.location.href='{{ route('school.ppdb', ['school' => 'sd']) }}'">
-                    {{ $ppdbLabel }} @if(!$ppdbLive) (Segera Hadir) @endif
+                    {{ $ppdbLabel }}
                 </button>
+                @endif
             </div>
             <!-- Mobile menu button -->
             <button class="lg:hidden text-primary" id="mobile-menu-toggle" aria-label="Open menu">
@@ -223,8 +201,8 @@
                     <span class="sr-only">Close</span>
                 </button>
             </div>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.home', ['school' => 'sd']) }}">BERANDA</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.profil', ['school' => 'sd']) }}">PROFIL</a>
-            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.visi', ['school' => 'sd']) }}">VISI DAN MISI</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="#">KATEGORI</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.berita', ['school' => request()->route('school') ?? 'sd']) }}">BERITA</a>
             <div class="flex flex-col gap-2">
@@ -240,121 +218,239 @@
             </div>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.galeri', ['school' => 'sd']) }}">GALERI</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.kontak', ['school' => 'sd']) }}">HUBUNGI KAMI</a>
-            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.ppdb', ['school' => 'sd']) }}">{{ $ppdbLabel }} @if(!($ppdbLive ?? false)) (Segera Hadir) @endif</a>
+            @if($ppdbLive ?? false)
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.ppdb', ['school' => 'sd']) }}">{{ $ppdbLabel }}</a>
+            @endif
         </div>
         <script>
-            function setSiteLoadingState(isLoading) {
-                const overlay = document.getElementById('site-loading-overlay');
-                if (!overlay) return;
-                overlay.classList.toggle('is-active', isLoading);
-                overlay.setAttribute('aria-hidden', isLoading ? 'false' : 'true');
-            }
+            // HTMX-safe mobile menu handlers
+            function initSdMobileMenu() {
+                const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuClose = document.getElementById('mobile-menu-close');
+                const mobileDirektoriToggle = document.getElementById('mobile-direktori-toggle');
+                const mobileDirektoriDropdown = document.getElementById('mobile-direktori-dropdown');
 
-            document.addEventListener('click', (event) => {
-                const link = event.target.closest('a[href]');
-                if (!link) return;
-                const href = link.getAttribute('href') || '';
-                if (!href || href.startsWith('#') || link.target === '_blank' || event.ctrlKey || event.metaKey) {
-                    return;
+                if (!mobileMenu) return;
+
+                const openMobileMenu = () => {
+                    mobileMenu.style.display = 'flex';
+                    requestAnimationFrame(() => {
+                        mobileMenu.style.translate = '0';
+                    });
+                };
+
+                const closeMobileMenu = () => {
+                    mobileMenu.style.translate = '100%';
+                    mobileMenu.addEventListener('transitionend', function hideMenu() {
+                        mobileMenu.style.display = 'none';
+                        mobileMenu.style.translate = '';
+                        mobileMenu.removeEventListener('transitionend', hideMenu);
+                    });
+                };
+
+                if (mobileMenuToggle && !mobileMenuToggle._htmxInit) {
+                    mobileMenuToggle._htmxInit = true;
+                    mobileMenuToggle.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        openMobileMenu();
+                    });
                 }
-                setSiteLoadingState(true);
-            });
 
-            document.addEventListener('submit', () => setSiteLoadingState(true));
-            document.addEventListener('htmx:beforeRequest', () => setSiteLoadingState(true));
-            document.addEventListener('htmx:beforeHistorySave', () => setSiteLoadingState(false));
-            document.addEventListener('htmx:historyRestore', () => setSiteLoadingState(false));
-            document.addEventListener('htmx:afterSettle', () => {
-                setSiteLoadingState(false);
-                closeMobileMenuInstant();
-            });
-            document.addEventListener('htmx:responseError', () => setSiteLoadingState(false));
-            document.addEventListener('htmx:sendError', () => setSiteLoadingState(false));
-            window.addEventListener('pagehide', () => setSiteLoadingState(false));
-            window.addEventListener('pageshow', () => setSiteLoadingState(false));
-
-            // Mobile menu toggle with robust guards
-            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileMenuClose = document.getElementById('mobile-menu-close');
-            const mobileDirektoriToggle = document.getElementById('mobile-direktori-toggle');
-            const mobileDirektoriDropdown = document.getElementById('mobile-direktori-dropdown');
-
-            const openMobileMenu = () => {
-                if (!mobileMenu) return;
-                mobileMenu.style.display = 'flex';
-                requestAnimationFrame(() => {
-                    mobileMenu.style.transform = 'translateX(0)';
-                });
-            };
-
-            const closeMobileMenu = () => {
-                if (!mobileMenu) return;
-                mobileMenu.style.transform = 'translateX(100%)';
-                mobileMenu.addEventListener('transitionend', function hideMenu() {
-                    mobileMenu.style.display = 'none';
-                    mobileMenu.removeEventListener('transitionend', hideMenu);
-                });
-            };
-
-            const closeMobileMenuInstant = () => {
-                if (!mobileMenu) return;
-                mobileMenu.style.display = 'none';
-                mobileMenu.style.transform = 'translateX(100%)';
-                if (mobileDirektoriDropdown) {
-                    mobileDirektoriDropdown.classList.add('hidden');
+                if (mobileMenuClose && !mobileMenuClose._htmxInit) {
+                    mobileMenuClose._htmxInit = true;
+                    mobileMenuClose.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        closeMobileMenu();
+                    });
                 }
-            };
 
-            if (mobileMenuToggle) {
-                mobileMenuToggle.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    openMobileMenu();
-                });
-            }
-            if (mobileMenuClose) {
-                mobileMenuClose.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    closeMobileMenu();
-                });
-            }
+                if (mobileDirektoriToggle && mobileDirektoriDropdown && !mobileDirektoriToggle._htmxInit) {
+                    mobileDirektoriToggle._htmxInit = true;
+                    mobileDirektoriToggle.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        mobileDirektoriDropdown.classList.toggle('hidden');
+                    });
 
-            if (mobileDirektoriToggle && mobileDirektoriDropdown) {
-                mobileDirektoriToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    mobileDirektoriDropdown.classList.toggle('hidden');
-                });
-
-                document.addEventListener('click', (e) => {
-                    if (!mobileDirektoriToggle.contains(e.target) && !mobileDirektoriDropdown.contains(e.target)) {
-                        mobileDirektoriDropdown.classList.add('hidden');
+                    if (!mobileDirektoriDropdown._htmxInit) {
+                        mobileDirektoriDropdown._htmxInit = true;
+                        mobileDirektoriDropdown.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                        });
                     }
-                });
 
-                mobileDirektoriDropdown.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                });
-            }
+                    if (!document._sdDirektoriOutsideInit) {
+                        document._sdDirektoriOutsideInit = true;
+                        document.addEventListener('click', (e) => {
+                            if (!mobileDirektoriToggle.contains(e.target) && !mobileDirektoriDropdown.contains(e.target)) {
+                                mobileDirektoriDropdown.classList.add('hidden');
+                            }
+                        });
+                    }
+                }
 
-            if (mobileMenu) {
                 mobileMenu.querySelectorAll('a[href]').forEach((link) => {
+                    if (link._htmxInit) return;
+                    link._htmxInit = true;
                     link.addEventListener('click', () => {
                         closeMobileMenu();
                     });
                 });
             }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSdMobileMenu);
+            } else {
+                initSdMobileMenu();
+            }
+
+            document.addEventListener('htmx:afterSettle', initSdMobileMenu);
         </script>
     </nav>
     <!-- End Navbar -->
+    <script>
+    (function() {
+        var _navScrollListener = null;
+        function updateNavLayout() {
+            var nav = document.getElementById('school-nav');
+            var mainContent = document.getElementById('main-content');
+            if (!nav) return;
+            if (_navScrollListener) {
+                window.removeEventListener('scroll', _navScrollListener);
+                _navScrollListener = null;
+            }
+            var hasHero = mainContent && mainContent.querySelector('[data-hero-section]');
+            if (hasHero) {
+                if (mainContent) mainContent.style.paddingTop = '0';
+                var onScroll = function() {
+                    if (window.scrollY > 80) {
+                        nav.classList.add('bg-charcoal');
+                        nav.style.borderColor = '';
+                        nav.style.boxShadow = '0 4px 20px rgba(0,0,0,0.4)';
+                    } else {
+                        nav.classList.remove('bg-charcoal');
+                        nav.style.borderColor = 'transparent';
+                        nav.style.boxShadow = 'none';
+                    }
+                };
+                _navScrollListener = onScroll;
+                window.addEventListener('scroll', _navScrollListener, { passive: true });
+                onScroll();
+            } else {
+                nav.classList.add('bg-charcoal');
+                nav.style.borderColor = '';
+                nav.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+                if (mainContent) {
+                    mainContent.style.paddingTop = nav.offsetHeight + 'px';
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', updateNavLayout);
+        document.addEventListener('htmx:afterSettle', updateNavLayout);
+    })();
+    </script>
     <main id="main-content">
         @yield('content')
     </main>
     <!-- Footer -->
-    <footer class="mt-16 py-8 bg-charcoal text-white text-center">
+    <footer class="bg-charcoal text-white pt-20 pb-10 border-t-4 border-primary">
         <div class="max-w-7xl mx-auto px-6">
-            <span class="font-semibold">&copy; {{ date('Y') }} SDIT Putra Pakuan. All rights reserved.</span>
+            <div class="grid lg:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 lg:col-span-1 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="relative w-10 h-10 rounded-lg overflow-hidden border border-white/30">
+                            <img src="{{ asset('images/logo-yayasan.png') }}" alt="SDIT Putra Pakuan" class="w-full h-full object-cover" />
+                        </div>
+                        <h2 class="text-xl font-black tracking-tight">SDIT PUTRA PAKUAN</h2>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Membangun generasi emas Indonesia yang beriman, berilmu, dan berakhlak mulia melalui pendidikan dasar Islam terpadu yang berkualitas.
+                    </p>
+                    <div class="flex gap-4">
+                        <a class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all" href="#">
+                            <span class="material-symbols-outlined text-xl">social_leaderboard</span>
+                        </a>
+                        <a class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all" href="#">
+                            <span class="material-symbols-outlined text-xl">language</span>
+                        </a>
+                        <a class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all" href="#">
+                            <span class="material-symbols-outlined text-xl">alternate_email</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-lg font-bold text-primary">Navigasi</h4>
+                    <ul class="space-y-4 text-slate-400 text-sm font-medium">
+                        <li><a class="hover:text-white transition-colors" href="{{ route('school.profil', ['school' => 'sd']) }}">Profil Sekolah</a></li>
+                        <li><a class="hover:text-white transition-colors" href="{{ route('school.visi', ['school' => 'sd']) }}">Visi &amp; Misi</a></li>
+                        <li><a class="hover:text-white transition-colors" href="{{ route('school.direktori.guru', ['school' => 'sd']) }}">Direktori Guru</a></li>
+                        <li><a class="hover:text-white transition-colors" href="{{ route('school.galeri', ['school' => 'sd']) }}">Galeri Foto</a></li>
+                        <li><a class="hover:text-white transition-colors" href="{{ route('school.ppdb', ['school' => 'sd']) }}">PPDB Online</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-lg font-bold text-primary">Program</h4>
+                    <ul class="space-y-4 text-slate-400 text-sm font-medium">
+                        <li><a class="hover:text-white transition-colors" href="#">Kurikulum Merdeka</a></li>
+                        <li><a class="hover:text-white transition-colors" href="#">Tahfidz Al-Qur'an</a></li>
+                        <li><a class="hover:text-white transition-colors" href="#">Bahasa Arab &amp; Inggris</a></li>
+                        <li><a class="hover:text-white transition-colors" href="#">Ekstrakurikuler</a></li>
+                        <li><a class="hover:text-white transition-colors" href="#">Bimbingan Belajar</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-lg font-bold text-primary">Hubungi Kami</h4>
+                    <div class="space-y-4">
+                        <div class="flex gap-3 items-start">
+                            <span class="material-symbols-outlined text-primary mt-1">location_on</span>
+                            <p class="text-slate-400 text-sm">Jl. Raya Pakuan No. 123, Bogor, Jawa Barat, Indonesia</p>
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            <span class="material-symbols-outlined text-primary">call</span>
+                            <p class="text-slate-400 text-sm">(0251) 1234567</p>
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            <span class="material-symbols-outlined text-primary">mail</span>
+                            <p class="text-slate-400 text-sm">info@sditputrapakuan.sch.id</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-xs font-medium">
+                <p>&copy; {{ date('Y') }} SDIT Putra Pakuan. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a class="hover:text-white" href="#">Kebijakan Privasi</a>
+                    <a class="hover:text-white" href="#">Syarat Layanan</a>
+                </div>
+            </div>
         </div>
     </footer>
+
+    <!-- Floating Quick Info FAB -->
+    <div id="sd-fab-container" class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+        <button id="sd-fab" class="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-charcoal shadow-2xl hover:bg-primary/90 focus:outline-none" aria-label="Quick Info">
+            <span class="material-symbols-outlined text-2xl">help</span>
+        </button>
+        <div id="sd-fab-menu" class="hidden w-64 rounded-xl bg-charcoal/95 text-white shadow-2xl p-3 space-y-2">
+            <a href="{{ route('school.ppdb', ['school' => 'sd']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Daftar PPDB</a>
+            <a href="{{ route('school.kontak', ['school' => 'sd']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Kontak Sekolah</a>
+        </div>
+    </div>
+
+    <script>
+        if (!window.__sdFabInitialized) {
+            window.__sdFabInitialized = true;
+            const initSdFab = () => {
+                const fabBtn = document.getElementById('sd-fab');
+                const fabMenu = document.getElementById('sd-fab-menu');
+                if (fabBtn && fabMenu) {
+                    fabBtn.addEventListener('click', (e) => { e.stopPropagation(); fabMenu.classList.toggle('hidden'); });
+                    document.addEventListener('click', (e) => { if (!fabBtn.contains(e.target) && !fabMenu.contains(e.target)) fabMenu.classList.add('hidden'); });
+                }
+            };
+            document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', initSdFab) : initSdFab();
+        }
+    </script>
     @stack('scripts')
 </body>
 </html>

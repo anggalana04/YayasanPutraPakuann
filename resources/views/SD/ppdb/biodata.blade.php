@@ -1,4 +1,4 @@
-﻿@extends('layouts.SD.ppdb')
+@extends('layouts.SD.ppdb')
 
 @php
     if (!Auth::guard('ppdb_applications')->check()) {

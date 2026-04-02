@@ -16,11 +16,13 @@ class PpdbManagementPhase extends Model
         'end_date',
         'status',
         'is_live',
+        'wa_group_link',
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
+        'is_live' => 'boolean',
     ];
 
     public function school()

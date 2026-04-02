@@ -6,7 +6,7 @@
             <p class="text-slate-600 dark:text-slate-400">Raihan gemilang siswa-siswi kami di tingkat regional, nasional, hingga internasional.</p>
         </div>
 
-        <!-- Unit Filters -->
+        {{-- <!-- Unit Filters -->
         <div class="flex overflow-x-auto pb-4 gap-2 mb-8 no-scrollbar">
             <button class="px-5 py-2.5 rounded-lg bg-[#FDB913] text-white font-bold text-sm shadow-lg shadow-[#FDB913]/25 whitespace-nowrap">
                 Semua Unit
@@ -23,7 +23,7 @@
             <button class="px-5 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-50 dark:hover:bg-slate-700 whitespace-nowrap transition-colors">
                 SMA
             </button>
-        </div>
+        </div> --}}
 
         <!-- Achievement Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

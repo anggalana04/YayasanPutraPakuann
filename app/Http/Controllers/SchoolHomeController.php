@@ -17,7 +17,7 @@ class SchoolHomeController extends Controller
     public function index(string $school)
     {
         $schoolTypeUpper = strtoupper($school);
-        $schoolModel = School::where('type', $schoolTypeUpper)->firstOrFail();
+        $schoolModel = School::where('type', School::resolveDbType($school))->firstOrFail();
         $cachePrefix = 'school.home.' . strtolower($schoolTypeUpper) . '.' . $schoolModel->id;
 
         $homepage = Cache::remember($cachePrefix . '.homepage', 120, function () use ($schoolModel) {
@@ -89,13 +89,26 @@ class SchoolHomeController extends Controller
             $ppdbLive = $phases->where('is_live', true)->isNotEmpty();
 
             $now = Carbon::now();
-            $activePhase = $phases->first(function ($phase) use ($now) {
-                $start = Carbon::parse($phase->start_date)->startOfDay();
-                $end = Carbon::parse($phase->end_date)->endOfDay();
-                return $now->between($start, $end);
-            });
 
-            $nextPhase = $phases->where('start_date', '>', $now->toDateString())->sortBy('start_date')->first();
+            $activePhase = $phases
+                ->filter(function ($phase) use ($now) {
+                    $start = Carbon::parse($phase->start_date)->startOfDay();
+                    $end = Carbon::parse($phase->end_date)->endOfDay();
+                    return $now->gte($start) && $now->lte($end);
+                })
+                ->sortByDesc(function ($phase) {
+                    return Carbon::parse($phase->start_date)->timestamp;
+                })
+                ->first();
+
+            $nextPhase = $phases
+                ->filter(function ($phase) use ($now) {
+                    return Carbon::parse($phase->start_date)->startOfDay()->gt($now);
+                })
+                ->sortBy(function ($phase) {
+                    return Carbon::parse($phase->start_date)->timestamp;
+                })
+                ->first();
             $phaseForCountdown = $activePhase ?? $nextPhase ?? $phases->last();
 
             if ($phaseForCountdown) {
@@ -125,7 +138,7 @@ class SchoolHomeController extends Controller
     public function teacherDirectory(string $school)
     {
         $schoolTypeUpper = strtoupper($school);
-        $schoolModel = School::where('type', $schoolTypeUpper)->firstOrFail();
+        $schoolModel = School::where('type', School::resolveDbType($school))->firstOrFail();
 
         $teacherStaff = TeacherStaff::where('school_id', $schoolModel->id)
             ->active()

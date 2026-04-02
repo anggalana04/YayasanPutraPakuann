@@ -1,4 +1,4 @@
-﻿@extends('layouts.SD.ppdb')
+@extends('layouts.SD.ppdb')
 
 @section('ppdb-content')
 <div class="flex-grow pt-8 pb-12">
@@ -106,7 +106,7 @@
                                 @endif
                                 <span id="kk_file_name" class="block mt-2 text-xs text-blue-600"></span>
                             </div>
-                            <input class="hidden" type="file" name="kk_file" accept=".jpg,.jpeg,.png,.pdf" onchange="document.getElementById('kk_file_name').textContent = this.files[0]?.name || ''">
+                            <input class="hidden" type="file" name="kk_file" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this, 2, 'kk_file_name')">
                         </label>
                     </div>
                     <!-- Upload Card 2 -->
@@ -121,7 +121,7 @@
                                 @endif
                                 <span id="ijazah_file_name" class="block mt-2 text-xs text-blue-600"></span>
                             </div>
-                            <input class="hidden" type="file" name="ijazah_file" accept=".jpg,.jpeg,.png,.pdf" onchange="document.getElementById('ijazah_file_name').textContent = this.files[0]?.name || ''">
+                            <input class="hidden" type="file" name="ijazah_file" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this, 2, 'ijazah_file_name')">
                         </label>
                     </div>
                     <!-- Upload Card 3 -->
@@ -136,7 +136,7 @@
                                 @endif
                                 <span id="photo_file_name" class="block mt-2 text-xs text-blue-600"></span>
                             </div>
-                            <input class="hidden" type="file" name="photo_file" accept=".jpg,.jpeg,.png,.pdf" onchange="document.getElementById('photo_file_name').textContent = this.files[0]?.name || ''">
+                            <input class="hidden" type="file" name="photo_file" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this, 2, 'photo_file_name')">
                         </label>
                     </div>
                     <!-- Upload Card 4: Raport Semester -->
@@ -151,7 +151,7 @@
                                 @endif
                                 <span id="raport_file_name" class="block mt-2 text-xs text-blue-600"></span>
                             </div>
-                            <input class="hidden" type="file" name="raport_file" accept=".jpg,.jpeg,.png,.pdf" onchange="document.getElementById('raport_file_name').textContent = this.files[0]?.name || ''">
+                            <input class="hidden" type="file" name="raport_file" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this, 2, 'raport_file_name')">
                         </label>
                     </div>
                     <!-- Upload Card 5: Prestasi / Sertifikat -->
@@ -166,7 +166,7 @@
                                 @endif
                                 <span id="prestasi_file_name" class="block mt-2 text-xs text-blue-600"></span>
                             </div>
-                            <input class="hidden" type="file" name="prestasi_file" accept=".jpg,.jpeg,.png,.pdf" onchange="document.getElementById('prestasi_file_name').textContent = this.files[0]?.name || ''">
+                            <input class="hidden" type="file" name="prestasi_file" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this, 2, 'prestasi_file_name')">
                         </label>
                     </div>
                 </div>

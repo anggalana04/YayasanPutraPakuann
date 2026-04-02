@@ -17,7 +17,7 @@ trait ResolvesSchool
     protected function resolveSchoolByType(string $type): ?School
     {
         $key = 'school.type.' . strtolower($type);
-        $normalizedType = strtoupper($type);
+        $normalizedType = School::resolveDbType($type);
 
         return Cache::remember($key, 300, function () use ($normalizedType) {
             if (! Schema::hasTable('schools')) {
@@ -49,13 +49,33 @@ trait ResolvesSchool
     protected function flushSchoolCache(?School $school = null): void
     {
         if ($school) {
+            // Keys used by ResolvesSchool trait itself
             Cache::forget('school.type.' . strtolower($school->type));
             Cache::forget('school.settings.' . $school->id);
+
+            // Keys used by SchoolHomeController (public-facing homepage).
+            // SchoolHomeController uses the route slug (e.g. "sd" for SDIT),
+            // so we must reverse-map the DB type to the slug here.
+            $typeSlug = match (strtoupper($school->type)) {
+                'SDIT' => 'sd',
+                default => strtolower($school->type),
+            };
+            $prefix = 'school.home.' . $typeSlug . '.' . $school->id;
+            Cache::forget($prefix . '.homepage');
+            Cache::forget($prefix . '.latest_news');
+            Cache::forget($prefix . '.latest_gallery');
+            Cache::forget($prefix . '.carousel');
+            Cache::forget($prefix . '.teachers');
+            Cache::forget($prefix . '.ppdb');
+            Cache::forget($prefix . '.phases');
+            Cache::forget($prefix . '.prestasi');
         } else {
-            // Flush all known types
+            // Flush all known types (both trait keys and public homepage keys)
             foreach (['yayasan', 'sd', 'smp', 'smk'] as $type) {
                 Cache::forget('school.type.' . $type);
             }
+            // Also flush SDIT's trait key (DB type is "SDIT", not "sd")
+            Cache::forget('school.type.sdit');
         }
     }
 }

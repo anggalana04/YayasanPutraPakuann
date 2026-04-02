@@ -1,4 +1,4 @@
-﻿@extends('layouts.SMP.app')
+@extends('layouts.SMP.app')
 
 @section('title', 'Profil Sekolah | SMP Putra Pakuan')
 
@@ -239,6 +239,104 @@
                 </div>
             </div>
         </aside>
+    </div>
+</section>
+
+<!-- Visi & Misi Section (Merged) -->
+<section id="visi-misi" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <h2 class="text-3xl font-black mb-4 flex items-center gap-3">
+        <span class="w-2 h-8 bg-primary rounded-full"></span>
+        Visi & Misi SMP Putra Pakuan
+    </h2>
+    <p class="text-slate-600 mb-12">Arah dan tujuan yang menjadi landasan SMP Putra Pakuan dalam menyelenggarakan pendidikan menengah pertama yang berkualitas dan berkarakter.</p>
+
+    <!-- Visi -->
+    <div class="rounded-xl p-8 md:p-16 relative overflow-hidden shadow-2xl mb-12" style="background: linear-gradient(135deg, #101c22 0%, #1a2e38 100%)">
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 flex flex-col items-center text-center">
+            <span class="text-primary font-bold tracking-[0.2em] uppercase mb-6 flex items-center gap-2">
+                <span class="w-8 h-px bg-primary"></span>
+                Visi Utama
+                <span class="w-8 h-px bg-primary"></span>
+            </span>
+            <blockquote class="max-w-4xl">
+                <p class="text-white text-2xl md:text-4xl font-bold leading-tight md:leading-snug italic">
+                    &quot;Membentuk manusia terampil, profesional, unggul dalam ilmu pengetahuan dan teknologi mampu menciptakan lapangan kerja sendiri dan siap terjun di dunia usaha/kerja yang didasari iman dan taqwa&quot;
+                </p>
+            </blockquote>
+            <div class="mt-8 flex flex-wrap justify-center gap-3">
+                <span class="bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-2 rounded-full text-white/80 text-sm font-medium">#Unggul</span>
+                <span class="bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-2 rounded-full text-white/80 text-sm font-medium">#Berkarakter</span>
+                <span class="bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-2 rounded-full text-white/80 text-sm font-medium">#Mandiri</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Misi -->
+    <h3 class="text-2xl font-bold text-primary mb-6">Misi</h3>
+    <div class="grid md:grid-cols-2 gap-6 mb-16">
+        <div class="bg-white border-l-4 border-primary shadow p-6 rounded-xl flex gap-4 items-start">
+            <span class="material-symbols-outlined text-primary text-3xl shrink-0">star</span>
+            <span class="text-slate-700 font-medium">Mempertinggi keimanan dan ketaqwaan kepada Tuhan Yang Maha Esa</span>
+        </div>
+        <div class="bg-white border-l-4 border-primary shadow p-6 rounded-xl flex gap-4 items-start">
+            <span class="material-symbols-outlined text-primary text-3xl shrink-0">star</span>
+            <span class="text-slate-700 font-medium">Melaksanakan pengembangan diri sejalan dengan pengembangan ilmu pengetahuan dan teknologi</span>
+        </div>
+        <div class="bg-white border-l-4 border-primary shadow p-6 rounded-xl flex gap-4 items-start">
+            <span class="material-symbols-outlined text-primary text-3xl shrink-0">star</span>
+            <span class="text-slate-700 font-medium">Melaksanakan pembelajaran yang efektif, efesien, dan menyenangkan</span>
+        </div>
+        <div class="bg-white border-l-4 border-primary shadow p-6 rounded-xl flex gap-4 items-start">
+            <span class="material-symbols-outlined text-primary text-3xl shrink-0">star</span>
+            <span class="text-slate-700 font-medium">Meningkatkan keterampilan seni dan budaya</span>
+        </div>
+        <div class="bg-white border-l-4 border-primary shadow p-6 rounded-xl flex gap-4 items-start">
+            <span class="material-symbols-outlined text-primary text-3xl shrink-0">star</span>
+            <span class="text-slate-700 font-medium">Menciptakan suasana lingkungan sekolah yang nyaman</span>
+        </div>
+        <div class="bg-white border-l-4 border-primary shadow p-6 rounded-xl flex gap-4 items-start">
+            <span class="material-symbols-outlined text-primary text-3xl shrink-0">star</span>
+            <span class="text-slate-700 font-medium">Meningkatkan rasa kekeluargaan diantara warga sekolah dan lingkungan sekolah</span>
+        </div>
+        <div class="bg-white border-l-4 border-primary shadow p-6 rounded-xl flex gap-4 items-start">
+            <span class="material-symbols-outlined text-primary text-3xl shrink-0">star</span>
+            <span class="text-slate-700 font-medium">Meningkatkan sarana dan prasarana belajar serta ekstrakulikuler</span>
+        </div>
+        <div class="bg-white border-l-4 border-primary shadow p-6 rounded-xl flex gap-4 items-start">
+            <span class="material-symbols-outlined text-primary text-3xl shrink-0">star</span>
+            <span class="text-slate-700 font-medium">Meningkatkan prilaku dan akhlak yang mulia bagi peserta didik</span>
+        </div>
+        <div class="bg-white border-l-4 border-primary shadow p-6 rounded-xl flex gap-4 items-start">
+            <span class="material-symbols-outlined text-primary text-3xl shrink-0">star</span>
+            <span class="text-slate-700 font-medium">Meningkatkan semangat prestasi bagi seluruh warga sekolah</span>
+        </div>
+        <div class="bg-white border-l-4 border-primary shadow p-6 rounded-xl flex gap-4 items-start">
+            <span class="material-symbols-outlined text-primary text-3xl shrink-0">star</span>
+            <span class="text-slate-700 font-medium">Mendorong murid untuk memahami potensi diri</span>
+        </div>
+    </div>
+
+    <!-- Nilai Utama -->
+    <h3 class="text-2xl font-bold text-charcoal mb-8 text-center">Nilai-Nilai Utama Kami</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="p-8 bg-slate-50 rounded-xl border border-dashed border-slate-200 flex flex-col items-center">
+            <span class="material-symbols-outlined text-4xl text-primary mb-4">verified</span>
+            <p class="font-bold text-charcoal">Integritas</p>
+        </div>
+        <div class="p-8 bg-slate-50 rounded-xl border border-dashed border-slate-200 flex flex-col items-center">
+            <span class="material-symbols-outlined text-4xl text-primary mb-4">bolt</span>
+            <p class="font-bold text-charcoal">Inovatif</p>
+        </div>
+        <div class="p-8 bg-slate-50 rounded-xl border border-dashed border-slate-200 flex flex-col items-center">
+            <span class="material-symbols-outlined text-4xl text-primary mb-4">groups</span>
+            <p class="font-bold text-charcoal">Kolaborasi</p>
+        </div>
+        <div class="p-8 bg-slate-50 rounded-xl border border-dashed border-slate-200 flex flex-col items-center">
+            <span class="material-symbols-outlined text-4xl text-primary mb-4">psychology</span>
+            <p class="font-bold text-charcoal">Kreatif</p>
+        </div>
     </div>
 </section>
 @endsection

@@ -1,4 +1,4 @@
-﻿@extends('layouts.SMP.app')
+@extends('layouts.SMP.app')
 
 @section('title', 'Visi dan Misi - SMP Putra Pakuan')
 

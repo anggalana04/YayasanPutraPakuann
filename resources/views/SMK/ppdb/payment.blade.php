@@ -1,4 +1,4 @@
-﻿@extends('layouts.SMK.ppdb')
+@extends('layouts.SMK.ppdb')
 
 @section('ppdb-content')
 
@@ -125,7 +125,7 @@
         </div>
         <p class="font-bold text-on-background mb-1">Unggah Bukti Pembayaran</p>
         <p class="text-[10px] text-on-surface-variant uppercase tracking-widest">JPG, PNG atau PDF (Max 2MB)</p>
-        <input class="hidden" type="file" name="payment_proof" accept=".jpg,.jpeg,.png,.pdf" required onchange="document.getElementById('payment_file_name').textContent = this.files[0]?.name || ''">
+        <input class="hidden" type="file" name="payment_proof" accept=".jpg,.jpeg,.png,.pdf" required onchange="validateFileSize(this, 2, 'payment_file_name')">
         <span id="payment_file_name" class="block mt-2 text-xs text-blue-600"></span>
     </label>
     <button type="submit" class="mt-6 w-full bg-green-600 text-white py-4 rounded-full font-bold shadow-lg shadow-green-400/20 hover:bg-green-700 active:scale-[0.98] transition-all">

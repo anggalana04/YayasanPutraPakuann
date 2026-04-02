@@ -13,7 +13,7 @@ class SchoolNewsController extends Controller
     public function index(Request $request, string $school)
     {
         $schoolTypeUpper = strtoupper($school);
-        $schoolModel = School::where('type', $schoolTypeUpper)->firstOrFail();
+        $schoolModel = School::where('type', School::resolveDbType($school))->firstOrFail();
 
         $category = $request->query('category');
         $page = max(1, (int) $request->query('page', 1));
@@ -72,10 +72,10 @@ class SchoolNewsController extends Controller
         ]);
     }
 
-    public function show(string $school, int $news)
+    public function show(string $school, string $slug)
     {
         $schoolTypeUpper = strtoupper($school);
-        $schoolModel = School::where('type', $schoolTypeUpper)->firstOrFail();
+        $schoolModel = School::where('type', School::resolveDbType($school))->firstOrFail();
 
         if (!Schema::hasTable('news')) {
             abort(404);
@@ -83,7 +83,8 @@ class SchoolNewsController extends Controller
 
         $newsItem = News::where('school_id', $schoolModel->id)
             ->where('status', 'published')
-            ->findOrFail($news);
+            ->where('slug', $slug)
+            ->firstOrFail();
 
         $view = strtoupper($school) . '.berita.detail';
 

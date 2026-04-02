@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 class AdminPpdbApplicantsController extends Controller
 {
+
     // ---------------------------------------------------------------
     // Shared private helpers
     // ---------------------------------------------------------------
@@ -21,11 +22,11 @@ class AdminPpdbApplicantsController extends Controller
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    private function buildApplicantQuery(string $schoolType, Request $request)
+    private function buildApplicantQuery(int $schoolId, Request $request)
     {
         PpdbApplication::cleanupOldDrafts();
 
-        $query = PpdbApplication::where('school_type', strtoupper($schoolType))
+        $query = PpdbApplication::where('school_id', $schoolId)
             ->whereIn('status', ['pending', 'payment_uploaded', 'accepted', 'rejected']);
 
         if ($request->filled('search')) {
@@ -78,7 +79,7 @@ class AdminPpdbApplicantsController extends Controller
      * Compute major capacity stats for an SMK applicant.
      * Returns [$capacities, $assignedCounts, $majorStats, $yearPeriod].
      */
-    private function computeMajorStats(PpdbApplication $applicant, int $schoolId, string $schoolType): array
+    private function computeMajorStats(PpdbApplication $applicant, int $schoolId): array
     {
         $yearStart  = Carbon::parse($applicant->created_at ?? now())->year;
         $yearPeriod = $yearStart . '/' . ($yearStart + 1);
@@ -88,7 +89,7 @@ class AdminPpdbApplicantsController extends Controller
             ->get()
             ->keyBy(fn($item) => trim(strtolower($item->major)));
 
-        $assignedCounts = PpdbApplication::where('school_type', strtoupper($schoolType))
+        $assignedCounts = PpdbApplication::where('school_id', $schoolId)
             ->whereIn('status', ['accepted', 'accepted_major_1', 'accepted_major_2'])
             ->whereYear('created_at', $yearStart)
             ->get()
@@ -222,9 +223,9 @@ class AdminPpdbApplicantsController extends Controller
     public function smkIndex(Request $request)
     {
         $schoolModel        = School::where('type', 'SMK')->firstOrFail();
-        $query              = $this->buildApplicantQuery('SMK', $request);
+        $query              = $this->buildApplicantQuery($schoolModel->id, $request);
         $pendingCount       = (clone $query)->whereIn('status', ['pending', 'payment_uploaded'])->count();
-        $pendingOverallCount = PpdbApplication::where('school_type', 'SMK')
+        $pendingOverallCount = PpdbApplication::where('school_id', $schoolModel->id)
             ->whereIn('status', ['pending', 'payment_uploaded'])->count();
         $applicants  = $query->orderBy('created_at', 'desc')->get();
         $capacities  = $this->getCapacities($schoolModel->id, $request->year);
@@ -243,14 +244,15 @@ class AdminPpdbApplicantsController extends Controller
     /** GET /admin/ppdb/applicants/smk/data */
     public function smkData(Request $request)
     {
-        $query      = $this->buildApplicantQuery('SMK', $request);
+        $schoolModel = School::where('type', 'SMK')->firstOrFail();
+        $query      = $this->buildApplicantQuery($schoolModel->id, $request);
         $applicants = $query->orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'applicants'      => $applicants->map(fn(PpdbApplication $item) => $this->mapApplicant($item)),
             'total'           => $applicants->count(),
             'pending'         => $applicants->whereIn('status', ['pending', 'payment_uploaded'])->count(),
-            'pending_overall' => PpdbApplication::where('school_type', 'SMK')
+            'pending_overall' => PpdbApplication::where('school_id', $schoolModel->id)
                 ->whereIn('status', ['pending', 'payment_uploaded'])->count(),
         ]);
     }
@@ -262,7 +264,7 @@ class AdminPpdbApplicantsController extends Controller
         $schoolModel = School::where('type', 'SMK')->firstOrFail();
 
         [$capacities, $assignedCounts, $majorStats, $yearPeriod] =
-            $this->computeMajorStats($applicant, $schoolModel->id, 'SMK');
+            $this->computeMajorStats($applicant, $schoolModel->id);
 
         return view('admin.superadmin.ppdb.smk.applicant_detail', compact(
             'applicant',
@@ -282,14 +284,15 @@ class AdminPpdbApplicantsController extends Controller
     public function bySchoolIndex(Request $request, string $school)
     {
         $schoolModel  = School::where('slug', $school)->firstOrFail();
-        $query        = $this->buildApplicantQuery($schoolModel->type, $request);
+        $query        = $this->buildApplicantQuery($schoolModel->id, $request);
         $applicants   = $query->orderBy('created_at', 'desc')->get();
         $capacities   = $this->getCapacities($schoolModel->id, $request->year);
         $selectedYear = $request->year;
 
-        $view = 'admin.superadmin.ppdb.' . strtolower($schoolModel->type) . '.applicants';
+        $viewFolder = strtolower($schoolModel->type) === 'sdit' ? 'sd' : strtolower($schoolModel->type);
+        $view = 'admin.superadmin.ppdb.' . $viewFolder . '.applicants';
         if (! view()->exists($view)) {
-            $view = 'admin.superadmin.ppdb.applicants';
+            $view = 'admin.superadmin.ppdb.sd.applicants';
         }
 
         return view($view, compact('applicants', 'schoolModel', 'selectedYear', 'capacities'));
@@ -299,7 +302,7 @@ class AdminPpdbApplicantsController extends Controller
     public function bySchoolData(Request $request, string $school)
     {
         $schoolModel  = School::where('slug', $school)->firstOrFail();
-        $query        = $this->buildApplicantQuery($schoolModel->type, $request);
+        $query        = $this->buildApplicantQuery($schoolModel->id, $request);
         $pendingCount = (clone $query)->whereIn('status', ['pending', 'payment_uploaded'])->count();
 
         $applicants = $query->orderBy('created_at', 'desc')
@@ -323,7 +326,7 @@ class AdminPpdbApplicantsController extends Controller
         $schoolModel = School::where('slug', $school)->firstOrFail();
         $applicant   = PpdbApplication::findOrFail($id);
 
-        if (strtoupper($applicant->school_type) !== strtoupper($schoolModel->type)) {
+        if ($applicant->school_id !== $schoolModel->id) {
             abort(404);
         }
 
@@ -334,7 +337,7 @@ class AdminPpdbApplicantsController extends Controller
 
         if ($schoolModel->type === 'SMK') {
             [$capacities, $assignedCounts, $majorStats, $yearPeriod] =
-                $this->computeMajorStats($applicant, $schoolModel->id, 'SMK');
+                $this->computeMajorStats($applicant, $schoolModel->id);
         }
 
         $view = 'admin.superadmin.ppdb.' . strtolower($schoolModel->type) . '.applicant_detail';
@@ -356,7 +359,8 @@ class AdminPpdbApplicantsController extends Controller
     public function export(Request $request, string $school)
     {
         $schoolModel = School::where('slug', $school)->firstOrFail();
-        $applicants  = $this->buildApplicantQuery($schoolModel->type, $request)
+        $applicants  = $this->buildApplicantQuery($schoolModel->id, $request)
+            ->with('school')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -386,7 +390,8 @@ class AdminPpdbApplicantsController extends Controller
         }
 
         $schoolModel = School::where('slug', $school)->firstOrFail();
-        $applicants  = $this->buildApplicantQuery($schoolModel->type, $request)
+        $applicants  = $this->buildApplicantQuery($schoolModel->id, $request)
+            ->with('school')
             ->orderBy('created_at', 'desc')
             ->get();
 

@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('title', 'Manajemen PPDB - SDIT Putra Pakuan CMS')
 
@@ -163,11 +163,11 @@
                     <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-bold text-on-surface-variant mb-1 uppercase">Tanggal Mulai</label>
-                            <input type="date" name="periode_1_start" class="w-full p-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-400" value="{{ optional($selectedPhases->firstWhere('phase_name','Periode 1'))->start_date }}" required>
+                            <input type="date" name="periode_1_start" class="w-full p-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-400" value="{{ $selectedPhases->firstWhere('phase_name','Periode 1')?->start_date?->format('Y-m-d') }}" required>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-on-surface-variant mb-1 uppercase">Tanggal Selesai</label>
-                            <input type="date" name="periode_1_end" class="w-full p-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-400" value="{{ optional($selectedPhases->firstWhere('phase_name','Periode 1'))->end_date }}" required>
+                            <input type="date" name="periode_1_end" class="w-full p-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-400" value="{{ $selectedPhases->firstWhere('phase_name','Periode 1')?->end_date?->format('Y-m-d') }}" required>
                         </div>
                     </div>
                 </div>
@@ -181,11 +181,11 @@
                     <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-bold text-on-surface-variant mb-1 uppercase">Tanggal Mulai</label>
-                            <input type="date" name="periode_2_start" class="w-full p-3 border border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-400" value="{{ optional($selectedPhases->firstWhere('phase_name','Periode 2'))->start_date }}" required>
+                            <input type="date" name="periode_2_start" class="w-full p-3 border border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-400" value="{{ $selectedPhases->firstWhere('phase_name','Periode 2')?->start_date?->format('Y-m-d') }}" required>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-on-surface-variant mb-1 uppercase">Tanggal Selesai</label>
-                            <input type="date" name="periode_2_end" class="w-full p-3 border border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-400" value="{{ optional($selectedPhases->firstWhere('phase_name','Periode 2'))->end_date }}" required>
+                            <input type="date" name="periode_2_end" class="w-full p-3 border border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-400" value="{{ $selectedPhases->firstWhere('phase_name','Periode 2')?->end_date?->format('Y-m-d') }}" required>
                         </div>
                     </div>
                 </div>
@@ -199,13 +199,22 @@
                     <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-bold text-on-surface-variant mb-1 uppercase">Tanggal Mulai</label>
-                            <input type="date" name="periode_3_start" class="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400" value="{{ optional($selectedPhases->firstWhere('phase_name','Periode 3'))->start_date }}" required>
+                            <input type="date" name="periode_3_start" class="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400" value="{{ $selectedPhases->firstWhere('phase_name','Periode 3')?->start_date?->format('Y-m-d') }}" required>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-on-surface-variant mb-1 uppercase">Tanggal Selesai</label>
-                            <input type="date" name="periode_3_end" class="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400" value="{{ optional($selectedPhases->firstWhere('phase_name','Periode 3'))->end_date }}" required>
+                            <input type="date" name="periode_3_end" class="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400" value="{{ $selectedPhases->firstWhere('phase_name','Periode 3')?->end_date?->format('Y-m-d') }}" required>
                         </div>
                     </div>
+                </div>
+
+                <!-- WA Group Link -->                <div class="md:col-span-3 p-6 rounded-2xl border-2 border-green-200 bg-green-50/50">
+                    <label class="block text-sm font-bold text-green-900 mb-1 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-600" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.418A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.95 7.95 0 01-4.073-1.117l-.292-.174-3.018.86.872-2.938-.19-.302A7.95 7.95 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8zm4.406-5.845c-.242-.121-1.434-.707-1.657-.788-.222-.081-.384-.121-.545.121-.162.242-.626.788-.768.95-.141.162-.283.182-.525.061-.242-.121-1.022-.376-1.947-1.2-.719-.641-1.205-1.433-1.346-1.675-.142-.242-.015-.373.106-.493.109-.109.242-.283.363-.424.12-.141.161-.243.242-.404.08-.162.04-.303-.02-.424-.061-.121-.545-1.316-.747-1.8-.197-.473-.397-.409-.545-.417l-.465-.008c-.162 0-.424.061-.646.303-.222.242-.848.829-.848 2.022s.868 2.346.99 2.508c.12.162 1.71 2.611 4.143 3.662.58.25 1.031.4 1.382.512.58.185 1.108.159 1.526.096.465-.07 1.434-.586 1.636-1.152.202-.566.202-1.051.141-1.152-.06-.1-.222-.162-.465-.283z"/></svg>
+                        Link Grup WhatsApp Peserta Didik Baru
+                    </label>
+                    <p class="text-xs text-green-700/70 mb-3">Link ini akan tampil di dashboard PPDB calon siswa yang diterima, sebagai panduan untuk daftar ulang dan bergabung ke grup.</p>
+                    <input type="url" name="wa_group_link" placeholder="https://chat.whatsapp.com/..." class="w-full p-3 border border-green-300 rounded-xl focus:ring-2 focus:ring-green-400 bg-white" value="{{ optional($selectedPhases->first())->wa_group_link }}">
                 </div>
 
                 <div class="md:col-span-3 flex justify-end gap-3 pt-4 border-t border-outline">
@@ -240,16 +249,25 @@
                                 <td class="px-6 py-4 text-on-surface-variant">{{ $phase->start_date ? $phase->start_date->format('d M Y') : '-' }}</td>
                                 <td class="px-6 py-4 text-on-surface-variant">{{ $phase->end_date ? $phase->end_date->format('d M Y') : '-' }}</td>
                                 <td class="px-6 py-4">
-                                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase {{ $phase->status == 'active' ? 'bg-green-100 text-green-700' : ($phase->status == 'finished' ? 'bg-slate-100 text-slate-700' : 'bg-blue-100 text-blue-700') }}">
-                                        {{ ucfirst($phase->status) }}
+                                    @php
+                                        $computed = $phase->computed_status ?? $phase->status;
+                                        $label = ucfirst($computed);
+                                        $classes = $computed == 'active'
+                                            ? 'bg-green-100 text-green-700'
+                                            : ($computed == 'finished' ? 'bg-slate-100 text-slate-700' : 'bg-blue-100 text-blue-700');
+                                    @endphp
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase {{ $classes }}">
+                                        {{ $label }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-right space-x-1 flex justify-end">
-                                    <form method="POST" action="{{ route('admin.ppdb.management.phase.activate', ['school' => $school->slug, 'phase' => $phase->id]) }}" class="inline">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="px-3 py-1 rounded-lg bg-green-100 text-green-700 text-xs font-bold hover:bg-green-200">Aktifkan</button>
-                                    </form>
+                                    @if(($phase->computed_status ?? $phase->status) !== 'active')
+                                        <form method="POST" action="{{ route('admin.ppdb.management.phase.activate', ['school' => $school->slug, 'phase' => $phase->id]) }}" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="px-3 py-1 rounded-lg bg-green-100 text-green-700 text-xs font-bold hover:bg-green-200">Aktifkan</button>
+                                        </form>
+                                    @endif
                                     <form method="POST" action="{{ route('admin.ppdb.management.phase.destroy', ['school' => $school->slug, 'phase' => $phase->id]) }}" class="inline" onsubmit="return confirm('Are you sure?');">
                                         @csrf
                                         @method('DELETE')

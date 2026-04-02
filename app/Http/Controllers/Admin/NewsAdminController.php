@@ -5,16 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Models\School;
+use App\Traits\ResolvesSchool;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class NewsAdminController extends Controller
 {
+    use ResolvesSchool;
     public function index(string $schoolType)
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
         $news = News::where('school_id', $school->id)
             ->orderByDesc('created_at')
             ->paginate(10);
@@ -30,7 +32,7 @@ class NewsAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         return view('admin.superadmin.cms.unit.news.form', [
             'mode' => 'create',
@@ -44,7 +46,7 @@ class NewsAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -53,7 +55,7 @@ class NewsAdminController extends Controller
             'content' => ['required', 'string'],
             'status' => ['required', 'in:draft,published'],
             'featured' => ['nullable', 'boolean'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $slug = $this->generateUniqueSlug($validated['title'], $school->id);
@@ -80,6 +82,8 @@ class NewsAdminController extends Controller
             'updated_by' => auth('admin')->user()->name ?? 'admin',
         ]);
 
+        $this->flushSchoolCache($school);
+
         return redirect()
             ->route('admin.cms.berita.index', ['schoolType' => strtolower($schoolType)])
             ->with('success', 'Berita berhasil dibuat.');
@@ -89,7 +93,7 @@ class NewsAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
         $newsItem = News::where('school_id', $school->id)->findOrFail($news);
 
         return view('admin.superadmin.cms.unit.news.form', [
@@ -104,7 +108,7 @@ class NewsAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
         $newsItem = News::where('school_id', $school->id)->findOrFail($news);
 
         $validated = $request->validate([
@@ -114,7 +118,7 @@ class NewsAdminController extends Controller
             'content' => ['required', 'string'],
             'status' => ['required', 'in:draft,published'],
             'featured' => ['nullable', 'boolean'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $newsItem->title = $validated['title'];
@@ -127,6 +131,7 @@ class NewsAdminController extends Controller
         $newsItem->slug = $this->generateUniqueSlug($validated['title'], $school->id, $newsItem->id);
 
         if ($request->hasFile('image')) {
+            $this->deleteOldCmsFile($newsItem->image_url);
             $newsItem->image_url = $this->storeNewsImage($request->file('image'), strtolower($schoolType), $newsItem->slug);
         }
 
@@ -138,6 +143,8 @@ class NewsAdminController extends Controller
         $newsItem->updated_by = auth('admin')->user()->name ?? 'admin';
         $newsItem->save();
 
+        $this->flushSchoolCache($school);
+
         return redirect()
             ->route('admin.cms.berita.edit', ['schoolType' => strtolower($schoolType), 'news' => $newsItem->id])
             ->with('success', 'Berita berhasil diperbarui.');
@@ -147,10 +154,13 @@ class NewsAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
         $newsItem = News::where('school_id', $school->id)->findOrFail($news);
 
+        $this->deleteOldCmsFile($newsItem->image_url);
         $newsItem->delete();
+
+        $this->flushSchoolCache($school);
 
         return redirect()
             ->route('admin.cms.berita.index', ['schoolType' => strtolower($schoolType)])
@@ -161,12 +171,14 @@ class NewsAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
         $newsItem = News::where('school_id', $school->id)->findOrFail($news);
 
         $newsItem->featured = !$newsItem->featured;
         $newsItem->updated_by = auth('admin')->user()->name ?? 'admin';
         $newsItem->save();
+
+        $this->flushSchoolCache($school);
 
         return redirect()
             ->route('admin.cms.berita.index', ['schoolType' => strtolower($schoolType)])
@@ -198,6 +210,16 @@ class NewsAdminController extends Controller
         }
 
         return $slug;
+    }
+
+    private function deleteOldCmsFile(?string $url): void
+    {
+        if (!$url) return;
+        if (!str_starts_with($url, '/images/cms/') && !str_starts_with($url, '/videos/cms/')) return;
+        $path = public_path(ltrim($url, '/'));
+        if (file_exists($path)) {
+            @unlink($path);
+        }
     }
 
     private function storeNewsImage(\Illuminate\Http\UploadedFile $file, string $schoolTypeLower, string $slug): string

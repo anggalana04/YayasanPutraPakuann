@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @php
     $newsExcerpt = trim(strip_tags((string) ($news->excerpt ?? $news->content ?? 'Berita terbaru dari Yayasan Putra Pakuan.')));
@@ -6,11 +6,11 @@
     $newsImageRaw = trim((string) ($news->image_url ?? ''));
     $newsImage = \Illuminate\Support\Str::startsWith($newsImageRaw, ['http://', 'https://'])
         ? $newsImageRaw
-        : ($newsImageRaw !== '' ? asset(ltrim($newsImageRaw, '/')) : asset('images/yayasan-logo.jfif'));
+        : ($newsImageRaw !== '' ? asset(ltrim($newsImageRaw, '/')) : asset('images/logo-yayasan.png'));
     $newsUrl = route('yayasan.berita.show', ['slug' => $news->slug]);
 @endphp
 
-@section('title', ($news->title ?? 'Berita') . ' — Yayasan Putra Pakuan')
+@section('title', ($news->title ?? 'Berita') . ' � Yayasan Putra Pakuan')
 @section('meta_description', $newsDescription)
 @section('meta_keywords', 'berita yayasan putra pakuan, berita pendidikan bogor, kegiatan sekolah bogor')
 @section('meta_image', $newsImage)
@@ -38,7 +38,7 @@
             'name' => 'Yayasan Putra Pakuan',
             'logo' => [
                 '@type' => 'ImageObject',
-                'url' => asset('images/yayasan-logo.jfif'),
+                'url' => asset('images/logo-yayasan.png'),
             ],
         ],
     ];

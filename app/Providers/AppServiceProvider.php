@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Models\School;
 use App\Models\PpdbApplication;
 use App\Models\PpdbMajorCapacity;
@@ -48,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
                     'ppdbCountdownDate' => null,
                 ];
 
-                $school = School::whereRaw('LOWER(type) = ?', [$schoolSlug])->first();
+                $school = School::where('type', School::resolveDbType($schoolSlug))->first();
                 if (!$school) {
                     return $defaults;
                 }
@@ -63,13 +62,25 @@ class AppServiceProvider extends ServiceProvider
                 }
 
                 $now = Carbon::now();
-                $activePhase = $phases->first(function ($phase) use ($now) {
-                    $start = Carbon::parse($phase->start_date)->startOfDay();
-                    $end = Carbon::parse($phase->end_date)->endOfDay();
-                    return $now->between($start, $end);
-                });
+                $activePhase = $phases
+                    ->filter(function ($phase) use ($now) {
+                        $start = Carbon::parse($phase->start_date)->startOfDay();
+                        $end = Carbon::parse($phase->end_date)->endOfDay();
+                        return $now->gte($start) && $now->lte($end);
+                    })
+                    ->sortByDesc(function ($phase) {
+                        return Carbon::parse($phase->start_date)->timestamp;
+                    })
+                    ->first();
 
-                $nextPhase = $phases->where('start_date', '>', $now->toDateString())->sortBy('start_date')->first();
+                $nextPhase = $phases
+                    ->filter(function ($phase) use ($now) {
+                        return Carbon::parse($phase->start_date)->startOfDay()->gt($now);
+                    })
+                    ->sortBy(function ($phase) {
+                        return Carbon::parse($phase->start_date)->timestamp;
+                    })
+                    ->first();
                 $phaseForCountdown = $activePhase ?? $nextPhase ?? $phases->last();
 
                 $ppdbCurrentPhase = null;
@@ -100,13 +111,20 @@ class AppServiceProvider extends ServiceProvider
         View::composer('admin.superadmin.dashboard', function ($view) {
             $metrics = Cache::remember('admin.dashboard.metrics.v2', 120, function () {
                 $schoolTypes = ['SD', 'SMP', 'SMK'];
-                $schools = School::whereIn('type', $schoolTypes)
+                $resolvedSchoolTypes = collect($schoolTypes)
+                    ->map(fn(string $type) => School::resolveDbType($type))
+                    ->unique()
+                    ->values()
+                    ->all();
+
+                $schools = School::whereIn('type', $resolvedSchoolTypes)
                     ->get(['id', 'type'])
                     ->keyBy('type');
 
-                $totalApplicantsByType = PpdbApplication::selectRaw('UPPER(school_type) as school_type, COUNT(*) as total')
-                    ->groupBy(DB::raw('UPPER(school_type)'))
-                    ->pluck('total', 'school_type');
+                $totalApplicantsBySchoolId = PpdbApplication::selectRaw('school_id, COUNT(*) as total')
+                    ->whereIn('school_id', $schools->pluck('id')->all())
+                    ->groupBy('school_id')
+                    ->pluck('total', 'school_id');
 
                 $phaseGroups = PpdbManagementPhase::whereIn('school_id', $schools->pluck('id')->all())
                     ->orderBy('start_date')
@@ -117,35 +135,59 @@ class AppServiceProvider extends ServiceProvider
                 $jenjangStats = collect();
 
                 foreach ($schoolTypes as $type) {
-                    $school = $schools->get($type);
+                    $resolvedType = School::resolveDbType($type);
+                    $school = $schools->get($resolvedType);
                     $phases = $school ? ($phaseGroups->get($school->id) ?? collect()) : collect();
 
                     $activePhaseName = 'Belum ada fase aktif';
                     $activePhaseEndsIn = null;
-                    $isLive = $phases->where('is_live', true)->isNotEmpty();
-
-                    if ($phases->isNotEmpty()) {
-                        $active = $phases->first(function ($phase) use ($now) {
+                    $active = $phases
+                        ->filter(function ($phase) use ($now) {
                             $start = Carbon::parse($phase->start_date)->startOfDay();
                             $end = Carbon::parse($phase->end_date)->endOfDay();
-                            return $now->between($start, $end);
-                        });
+                            return $now->gte($start) && $now->lte($end);
+                        })
+                        ->sortByDesc(function ($phase) {
+                            return Carbon::parse($phase->start_date)->timestamp;
+                        })
+                        ->first();
 
+                    $isLive = $phases->contains(function ($phase) use ($now) {
+                        if (! $phase->is_live) return false;
+                        $start = Carbon::parse($phase->start_date)->startOfDay();
+                        $end   = Carbon::parse($phase->end_date)->endOfDay();
+                        return $now->gte($start) && $now->lte($end);
+                    });
+
+                    if ($phases->isNotEmpty()) {
                         if ($active) {
                             $activePhaseName = $active->phase_name;
-                            $activePhaseEndsIn = Carbon::parse($active->end_date)->endOfDay()->diffInDays($now, false);
+                            $endDate = Carbon::parse($active->end_date)->endOfDay();
+                            $activePhaseEndsIn = $now->gte($endDate)
+                                ? null
+                                : (int) ceil($now->floatDiffInDays($endDate));
                         } else {
-                            $upcoming = $phases->where('start_date', '>', $now->toDateString())->sortBy('start_date')->first();
+                            $upcoming = $phases
+                                ->filter(function ($phase) use ($now) {
+                                    return Carbon::parse($phase->start_date)->startOfDay()->gt($now);
+                                })
+                                ->sortBy(function ($phase) {
+                                    return Carbon::parse($phase->start_date)->timestamp;
+                                })
+                                ->first();
                             if ($upcoming) {
                                 $activePhaseName = 'Upcoming: ' . $upcoming->phase_name;
-                                $activePhaseEndsIn = Carbon::parse($upcoming->end_date)->endOfDay()->diffInDays($now, false);
+                                $endDate = Carbon::parse($upcoming->end_date)->endOfDay();
+                                $activePhaseEndsIn = $now->gte($endDate)
+                                    ? null
+                                    : (int) ceil($now->floatDiffInDays($endDate));
                             }
                         }
                     }
 
                     $jenjangStats->push([
                         'type' => $type,
-                        'totalApplicants' => (int) ($totalApplicantsByType->get($type, 0)),
+                        'totalApplicants' => (int) ($totalApplicantsBySchoolId->get($school?->id, 0)),
                         'activePhase' => $activePhaseName,
                         'endsIn' => $activePhaseEndsIn,
                         'isLive' => $isLive,
@@ -169,7 +211,7 @@ class AppServiceProvider extends ServiceProvider
                         $yearEnd = intval(substr($smkCapacityYear, 5, 4));
 
                         $acceptedByMajor = PpdbApplication::query()
-                            ->where('school_type', 'SMK')
+                            ->where('school_id', $smkSchool->id)
                             ->whereIn('status', ['accepted', 'accepted_major_1', 'accepted_major_2'])
                             ->where(function ($q) use ($yearStart, $yearEnd) {
                                 $q->whereBetween('admission_date', ["{$yearStart}-01-01", "{$yearEnd}-12-31"])

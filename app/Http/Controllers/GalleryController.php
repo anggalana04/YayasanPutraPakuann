@@ -11,7 +11,7 @@ class GalleryController extends Controller
     public function index(string $school)
     {
         $schoolTypeUpper = strtoupper($school);
-        $schoolModel = School::where('type', $schoolTypeUpper)->firstOrFail();
+        $schoolModel = School::where('type', School::resolveDbType($school))->firstOrFail();
 
         $filter = request('filter', 'all');
         $page = max(1, (int) request('page', 1));
@@ -43,7 +43,7 @@ class GalleryController extends Controller
     public function loadMore(string $school)
     {
         $schoolTypeUpper = strtoupper($school);
-        $schoolModel = School::where('type', $schoolTypeUpper)->firstOrFail();
+        $schoolModel = School::where('type', School::resolveDbType($school))->firstOrFail();
 
         $filter = request('filter', 'all');
         $page = request('page', 2);

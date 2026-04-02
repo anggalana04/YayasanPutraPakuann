@@ -78,7 +78,8 @@
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(28, 25, 13, 0.25) 0%, rgba(28, 25, 13, 0.15) 50%, rgba(242, 204, 13, 0.1) 100%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 18%),
+                linear-gradient(135deg, rgba(28, 25, 13, 0.25) 0%, rgba(28, 25, 13, 0.15) 50%, rgba(242, 204, 13, 0.1) 100%);
     z-index: 2;
 }
 
@@ -326,15 +327,15 @@
 </style>
 
 <!-- Modern Hero Carousel -->
-<section class="relative min-h-screen">
+<section class="relative min-h-screen" data-hero-section>
     @php
         $heroSlides = $carouselImages->map(function ($item) {
             return [
                 'image' => $item->image_url ?: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1920&q=80',
                 'video_url' => $item->video_url,
                 'badge' => $item->title ? strtoupper($item->title) : 'SEKOLAH UNGGULAN',
-                'title' => $item->title ?: 'Membangun Generasi Unggul & Berkarakter',
-                'description' => $item->description ?: 'SMK Putra Pakuan memberikan pendidikan berkualitas dengan fasilitas modern dan tenaga pengajar profesional untuk masa depan gemilang.',
+                'title' => $item->title ?: null,
+                'description' => $item->description ?: null,
                 'buttonText' => $item->button_text ?: 'DAFTAR SEKARANG',
                 'buttonUrl' => $item->button_url ?: '#',
                 'stats' => [
@@ -398,7 +399,7 @@
         @foreach ($heroSlides as $index => $slide)
         <div class="hero-slide {{ $index === 0 ? 'active' : '' }}" data-slide="{{ $index }}">
             @if (!empty($slide['video_url']))
-                <video class="hero-media" autoplay muted loop playsinline>
+                <video class="hero-media" muted loop playsinline preload="none" poster="{{ $slide['image'] }}">
                     <source src="{{ $slide['video_url'] }}" type="video/mp4">
                     Browser Anda tidak mendukung video.
                 </video>
@@ -407,8 +408,8 @@
             @endif
             <div class="hero-overlay"></div>
             <div class="hero-text-overlay">
-                <h2 class="hero-overlay-title">{{ $slide['title'] }}</h2>
-                <p class="hero-overlay-description">{{ $slide['description'] }}</p>
+                @if(!empty($slide['title']))<h2 class="hero-overlay-title">{{ $slide['title'] }}</h2>@endif
+                @if(!empty($slide['description']))<p class="hero-overlay-description">{{ $slide['description'] }}</p>@endif
             </div>
         </div>
         @endforeach
@@ -430,151 +431,103 @@
     </div>
 </section>
 
-<!-- PPDB CTA Section -->
-@if($ppdbLive)
-<section class="bg-white dark:bg-charcoal py-16 md:py-20 relative overflow-hidden">
-    <!-- Decorative elements -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-    <div class="absolute bottom-0 left-0 w-80 h-80 bg-charcoal/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-
-    <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <div class="bg-charcoal rounded-3xl p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row items-center justify-between gap-10 shadow-2xl overflow-hidden relative">
-            <!-- Decorative Icon -->
-            <div class="absolute top-0 right-0 opacity-5 pointer-events-none">
-                <span class="material-symbols-outlined text-[400px]">school</span>
-            </div>
-
-            <!-- Content -->
-            <div class="relative z-10 flex-1 text-center lg:text-left">
-                {{-- <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FDB913] text-charcoal text-sm font-black mb-6 shadow-lg">
-                    <span class="material-symbols-outlined animate-pulse">campaign</span>
-                    PPDB DINAMIS READY
-                </div> --}}
-                <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight">
-                    PPDB {{ $ppdbPeriod ?? '2024/2025' }} <br class="hidden md:block"/>
-                    <span class="text-[#FDB913]">{{ $ppdbCurrentPhase ?? 'TBA' }}</span>
-                </h2>
-                <p class="text-slate-300 text-lg md:text-xl max-w-2xl mb-8 leading-relaxed">
-                    Pendaftaran masih dibuka ! Segera Daftar & Perhatikan batas waktu dan siapkan berkas.
-                </p>
-                <a href="{{ route('school.ppdb', ['school' => $school]) }}" class="bg-[#FDB913] text-charcoal px-10 py-4 rounded-xl font-black text-xl hover:bg-white hover:scale-105 transition-all duration-300 shadow-xl shadow-[#FDB913]/30 inline-flex items-center gap-3">
-                    <span class="material-symbols-outlined">edit_note</span>
-                    DAFTAR ONLINE SEKARANG
-                </a>
-            </div>
-
-            <!-- Countdown Timer -->
-            <div class="relative z-10 w-full lg:w-auto">
-                <div class="flex flex-col gap-4">
-                    <p class="text-white/70 font-bold text-center uppercase tracking-widest text-sm flex items-center justify-center gap-2">
-                        <span class="material-symbols-outlined text-[#FDB913]">schedule</span>
-                        Fase Ini Berakhir Dalam:
-                    </p>
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <div class="flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl p-6 min-w-[100px] backdrop-blur-lg hover:bg-white/20 transition-all">
-                            <span class="text-5xl font-black text-[#FDB913] mb-2" id="countdownDays">--</span>
-                            <span class="text-white/70 text-xs font-bold uppercase tracking-wider">Hari</span>
-                        </div>
-                        <div class="flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl p-6 min-w-[100px] backdrop-blur-lg hover:bg-white/20 transition-all">
-                            <span class="text-5xl font-black text-[#FDB913] mb-2" id="countdownHours">--</span>
-                            <span class="text-white/70 text-xs font-bold uppercase tracking-wider">Jam</span>
-                        </div>
-                        <div class="flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl p-6 min-w-[100px] backdrop-blur-lg hover:bg-white/20 transition-all">
-                            <span class="text-5xl font-black text-[#FDB913] mb-2" id="countdownMinutes">--</span>
-                            <span class="text-white/70 text-xs font-bold uppercase tracking-wider">Menit</span>
-                        </div>
-                        <div class="flex flex-col items-center bg-white/10 border border-white/20 rounded-2xl p-6 min-w-[100px] backdrop-blur-lg hover:bg-white/20 transition-all">
-                            <span class="text-5xl font-black text-[#FDB913] mb-2" id="countdownSeconds">--</span>
-                            <span class="text-white/70 text-xs font-bold uppercase tracking-wider">Detik</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-@else
-<!-- PPDB Offline Message -->
-<section class="bg-gradient-to-r from-slate-100 to-slate-50 dark:from-charcoal/50 dark:to-charcoal/30 py-16 md:py-20">
-    <div class="max-w-7xl mx-auto px-6 text-center">
-        <span class="material-symbols-outlined text-6xl text-slate-400 inline-block mb-4">pause_circle</span>
-        <h2 class="text-3xl md:text-4xl font-black text-charcoal dark:text-white mb-2">PPDB Belum Dibuka</h2>
-        <p class="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">Pendaftaran pelajar baru untuk SMK Putra Pakuan belum dibuka. Mohon menunggu pengumuman lebih lanjut.</p>
-    </div>
-</section>
-@endif
-
-
-
-
-
-<!-- Sambutan Kepala Sekolah -->
-<section class="py-16 md:py-24 bg-white dark:bg-charcoal/30"> <div class="max-w-7xl mx-auto px-6"> <div class="flex flex-col lg:flex-row gap-8 md:gap-16 items-center"> <div class="w-full lg:w-5/12 relative"> <div class="absolute -top-6 -left-6 w-32 h-32 bg-primary rounded-2xl -z-10"></div> <div class="rounded-3xl overflow-hidden shadow-2xl"> <img alt="Potret Kepala Sekolah" class="w-full h-auto object-cover" src="{{ $homepage->kepsek_photo_url }}"/> </div> <div class="absolute -bottom-6 -right-6 bg-primary p-6 rounded-2xl shadow-xl"> <p class="text-charcoal font-black text-xl leading-none">{{ $homepage->kepsek_name }}</p> <p class="text-charcoal/70 text-sm font-bold mt-1">{{ $homepage->kepsek_title }}</p> </div> </div> <div class="w-full lg:w-7/12 space-y-6"> <span class="material-symbols-outlined text-primary text-4xl md:text-6xl">format_quote</span> <h2 class="text-3xl md:text-4xl font-black text-charcoal dark:text-white">Sambutan Kepala Sekolah</h2> <p class="text-lg md:text-xl italic text-slate-600 dark:text-slate-300 leading-relaxed"> {!! nl2br(e($homepage->kepsek_sambutan)) !!} </p> </div> </div> </div> </section> <section class="py-16 md:py-24 bg-background-light dark:bg-background-dark"> <div class="max-w-7xl mx-auto px-6"> <div class="flex justify-between items-end mb-8 md:mb-12"> <div> <h2 class="text-3xl md:text-4xl font-black text-charcoal dark:text-white">Tulisan Terbaru</h2> <p class="text-slate-500 mt-2">Update terkini kegiatan dan berita dari kampus kami.</p> </div> <a class="hidden lg:flex items-center gap-2 text-charcoal dark:text-primary font-bold hover:gap-4 transition-all" href="{{ route('school.berita', ['school' => $school]) }}"> Lihat Semua Berita <span class="material-symbols-outlined">arrow_forward</span> </a> </div> <div class="grid md:grid-cols-3 gap-6 md:gap-8"> @if ($latestNews->isEmpty()) <div class="md:col-span-3 text-center py-10"> <p class="text-slate-500 dark:text-slate-400">Belum ada berita untuk saat ini.</p> </div> @else @foreach ($latestNews as $item) <article class="bg-white dark:bg-charcoal/40 rounded-2xl overflow-hidden shadow-md border border-charcoal/5 dark:border-white/5 hover:shadow-xl transition-shadow group"> <div class="h-56 bg-cover bg-center overflow-hidden" @if ($item->image_url) style="background-image: url('{{ $item->image_url }}')" @endif > <div class="w-full h-full bg-charcoal/20 group-hover:bg-charcoal/0 transition-colors"></div> </div> <div class="p-4 md:p-6 space-y-4"> <div class="flex gap-4 text-xs font-bold text-slate-400"> <span class="flex items-center gap-1"> <span class="material-symbols-outlined text-sm">calendar_month</span> {{ $item->published_at ? $item->published_at->format('d M Y') : ($item->created_at?->format('d M Y') ?? '-') }} </span> <span class="flex items-center gap-1"> <span class="material-symbols-outlined text-sm">person</span> {{ $item->created_by ?? 'Admin' }} </span> </div> <h3 class="text-lg md:text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2"> {{ $item->title }} </h3> <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3"> {{ \Illuminate\Support\Str::limit($item->excerpt ?? strip_tags($item->content ?? ''), 140) }} </p> <a href="{{ route('school.berita.detail', ['school' => $school, 'news' => $item->id]) }}" class="text-charcoal dark:text-white font-bold text-sm flex items-center gap-1 underline decoration-primary decoration-2 underline-offset-4"> Selengkapnya </a> </div> </article> @endforeach @endif </div> </div> </section>
-
-<!-- Rest of content... -->
-
-
-<!-- Foto Terbaru Section -->
-<section class="py-16 md:py-24 bg-white dark:bg-charcoal/30">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="flex justify-between items-end mb-12" data-aos="fade-up">
-            <div>
-                <h2 class="text-4xl md:text-5xl font-black text-charcoal dark:text-white mb-3">
-                    Foto <span class="text-[#FDB913]">Terbaru</span>
-                </h2>
-                <p class="text-slate-500 text-lg">Dokumentasi kegiatan dan momen spesial terbaru dari SMK Putra Pakuan.</p>
-            </div>
-            <a class="hidden lg:flex items-center gap-2 text-charcoal dark:text-[#FDB913] font-bold hover:gap-4 transition-all group" href="{{ route('school.galeri', ['school' => $school]) }}">
-                Lihat Semua Galeri
-                <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
-            </a>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
-            @if ($latestGallery->isEmpty())
-                <div class="md:col-span-3 text-center py-10">
-                    <p class="text-slate-500 dark:text-slate-400">Belum ada foto untuk saat ini.</p>
-                </div>
-            @else
-                @foreach ($latestGallery as $item)
-                    <article class="bg-white dark:bg-charcoal/40 rounded-3xl overflow-hidden shadow-lg border border-charcoal/5 dark:border-white/5 hover:shadow-lg hover:-translate-y-1 transition-transform duration-200 group cursor-pointer" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                        <div class="h-64 overflow-hidden relative">
-                            <img src="{{ $item->image_url ?? 'https://via.placeholder.com/640x480?text=Tanpa+Gambar' }}" alt="{{ $item->title ?? 'Foto Terbaru' }}" class="w-full h-full object-cover transition-transform duration-300 ease-out transform group-hover:scale-105" />
-                            <div class="absolute inset-0 bg-black/20 transition-opacity duration-300 ease-out group-hover:bg-black/30"></div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal/70 to-transparent opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-90"></div>
-                        </div>
-                        <div class="p-6 space-y-4">
-                            <div class="flex gap-4 text-xs font-bold text-slate-400">
-                                <span class="flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-sm">calendar_month</span>
-                                    {{ $item->published_at ? $item->published_at->format('d M Y') : ($item->created_at?->format('d M Y') ?? '-') }}
-                                </span>
-                            </div>
-                            <h3 class="text-xl font-bold leading-tight group-hover:text-[#FDB913] transition-colors line-clamp-2">
-                                {{ $item->title ?? 'Galeri SMK Putra Pakuan' }}
-                            </h3>
-                            <p class="text-slate-500 dark:text-slate-400 line-clamp-3">{{ $item->description ?? 'Lihat kumpulan foto terbaru kegiatan kami.' }}</p>
-                            <a href="{{ route('school.galeri', ['school' => $school]) }}" class="text-charcoal dark:text-white font-bold flex items-center gap-2 group/link">
-                                Lihat Galeri
-                                <span class="material-symbols-outlined transition-transform group-hover/link:translate-x-1">arrow_forward</span>
-                            </a>
-                        </div>
-                    </article>
-                @endforeach
-            @endif
-        </div>
-    </div>
-</section>
-
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+@include('partials.school-homepage', [
+    'schoolConfig' => [
+        'name'       => 'SMK Putra Pakuan',
+        'short_name' => 'SMK',
+        'stats' => [
+            ['number' => 12,  'suffix' => '+', 'label' => 'Tahun Berdiri'],
+            ['number' => 800, 'suffix' => '+', 'label' => 'Siswa Aktif'],
+            ['number' => 150, 'suffix' => '+', 'label' => 'Prestasi'],
+            ['number' => 50,  'suffix' => '+', 'label' => 'Mitra Industri'],
+        ],
+        'keunggulan' => [
+            [
+                'icon'       => 'factory',
+                'title'      => 'Link and Match Industri',
+                'desc'       => '50+ mitra industri terkemuka untuk magang dan penempatan kerja langsung setelah lulus.',
+                'bg_from'    => '#1e3a5f',
+                'bg_to'      => '#1d4ed8',
+                'glow'       => '#3b82f6',
+                'icon_color' => '#93c5fd',
+            ],
+            [
+                'icon'       => 'workspace_premium',
+                'title'      => 'Sertifikasi Kompetensi',
+                'desc'       => 'Siswa mendapat sertifikat BNSP dan industri yang diakui secara nasional dan internasional.',
+                'bg_from'    => '#78350f',
+                'bg_to'      => '#92400e',
+                'glow'       => '#f59e0b',
+                'icon_color' => '#fcd34d',
+            ],
+            [
+                'icon'       => 'engineering',
+                'title'      => 'Teaching Factory',
+                'desc'       => 'Workshop industri nyata di dalam sekolah memberikan pengalaman kerja profesional sejak dini.',
+                'bg_from'    => '#064e3b',
+                'bg_to'      => '#065f46',
+                'glow'       => '#10b981',
+                'icon_color' => '#6ee7b7',
+            ],
+            [
+                'icon'       => 'rocket_launch',
+                'title'      => 'Wirausaha Muda',
+                'desc'       => 'Program inkubasi bisnis dan entrepreneurship membentuk wirausahawan muda yang inovatif.',
+                'bg_from'    => '#4a044e',
+                'bg_to'      => '#701a75',
+                'glow'       => '#d946ef',
+                'icon_color' => '#f0abfc',
+            ],
+        ],
+        'kurikulum' => [
+            [
+                'icon'      => 'business_center',
+                'title'     => 'Manajemen Perkantoran dan Layanan Bisnis (MPLB)',
+                'desc'      => 'Administrasi perkantoran modern, pelayanan bisnis, pengarsipan digital, dan komunikasi profesional.',
+                'color_hex' => '#3b82f6',
+                'bg_hex'    => 'rgba(59,130,246,0.08)',
+            ],
+            [
+                'icon'      => 'account_balance',
+                'title'     => 'Akuntansi dan Keuangan Lembaga (AKL)',
+                'desc'      => 'Akuntansi dasar hingga lanjutan, perpajakan, pengelolaan keuangan, dan praktik aplikasi akuntansi.',
+                'color_hex' => '#f97316',
+                'bg_hex'    => 'rgba(249,115,22,0.08)',
+            ],
+            [
+                'icon'      => 'router',
+                'title'     => 'Teknik Komputer Jaringan (TKJ)',
+                'desc'      => 'Jaringan komputer, administrasi server, keamanan siber, dan troubleshooting infrastruktur digital.',
+                'color_hex' => '#eab308',
+                'bg_hex'    => 'rgba(234,179,8,0.08)',
+            ],
+            [
+                'icon'      => 'palette',
+                'title'     => 'Desain Komunikasi Visual (DKV)',
+                'desc'      => 'Desain grafis, branding visual, ilustrasi digital, fotografi, dan produksi konten kreatif.',
+                'color_hex' => '#ef4444',
+                'bg_hex'    => 'rgba(239,68,68,0.08)',
+            ],
+            [
+                'icon'      => 'directions_car',
+                'title'     => 'Teknik Kendaraan Ringan (TKR)',
+                'desc'      => 'Perawatan, perbaikan, diagnosis sistem kendaraan ringan, dan praktik otomotif modern.',
+                'color_hex' => '#10b981',
+                'bg_hex'    => 'rgba(16,185,129,0.08)',
+            ],
+            [
+                'icon'      => 'two_wheeler',
+                'title'     => 'Teknik Sepeda Motor (TSM)',
+                'desc'      => 'Servis, tune up, kelistrikan, dan perawatan sepeda motor sesuai standar bengkel industri.',
+                'color_hex' => '#8b5cf6',
+                'bg_hex'    => 'rgba(139,92,246,0.08)',
+            ],
+        ],
+        'ppdb_offline_text' => 'Pendaftaran pelajar baru untuk SMK Putra Pakuan belum dibuka. Mohon menunggu pengumuman resmi.',
+        'galeri_desc'       => 'Dokumentasi kegiatan dan momen spesial terbaru dari SMK Putra Pakuan.',
+    ],
+])
 <script>
-    // Initialize AOS
-    AOS.init({
-        duration: 800,
-        once: true,
-        easing: 'ease-out'
-    });
-
     // Hero Carousel
     function initHeroCarousel(root = document) {
         const carouselRoot = root.querySelector('.hero-carousel-container');
@@ -625,6 +578,13 @@
 
             currentIndex = index;
 
+            // Hint browser to preload metadata for next slide (small � just duration/dimensions)
+            const nextIdx = (index + 1) % slides.length;
+            const nextVideo = slides[nextIdx]?.querySelector('video');
+            if (nextVideo && nextVideo.readyState === 0) {
+                nextVideo.preload = 'metadata';
+            }
+
             // Reset progress
             resetProgress();
         }
@@ -657,6 +617,12 @@
             if (video) {
                 stopVideoPlayback();
                 activeVideo = video;
+
+                // Set preload so browser can stream on play() � do NOT call load()
+                // which would eagerly download the entire video file.
+                if (video.readyState === 0) {
+                    video.preload = 'auto';
+                }
 
                 video.play().catch(() => {
                     // Autoplay may be blocked in some browsers.
@@ -765,6 +731,13 @@
             });
         });
 
+        // Hint metadata only for first video � do NOT call load() here as it
+        // triggers a full download of the video file at page load time.
+        const firstVideo = slides[0]?.querySelector('video');
+        if (firstVideo && firstVideo.readyState === 0) {
+            firstVideo.preload = 'metadata';
+        }
+
         // Start autoplay (no hover pause)
         startAutoplay();
     }
@@ -774,52 +747,5 @@
         initHeroCarousel(event.detail?.elt || document);
     });
 
-    // Countdown Timer
-    function updateCountdown() {
-        @if($ppdbLive && $ppdbCountdownDate)
-            const endDate = new Date('{{ $ppdbCountdownDate->format('Y-m-d H:i:s') }}');
-        @else
-            const endDate = null;
-        @endif
-
-        if (!endDate) {
-            document.getElementById('countdownDays').textContent = '00';
-            document.getElementById('countdownHours').textContent = '00';
-            document.getElementById('countdownMinutes').textContent = '00';
-            document.getElementById('countdownSeconds').textContent = '00';
-            return;
-        }
-
-        const now = new Date();
-        const diff = endDate - now;
-
-        if (diff <= 0) {
-            document.getElementById('countdownDays').textContent = '00';
-            document.getElementById('countdownHours').textContent = '00';
-            document.getElementById('countdownMinutes').textContent = '00';
-            document.getElementById('countdownSeconds').textContent = '00';
-            return;
-        }
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        document.getElementById('countdownDays').textContent = String(days).padStart(2, '0');
-        document.getElementById('countdownHours').textContent = String(hours).padStart(2, '0');
-        document.getElementById('countdownMinutes').textContent = String(minutes).padStart(2, '0');
-        document.getElementById('countdownSeconds').textContent = String(seconds).padStart(2, '0');
-    }
-
-    // Update countdown every second
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
 </script>
 @endsection
-
-
-
-
-
-

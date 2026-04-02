@@ -3,8 +3,8 @@
     <div class="w-full min-h-[700px] md:min-h-[600px] relative flex items-center">
         <!-- Background Video with Overlay -->
         <div class="absolute inset-0 overflow-hidden">
-            <video class="absolute inset-0 w-full h-full object-cover scale-[1.45]" autoplay muted loop playsinline>
-                <source src="{{ asset('videos/cms/sd/carousel/carousel_video_sd_60a33e81-022f-4059-a4f5-29b54391944a.mp4') }}" type="video/mp4">
+            <video id="hero-video" class="absolute inset-0 w-full h-full object-cover scale-[1.45]" muted loop playsinline preload="auto">
+                <source src="{{ asset('videos/Pakuan (1) (1).mp4') }}" type="video/mp4">
                 Browser Anda tidak mendukung video.
             </video>
             <div class="absolute inset-0 bg-slate-900/70"></div>
@@ -30,14 +30,14 @@
                     </div>
 
                     <div class="flex flex-wrap gap-4 justify-center lg:justify-start items-center">
-                        <a href="{{ route('daftar') }}" class="group flex items-center gap-2 cursor-pointer justify-center rounded-full h-14 px-8 bg-[#FDB913] hover:bg-[#E5A800] text-white text-base font-bold transition-all transform hover:scale-105 shadow-xl shadow-[#FDB913]/30">
+                        {{-- <a href="{{ route('daftar') }}" class="group flex items-center gap-2 cursor-pointer justify-center rounded-full h-14 px-8 bg-[#FDB913] hover:bg-[#E5A800] text-white text-base font-bold transition-all transform hover:scale-105 shadow-xl shadow-[#FDB913]/30">
                             <span>{{ $heroCta }}</span>
                             <span class="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
                         </a>
                         <button class="flex items-center gap-2 cursor-pointer justify-center rounded-full h-14 px-8 bg-white/10 backdrop-blur-sm border-2 border-white/20 hover:bg-white hover:text-slate-900 text-white text-base font-bold transition-all shadow-lg">
                             <span class="material-symbols-outlined text-xl">play_circle</span>
                             <span>{{ $heroCtaSecondary }}</span>
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
 
@@ -52,7 +52,7 @@
                             <div class="flex flex-col gap-6 items-center text-center">
 
                                 <div class="w-40 h-40 rounded-2xl flex items-center justify-center">
-                                    <img src="{{ asset('images/yayasan-logo.jfif') }}" alt="Logo Yayasan Putra Pakuan" class="w-full h-full object-contain">
+                                    <img src="{{ asset('images/logo-yayasan.png') }}" alt="Logo Yayasan Putra Pakuan" class="w-full h-full object-contain">
                                 </div>
 
                                 <div class="flex flex-col gap-3">
@@ -61,7 +61,7 @@
                                     </h2>
                                     <div class="w-16 h-1 bg-[#FDB913] rounded-full mx-auto"></div>
                                     <p class="text-slate-700 text-lg md:text-xl font-semibold leading-relaxed">
-                                        Putra Pakuan Unggul, Intelektual, Bertalenta
+                                        Putra Pakuan Excellent, Intellectual, School Talent
                                     </p>
                                 </div>
 
@@ -94,3 +94,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Lazy-load hero video after page completes initial render
+    (function() {
+        const video = document.getElementById('hero-video');
+        if (!video) return;
+
+        // Play as soon as the browser has buffered enough data
+        function tryPlay() {
+            video.play().catch(() => {});
+        }
+        if (video.readyState >= 3) {
+            tryPlay();
+        } else {
+            video.addEventListener('canplay', tryPlay, { once: true });
+        }
+    })();
+</script>

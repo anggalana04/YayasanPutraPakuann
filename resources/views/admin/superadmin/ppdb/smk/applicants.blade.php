@@ -39,7 +39,7 @@
 </div>
 </div>
 <div class="bg-[#f2cc0d] p-6 rounded-3xl flex flex-col justify-between">
-<span class="text-[#1c190d]/60 text-xs font-bold uppercase tracking-tighter">Perlu Direview ❗</span>
+<span class="text-[#1c190d]/60 text-xs font-bold uppercase tracking-tighter">Perlu Direview ?</span>
 <div class="flex items-end justify-between">
 <span id="pendingApplicantsValue" class="text-3xl font-black text-[#1c190d]">{{ $pendingCount ?? $applicants->whereIn('status', ['pending', 'payment_uploaded'])->count() }}</span>
 <span class="material-symbols-outlined text-[#1c190d]/40" data-icon="pending_actions">pending_actions</span>
@@ -54,7 +54,7 @@
         @foreach($capacities as $cap)
             @php
                 $yearStart = intval(substr($cap->year, 0, 4));
-                $assignedCount = \App\Models\PpdbApplication::where('school_type', 'SMK')
+                $assignedCount = \App\Models\PpdbApplication::where('school_id', $schoolModel->id)
                     ->where('assigned_major', $cap->major)
                     ->where('status', 'accepted')
                     ->whereYear('created_at', $yearStart)

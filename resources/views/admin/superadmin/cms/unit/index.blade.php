@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('title', 'CMS - ' . strtoupper($schoolType) . ' Putra Pakuan')
 
@@ -9,7 +9,7 @@
     $welcomeTitle = $isYayasan ? 'Sambutan Pimpinan Yayasan' : 'Sambutan Kepala Sekolah';
 @endphp
 <div class="p-10 max-w-7xl mx-auto space-y-8">
-    <div class="flex justify-between items-end gap-6">
+    <div class="flex flex-wrap justify-between items-start gap-6">
         <div class="space-y-2">
             <p class="text-primary font-bold tracking-widest text-xs uppercase">Superadmin CMS</p>
             <h2 class="text-4xl font-extrabold tracking-tight text-[#1c190d]">{{ strtoupper($schoolType) }}</h2>
@@ -21,7 +21,7 @@
                 @endif
             </p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex flex-wrap gap-3 justify-end">
             <a href="{{ route('admin.cms.berita.index', ['schoolType' => $schoolType]) }}"
                class="px-6 py-3 bg-white border border-primary/20 rounded-2xl font-bold text-sm hover:bg-primary/10 transition-all shadow-sm flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary">newspaper</span>
@@ -39,14 +39,21 @@
             </a>
             <a href="{{ route('admin.cms.carousel.index', ['schoolType' => $schoolType]) }}"
                class="px-6 py-3 bg-white border border-primary/20 rounded-2xl font-bold text-sm hover:bg-primary/10 transition-all shadow-sm flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary">slideshow</span>
-                Kelola Karousel
+                <span class="material-symbols-outlined text-primary">{{ $isYayasan ? 'apartment' : 'slideshow' }}</span>
+                {{ $isYayasan ? 'Kelola Fasilitas' : 'Kelola Karousel' }}
             </a>
             <a href="{{ route('admin.cms.guru.index', ['schoolType' => $schoolType]) }}"
                class="px-6 py-3 bg-white border border-primary/20 rounded-2xl font-bold text-sm hover:bg-primary/10 transition-all shadow-sm flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary">people</span>
                 Kelola Guru & Staf
             </a>
+            @if(strtolower($schoolType) === 'smk')
+            <a href="{{ route('admin.cms.jurusan.index', ['schoolType' => $schoolType]) }}"
+               class="px-6 py-3 bg-white border border-primary/20 rounded-2xl font-bold text-sm hover:bg-primary/10 transition-all shadow-sm flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">class</span>
+                Kelola Jurusan
+            </a>
+            @endif
         </div>
     </div>
 
@@ -85,7 +92,7 @@
                                 @php
                                     $currentPhoto = old('principals.' . $index . '.photo_existing', $principal['photo_url'] ?? '');
                                     $currentVideo = old('principals.' . $index . '.video_existing', $principal['video_url'] ?? '');
-                                    $currentPhotoPreview = $currentPhoto ?: asset('images/logo-putrapakuan.png');
+                                    $currentPhotoPreview = $currentPhoto ?: asset('images/logo-yayasan.png');
                                 @endphp
                                 <div class="rounded-2xl border border-[#1c190d]/10 p-4 bg-white/70 space-y-4">
                                     <h4 class="text-sm font-extrabold text-[#1c190d] uppercase tracking-wider">Kartu {{ $index + 1 }}</h4>
@@ -130,8 +137,9 @@
                                             </div>
                                             <input type="hidden" name="principals[{{ $index }}][photo_existing]" value="{{ $currentPhoto }}">
                                             <input type="file" name="principals[{{ $index }}][photo]" accept="image/*"
-                                                   class="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#f2cc0d] file:text-[#1c190d]">
-                                            <p class="text-xs text-on-surface-variant">Kosongkan jika tidak ingin mengganti foto saat ini.</p>
+                                                   class="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#f2cc0d] file:text-[#1c190d]"
+                                                   onchange="validateFileSize(this, 1)">
+                                            <p class="text-xs text-on-surface-variant">Kosongkan jika tidak ingin mengganti. <strong>Maks 1 MB.</strong></p>
                                         </div>
                                         <div class="col-span-12 md:col-span-6 space-y-3">
                                             <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Video Profil (opsional)</label>
@@ -146,8 +154,9 @@
                                             @endif
                                             <input type="hidden" name="principals[{{ $index }}][video_existing]" value="{{ $currentVideo }}">
                                             <input type="file" name="principals[{{ $index }}][video]" accept="video/mp4,video/webm,video/ogg,video/quicktime"
-                                                   class="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#f2cc0d] file:text-[#1c190d]">
-                                            <p class="text-xs text-on-surface-variant">Kosongkan jika tidak ingin mengganti video saat ini.</p>
+                                                   class="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#f2cc0d] file:text-[#1c190d]"
+                                                   onchange="validateFileSize(this, 20)">
+                                            <p class="text-xs text-on-surface-variant">Kosongkan jika tidak ingin mengganti. <strong>Maks 20 MB.</strong></p>
                                         </div>
                                     </div>
                                 </div>
@@ -178,8 +187,9 @@
                             <div class="flex-1 space-y-2">
                                 <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Unggah Foto {{ $leaderTitle }}</label>
                                 <input type="file" name="kepsek_photo" accept="image/*"
-                                       class="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#f2cc0d] file:text-[#1c190d]">
-                                <p class="text-xs text-on-surface-variant">Kosongkan jika tidak ingin mengganti foto.</p>
+                                       class="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#f2cc0d] file:text-[#1c190d]"
+                                       onchange="validateFileSize(this, 1)">
+                                <p class="text-xs text-on-surface-variant">Kosongkan jika tidak ingin mengganti foto. <strong>Maks 1 MB.</strong></p>
                             </div>
                         </div>
 
@@ -272,7 +282,7 @@
                 </div>
 
                 @if ($latestNews->isEmpty())
-                    <p class="text-on-surface-variant text-sm">Belum ada berita yang dipublikasikan. Tambahkan lewat menu “Kelola Berita”.</p>
+                    <p class="text-on-surface-variant text-sm">Belum ada berita yang dipublikasikan. Tambahkan lewat menu �Kelola Berita�.</p>
                 @else
                     <div class="space-y-3">
                         @foreach ($latestNews as $item)

@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('title', ($mode === 'create' ? 'Tambah' : 'Ubah') . ' Prestasi - ' . strtoupper($schoolType))
 
@@ -43,7 +43,8 @@
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
                 <label class="block text-xs font-bold uppercase text-slate-500">Gambar (opsional)</label>
-                <input type="file" name="image" accept="image/*" class="w-full" />
+                <input type="file" name="image" accept="image/*" class="w-full" onchange="validateFileSize(this, 2)" />
+                <p class="text-xs text-slate-400 mt-1"><strong>Maksimal 2 MB.</strong></p>
                 @if(!empty($prestasiItem->image_url))
                 <img src="{{ $prestasiItem->image_url }}" alt="Existing" class="w-28 h-20 object-cover mt-2 border" />
                 @endif

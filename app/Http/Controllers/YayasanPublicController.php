@@ -37,7 +37,9 @@ class YayasanPublicController extends Controller
 
     public function home()
     {
-        $pageContent     = $this->pageContent('yayasan-home');
+        // Keep home assembled from partials so view-level updates (hero/principals/unit cards)
+        // are reflected immediately instead of being overridden by CMS page HTML.
+        $pageContent     = null;
         $yayasanSchool   = $this->resolveSchoolByType('yayasan');
         $homepage        = $yayasanSchool ? $this->resolveHomepageSettings($yayasanSchool->id) : null;
 
@@ -47,14 +49,9 @@ class YayasanPublicController extends Controller
             ->values()
             ->all();
 
-        $featuredPrincipal = $yayasanPrincipals[0] ?? null;
-
-        $heroTitle = !empty($featuredPrincipal['unit'])
-            ? 'Selamat Datang di Yayasan Putra Pakuan - ' . $featuredPrincipal['unit']
-            : 'Selamat Datang di Yayasan Putra Pakuan';
-
-        $heroSubtitle = $featuredPrincipal['description']
-            ?? 'Membangun generasi unggul melalui pendidikan berkualitas dan karakter Islami.';
+        // Keep main hero messaging at foundation level (not tied to a specific unit).
+        $heroTitle = 'Selamat Datang di Yayasan Putra Pakuan';
+        $heroSubtitle = 'Menaungi pendidikan berkualitas dari SD, SMP, hingga SMK untuk membentuk generasi berakhlak, unggul, dan siap menghadapi masa depan.';
 
         $heroCta = $homepage?->cta_text ?: 'Daftar Sekarang';
         $heroCtaSecondary = $homepage?->cta_secondary_text ?: 'Tonton Video';

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\School;
 
 class PpdbApplication extends Authenticatable
 {
@@ -12,7 +13,7 @@ class PpdbApplication extends Authenticatable
 
     protected $fillable = [
         'application_id',
-        'school_type',
+        'school_id',
         'password',
         'full_name',
         'email',
@@ -21,7 +22,6 @@ class PpdbApplication extends Authenticatable
         'address',
         'previous_school',
         'nisn',
-        'average_grade',
         'status',
         'status_history',
         'uploaded_documents',
@@ -29,8 +29,6 @@ class PpdbApplication extends Authenticatable
         'payment_method',
         'payment_proof',
         'payment_date',
-        'interview_date',
-        'interview_notes',
         'admission_date',
         'father_name',
         'father_occupation',
@@ -46,6 +44,8 @@ class PpdbApplication extends Authenticatable
         'raport_file',
         'prestasi_file',
         'last_registration_step',
+        'place_of_birth',
+        'gender',
     ];
 
     protected $hidden = [
@@ -55,13 +55,32 @@ class PpdbApplication extends Authenticatable
     protected $casts = [
         'date_of_birth' => 'date',
         'payment_date' => 'datetime',
-        'interview_date' => 'datetime',
         'admission_date' => 'datetime',
         'status_history' => 'array',
         'uploaded_documents' => 'array',
-        'average_grade' => 'decimal:2',
         'payment_amount' => 'decimal:2',
     ];
+
+    // ── Relationships ─────────────────────────────────────────────────
+
+    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    /**
+     * Virtual accessor so existing code reading $app->school_type continues to work.
+     * Avoids mass-updating every read reference while keeping a single source of truth.
+     */
+    public function getSchoolTypeAttribute(): string
+    {
+        return $this->school?->type ?? '';
+    }
+
+    public function student(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Student::class, 'ppdb_application_id');
+    }
 
     // Authentication methods
     public function getAuthIdentifierName()
@@ -83,17 +102,17 @@ class PpdbApplication extends Authenticatable
     public function generateApplicationId()
     {
         $year = date('Y');
-        $count = self::where('school_type', $this->school_type)
+        $count = self::where('school_id', $this->school_id)
             ->whereYear('created_at', $year)
             ->count() + 1;
 
         return 'PPDB-' . $year . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
     }
 
-    public function setPasswordFromDob()
+    public function setPasswordFromDob(): void
     {
-        // Use date of birth as password (DDMMYYYY format)
-        $this->password = $this->date_of_birth->format('dmY');
+        // Always hash the generated password — storing plain-text passwords is forbidden.
+        $this->password = bcrypt($this->date_of_birth->format('dmY'));
     }
 
     public function updateStatus($newStatus, $notes = null)

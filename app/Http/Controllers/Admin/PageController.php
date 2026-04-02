@@ -73,15 +73,17 @@ class PageController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->abortUnlessSuperAdmin();
+
         $page = Page::findOrFail($id);
         $data = $request->validate([
-            'title' => 'required',
-            'slug' => 'required',
-            'content' => 'nullable',
-            'status' => 'required',
-            'meta_title' => 'nullable',
-            'meta_description' => 'nullable',
-            'meta_robots' => 'nullable',
+            'title' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255'],
+            'content' => ['nullable', 'string'],
+            'status' => ['required', 'in:draft,published'],
+            'meta_title' => ['nullable', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'string', 'max:255'],
+            'meta_robots' => ['nullable', 'string', 'max:255'],
         ]);
         $data['last_updated_by'] = auth('admin')->user()->name ?? 'admin';
         $page->update($data);

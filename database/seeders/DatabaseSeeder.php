@@ -7,6 +7,11 @@ use App\Models\School;
 use App\Models\PpdbManagementPhase;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\NewsSeeder;
+use Database\Seeders\PrestasiSeeder;
+use Database\Seeders\GalleryCarouselSeeder;
+use Database\Seeders\TeacherStaffSeeder;
+use Database\Seeders\HomepageSettingSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -32,7 +37,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'superadmin@putrapakuan.sch.id',
         ], [
             'name' => 'Super Admin',
-            'password' => bcrypt('superadmin123'), // Change after first login
+            'password' => bcrypt(env('ADMIN_DEFAULT_PASSWORD', \Illuminate\Support\Str::random(32))),
             'is_admin' => true,
             'admin_role' => 'superadmin',
         ]);
@@ -91,5 +96,15 @@ class DatabaseSeeder extends Seeder
                 'status' => 'upcoming',
             ]);
         }
+
+        // ─── Website Content Seeders ──────────────────────────────────────
+        $this->call([
+            HomepageSettingSeeder::class,
+            GalleryCarouselSeeder::class,
+            NewsSeeder::class,
+            PrestasiSeeder::class,
+            TeacherStaffSeeder::class,
+            SmkJurusanSeeder::class,
+        ]);
     }
 }

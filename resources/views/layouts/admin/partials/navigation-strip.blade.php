@@ -105,6 +105,41 @@
         $breadcrumbs[] = ['label' => 'Manajemen Pengguna', 'url' => url('/admin/user-management')];
         $backUrl = url('/admin/user-management');
         $currentLabel = ($segments[1] ?? null) === 'user-management' ? 'Manajemen Pengguna' : ($labelFor($segments[2] ?? null) ?? 'Pengguna');
+    } elseif (($segments[1] ?? null) === 'archive') {
+        $archiveIndexUrl = url('/admin/archive');
+        $breadcrumbs[] = ['label' => 'Arsip Digital', 'url' => $archiveIndexUrl];
+        $backUrl = $archiveIndexUrl;
+
+        $third  = $segments[2] ?? null; // school slug e.g. smk
+        $fourth = $segments[3] ?? null; // year e.g. 2026-2027
+        $fifth  = $segments[4] ?? null; // student id or 'export'
+
+        if ($third && $fourth) {
+            $yearDisplay = str_replace('-', '/', $fourth);
+            $schoolLabel = $labelFor($third);
+            $yearUrl     = url("/admin/archive/{$third}/{$fourth}");
+            $breadcrumbs[] = ['label' => $schoolLabel . ' – ' . $yearDisplay, 'url' => $yearUrl];
+            $backUrl = $yearUrl;
+
+            if ($fifth && is_numeric($fifth)) {
+                $currentLabel = 'Detail Siswa';
+            } elseif ($fifth === 'export') {
+                $currentLabel = 'Ekspor';
+            } else {
+                $currentLabel = $schoolLabel . ' – ' . $yearDisplay;
+                array_pop($breadcrumbs);
+                $backUrl = $archiveIndexUrl;
+            }
+        } elseif ($third) {
+            $currentLabel = $labelFor($third);
+        } else {
+            $currentLabel = 'Arsip Digital';
+            array_pop($breadcrumbs);
+        }
+    } elseif (($segments[1] ?? null) === 'students') {
+        $breadcrumbs[] = ['label' => 'Arsip Digital', 'url' => url('/admin/archive')];
+        $backUrl = url('/admin/archive');
+        $currentLabel = 'Siswa';
     }
 
     if (count($breadcrumbs) > 1) {

@@ -17,7 +17,7 @@ class CmsController extends Controller
     {
         $schoolTypeUpper = strtoupper($schoolType);
         $isYayasan = strtolower($schoolTypeUpper) === 'yayasan';
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         $this->abortUnlessSuperAdmin();
 
@@ -62,12 +62,12 @@ class CmsController extends Controller
     public function updateKepsek(Request $request, string $schoolType)
     {
         $schoolTypeUpper = strtoupper($schoolType);
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         $this->abortUnlessSuperAdmin();
 
         $validated = $request->validate([
-            'kepsek_photo' => ['nullable', 'image', 'max:2048'],
+            'kepsek_photo' => ['nullable', 'image', 'max:1024'],
             'kepsek_name' => ['required', 'string', 'max:255'],
             'kepsek_title' => ['required', 'string', 'max:255'],
             'kepsek_sambutan' => ['required', 'string'],
@@ -88,6 +88,7 @@ class CmsController extends Controller
         $homepage->kepsek_sambutan = $validated['kepsek_sambutan'];
 
         if ($request->hasFile('kepsek_photo')) {
+            $this->deleteOldCmsFile($homepage->kepsek_photo_url);
             $file = $request->file('kepsek_photo');
             $ext = strtolower($file->getClientOriginalExtension() ?: 'jpg');
             $filename = 'kepsek_' . $schoolTypeUpper . '_' . Str::uuid()->toString() . '.' . $ext;
@@ -113,7 +114,7 @@ class CmsController extends Controller
     public function updateContactInfo(Request $request, string $schoolType)
     {
         $schoolTypeUpper = strtoupper($schoolType);
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         $this->abortUnlessSuperAdmin();
 
@@ -122,7 +123,7 @@ class CmsController extends Controller
             'contact_email' => ['nullable', 'email', 'max:255'],
             'contact_phone' => ['nullable', 'string', 'max:50'],
             'contact_address' => ['nullable', 'string', 'max:1000'],
-            'contact_map_url' => ['nullable', 'url', 'max:1000'],
+            'contact_map_url' => ['nullable', 'url', 'starts_with:https://', 'max:1000'],
         ]);
 
         $contactDefaults = $this->defaultContactData();
@@ -173,7 +174,7 @@ class CmsController extends Controller
             abort(404);
         }
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
         $this->abortUnlessSuperAdmin();
 
         $validated = $request->validate([
@@ -184,8 +185,8 @@ class CmsController extends Controller
             'principals.*.description' => ['required', 'string', 'max:500'],
             'principals.*.photo_existing' => ['nullable', 'string', 'max:1000'],
             'principals.*.video_existing' => ['nullable', 'string', 'max:1000'],
-            'principals.*.photo' => ['nullable', 'image', 'max:4096'],
-            'principals.*.video' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm,video/ogg,video/quicktime', 'max:51200'],
+            'principals.*.photo' => ['nullable', 'image', 'max:1024'],
+            'principals.*.video' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm,video/ogg,video/quicktime', 'max:20480'],
         ]);
 
         $homepage = SchoolHomepageSetting::firstOrCreate(
@@ -205,6 +206,7 @@ class CmsController extends Controller
                 $videoUrl = trim((string)($item['video_existing'] ?? ''));
 
                 if ($request->hasFile("principals.$index.photo")) {
+                    $this->deleteOldCmsFile($photoUrl);
                     $file = $request->file("principals.$index.photo");
                     $ext = strtolower($file->getClientOriginalExtension() ?: 'jpg');
                     $filename = 'principal_photo_' . Str::uuid()->toString() . '.' . $ext;
@@ -219,6 +221,7 @@ class CmsController extends Controller
                 }
 
                 if ($request->hasFile("principals.$index.video")) {
+                    $this->deleteOldCmsFile($videoUrl);
                     $file = $request->file("principals.$index.video");
                     $ext = strtolower($file->getClientOriginalExtension() ?: 'mp4');
                     $filename = 'principal_video_' . Str::uuid()->toString() . '.' . $ext;
@@ -332,11 +335,7 @@ class CmsController extends Controller
 
     private function normalizeYayasanPrincipals($principals): array
     {
-        $source = is_array($principals) && count($principals) > 0
-            ? $principals
-            : $this->defaultYayasanPrincipals();
-
-        return collect($source)
+        $source = collect(is_array($principals) ? $principals : [])
             ->map(function ($item) {
                 return [
                     'unit' => trim((string)($item['unit'] ?? '')),
@@ -348,8 +347,54 @@ class CmsController extends Controller
                 ];
             })
             ->filter(fn($item) => $item['unit'] !== '' && $item['name'] !== '' && $item['photo_url'] !== '')
+            ->values();
+
+        $normalizeUnitKey = function (?string $unit): string {
+            $value = strtoupper(trim((string) $unit));
+
+            return match (true) {
+                str_contains($value, 'PAUD') => 'PAUD',
+                str_contains($value, 'PKBM') => 'PKBM',
+                str_contains($value, 'SDIT'), $value === 'SD' => 'SDIT',
+                str_contains($value, 'SMP') => 'SMP',
+                str_contains($value, 'SMK') => 'SMK',
+                default => $value,
+            };
+        };
+
+        $sourceByUnit = $source->keyBy(fn($item) => $normalizeUnitKey($item['unit'] ?? ''));
+
+        $merged = collect($this->defaultYayasanPrincipals())
+            ->map(function ($defaultItem) use ($sourceByUnit, $normalizeUnitKey) {
+                $unitKey = $normalizeUnitKey($defaultItem['unit'] ?? '');
+                $savedItem = $sourceByUnit->get($unitKey);
+
+                return $savedItem
+                    ? array_merge($defaultItem, $savedItem)
+                    : $defaultItem;
+            });
+
+        $extraItems = $source
+            ->filter(function ($item) use ($normalizeUnitKey) {
+                return ! collect($this->defaultYayasanPrincipals())
+                    ->contains(fn($defaultItem) => $normalizeUnitKey($defaultItem['unit'] ?? '') === $normalizeUnitKey($item['unit'] ?? ''));
+            })
+            ->values();
+
+        return $merged
+            ->concat($extraItems)
             ->values()
             ->all();
+    }
+
+    private function deleteOldCmsFile(?string $url): void
+    {
+        if (!$url) return;
+        if (!str_starts_with($url, '/images/cms/') && !str_starts_with($url, '/videos/cms/') && !str_starts_with($url, '/video/cms/')) return;
+        $path = public_path(ltrim($url, '/'));
+        if (file_exists($path)) {
+            @unlink($path);
+        }
     }
 
     private function abortUnlessSuperAdmin(): void

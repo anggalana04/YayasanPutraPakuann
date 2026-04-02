@@ -1,4 +1,4 @@
-﻿@extends('layouts.SMK.ppdb')
+@extends('layouts.SMK.ppdb')
 
 @section('ppdb-content')
 <div class="pt-28 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
@@ -105,6 +105,44 @@
             </div>
         </div>
     </div>
+
+    @if($waGroupLink)
+    {{-- Daftar Ulang Section --}}
+    <div class="bg-white border border-green-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="bg-green-100 text-green-700 w-10 h-10 rounded-full flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-xl" data-icon="how_to_reg">how_to_reg</span>
+            </div>
+            <div>
+                <h3 class="font-extrabold text-green-900 text-lg leading-tight">Langkah Selanjutnya: Daftar Ulang</h3>
+                <p class="text-sm text-on-surface-variant">Selesaikan daftar ulang untuk memastikan tempat Anda.</p>
+            </div>
+        </div>
+        <ul class="text-sm text-on-surface space-y-2">
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-base text-green-500 mt-0.5">check_small</span>Membawa dokumen asli (Ijazah, KK, Akte Kelahiran)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-base text-green-500 mt-0.5">check_small</span>Datang ke sekolah pada jam kerja (08.00 – 14.00)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-base text-green-500 mt-0.5">check_small</span>Tunjukkan ID Pendaftaran: <strong>#{{ $application->application_id }}</strong></li>
+        </ul>
+    </div>
+
+    {{-- WA Group Section --}}
+    <div class="bg-[#25D366] rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-3 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.418A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.95 7.95 0 01-4.073-1.117l-.292-.174-3.018.86.872-2.938-.19-.302A7.95 7.95 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8zm4.406-5.845c-.242-.121-1.434-.707-1.657-.788-.222-.081-.384-.121-.545.121-.162.242-.626.788-.768.95-.141.162-.283.182-.525.061-.242-.121-1.022-.376-1.947-1.2-.719-.641-1.205-1.433-1.346-1.675-.142-.242-.015-.373.106-.493.109-.109.242-.283.363-.424.12-.141.161-.243.242-.404.08-.162.04-.303-.02-.424-.061-.121-.545-1.316-.747-1.8-.197-.473-.397-.409-.545-.417l-.465-.008c-.162 0-.424.061-.646.303-.222.242-.848.829-.848 2.022s.868 2.346.99 2.508c.12.162 1.71 2.611 4.143 3.662.58.25 1.031.4 1.382.512.58.185 1.108.159 1.526.096.465-.07 1.434-.586 1.636-1.152.202-.566.202-1.051.141-1.152-.06-.1-.222-.162-.465-.283z"/>
+            </svg>
+            <div>
+                <h3 class="font-extrabold text-white text-lg leading-tight">Bergabung Grup Peserta Didik Baru</h3>
+                <p class="text-white/80 text-sm">Khusus siswa yang telah diterima &amp; daftar ulang.</p>
+            </div>
+        </div>
+        <a href="{{ $waGroupLink }}" target="_blank" rel="noopener noreferrer"
+            class="flex items-center justify-center gap-2 w-full py-3 bg-white text-[#25D366] font-bold rounded-xl hover:bg-green-50 active:scale-95 transition-all shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.418A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.95 7.95 0 01-4.073-1.117l-.292-.174-3.018.86.872-2.938-.19-.302A7.95 7.95 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8zm4.406-5.845c-.242-.121-1.434-.707-1.657-.788-.222-.081-.384-.121-.545.121-.162.242-.626.788-.768.95-.141.162-.283.182-.525.061-.242-.121-1.022-.376-1.947-1.2-.719-.641-1.205-1.433-1.346-1.675-.142-.242-.015-.373.106-.493.109-.109.242-.283.363-.424.12-.141.161-.243.242-.404.08-.162.04-.303-.02-.424-.061-.121-.545-1.316-.747-1.8-.197-.473-.397-.409-.545-.417l-.465-.008c-.162 0-.424.061-.646.303-.222.242-.848.829-.848 2.022s.868 2.346.99 2.508c.12.162 1.71 2.611 4.143 3.662.58.25 1.031.4 1.382.512.58.185 1.108.159 1.526.096.465-.07 1.434-.586 1.636-1.152.202-.566.202-1.051.141-1.152-.06-.1-.222-.162-.465-.283z"/></svg>
+            Buka Link Grup WhatsApp
+        </a>
+    </div>
+    @endif
 @else
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         @if($application->major_1)

@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('title', ($mode === 'create' ? 'Tambah' : 'Ubah') . ' Galeri - ' . strtoupper($schoolType))
 
@@ -45,7 +45,8 @@
 
             <div class="space-y-2">
                 <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Unggah Foto Galeri</label>
-                <input type="file" name="image" accept="image/*" class="block w-full text-sm" />
+                <input type="file" name="image" accept="image/*" class="block w-full text-sm" onchange="validateFileSize(this, 2)" />
+                <p class="text-xs text-on-surface-variant/70 mt-1">Format: JPG, PNG, GIF. <strong>Maksimal 2 MB.</strong></p>
                 @if ($mode === 'edit' && !empty($item->image_url))
                     <div class="mt-2">
                         <span class="text-xs text-on-surface-variant">Foto Saat Ini:</span>

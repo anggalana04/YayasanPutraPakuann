@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('title', 'Applicant Details - SMK Putra Pakuan')
 
@@ -15,12 +15,12 @@
             </div>
             <div>
                 <div class="flex items-center gap-3 mb-1">
-                    <span class="text-xs font-bold tracking-widest text-primary uppercase">ID: {{ $applicant->application_id ?? $applicant->id }}</span>
+                    <span class="text-xs font-bold tracking-widest text-primary uppercase">ID: {{ $applicant->application_id }}</span>
                     <span class="px-3 py-1 bg-tertiary-container text-on-tertiary-container rounded-full text-[10px] font-black uppercase">{{ ucfirst($applicant->status) }}</span>
                 </div>
                 <h1 class="text-4xl font-bold font-headline text-on-surface tracking-tight">{{ $applicant->full_name }}</h1>
                 <p class="text-on-surface-variant flex items-center gap-2 mt-1">
-                    <span class="material-symbols-outlined text-sm">location_on</span> {{ $applicant->address ?? '-' }} • Dikirim pada {{ $applicant->created_at ? $applicant->created_at->format('d M Y') : '-' }}
+                    <span class="material-symbols-outlined text-sm">location_on</span> {{ $applicant->address ?? '-' }} � Dikirim pada {{ $applicant->created_at ? $applicant->created_at->format('d M Y') : '-' }}
                 </p>
             </div>
         </div>
@@ -57,7 +57,7 @@
                                 <span class="text-xs font-bold text-{{ $item['accent'] }} mb-2 block">{{ $item['label'] }}</span>
                                 <h4 class="text-lg font-bold mb-3">{{ $item['major'] }}</h4>
 
-                                <div class="text-xs text-on-surface-variant mb-2">Capacity: {{ $capacityValue ?? 'N/A' }} • Filled: {{ $filled }}</div>
+                                <div class="text-xs text-on-surface-variant mb-2">Capacity: {{ $capacityValue ?? 'N/A' }} � Filled: {{ $filled }}</div>
                                 <div class="w-full h-2 rounded-full bg-surface-variant overflow-hidden mb-1">
                                     <div class="h-full bg-{{ $item['accent'] }}-container" style="width: {{ $capacityValue ? $percent : 0 }}%;"></div>
                                 </div>
@@ -75,10 +75,6 @@
                     <h3 class="text-xl font-bold font-headline">Informasi Pribadi</h3>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-outline-variant uppercase">ID Pendaftaran</label>
-                        <p class="text-on-surface font-medium">{{ $applicant->application_id ?? '-' }}</p>
-                    </div>
                     <div class="space-y-1">
                         <label class="text-xs font-bold text-outline-variant uppercase">Email</label>
                         <p class="text-on-surface font-medium">{{ $applicant->email ?? '-' }}</p>
@@ -158,6 +154,7 @@
                         ['file' => $applicant->ijazah_file, 'label' => 'Ijazah SMP'],
                         ['file' => $applicant->prestasi_file, 'label' => 'Dokumen Prestasi / Sertifikat'],
                         ['file' => $applicant->raport_file, 'label' => 'Rapor Semester 1-5'],
+                        ['file' => $applicant->payment_proof, 'label' => 'Bukti Pembayaran'],
                     ] as $doc)
                         @if(!empty($doc['file']))
                             @php
@@ -199,6 +196,54 @@
         <!-- Right Column: Review Panel -->
         <div class="md:col-span-4">
     <div class="sticky top-24 space-y-6">
+
+        <!-- PAYMENT VERIFICATION PANEL -->
+        @if($applicant->payment_proof)
+        @php
+            $payExt = strtolower(pathinfo($applicant->payment_proof, PATHINFO_EXTENSION));
+            $payUrl = asset('storage/' . $applicant->payment_proof);
+            $payIsImage = in_array($payExt, ['jpg','jpeg','png','gif']);
+        @endphp
+        <section class="bg-white rounded-3xl p-6 shadow border">
+            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-green-600" style="font-variation-settings:'FILL' 1">receipt_long</span>
+                Verifikasi Pembayaran
+            </h3>
+            <div class="mb-4 cursor-pointer rounded-xl overflow-hidden border border-outline-variant" onclick="openDocViewer('{{ $payUrl }}', 'Bukti Pembayaran', '{{ $payExt }}')">
+                @if($payIsImage)
+                    <img src="{{ $payUrl }}" alt="Bukti Pembayaran" class="w-full object-cover max-h-52 hover:opacity-90 transition-opacity">
+                @else
+                    <div class="flex flex-col items-center justify-center p-6 bg-surface-container-low hover:bg-surface-container transition-colors">
+                        <svg class="w-12 h-12 mb-2 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/></svg>
+                        <span class="text-sm font-bold">Klik untuk Lihat PDF</span>
+                    </div>
+                @endif
+            </div>
+            <div class="space-y-2 text-sm mb-4">
+                @if($applicant->payment_amount)
+                <div class="flex justify-between items-center">
+                    <span class="text-on-surface-variant">Jumlah</span>
+                    <span class="font-bold">Rp {{ number_format($applicant->payment_amount, 0, ',', '.') }}</span>
+                </div>
+                @endif
+                @if($applicant->payment_method)
+                <div class="flex justify-between items-center">
+                    <span class="text-on-surface-variant">Metode</span>
+                    <span class="font-bold">{{ $applicant->payment_method }}</span>
+                </div>
+                @endif
+                @if($applicant->payment_date)
+                <div class="flex justify-between items-center">
+                    <span class="text-on-surface-variant">Tanggal</span>
+                    <span class="font-bold">{{ \Carbon\Carbon::parse($applicant->payment_date)->format('d M Y') }}</span>
+                </div>
+                @endif
+            </div>
+            <a href="{{ $payUrl }}" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 w-full py-2 rounded-xl border border-outline-variant text-sm font-bold hover:bg-surface-container-low transition-colors">
+                <span class="material-symbols-outlined text-sm">open_in_new</span> Buka di Tab Baru
+            </a>
+        </section>
+        @endif
 
         <!-- ACTION PANEL -->
         <section class="bg-white rounded-3xl p-6 shadow border">
@@ -280,6 +325,125 @@
                 <div id="decisionResult" class="text-sm font-semibold"></div>
             </form>
         </section>
+
+        {{-- ARSIP: Promosikan ke Siswa --}}
+        @php $promotedStudent = $applicant->student; @endphp
+
+        @if($promotedStudent)
+            <section class="bg-green-50 border border-green-200 rounded-3xl p-6">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="material-symbols-outlined text-green-600" style="font-variation-settings:'FILL' 1">check_circle</span>
+                    <h3 class="font-bold text-green-800 text-sm">Sudah Dipromosikan ke Sistem Siswa</h3>
+                </div>
+                @if($promotedStudent->nis)
+                    <p class="text-green-700 text-xs mb-3">NIS: <span class="font-mono font-bold">{{ $promotedStudent->nis }}</span></p>
+                @endif
+                @php
+                    $archiveSlug  = strtolower($applicant->school_type === 'SDIT' ? 'sd' : $applicant->school_type);
+                    $archiveYear  = $promotedStudent->academic_year_entry;
+                @endphp
+                <a href="{{ url('/admin/archive/'.$archiveSlug.'/'.str_replace('/', '-', $archiveYear).'/'.$promotedStudent->id) }}"
+                   class="flex items-center gap-2 w-full py-2.5 rounded-2xl bg-green-600 text-white font-bold text-sm justify-center hover:bg-green-700 transition-colors">
+                    <span class="material-symbols-outlined text-sm">open_in_new</span>
+                    Lihat Data Siswa
+                </a>
+            </section>
+        @elseif($applicant->status === 'accepted')
+            <section x-data="{ showForm: false }" class="bg-primary-container/30 border border-primary-container rounded-3xl p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1">school</span>
+                    <h3 class="font-bold text-on-surface text-sm">Promosikan ke Data Siswa</h3>
+                </div>
+                <p class="text-xs text-on-surface-variant mb-4">Pendaftar ini telah diterima. Promosikan ke sistem siswa permanen untuk mengelola data akademik.</p>
+
+                <button @click="showForm = !showForm"
+                        class="w-full py-3 rounded-2xl bg-primary text-on-primary font-bold text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2 active:scale-95">
+                    <span class="material-symbols-outlined text-sm" x-text="showForm ? 'close' : 'add_circle'">add_circle</span>
+                    <span x-text="showForm ? 'Batal' : 'Promosikan ke Siswa'">Promosikan ke Siswa</span>
+                </button>
+
+                <div x-show="showForm"
+                     x-transition:enter="transition ease-out duration-150"
+                     x-transition:enter-start="opacity-0 -translate-y-1"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="mt-4 space-y-3"
+                     style="display:none;">
+                    @php $appYear = $applicant->created_at ? $applicant->created_at->year : now()->year; @endphp
+                    <div>
+                        <label class="text-xs font-bold text-on-surface-variant uppercase block mb-1.5">NIS</label>
+                        <input id="promote-nis" type="text" placeholder="Nomor Induk Siswa (opsional)"
+                               class="w-full px-4 py-2.5 rounded-2xl border border-outline-variant bg-surface text-sm text-on-surface focus:outline-none focus:border-primary transition-colors">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs font-bold text-on-surface-variant uppercase block mb-1.5">Kelas</label>
+                            <input id="promote-class" type="text" placeholder="X / XI / XII"
+                                   class="w-full px-4 py-2.5 rounded-2xl border border-outline-variant bg-surface text-sm text-on-surface focus:outline-none focus:border-primary transition-colors">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-on-surface-variant uppercase block mb-1.5">Ruang</label>
+                            <input id="promote-room" type="text" placeholder="A / B"
+                                   class="w-full px-4 py-2.5 rounded-2xl border border-outline-variant bg-surface text-sm text-on-surface focus:outline-none focus:border-primary transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-on-surface-variant uppercase block mb-1.5">Tahun Ajaran</label>
+                        <input id="promote-year" type="text" value="{{ $appYear.'/'.(($appYear)+1) }}" placeholder="2024/2025"
+                               class="w-full px-4 py-2.5 rounded-2xl border border-outline-variant bg-surface text-sm text-on-surface focus:outline-none focus:border-primary transition-colors">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-on-surface-variant uppercase block mb-1.5">Tanggal Masuk</label>
+                        <input id="promote-date" type="date" value="{{ now()->toDateString() }}"
+                               class="w-full px-4 py-2.5 rounded-2xl border border-outline-variant bg-surface text-sm text-on-surface focus:outline-none focus:border-primary transition-colors">
+                    </div>
+                    <button
+                        @click="
+                            const btn = $el;
+                            btn.disabled = true;
+                            btn.textContent = 'Memproses...';
+                            fetch('{{ route('admin.students.promote') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    ppdb_application_id: {{ $applicant->id }},
+                                    nis: document.getElementById('promote-nis').value,
+                                    current_class: document.getElementById('promote-class').value,
+                                    class_room: document.getElementById('promote-room').value,
+                                    academic_year_entry: document.getElementById('promote-year').value,
+                                    enrolled_at: document.getElementById('promote-date').value,
+                                })
+                            })
+                            .then(r => r.json())
+                            .then(data => {
+                                if (data.success) {
+                                    const t = document.createElement('div');
+                                    t.style.cssText = 'position:fixed;top:24px;right:24px;z-index:9999;background:#14532d;color:#fff;font-weight:700;font-size:13px;padding:14px 22px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.25);display:flex;align-items:center;gap:10px;transition:opacity 0.4s';
+                                    t.innerHTML = '<span style=&quot;font-size:18px;line-height:1&quot;>&#x2713;</span> ' + (data.message || 'Siswa berhasil dipromosikan.');
+                                    document.body.appendChild(t);
+                                    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 2500);
+                                    setTimeout(() => window.location.reload(), 1200);
+                                } else {
+                                    alert(data.message);
+                                    btn.disabled = false;
+                                    btn.textContent = 'Simpan & Promosikan';
+                                }
+                            })
+                            .catch(() => {
+                                alert('Terjadi kesalahan. Coba lagi.');
+                                btn.disabled = false;
+                                btn.textContent = 'Simpan & Promosikan';
+                            })
+                        "
+                        class="w-full bg-primary text-on-primary font-bold text-sm py-3 rounded-2xl hover:opacity-90 transition-opacity active:scale-95">
+                        Simpan & Promosikan
+                    </button>
+                </div>
+            </section>
+        @endif
 
     </div>
 </div>
@@ -666,7 +830,7 @@ class DocumentViewer {
             this.loader.style.display = 'none';
             this.content.appendChild(img);
             this.enableImagePan(img);
-            console.log('✅ Image loaded successfully');
+            console.log('? Image loaded successfully');
         };
 
         img.onerror = () => {
@@ -684,7 +848,7 @@ class DocumentViewer {
         iframe.style.height = '100%';
         this.content.appendChild(iframe);
 
-        console.log('✅ PDF loaded in iframe');
+        console.log('? PDF loaded in iframe');
     }
 
     loadOther(url, type) {
@@ -707,7 +871,7 @@ class DocumentViewer {
         this.loader.style.display = 'none';
         this.content.innerHTML = `
             <div style="text-align: center; color: white;">
-                <span style="font-size: 60px; display: block; margin-bottom: 20px;">⚠️</span>
+                <span style="font-size: 60px; display: block; margin-bottom: 20px;">??</span>
                 <h3 style="font-size: 24px; margin-bottom: 12px;">Error</h3>
                 <p style="font-size: 16px; opacity: 0.8;">${message}</p>
             </div>
@@ -806,7 +970,7 @@ const docViewer = new DocumentViewer();
 
 // Global function to open viewer
 function openDocViewer(url, title, type) {
-    console.log('📄 Opening document:', title, type);
+    console.log('?? Opening document:', title, type);
     docViewer.open(url, title, type);
 }
 

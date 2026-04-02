@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('title', 'Manajemen Pengguna - Putra Pakuan CMS')
 
@@ -48,7 +48,7 @@
 
 <div
     x-data="{
-        /* ── modal state ── */
+        /* -- modal state -- */
         showModal: {{ $reopenModal ? 'true' : 'false' }},
         showDelete: false,
         mode: '{{ $reopenModal ? $reopenMode : 'add' }}',
@@ -100,7 +100,7 @@
     class="w-full"
 >
 
-    {{-- ── Flash Messages ── --}}
+    {{-- -- Flash Messages -- --}}
     @if(session('success'))
     <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
         x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
@@ -124,7 +124,7 @@
     </div>
     @endif
 
-    {{-- ── Validation Errors ── --}}
+    {{-- -- Validation Errors -- --}}
     @if($errors->any())
     <div class="mb-6 bg-red-50 border border-red-200 text-red-800 rounded-2xl px-5 py-4 text-sm shadow-sm">
         <p class="font-bold mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-red-500">warning</span> Terdapat kesalahan input:</p>
@@ -134,7 +134,7 @@
     </div>
     @endif
 
-    {{-- ── Page Header ── --}}
+    {{-- -- Page Header -- --}}
     <div class="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
             <h2 class="text-3xl font-bold tracking-tight text-[#1c190d]">Manajemen Pengguna</h2>
@@ -146,7 +146,7 @@
         </div>
     </div>
 
-    {{-- ── School Columns ── --}}
+    {{-- -- School Columns -- --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @foreach($schools as $roleKey => $school)
         @php $users = $allAdmins->get($roleKey, collect()); @endphp
@@ -223,9 +223,9 @@
         @endforeach
     </div>
 
-    {{-- ════════════════════════════════════════
+    {{-- ----------------------------------------
          ADD / EDIT MODAL
-    ════════════════════════════════════════ --}}
+    ---------------------------------------- --}}
     <div
         x-show="showModal"
         x-transition:enter="transition ease-out duration-200"
@@ -363,9 +363,9 @@
         </div>
     </div>
 
-    {{-- ════════════════════════════════════════
+    {{-- ----------------------------------------
          DELETE CONFIRMATION MODAL
-    ════════════════════════════════════════ --}}
+    ---------------------------------------- --}}
     <div
         x-show="showDelete"
         x-transition:enter="transition ease-out duration-200"

@@ -11,12 +11,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->trustProxies(at: '*');
+
         $middleware->append([
             \App\Http\Middleware\ApplySecurityHeaders::class,
         ]);
 
         $middleware->alias([
             'admin.access' => \App\Http\Middleware\EnsureAdminHasAccess::class,
+            'ppdb.auth'    => \App\Http\Middleware\EnsurePpdbAuthenticated::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

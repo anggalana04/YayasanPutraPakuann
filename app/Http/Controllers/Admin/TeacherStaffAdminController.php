@@ -5,16 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TeacherStaff;
 use App\Models\School;
+use App\Traits\ResolvesSchool;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class TeacherStaffAdminController extends Controller
 {
+    use ResolvesSchool;
     public function index(string $schoolType)
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         $teacherStaff = TeacherStaff::where('school_id', $school->id)
             ->ordered()
@@ -31,7 +33,7 @@ class TeacherStaffAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         return view('admin.superadmin.cms.unit.guru.form', [
             'mode' => 'create',
@@ -45,13 +47,13 @@ class TeacherStaffAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         $request->validate([
             'name' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'department' => 'required|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'type' => 'required|in:teacher,staff,management',
@@ -79,6 +81,8 @@ class TeacherStaffAdminController extends Controller
 
         TeacherStaff::create($data);
 
+        $this->flushSchoolCache($school);
+
         return redirect()->route('admin.cms.guru.index', ['schoolType' => strtolower($schoolType)])
             ->with('success', 'Data guru/staff berhasil ditambahkan.');
     }
@@ -87,7 +91,7 @@ class TeacherStaffAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         $person = TeacherStaff::findOrFail($guru);
 
@@ -108,7 +112,7 @@ class TeacherStaffAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         $person = TeacherStaff::findOrFail($guru);
 
@@ -121,7 +125,7 @@ class TeacherStaffAdminController extends Controller
             'name' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'department' => 'required|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'type' => 'required|in:teacher,staff,management',
@@ -142,11 +146,14 @@ class TeacherStaffAdminController extends Controller
 
         // Handle photo upload
         if ($request->hasFile('photo')) {
+            $this->deleteOldCmsFile($person->photo_url);
             $filename = $this->uploadPhoto($request->file('photo'), $schoolType);
             $data['photo_url'] = $filename;
         }
 
         $person->update($data);
+
+        $this->flushSchoolCache($school);
 
         return redirect()->route('admin.cms.guru.edit', [
             'schoolType' => strtolower($schoolType),
@@ -158,7 +165,7 @@ class TeacherStaffAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         $person = TeacherStaff::findOrFail($guru);
 
@@ -167,10 +174,23 @@ class TeacherStaffAdminController extends Controller
             abort(404);
         }
 
+        $this->deleteOldCmsFile($person->photo_url);
         $person->delete();
+
+        $this->flushSchoolCache($school);
 
         return redirect()->route('admin.cms.guru.index', ['schoolType' => strtolower($schoolType)])
             ->with('success', 'Data guru/staff berhasil dihapus.');
+    }
+
+    private function deleteOldCmsFile(?string $url): void
+    {
+        if (!$url) return;
+        if (!str_starts_with($url, '/images/cms/')) return;
+        $path = public_path(ltrim($url, '/'));
+        if (file_exists($path)) {
+            @unlink($path);
+        }
     }
 
     private function uploadPhoto($file, $schoolType)

@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('title', 'Content Management - SMK Putra Pakuan CMS')
 
@@ -100,7 +100,7 @@
                         <label class="mt-2 inline-flex items-center gap-2 px-4 py-2 bg-[#f2cc0d] text-[#1c190d] rounded-xl font-bold text-xs cursor-pointer hover:bg-[#ffe066] transition-all shadow-sm border border-[#e6b800]">
                             <span class="material-symbols-outlined text-base">upload</span>
                             <span>Unggah Foto</span>
-                            <input type="file" accept="image/*" class="hidden" onchange="if(this.files[0]){const reader=new FileReader();reader.onload=e=>{document.getElementById('kepsek-preview').src=e.target.result;};reader.readAsDataURL(this.files[0]);}" />
+                            <input type="file" accept="image/*" class="hidden" onchange="if(this.files[0]){if(this.files[0].size>1048576){alert('File terlalu besar. Maksimal 1 MB.');this.value='';return;}const reader=new FileReader();reader.onload=e=>{document.getElementById('kepsek-preview').src=e.target.result;};reader.readAsDataURL(this.files[0]);}" />
                         </label>
                     </div>
                 </div>

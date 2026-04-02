@@ -16,24 +16,24 @@
                 $type = strtoupper((string) ($unit->type ?? ''));
 
                 $badge = match ($type) {
-                    'SD' => 'Sekolah Dasar Islam Terpadu',
+                    'SD', 'SDIT' => 'Sekolah Dasar Islam Terpadu',
                     'SMP' => 'Sekolah Menengah Pertama',
                     'SMK' => 'Sekolah Menengah Kejuruan',
                     default => 'Unit Pendidikan',
                 };
 
                 $routePath = match ($type) {
-                    'SD' => '/sd',
+                    'SD', 'SDIT' => '/sd',
                     'SMP' => '/smp',
                     'SMK' => '/smk',
                     default => null,
                 };
 
                 $logoPath = match ($type) {
-                    'SD' => 'images/logo-sdit-putrapakuan.png',
-                    'SMP' => 'images/yayasan-logo.jfif',
-                    'SMK' => 'images/logo-putrapakuan.png',
-                    default => 'images/yayasan-logo.jfif',
+                    'SD', 'SDIT' => 'images/logo-sdit-putrapakuan.png',
+                    'SMP' => 'images/logo-yayasan.png',
+                    'SMK' => 'images/logo-yayasan.png',
+                    default => 'images/logo-yayasan.png',
                 };
 
                 return [
@@ -52,7 +52,7 @@
                     'name' => 'PAUD IT Putra Pakuan',
                     'type' => 'PAUD',
                     'badge' => 'Pendidikan Anak Usia Dini',
-                    'logo_path' => 'images/yayasan-logo.jfif',
+                    'logo_path' => 'images/logo-yayasan.png',
                     'route_path' => null,
                     'available' => false,
                 ]);
@@ -63,7 +63,7 @@
                     'name' => 'PKBM Putra Pakuan',
                     'type' => 'PKBM',
                     'badge' => 'Pusat Kegiatan Belajar Masyarakat',
-                    'logo_path' => 'images/yayasan-logo.jfif',
+                    'logo_path' => 'images/logo-yayasan.png',
                     'route_path' => null,
                     'available' => false,
                 ]);
@@ -87,7 +87,7 @@
                 <article class="flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 min-h-[270px] shadow-sm hover:shadow-md transition-shadow">
                     <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center mb-4 overflow-hidden">
                         <img
-                            src="{{ asset($card['logo_path'] ?? 'images/yayasan-logo.jfif') }}"
+                            src="{{ asset($card['logo_path'] ?? 'images/logo-yayasan.png') }}"
                             alt="Logo {{ $card['name'] }}"
                             class="w-10 h-10 object-contain"
                         >

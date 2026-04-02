@@ -18,6 +18,14 @@ class PpdbManagementController extends Controller
     {
         Cache::forget('admin.dashboard.metrics.v2');
         Cache::forget('ppdb.layout.' . strtolower((string) $school->type));
+
+        // Flush frontend homepage phase cache so $ppdbLive reflects immediately
+        $typeSlug = match (strtoupper((string) $school->type)) {
+            'SDIT' => 'sd',
+            default => strtolower((string) $school->type),
+        };
+        $prefix = 'school.home.' . $typeSlug . '.' . $school->id;
+        Cache::forget($prefix . '.phases');
     }
 
     private function defaultMajorsBySchool($schoolType)
@@ -36,7 +44,7 @@ class PpdbManagementController extends Controller
                 'Multimedia',
                 'Akuntansi',
             ],
-            'SD' => [
+            'SDIT' => [
                 'Umum',
             ],
         ];
@@ -90,7 +98,7 @@ class PpdbManagementController extends Controller
             $startDate = Carbon::create($yearStart, 1, 1);
             $endDate = Carbon::create($yearStart + 1, 12, 31);
 
-            $applicants = PpdbApplication::where('school_type', $schoolType)
+            $applicants = PpdbApplication::where('school_id', $schoolModel->id)
                 ->whereNotIn('status', ['draft'])
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->get();
@@ -118,9 +126,30 @@ class PpdbManagementController extends Controller
             return false;
         });
 
-        $nextPhase = $phases->firstWhere('computed_status', 'active');
+        $activePhase = $phases
+            ->filter(function ($phase) use ($today) {
+                $start = Carbon::parse($phase->start_date)->startOfDay();
+                $end   = Carbon::parse($phase->end_date)->endOfDay();
+                return $today->gte($start) && $today->lte($end);
+            })
+            ->sortByDesc(function ($phase) {
+                return Carbon::parse($phase->start_date)->timestamp;
+            })
+            ->first();
 
-        return view('admin.superadmin.ppdb.' . strtolower($schoolModel->type) . '.management', [
+        $upcomingPhase = $phases
+            ->filter(function ($phase) use ($today) {
+                return Carbon::parse($phase->start_date)->startOfDay()->gt($today);
+            })
+            ->sortBy(function ($phase) {
+                return Carbon::parse($phase->start_date)->timestamp;
+            })
+            ->first();
+
+        $nextPhase = $activePhase ?? $upcomingPhase;
+
+        $viewFolder = strtolower($schoolModel->type) === 'sdit' ? 'sd' : strtolower($schoolModel->type);
+        return view('admin.superadmin.ppdb.' . $viewFolder . '.management', [
             'school' => $schoolModel,
             'phases' => $phases,
             'academicYears' => $academicYears,
@@ -170,9 +199,11 @@ class PpdbManagementController extends Controller
             'periode_2_end' => 'required|date|after_or_equal:periode_2_start',
             'periode_3_start' => 'required|date',
             'periode_3_end' => 'required|date|after_or_equal:periode_3_start',
+            'wa_group_link' => 'nullable|url|max:500',
         ]);
 
         $yearStart = intval(substr($validated['year'], 0, 4));
+        $waGroupLink = $validated['wa_group_link'] ?? null;
 
         $periodeData = [
             1 => ['start' => $validated['periode_1_start'], 'end' => $validated['periode_1_end']],
@@ -197,7 +228,11 @@ class PpdbManagementController extends Controller
 
             $phase->start_date = $dates['start'];
             $phase->end_date = $dates['end'];
-            $phase->status = Carbon::now()->between(Carbon::parse($dates['start']), Carbon::parse($dates['end'])) ? 'active' : 'upcoming';
+            $today = Carbon::now();
+            $start = Carbon::parse($dates['start'])->startOfDay();
+            $end = Carbon::parse($dates['end'])->endOfDay();
+            $phase->status = ($today->gte($start) && $today->lte($end)) ? 'active' : 'upcoming';
+            $phase->wa_group_link = $waGroupLink;
             $phase->save();
         }
 
@@ -275,7 +310,7 @@ class PpdbManagementController extends Controller
 
         $defaultMajors = $this->defaultMajorsBySchool($schoolModel->type);
 
-        $applicantMajors = PpdbApplication::where('school_type', $schoolType)
+        $applicantMajors = PpdbApplication::where('school_id', $schoolModel->id)
             ->whereYear('created_at', intval(substr($year, 0, 4)))
             ->get(['major_1', 'major_2', 'assigned_major'])
             ->flatMap(function ($application) {
@@ -303,7 +338,7 @@ class PpdbManagementController extends Controller
         $yearStart = intval(substr($year, 0, 4));
         $yearEnd = intval(substr($year, 5, 4));
 
-        $applicantCountByMajor = PpdbApplication::where('school_type', $schoolType)
+        $applicantCountByMajor = PpdbApplication::where('school_id', $schoolModel->id)
             ->whereIn('status', ['accepted', 'accepted_major_1', 'accepted_major_2'])
             ->where(function ($query) use ($yearStart, $yearEnd) {
                 $query->whereBetween('admission_date', ["{$yearStart}-01-01", "{$yearEnd}-12-31"])

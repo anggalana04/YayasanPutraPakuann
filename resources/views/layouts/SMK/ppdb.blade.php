@@ -1,5 +1,5 @@
-﻿<!DOCTYPE html>
-<html lang="id" style="margin:0; padding:0; background:#1c190d;">
+<!DOCTYPE html>
+<html lang="id" style="margin:0; padding:0; background:#f8f8f5;">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -7,7 +7,7 @@
         $seoTitle = trim($__env->yieldContent('title', 'PPDB SMK Putra Pakuan | Pendaftaran Peserta Didik Baru'));
         $seoDescription = trim($__env->yieldContent('meta_description', 'Daftar PPDB SMK Putra Pakuan secara online. Lengkapi biodata, unggah berkas, dan pantau status seleksi dengan mudah.'));
         $seoKeywords = trim($__env->yieldContent('meta_keywords', 'ppdb smk putra pakuan, pendaftaran smk bogor, ppdb online smk'));
-        $seoImage = trim($__env->yieldContent('meta_image', asset('images/logo-putrapakuan.png')));
+        $seoImage = trim($__env->yieldContent('meta_image', asset('images/logo-yayasan.png')));
         $seoUrl = url()->current();
     @endphp
     <title>{{ $seoTitle }}</title>
@@ -18,9 +18,9 @@
     <link rel="canonical" href="{{ $seoUrl }}" />
     <link rel="alternate" hreflang="id-ID" href="{{ $seoUrl }}" />
     <link rel="alternate" hreflang="x-default" href="{{ $seoUrl }}" />
-    <link rel="icon" type="image/png" href="{{ asset('images/logo-putrapakuan.png') }}" />
-    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo-putrapakuan.png') }}" />
-    <link rel="apple-touch-icon" href="{{ asset('images/logo-putrapakuan.png') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('images/logo-yayasan.png') }}" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="id_ID" />
     <meta property="og:site_name" content="PPDB SMK Putra Pakuan" />
@@ -41,7 +41,7 @@
             'url' => $schoolBaseUrl,
             'logo' => [
                 '@type' => 'ImageObject',
-                'url' => asset('images/logo-putrapakuan.png'),
+                'url' => asset('images/logo-yayasan.png'),
             ],
         ];
         $webpageSchema = [
@@ -62,10 +62,19 @@
     @endphp
     <script type="application/ld+json">{!! json_encode($seoJsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @stack('structured_data')
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        :root {
+            --color-primary: #f2cc0d;
+            --color-secondary: #605b4c;
+            --color-charcoal: #1c190d;
+            --color-background-light: #f8f8f5;
+            --color-background-dark: #221f10;
+        }
+    </style>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -145,7 +154,7 @@
             },
         }
     </script>
-    <style type="text/tailwindcss">
+    <style>
         html,
         body {
             margin: 0;
@@ -169,6 +178,11 @@
             color: #f2cc0d;
             background-color: rgba(242, 204, 13, 0.2);
         }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px) saturate(1.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
     </style>
 </head>
 <body class="m-0 p-0 bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100">
@@ -177,7 +191,7 @@
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <a href="{{ route('ppdb.dashboard', ['school' => $school]) }}" class="flex items-center space-x-2">
-                    <img src="{{ asset('images/logo-putrapakuan.png') }}" alt="SMK Putra Pakuan" class="h-8 w-8">
+                    <img src="{{ asset('images/logo-yayasan.png') }}" alt="SMK Putra Pakuan" class="h-8 w-8">
                     <span class="font-bold text-lg text-primary">PPDB SMK Putra Pakuan</span>
                 </a>
             </div>
@@ -261,15 +275,33 @@
         </button>
     </form>
 </nav>
+
 <script>
     document.getElementById('mobile-menu-button').addEventListener('click', function() {
         document.getElementById('mobile-menu').classList.toggle('hidden');
     });
 </script>
+<script>
+function validateFileSize(input, maxMB, feedbackId) {
+    const file = input.files[0];
+    let fb = feedbackId ? document.getElementById(feedbackId) : null;
+    if (!fb) {
+        fb = input.parentElement.querySelector('.file-size-msg');
+        if (!fb) {
+            fb = document.createElement('p');
+            fb.className = 'file-size-msg text-xs mt-1';
+            input.insertAdjacentElement('afterend', fb);
+        }
+    }
+    if (!file) { fb.textContent = ''; return; }
+    if (file.size > maxMB * 1048576) {
+        fb.textContent = '\u274C File terlalu besar (' + (file.size/1048576).toFixed(1) + ' MB). Maksimal ' + maxMB + ' MB.';
+        fb.className = 'text-xs mt-1 text-red-600 font-bold';
+        input.value = '';
+    } else {
+        fb.textContent = file.name + ' (' + (file.size/1048576).toFixed(1) + ' MB)';
+        fb.className = 'text-xs mt-1 text-blue-600';
+    }
+}
+</script>
 </body>
-</html>
-
-
-
-
-

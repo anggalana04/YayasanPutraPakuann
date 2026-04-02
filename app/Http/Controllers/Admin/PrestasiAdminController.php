@@ -5,16 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Prestasi;
 use App\Models\School;
+use App\Traits\ResolvesSchool;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class PrestasiAdminController extends Controller
 {
+    use ResolvesSchool;
     public function index(string $schoolType)
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
         $prestasi = Prestasi::where('school_id', $school->id)
             ->orderByDesc('created_at')
             ->paginate(10);
@@ -26,7 +28,7 @@ class PrestasiAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         return view('admin.superadmin.cms.unit.prestasi.form', [
             'mode' => 'create',
@@ -40,7 +42,7 @@ class PrestasiAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -49,7 +51,7 @@ class PrestasiAdminController extends Controller
             'content' => ['required', 'string'],
             'status' => ['required', 'in:draft,published'],
             'featured' => ['nullable', 'boolean'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $slug = $this->generateUniqueSlug($validated['title'], $school->id);
@@ -76,6 +78,8 @@ class PrestasiAdminController extends Controller
             'updated_by' => auth('admin')->user()->name ?? 'admin',
         ]);
 
+        $this->flushSchoolCache($school);
+
         return redirect()->route('admin.cms.prestasi.index', ['schoolType' => strtolower($schoolType)])
             ->with('success', 'Prestasi berhasil dibuat.');
     }
@@ -84,7 +88,7 @@ class PrestasiAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
         $prestasiItem = Prestasi::where('school_id', $school->id)->findOrFail($prestasi);
 
         return view('admin.superadmin.cms.unit.prestasi.form', [
@@ -99,7 +103,7 @@ class PrestasiAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
         $prestasiItem = Prestasi::where('school_id', $school->id)->findOrFail($prestasi);
 
         $validated = $request->validate([
@@ -109,7 +113,7 @@ class PrestasiAdminController extends Controller
             'content' => ['required', 'string'],
             'status' => ['required', 'in:draft,published'],
             'featured' => ['nullable', 'boolean'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $prestasiItem->title = $validated['title'];
@@ -121,6 +125,7 @@ class PrestasiAdminController extends Controller
         $prestasiItem->slug = $this->generateUniqueSlug($validated['title'], $school->id, $prestasiItem->id);
 
         if ($request->hasFile('image')) {
+            $this->deleteOldCmsFile($prestasiItem->image_url);
             $prestasiItem->image_url = $this->storeImage($request->file('image'), strtolower($schoolType), $prestasiItem->slug);
         }
 
@@ -132,6 +137,8 @@ class PrestasiAdminController extends Controller
         $prestasiItem->updated_by = auth('admin')->user()->name ?? 'admin';
         $prestasiItem->save();
 
+        $this->flushSchoolCache($school);
+
         return redirect()->route('admin.cms.prestasi.edit', ['schoolType' => strtolower($schoolType), 'prestasi' => $prestasiItem->id])
             ->with('success', 'Prestasi berhasil diperbarui.');
     }
@@ -140,9 +147,12 @@ class PrestasiAdminController extends Controller
     {
         $this->abortUnlessAdmin();
 
-        $school = School::whereRaw('LOWER(type) = ?', [strtolower($schoolType)])->firstOrFail();
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
         $prestasiItem = Prestasi::where('school_id', $school->id)->findOrFail($prestasi);
+        $this->deleteOldCmsFile($prestasiItem->image_url);
         $prestasiItem->delete();
+
+        $this->flushSchoolCache($school);
 
         return redirect()->route('admin.cms.prestasi.index', ['schoolType' => strtolower($schoolType)])
             ->with('success', 'Prestasi berhasil dihapus.');
@@ -173,6 +183,16 @@ class PrestasiAdminController extends Controller
         }
 
         return $slug;
+    }
+
+    private function deleteOldCmsFile(?string $url): void
+    {
+        if (!$url) return;
+        if (!str_starts_with($url, '/images/cms/')) return;
+        $path = public_path(ltrim($url, '/'));
+        if (file_exists($path)) {
+            @unlink($path);
+        }
     }
 
     private function storeImage($file, string $schoolTypeLower, string $slug): string

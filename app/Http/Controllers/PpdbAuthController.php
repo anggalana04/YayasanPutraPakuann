@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PpdbApplication;
+use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,9 +18,10 @@ class PpdbAuthController extends Controller
 
         // Accept either email or NISN as identifier
         $identifier = $request->application_id;
-        $schoolType = strtoupper((string) $request->route('school'));
+        $dbType = School::resolveDbType((string) $request->route('school'));
+        $school = School::where('type', $dbType)->firstOrFail();
 
-        $application = PpdbApplication::whereRaw('UPPER(school_type) = ?', [$schoolType])
+        $application = PpdbApplication::where('school_id', $school->id)
             ->where(function ($query) use ($identifier) {
                 $query->where('application_id', $identifier)
                     ->orWhere('email', $identifier)
@@ -27,17 +29,14 @@ class PpdbAuthController extends Controller
             })
             ->first();
 
-        if (!$application) {
-            return back()->withErrors(['application_id' => 'ID Pendaftaran/email/NISN tidak ditemukan.']);
+        // Use a single generic message for both "not found" and "wrong password"
+        // to prevent user enumeration via differing error responses.
+        if (!$application || !\Illuminate\Support\Facades\Hash::check($request->password, $application->password)) {
+            return back()->withErrors(['application_id' => 'ID Pendaftaran/email/NISN atau password salah.']);
         }
 
         if (!$application->canLogin()) {
-            return back()->withErrors(['application_id' => 'Akun Anda belum dapat diakses.']);
-        }
-
-        // Check password (hashed)
-        if (!\Illuminate\Support\Facades\Hash::check($request->password, $application->password)) {
-            return back()->withErrors(['password' => 'Password salah.']);
+            return back()->withErrors(['application_id' => 'Akun Anda belum dapat diakses. Hubungi admin.']);
         }
 
         Auth::guard('ppdb_applications')->login($application);
@@ -101,7 +100,18 @@ class PpdbAuthController extends Controller
         if (!view()->exists($viewName)) {
             $viewName = 'SMK.ppdb.dashboard';
         }
-        return view($viewName, compact('application', 'school'));
+
+        $schoolModel = \App\Models\School::resolveDbType($school);
+        $schoolRecord = \App\Models\School::where('type', $schoolModel)->first();
+        $waGroupLink = null;
+        if ($schoolRecord) {
+            $waGroupLink = \App\Models\PpdbManagementPhase::where('school_id', $schoolRecord->id)
+                ->whereNotNull('wa_group_link')
+                ->orderByDesc('start_date')
+                ->value('wa_group_link');
+        }
+
+        return view($viewName, compact('application', 'school', 'waGroupLink'));
     }
 
     public function updateBiodata(Request $request)
@@ -139,11 +149,12 @@ class PpdbAuthController extends Controller
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:ppdb_applications,email',
             'phone' => 'nullable|string|max:20',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:10',
         ]);
         $application = new PpdbApplication();
         $application->application_id = 'PPDB-' . date('Y') . '-' . strtoupper(substr(md5($validated['email']), 0, 6));
-        $application->school_type = strtoupper((string) $request->route('school'));
+        $dbType = School::resolveDbType((string) $request->route('school'));
+        $application->school_id = School::where('type', $dbType)->value('id');
         $application->full_name = $validated['full_name'];
         $application->email = $validated['email'];
         $application->phone = $validated['phone'] ?? null;

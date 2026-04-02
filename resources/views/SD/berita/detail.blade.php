@@ -1,4 +1,4 @@
-﻿@extends('layouts.SD.app')
+@extends('layouts.SD.app')
 
 @php
     $newsExcerpt = trim(strip_tags((string) ($newsItem->excerpt ?? $newsItem->content ?? 'Berita terbaru dari SDIT Putra Pakuan.')));
@@ -8,7 +8,7 @@
         ? $newsImageRaw
         : ($newsImageRaw !== '' ? asset(ltrim($newsImageRaw, '/')) : asset('images/logo-sdit-putrapakuan.png'));
     $schoolSlug = request()->route('school') ?? 'sd';
-    $newsUrl = route('school.berita.detail', ['school' => $schoolSlug, 'news' => $newsItem->id]);
+    $newsUrl = route('school.berita.detail', ['school' => $schoolSlug, 'slug' => $newsItem->slug]);
 @endphp
 
 @section('title', ($newsItem->title ?? 'Detail Berita') . ' | SDIT Putra Pakuan')

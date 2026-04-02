@@ -1,10 +1,10 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('content')
 <!-- Dashboard Canvas -->
 <div class="p-8 max-w-7xl mx-auto">
     <!-- Hero Stats Bento Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <!-- Stat Card 1 -->
         <div class="col-span-1 md:col-span-2 bg-[#1c190d] rounded-3xl p-8 relative overflow-hidden text-white flex flex-col justify-between h-64">
             <div class="relative z-10">
@@ -17,21 +17,6 @@
             </div>
             <div class="absolute -right-10 -bottom-10 opacity-10">
                 <span class="material-symbols-outlined text-[12rem]">groups</span>
-            </div>
-        </div>
-        <!-- Stat Card 2 -->
-        @php
-            $activeOverview = $jenjangStats->firstWhere('isLive', true) ?? $jenjangStats->first();
-            $phaseEndsIn = $activeOverview['endsIn'] !== null ? "Berakhir dalam {$activeOverview['endsIn']} days" : 'Tidak ada fase aktif';
-        @endphp
-        <div class="bg-primary-container rounded-3xl p-6 flex flex-col justify-between border-none shadow-sm h-64">
-            <div class="w-12 h-12 rounded-2xl bg-[#1c190d] text-[#f2cc0d] flex items-center justify-center mb-4">
-                <span class="material-symbols-outlined">event_available</span>
-            </div>
-            <div>
-                <p class="text-[#1c190d]/60 text-xs font-bold uppercase tracking-widest mb-1">Fase Aktif</p>
-                <h3 class="text-xl font-bold text-[#1c190d]">{{ $activeOverview['type'] ?? 'N/A' }} - {{ $activeOverview['activePhase'] ?? 'N/A' }}</h3>
-                <p class="text-[#1c190d]/70 text-sm mt-1">{{ $phaseEndsIn }}</p>
             </div>
         </div>
         <!-- Stat Card 3 -->
@@ -63,7 +48,7 @@
                 </div>
                 <p class="text-xs text-slate-500 dark:text-slate-300 mb-2">Phase: <strong>{{ $stat['activePhase'] ?? 'N/A' }}</strong></p>
                 <p class="text-xs text-slate-500 dark:text-slate-300">Status: <span class="font-bold {{ $stat['isLive'] ? 'text-emerald-600' : 'text-amber-500' }}">{{ $stat['isLive'] ? 'Live' : 'Offline' }}</span></p>
-                <p class="text-xs text-slate-400 dark:text-slate-400 mt-1">Berakhir dalam: {{ $stat['endsIn'] !== null ? $stat['endsIn'] . ' days' : 'N/A' }}</p>
+                <p class="text-xs text-slate-400 dark:text-slate-400 mt-1">Berakhir dalam: {{ $stat['endsIn'] !== null ? $stat['endsIn'] . ' hari lagi' : 'N/A' }}</p>
             </div>
         @endforeach
     </div>
@@ -111,21 +96,26 @@
             <div class="bg-white rounded-[2.5rem] p-8 shadow-sm">
                 <h3 class="text-lg font-bold mb-6 text-on-surface">Aksi Cepat</h3>
                 <div class="grid grid-cols-2 gap-4">
-                    <a href="{{ route('admin.ppdb.management', ['school' => 'sd']) }}" class="p-4 rounded-3xl bg-surface-container-low hover:bg-primary-container transition-all group flex flex-col gap-2">
+                    @php $academicYear = now()->year . '/' . (now()->year + 1); @endphp
+                    <a href="{{ route('admin.ppdb.applicants.by_school', ['school' => 'sdit-putra-pakuan']) }}?year={{ urlencode($academicYear) }}" class="p-4 rounded-3xl bg-surface-container-low hover:bg-primary-container transition-all group flex flex-col gap-2">
                         <span class="material-symbols-outlined text-4xl text-primary">school</span>
-                        <span class="text-xs font-bold text-on-surface">Kelola SD</span>
+                        <span class="text-xs font-bold text-on-surface">Pendaftar SD</span>
+                        <span class="text-[10px] text-on-surface-variant">{{ $academicYear }}</span>
                     </a>
-                    <a href="{{ route('admin.ppdb.management', ['school' => 'smp']) }}" class="p-4 rounded-3xl bg-surface-container-low hover:bg-primary-container transition-all group flex flex-col gap-2">
+                    <a href="{{ route('admin.ppdb.applicants.by_school', ['school' => 'smp-putra-pakuan']) }}?year={{ urlencode($academicYear) }}" class="p-4 rounded-3xl bg-surface-container-low hover:bg-primary-container transition-all group flex flex-col gap-2">
                         <span class="material-symbols-outlined text-4xl text-primary">groups</span>
-                        <span class="text-xs font-bold text-on-surface">Kelola SMP</span>
+                        <span class="text-xs font-bold text-on-surface">Pendaftar SMP</span>
+                        <span class="text-[10px] text-on-surface-variant">{{ $academicYear }}</span>
                     </a>
-                    <a href="{{ route('admin.ppdb.management', ['school' => 'smk']) }}" class="p-4 rounded-3xl bg-surface-container-low hover:bg-primary-container transition-all group flex flex-col gap-2">
+                    <a href="{{ route('admin.ppdb.applicants.smk') }}?year={{ urlencode($academicYear) }}" class="p-4 rounded-3xl bg-surface-container-low hover:bg-primary-container transition-all group flex flex-col gap-2">
                         <span class="material-symbols-outlined text-4xl text-primary">engineering</span>
-                        <span class="text-xs font-bold text-on-surface">Kelola SMK</span>
+                        <span class="text-xs font-bold text-on-surface">Pendaftar SMK</span>
+                        <span class="text-[10px] text-on-surface-variant">{{ $academicYear }}</span>
                     </a>
-                    <a href="{{ route('admin.ppdb.management', ['school' => 'smk']) }}" class="p-4 rounded-3xl bg-surface-container-low hover:bg-primary-container transition-all group flex flex-col gap-2">
-                        <span class="material-symbols-outlined text-4xl text-primary">description</span>
-                        <span class="text-xs font-bold text-on-surface">Kelola Pendaftar</span>
+                    <a href="{{ route('admin.ppdb.applicants.smk') }}?year={{ urlencode($academicYear) }}&status=pending" class="p-4 rounded-3xl bg-surface-container-low hover:bg-error-container/20 transition-all group flex flex-col gap-2">
+                        <span class="material-symbols-outlined text-4xl text-error">pending_actions</span>
+                        <span class="text-xs font-bold text-on-surface">Tertunda</span>
+                        <span class="text-[10px] text-error font-medium">{{ $pendingVerifications }} menunggu</span>
                     </a>
                 </div>
             </div>

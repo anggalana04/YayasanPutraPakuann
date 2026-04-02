@@ -1,4 +1,4 @@
-﻿@extends('layouts.SMK.app')
+@extends('layouts.SMK.app')
 
 @section('content')
 <style>
@@ -363,10 +363,10 @@
         </button>
 
         <!-- Navigation Arrows -->
-        <button id="prevImageBtn" class="gallery-nav-btn gallery-nav-left" title="Sebelumnya (←)">
+        <button id="prevImageBtn" class="gallery-nav-btn gallery-nav-left" title="Sebelumnya (?)">
             <span class="material-symbols-outlined">chevron_left</span>
         </button>
-        <button id="nextImageBtn" class="gallery-nav-btn gallery-nav-right" title="Berikutnya (→)">
+        <button id="nextImageBtn" class="gallery-nav-btn gallery-nav-right" title="Berikutnya (?)">
             <span class="material-symbols-outlined">chevron_right</span>
         </button>
 
@@ -629,7 +629,7 @@ function initSmkGalleryPage() {
         galleryLightbox.open(index);
     };
 
-    console.log('✅ Gallery Lightbox initialized with', galleryLightbox.images.length, 'images');
+    console.log('? Gallery Lightbox initialized with', galleryLightbox.images.length, 'images');
 
 // Load More Functionality
 class GalleryLoadMore {
@@ -675,12 +675,12 @@ class GalleryLoadMore {
                 this.meta.hasMore = data.hasMore;
                 this.meta.nextPage = data.nextPage;
 
-                console.log('✅ Loaded', data.items.length, 'more gallery items');
+                console.log('? Loaded', data.items.length, 'more gallery items');
             } else {
                 this.meta.hasMore = false;
             }
         } catch (error) {
-            console.error('❌ Error loading more gallery items:', error);
+            console.error('? Error loading more gallery items:', error);
         } finally {
             this.isLoading = false;
             this.updateButtonState();

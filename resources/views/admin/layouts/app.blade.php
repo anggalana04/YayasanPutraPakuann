@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" style="margin:0; padding:0; background:#f7f7f4;">
 <head>
     <meta charset="utf-8" />
@@ -6,13 +6,13 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="description" content="Halaman masuk admin Yayasan Putra Pakuan." />
     <link rel="canonical" href="{{ url()->current() }}" />
-    <link rel="icon" type="image/jpeg" href="{{ asset('images/yayasan-logo.jfif') }}" />
-    <link rel="shortcut icon" type="image/jpeg" href="{{ asset('images/yayasan-logo.jfif') }}" />
-    <link rel="apple-touch-icon" href="{{ asset('images/yayasan-logo.jfif') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('images/logo-yayasan.png') }}" />
     <title>Masuk Admin - Yayasan Putra Pakuan</title>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",

@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @push('styles')
 <style>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <!-- Main Section — matches Achievements section style in index -->
+    <!-- Main Section � matches Achievements section style in index -->
     <section class="w-full flex justify-center px-4 sm:px-10 py-10 pb-20 bg-slate-50 dark:bg-background-dark">
         <div class="w-full max-w-[1400px]">
 

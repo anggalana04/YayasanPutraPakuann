@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PpdbApplication;
+use App\Models\School;
 
 class PpdbApplicationDecisionController extends Controller
 {
@@ -13,7 +14,7 @@ class PpdbApplicationDecisionController extends Controller
         $newStatus = null;
 
         // For SMP (general education), no major assignment
-        $isSmp = strtoupper($applicant->school_type) === 'SMP';
+        $isSmp = ($applicant->school?->type ?? '') === 'SMP';
 
         if ($status === 'accepted_major_1' && !$isSmp) {
             $newStatus = 'accepted';
@@ -78,8 +79,8 @@ class PpdbApplicationDecisionController extends Controller
 
         $applicant = PpdbApplication::findOrFail($id);
 
-        // Case-insensitive school type comparison
-        if (strtoupper($applicant->school_type) !== strtoupper($schoolModel->type)) {
+        // Validate that the applicant belongs to this school.
+        if ($applicant->school_id !== $schoolModel->id) {
             abort(404);
         }
 

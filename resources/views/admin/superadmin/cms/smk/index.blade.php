@@ -1,4 +1,4 @@
-ï»¿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('content')
 <div class="p-10 flex-1">
@@ -42,7 +42,7 @@
                                     <div class="text-xs text-on-surface-variant">/index.html</div>
                                 </div>
                             </td>
-                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 24, 2023 Â· 14:20</td>
+                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 24, 2023 · 14:20</td>
                             <td class="px-6 py-6">
                                 <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
@@ -58,7 +58,7 @@
                                     <div class="text-xs text-on-surface-variant">/profil</div>
                                 </div>
                             </td>
-                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 20, 2023 Â· 09:15</td>
+                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 20, 2023 · 09:15</td>
                             <td class="px-6 py-6">
                                 <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
@@ -74,7 +74,7 @@
                                     <div class="text-xs text-on-surface-variant">/visi-misi</div>
                                 </div>
                             </td>
-                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 18, 2023 Â· 10:00</td>
+                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 18, 2023 · 10:00</td>
                             <td class="px-6 py-6">
                                 <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
@@ -90,7 +90,7 @@
                                     <div class="text-xs text-on-surface-variant">/jurusan</div>
                                 </div>
                             </td>
-                            <td class="px-6 py-6 text-sm text-on-surface-variant">Yesterday Â· 16:45</td>
+                            <td class="px-6 py-6 text-sm text-on-surface-variant">Yesterday · 16:45</td>
                             <td class="px-6 py-6">
                                 <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Draf</span>
                             </td>
@@ -106,7 +106,7 @@
                                     <div class="text-xs text-on-surface-variant">/direktori-guru</div>
                                 </div>
                             </td>
-                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 15, 2023 Â· 13:30</td>
+                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 15, 2023 · 13:30</td>
                             <td class="px-6 py-6">
                                 <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
@@ -122,7 +122,7 @@
                                     <div class="text-xs text-on-surface-variant">/direktori-siswa</div>
                                 </div>
                             </td>
-                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 14, 2023 Â· 12:00</td>
+                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 14, 2023 · 12:00</td>
                             <td class="px-6 py-6">
                                 <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
@@ -138,7 +138,7 @@
                                     <div class="text-xs text-on-surface-variant">/berita</div>
                                 </div>
                             </td>
-                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 13, 2023 Â· 15:45</td>
+                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 13, 2023 · 15:45</td>
                             <td class="px-6 py-6">
                                 <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
@@ -170,7 +170,7 @@
                                     <div class="text-xs text-on-surface-variant">/galeri</div>
                                 </div>
                             </td>
-                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 12, 2023 Â· 11:00</td>
+                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 12, 2023 · 11:00</td>
                             <td class="px-6 py-6">
                                 <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
@@ -186,7 +186,7 @@
                                     <div class="text-xs text-on-surface-variant">/hubungi-kami</div>
                                 </div>
                             </td>
-                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 11, 2023 Â· 10:30</td>
+                            <td class="px-6 py-6 text-sm text-on-surface-variant">Oct 11, 2023 · 10:30</td>
                             <td class="px-6 py-6">
                                 <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider rounded-full">Diterbitkan</span>
                             </td>
@@ -202,7 +202,7 @@
     <!-- Footer-like action bar -->
     <div class="mt-auto pt-8 flex items-center justify-between border-t border-[#1c190d]/5">
         <div class="text-xs text-on-surface-variant">
-            Â© 2024 SMK Putra Pakuan CMS System. All editorial rights reserved.
+            © 2024 SMK Putra Pakuan CMS System. All editorial rights reserved.
         </div>
         <div class="flex gap-4">
             <button class="px-4 py-2 text-xs font-bold text-on-surface-variant hover:text-[#1c190d]">Global SEO Settings</button>

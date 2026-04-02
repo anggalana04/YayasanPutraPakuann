@@ -1,4 +1,4 @@
-﻿@extends('layouts.SD.app')
+@extends('layouts.SD.app')
 
 @section('content')
 <!-- Breadcrumb -->
@@ -58,7 +58,7 @@
                     {{ \Illuminate\Support\Str::limit($featuredNews->excerpt ?? strip_tags($featuredNews->content ?? ''), 170) }}
                 </p>
             </div>
-            <a href="{{ route('school.berita.detail', ['school' => $school, 'news' => $featuredNews->id]) }}"
+            <a href="{{ route('school.berita.detail', ['school' => $school, 'slug' => $featuredNews->slug]) }}"
                class="flex-shrink-0 flex items-center gap-2 bg-white text-charcoal px-6 py-3 rounded-lg font-bold hover:bg-primary transition-colors shadow-lg">
                 Baca Selengkapnya <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
             </a>
@@ -86,8 +86,9 @@
 
 <div class="flex flex-col gap-8">
 @forelse ($news as $item)
+@if ($featuredNews && $item->id === $featuredNews->id) @continue @endif
 <article class="group flex flex-col md:flex-row gap-6 bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all hover:border-primary/20 cursor-pointer"
-    onclick="window.location.href='{{ route('school.berita.detail', ['school' => $school, 'news' => $item->id]) }}'">
+    onclick="window.location.href='{{ route('school.berita.detail', ['school' => $school, 'slug' => $item->slug]) }}'">
     <div class="w-full md:w-1/3 aspect-video md:aspect-4/3 rounded-lg overflow-hidden relative">
         <div
             class="w-full h-full bg-cover bg-center transform group-hover:scale-105 transition-transform duration-500"
@@ -114,7 +115,7 @@
             {{ \Illuminate\Support\Str::limit($item->excerpt ?? strip_tags($item->content ?? ''), 160) }}
         </p>
         <div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
-            <a class="text-sm font-bold text-primary flex items-center gap-1 group/link hover:text-[#E5A800]" href="{{ route('school.berita.detail', ['school' => $school, 'news' => $item->id]) }}">
+            <a class="text-sm font-bold text-primary flex items-center gap-1 group/link hover:text-[#E5A800]" href="{{ route('school.berita.detail', ['school' => $school, 'slug' => $item->slug]) }}">
                 Baca Update <span class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform">arrow_right_alt</span>
             </a>
             <button class="text-slate-500 hover:text-primary transition-colors">

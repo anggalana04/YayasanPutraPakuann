@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('title', 'Pilih Sekolah - Yayasan Putra Pakuan')
 
@@ -32,7 +32,10 @@
                             <td class="px-6 py-6 font-bold text-[#1c190d]">{{ $school->name }}</td>
                             <td class="px-6 py-6 text-on-surface-variant">{{ $school->type }}</td>
                             <td class="px-6 py-6">
-                                <a href="{{ url('/admin/cms/' . strtolower($school->type)) }}"
+                                @php
+                                    $cmsSlug = $school->type === 'SDIT' ? 'sd' : strtolower($school->type);
+                                @endphp
+                                <a href="{{ url('/admin/cms/' . $cmsSlug) }}"
                                    data-admin-nav
                                    hx-boost="true"
                                    hx-target="#admin-page-shell"

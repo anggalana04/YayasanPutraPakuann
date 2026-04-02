@@ -1,4 +1,4 @@
-﻿@extends('admin.layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
 <main class="min-h-screen flex items-center justify-center p-4 md:p-8 bg-background">
@@ -44,7 +44,7 @@
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                 <span class="material-symbols-outlined text-outline text-xl" data-icon="lock">lock</span>
                             </div>
-                            <input class="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:bg-surface-container-lowest focus:ring-0 rounded-t-xl transition-all font-medium text-charcoal placeholder:text-outline-variant" id="password" name="password" placeholder="••••••••••••" type="password" required />
+                            <input class="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:bg-surface-container-lowest focus:ring-0 rounded-t-xl transition-all font-medium text-charcoal placeholder:text-outline-variant" id="password" name="password" placeholder="Kata sandi" type="password" required style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" />
                         </div>
                     </div>
                     <div class="mb-4 flex items-center">

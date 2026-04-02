@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PpdbApplication;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -29,6 +30,7 @@ class GoogleAuthController extends Controller
     public function callback(?string $school = null): \Illuminate\Http\RedirectResponse
     {
         $school = $school ?? session('ppdb_school', 'smk');
+        $schoolModel = School::where('type', School::resolveDbType($school))->firstOrFail();
 
         try {
             $googleUser = Socialite::driver('google')->user();
@@ -45,8 +47,8 @@ class GoogleAuthController extends Controller
 
             $ppdb = PpdbApplication::firstOrCreate(
                 [
-                    'email'       => $user->email,
-                    'school_type' => strtoupper($school),
+                    'email'     => $user->email,
+                    'school_id' => $schoolModel->id,
                 ],
                 [
                     'full_name'      => $user->name,

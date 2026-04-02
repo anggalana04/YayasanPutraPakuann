@@ -1,4 +1,4 @@
-﻿@extends('layouts.SD.ppdb')
+@extends('layouts.SD.ppdb')
 
 @section('ppdb-content')
 

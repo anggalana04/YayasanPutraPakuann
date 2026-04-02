@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('title', 'Manajemen Kapasitas PPDB - ' . ($school->name ?? ''))
 
