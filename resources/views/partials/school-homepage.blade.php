@@ -1,4 +1,4 @@
-﻿{{-- ============================================================
+{{-- ============================================================
      SCHOOL HOMEPAGE PARTIAL  (redesigned v2)
      $schoolConfig, $homepage, $latestNews, $latestGallery,
      $ppdbLive, $ppdbCountdownDate, $ppdbCurrentPhase, $ppdbPeriod, $school
@@ -6,10 +6,10 @@
 @php $ppdbIsLive = $ppdbLive ?? false; $ppdbYear = $ppdbPeriod ?? (date('Y').'/'.((int)date('Y')+1)); @endphp
 
 {{-- =========================================================
-     1. PPDB ANNOUNCEMENT
+     1. SPMB ANNOUNCEMENT
 ========================================================= --}}
 @if ($ppdbIsLive)
-{{-- ===== PPDB LIVE ===== --}}
+{{-- ===== SPMB LIVE ===== --}}
 <section style="background: #08080f; overflow: hidden;">
 
     {{-- Top status strip --}}
@@ -40,7 +40,7 @@
 
                 {{-- Big headline --}}
                 <h2 style="font-size: clamp(2.8rem, 6vw, 5.2rem); font-weight: 900; color: #ffffff; line-height: 0.9; letter-spacing: -0.03em; margin: 0 0 1.25rem 0;">
-                    PPDB<br>
+                    SPMB<br>
                     <span style="color: #FDB913;">{{ $schoolConfig['short_name'] }}</span><br>
                     Putra Pakuan
                 </h2>
@@ -135,7 +135,7 @@
 </section>
 
 @else
-{{-- ===== PPDB CLOSED ===== --}}
+{{-- ===== SPMB CLOSED ===== --}}
 <section style="background: #f5f4ef; padding: 3.5rem 1.5rem;">
     <div style="max-width: 860px; margin: 0 auto;">
 
@@ -143,7 +143,7 @@
         <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
             <div style="display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #e4dfc8; border-radius: 9999px; padding: 6px 16px;">
                 <span class="material-symbols-outlined" style="font-size: 13px; color: #b45309;">notifications</span>
-                <span style="font-size: 11px; font-weight: 700; color: #92400e; text-transform: uppercase; letter-spacing: 0.18em;">Pengumuman PPDB</span>
+                <span style="font-size: 11px; font-weight: 700; color: #92400e; text-transform: uppercase; letter-spacing: 0.18em;">Pengumuman SPMB</span>
             </div>
         </div>
 
@@ -166,7 +166,7 @@
                     <div style="flex: 1; min-width: 180px;">
                         <p style="font-weight: 700; color: #1a1814; font-size: 15px; margin: 0 0 6px 0;">{{ $schoolConfig['name'] }}</p>
                         <p style="color: #6b6759; font-size: 13px; margin: 0; line-height: 1.6;">
-                            {{ $schoolConfig['ppdb_offline_text'] ?? 'PPDB tahun ajaran ini belum dibuka. Nantikan pengumuman resmi melalui website ini.' }}
+                            {{ $schoolConfig['ppdb_offline_text'] ?? 'SPMB tahun ajaran ini belum dibuka. Nantikan pengumuman resmi melalui website ini.' }}
                         </p>
                     </div>
 
@@ -174,7 +174,7 @@
                     <a href="{{ route('school.ppdb', ['school' => $school]) }}"
                        style="display: inline-flex; align-items: center; gap: 7px; background: #1a1814; color: #ffffff; font-weight: 600; font-size: 13px; padding: 12px 22px; border-radius: 11px; text-decoration: none; flex-shrink: 0; white-space: nowrap; transition: opacity 0.15s;"
                        onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
-                        Informasi PPDB
+                        Informasi SPMB
                         <span class="material-symbols-outlined" style="font-size: 15px; line-height: 1;">arrow_forward</span>
                     </a>
                 </div>
@@ -183,7 +183,7 @@
 
         {{-- Sub note --}}
         <p style="text-align: center; color: #9c9887; font-size: 12px; margin-top: 14px;">
-            Pantau terus halaman ini untuk pengumuman PPDB tahun ajaran berikutnya.
+            Pantau terus halaman ini untuk pengumuman SPMB tahun ajaran berikutnya.
         </p>
     </div>
 </section>
@@ -463,7 +463,12 @@
     <div class="max-w-7xl mx-auto px-6 md:px-12">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
             @foreach ($schoolConfig['kurikulum'] as $idx => $item)
-            <a href="{{ route('school.ppdb', ['school' => $school]) }}"
+            @php
+                $cardUrl = ($school === 'smk' && !empty($item['slug']))
+                    ? route('school.jurusan.show', ['school' => $school, 'slug' => $item['slug']])
+                    : route('school.ppdb', ['school' => $school]);
+            @endphp
+            <a href="{{ $cardUrl }}"
                class="group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer"
                style="background:#111">
 

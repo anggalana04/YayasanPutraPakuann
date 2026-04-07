@@ -10,7 +10,7 @@
 
         $map = [
             'cms' => 'CMS',
-            'ppdb' => 'PPDB',
+            'ppdb' => 'SPMB',
             'schools' => 'Pilih Sekolah',
             'pages' => 'Halaman Yayasan',
             'management' => 'Manajemen',
@@ -82,7 +82,7 @@
             }
         }
     } elseif (($segments[1] ?? null) === 'ppdb') {
-        $breadcrumbs[] = ['label' => 'PPDB', 'url' => $ppdbLink !== '#' ? $ppdbLink : url('/admin/ppdb/schools')];
+        $breadcrumbs[] = ['label' => 'SPMB', 'url' => $ppdbLink !== '#' ? $ppdbLink : url('/admin/ppdb/schools')];
 
         $third = $segments[2] ?? null;
         $fourth = $segments[3] ?? null;

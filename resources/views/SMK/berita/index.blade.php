@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<main class="flex-1 flex flex-col items-center w-full px-4 sm:px-8 py-6 lg:py-12">
+<div class="flex-1 flex flex-col items-center w-full px-4 sm:px-8 py-6 lg:py-12">
 <div class="w-full max-w-7xl flex flex-col gap-10">
 
 <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
@@ -136,7 +136,7 @@
 
 </div>
 </div>
-</main>
+</div>
 @endsection
 
 

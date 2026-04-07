@@ -1,4 +1,4 @@
-<!-- resources/views/layouts/SMP/app.blade.php -->
+@php $__smpIsHero = $__env->hasSection('hero_page'); @endphp
 <!DOCTYPE html>
 <html lang="id" style="margin:0; padding:0; background:#f8f8f5;">
 <head>
@@ -85,53 +85,35 @@
             --color-background-light: #f8f8f5;
             --color-background-dark: #1e293b;
         }
-    </style>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#3b82f6", // SMP blue
-                        "background-light": "#f8f8f5",
-                        "background-dark": "#1e293b",
-                        "charcoal": "#1e293b",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.5rem",
-                        "lg": "1rem",
-                        "xl": "1.5rem",
-                        "full": "9999px"
-                    },
-                },
-            },
-        }
-    </script>
-    <style type="text/tailwindcss">
         html,
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0 !important;
+            padding: 0 !important;
         }
-
-        body { font-family: 'Lexend', sans-serif; }
-
+        #main-content {
+            padding-top: 72px;
+        }
+        #main-content:has([data-hero-section]) {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+            border-top: none !important;
+        }
+        [data-hero-section] {
+            margin-top: 0 !important;
+        }
     </style>
     @stack('head')
     <!-- HTMX -->
     <script src="{{ asset('js/htmx.min.js') }}" defer></script>
 </head>
-<body class="m-0 p-0 bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100"
+<body style="margin:0; padding:0;" class="m-0 p-0 bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100"
     hx-boost="true"
     hx-target="#main-content"
     hx-select="#main-content"
     hx-swap="outerHTML transition:true"
     hx-push-url="true">
     <!-- Navbar -->
-    <nav id="school-nav" class="fixed top-0 z-50 w-full bg-charcoal text-white border-b border-primary/20 transition-all duration-300">
+    <nav id="school-nav" class="fixed top-0 z-50 w-full {{ $__smpIsHero ? '' : 'bg-charcoal border-b border-primary/20' }} text-white transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <a href="{{ route('school.home', ['school'=> 'smp']) }}">
@@ -342,7 +324,7 @@
         document.addEventListener('htmx:afterSettle', updateNavLayout);
     })();
     </script>
-    <main id="main-content">
+    <main id="main-content" style="{{ $__smpIsHero ? 'padding-top:0;' : 'padding-top:72px;' }}">
         @yield('content')
     </main>
     <!-- Footer -->

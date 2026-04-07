@@ -1,15 +1,15 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
-@section('title', 'Manajemen Kapasitas PPDB - ' . ($school->name ?? ''))
+@section('title', 'Manajemen Kapasitas SPMB - ' . ($school->name ?? ''))
 
 @section('content')
 <div class="p-8 max-w-7xl mx-auto w-full space-y-6">
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-            <h2 class="text-3xl font-bold tracking-tight text-[#1c190d]">Kapasitas PPDB</h2>
+            <h2 class="text-3xl font-bold tracking-tight text-[#1c190d]">Kapasitas SPMB</h2>
             <p class="text-on-surface-variant">Sekolah: {{ $school->name }} | Tahun Ajaran: {{ $year }}</p>
         </div>
-        <a href="{{ route('admin.ppdb.management', ['school' => $school->slug, 'year' => $year]) }}" class="px-5 py-2 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary/90">Kembali ke PPDB Management</a>
+        <a href="{{ route('admin.ppdb.management', ['school' => $school->slug, 'year' => $year]) }}" class="px-5 py-2 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary/90">Kembali ke SPMB Management</a>
     </div>
 
     @if(session('success'))

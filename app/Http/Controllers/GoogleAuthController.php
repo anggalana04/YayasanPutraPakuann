@@ -55,6 +55,7 @@ class GoogleAuthController extends Controller
                     'status'         => 'draft',
                     'application_id' => 'PPDB-' . date('Y') . '-' . strtoupper(substr(md5($user->email . $school), 0, 6)),
                     'password'       => bcrypt(uniqid()),
+                    'unique_code'    => PpdbApplication::generateUniqueCode(),
                     'assigned_major' => null,
                 ]
             );
@@ -62,6 +63,7 @@ class GoogleAuthController extends Controller
             if (! $ppdb->full_name)              $ppdb->full_name = $user->name;
             if (! $ppdb->application_id)         $ppdb->application_id = 'PPDB-' . date('Y') . '-' . strtoupper(substr(md5($user->email . $school), 0, 6));
             if (! $ppdb->password)               $ppdb->password = bcrypt(uniqid());
+            if (! $ppdb->unique_code)            $ppdb->unique_code = PpdbApplication::generateUniqueCode();
             if (! $ppdb->status)                 $ppdb->status = 'draft';
             if (! $ppdb->last_registration_step) $ppdb->last_registration_step = 'biodata';
             $ppdb->save();
@@ -76,7 +78,6 @@ class GoogleAuthController extends Controller
             if ($nextStep && $nextStep !== 'done') {
                 return match ($nextStep) {
                     'jurusan_berkas' => redirect()->route('ppdb.berkas',  ['school' => $school]),
-                    'payment'        => redirect()->route('ppdb.payment', ['school' => $school]),
                     default          => redirect()->route('ppdb.biodata', ['school' => $school]),
                 };
             }

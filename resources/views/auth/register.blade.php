@@ -3,9 +3,9 @@
 <html class="light" lang="id" style="margin:0; padding:0; background:#f7f7f4;"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Daftar Akun PPDB Yayasan Putra Pakuan</title>
-<meta name="description" content="Buat akun PPDB Yayasan Putra Pakuan untuk memulai proses pendaftaran peserta didik baru secara online." />
-<meta name="keywords" content="daftar ppdb yayasan putra pakuan, registrasi ppdb bogor, akun pendaftaran sekolah" />
+<title>Daftar Akun SPMB Yayasan Putra Pakuan</title>
+<meta name="description" content="Buat akun SPMB Yayasan Putra Pakuan untuk memulai proses pendaftaran peserta didik baru secara online." />
+<meta name="keywords" content="daftar spmb yayasan putra pakuan, registrasi spmb bogor, akun pendaftaran sekolah" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="{{ url()->current() }}" />
 <link rel="icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
@@ -13,13 +13,13 @@
 <link rel="apple-touch-icon" href="{{ asset('images/logo-yayasan.png') }}" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="id_ID" />
-<meta property="og:title" content="Daftar Akun PPDB Yayasan Putra Pakuan" />
-<meta property="og:description" content="Buat akun PPDB Yayasan Putra Pakuan untuk memulai proses pendaftaran peserta didik baru secara online." />
+<meta property="og:title" content="Daftar Akun SPMB Yayasan Putra Pakuan" />
+<meta property="og:description" content="Buat akun SPMB Yayasan Putra Pakuan untuk memulai proses pendaftaran peserta didik baru secara online." />
 <meta property="og:url" content="{{ url()->current() }}" />
 <meta property="og:image" content="{{ asset('images/logo-yayasan.png') }}" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Daftar Akun PPDB Yayasan Putra Pakuan" />
-<meta name="twitter:description" content="Buat akun PPDB Yayasan Putra Pakuan untuk memulai proses pendaftaran peserta didik baru secara online." />
+<meta name="twitter:title" content="Daftar Akun SPMB Yayasan Putra Pakuan" />
+<meta name="twitter:description" content="Buat akun SPMB Yayasan Putra Pakuan untuk memulai proses pendaftaran peserta didik baru secara online." />
 <meta name="twitter:image" content="{{ asset('images/logo-yayasan.png') }}" />
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
@@ -132,7 +132,7 @@
                         Langkah awal menuju <span class="text-primary">masa depan</span> cemerlang.
                     </h1>
 <p class="text-on-surface-variant text-lg leading-relaxed max-w-md">
-                        Daftarkan akun Anda untuk memulai proses seleksi, memantau status aplikasi, dan mendapatkan pembaruan terkini seputar PPDB SMK Putra Pakuan.
+                        Daftarkan akun Anda untuk memulai proses seleksi, memantau status aplikasi, dan mendapatkan pembaruan terkini seputar SPMB SMK Putra Pakuan.
                     </p>
 </div>
 <div class="space-y-6">
@@ -237,7 +237,7 @@
 <footer class="py-12 px-6 border-t border-surface-container-high/30">
 <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
 <div class="flex flex-col items-center md:items-start">
-<p class="text-xs text-on-surface-variant font-medium">© 2024 SMK Putra Pakuan Bogor. Seluruh Hak Cipta Dilindungi.</p>
+<p class="text-xs text-on-surface-variant font-medium">ï¿½ 2024 SMK Putra Pakuan Bogor. Seluruh Hak Cipta Dilindungi.</p>
 </div>
 <div class="flex gap-8">
 <a class="text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Syarat &amp; Ketentuan</a>

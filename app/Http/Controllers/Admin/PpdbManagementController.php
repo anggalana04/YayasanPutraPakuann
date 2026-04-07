@@ -7,6 +7,7 @@ use App\Models\PpdbApplication;
 use App\Models\PpdbMajorCapacity;
 use App\Models\PpdbManagementPhase;
 use App\Models\School;
+use App\Models\SchoolHomepageSetting;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -148,9 +149,12 @@ class PpdbManagementController extends Controller
 
         $nextPhase = $activePhase ?? $upcomingPhase;
 
+        $homepage = SchoolHomepageSetting::where('school_id', $schoolModel->id)->first();
+
         $viewFolder = strtolower($schoolModel->type) === 'sdit' ? 'sd' : strtolower($schoolModel->type);
         return view('admin.superadmin.ppdb.' . $viewFolder . '.management', [
             'school' => $schoolModel,
+            'homepage' => $homepage,
             'phases' => $phases,
             'academicYears' => $academicYears,
             'selectedYear' => $selectedYear,

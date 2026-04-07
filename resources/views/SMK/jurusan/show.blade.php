@@ -4,11 +4,12 @@
 @section('meta_description', $jurusan->tagline ?? 'Program keahlian ' . $jurusan->name . ' di SMK Putra Pakuan.')
 @section('meta_image', $jurusan->cover_image_url ?? asset('images/logo-yayasan.png'))
 
+@section('hero_page', '1')
+
 @section('content')
-<div id="main-content">
 
 {{-- ═══════════════════════════ HERO ════════════════════════════════════════════ --}}
-<section class="relative min-h-[70vh] flex items-end overflow-hidden">
+<section class="relative min-h-[70vh] flex items-end overflow-hidden" data-hero-section>
 
     {{-- Background Image or Gradient --}}
     @if($jurusan->cover_image_url)
@@ -261,14 +262,14 @@
         </p>
         <h2 class="text-3xl md:text-4xl font-black mb-5">Bergabunglah Bersama Kami</h2>
         <p class="text-slate-300 mb-8 max-w-xl mx-auto">
-            Jadilah bagian dari generasi unggul SMK Putra Pakuan. Daftarkan dirimu sekarang melalui PPDB online.
+            Jadilah bagian dari generasi unggul SMK Putra Pakuan. Daftarkan dirimu sekarang melalui SPMB online.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="{{ route('school.ppdb', ['school' => 'smk']) }}"
                class="inline-flex items-center justify-center gap-2 font-black px-8 py-4 rounded-2xl text-sm shadow-lg hover:-translate-y-0.5 transition-all"
                style="background: {{ $jurusan->accent_color }}; color: #1c190d;">
                 <span class="material-symbols-outlined">how_to_reg</span>
-                Daftar PPDB Online
+                Daftar SPMB Online
             </a>
             <a href="{{ route('school.kontak', ['school' => 'smk']) }}"
                class="inline-flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-2xl text-sm bg-white/10 hover:bg-white/20 backdrop-blur transition-all">

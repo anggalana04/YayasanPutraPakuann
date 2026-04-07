@@ -13,6 +13,7 @@ class PpdbApplication extends Authenticatable
 
     protected $fillable = [
         'application_id',
+        'unique_code',
         'school_id',
         'password',
         'full_name',
@@ -50,6 +51,7 @@ class PpdbApplication extends Authenticatable
 
     protected $hidden = [
         'password',
+        'unique_code',
     ];
 
     protected $casts = [
@@ -107,6 +109,25 @@ class PpdbApplication extends Authenticatable
             ->count() + 1;
 
         return 'PPDB-' . $year . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Generate a unique 8-char alphanumeric code for applicant login.
+     * Uses unambiguous characters (no 0/O/1/I/L).
+     */
+    public static function generateUniqueCode(): string
+    {
+        $chars = 'ABCDEFGHJKMNPQRSTVWXYZ23456789';
+        do {
+            $code = '';
+            for ($i = 0; $i < 8; $i++) {
+                $code .= $chars[random_int(0, strlen($chars) - 1)];
+            }
+            // Format as XXXX-XXXX for readability
+            $formatted = substr($code, 0, 4) . '-' . substr($code, 4, 4);
+        } while (self::where('unique_code', $formatted)->exists());
+
+        return $formatted;
     }
 
     public function setPasswordFromDob(): void

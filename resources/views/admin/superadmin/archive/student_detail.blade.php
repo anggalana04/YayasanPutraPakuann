@@ -273,7 +273,7 @@ Detail Siswa – {{ $student->full_name }}
         @if(!$app)
             <div class="bg-surface-container rounded-3xl p-12 flex flex-col items-center gap-4 text-center">
                 <span class="material-symbols-outlined text-4xl text-outline-variant">folder_off</span>
-                <p class="text-on-surface-variant">Siswa ini tidak terhubung ke pendaftaran PPDB. Berkas tidak tersedia.</p>
+                <p class="text-on-surface-variant">Siswa ini tidak terhubung ke pendaftaran SPMB. Berkas tidak tersedia.</p>
             </div>
         @else
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -350,10 +350,10 @@ Detail Siswa – {{ $student->full_name }}
         <div class="relative">
             <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-outline-variant/30"></div>
             <div class="space-y-6">
-                {{-- PPDB status history --}}
+                {{-- SPMB status history --}}
                 @if($app && $app->status_history)
                     @php
-                        $ppdbLabels = ['draft'=>'Mendaftar PPDB','pending'=>'Berkas Dikirim','payment_uploaded'=>'Bukti Bayar Diunggah','verified'=>'Diverifikasi','accepted'=>'Diterima','rejected'=>'Ditolak'];
+                        $ppdbLabels = ['draft'=>'Mendaftar SPMB','pending'=>'Berkas Dikirim','payment_uploaded'=>'Bukti Bayar Diunggah','verified'=>'Diverifikasi','accepted'=>'Diterima','rejected'=>'Ditolak'];
                         $ppdbColors = ['draft'=>'text-outline-variant','pending'=>'text-blue-600','payment_uploaded'=>'text-purple-600','verified'=>'text-indigo-600','accepted'=>'text-green-600','rejected'=>'text-red-600'];
                     @endphp
                     @foreach($app->status_history as $h)

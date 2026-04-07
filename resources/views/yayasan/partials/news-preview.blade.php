@@ -3,7 +3,7 @@
     <div class="max-w-[1280px] w-full px-4 md:px-10 flex flex-col gap-10">
         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
             <h2 class="text-slate-900 dark:text-white text-2xl md:text-3xl font-black tracking-tight">Berita Terbaru</h2>
-            <a class="text-[#FDB913] font-bold hover:text-[#E5A800] text-sm flex items-center gap-2 transition-colors" href="#">
+            <a class="text-[#FDB913] font-bold hover:text-[#E5A800] text-sm flex items-center gap-2 transition-colors" href="{{ route('yayasan.berita') }}">
                 Lihat Semua <span class="material-symbols-outlined text-sm">arrow_forward</span>
             </a>
         </div>

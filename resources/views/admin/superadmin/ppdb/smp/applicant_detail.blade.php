@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
 @section('title', 'Applicant Details - SMP Putra Pakuan')
 
@@ -20,7 +20,7 @@
                 </div>
                 <h1 class="text-4xl font-bold font-headline text-on-surface tracking-tight">{{ $applicant->full_name }}</h1>
                 <p class="text-on-surface-variant flex items-center gap-2 mt-1">
-                    <span class="material-symbols-outlined text-sm">location_on</span> {{ $applicant->address ?? '-' }} � Dikirim pada {{ $applicant->created_at ? $applicant->created_at->format('d M Y') : '-' }}
+                    <span class="material-symbols-outlined text-sm">location_on</span> {{ $applicant->address ?? '-' }} &middot; Dikirim pada {{ $applicant->created_at ? $applicant->created_at->format('d M Y') : '-' }}
                 </p>
             </div>
         </div>
@@ -164,28 +164,89 @@
     <div class="sticky top-24 space-y-6">
 
         <!-- PAYMENT VERIFICATION PANEL -->
-        @if($applicant->payment_proof)
+        @if($applicant->payment_proof || $applicant->payment_method === 'tu')
         @php
-            $payExt = strtolower(pathinfo($applicant->payment_proof, PATHINFO_EXTENSION));
-            $payUrl = asset('storage/' . $applicant->payment_proof);
-            $payIsImage = in_array($payExt, ['jpg','jpeg','png','gif']);
+            $payExt = $applicant->payment_proof ? strtolower(pathinfo($applicant->payment_proof, PATHINFO_EXTENSION)) : null;
+            $payUrl = $applicant->payment_proof ? asset('storage/' . $applicant->payment_proof) : null;
+            $payIsImage = $payExt && in_array($payExt, ['jpg','jpeg','png','gif']);
+            $isTuPayment = $applicant->payment_method === 'tu';
+            $paymentConfirmed = collect($applicant->status_history ?? [])->contains(fn($h) => in_array($h['status'] ?? '', ['payment_confirmed_tu', 'payment_confirmed']));
         @endphp
         <section class="bg-white rounded-3xl p-6 shadow border">
             <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                <span class="material-symbols-outlined text-green-600" style="font-variation-settings:'FILL' 1">receipt_long</span>
-                Verifikasi Pembayaran
+                <span class="material-symbols-outlined {{ $isTuPayment ? 'text-amber-500' : 'text-green-600' }}" style="font-variation-settings:'FILL' 1">{{ $isTuPayment ? 'store' : 'receipt_long' }}</span>
+                @if ($isTuPayment) Pembayaran di TU @else Verifikasi Pembayaran @endif
             </h3>
-            <div class="mb-4 cursor-pointer rounded-xl overflow-hidden border border-outline-variant" onclick="openDocViewer('{{ $payUrl }}', 'Bukti Pembayaran', '{{ $payExt }}')">
-                @if($payIsImage)
-                    <img src="{{ $payUrl }}" alt="Bukti Pembayaran" class="w-full object-cover max-h-52 hover:opacity-90 transition-opacity">
-                @else
-                    <div class="flex flex-col items-center justify-center p-6 bg-surface-container-low hover:bg-surface-container transition-colors">
-                        <svg class="w-12 h-12 mb-2 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/></svg>
-                        <span class="text-sm font-bold">Klik untuk Lihat PDF</span>
+
+            @if($isTuPayment)
+                <div class="mb-4 rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800 space-y-1">
+                    <div class="flex items-center gap-2 font-bold mb-2">
+                        <span class="material-symbols-outlined text-amber-500 text-base">store</span>
+                        Pembayaran Langsung di TU
                     </div>
+                    <p>Pendaftar memilih membayar langsung ke kantor TU sekolah.</p>
+                    @if ($paymentConfirmed)
+                        <div class="mt-2 flex items-center gap-2 text-green-700 font-bold">
+                            <span class="material-symbols-outlined text-base">check_circle</span>
+                            Sudah dikonfirmasi oleh admin
+                        </div>
+                    @else
+                        <div class="mt-2 flex items-center gap-2 text-amber-700">
+                            <span class="material-symbols-outlined text-base">pending</span>
+                            Menunggu konfirmasi admin
+                        </div>
+                    @endif
+                </div>
+
+                @if (!$paymentConfirmed)
+                <form method="POST" action="{{ route('admin.ppdb.applicants.by_school.confirm_payment', ['school' => $schoolModel->slug, 'id' => $applicant->id]) }}">
+                    @csrf
+                    <button type="submit"
+                        onclick="return confirm('Konfirmasi bahwa pembayaran TU dari {{ addslashes($applicant->full_name) }} sudah diterima?')"
+                        class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors">
+                        <span class="material-symbols-outlined text-base">how_to_reg</span>
+                        Konfirmasi Pembayaran Diterima
+                    </button>
+                </form>
                 @endif
-            </div>
-            <div class="space-y-2 text-sm mb-4">
+            @else
+                <div class="mb-4 cursor-pointer rounded-xl overflow-hidden border border-outline-variant" onclick="openDocViewer('{{ $payUrl }}', 'Bukti Pembayaran', '{{ $payExt }}')">
+                    @if($payIsImage)
+                        <img src="{{ $payUrl }}" alt="Bukti Pembayaran" class="w-full object-cover max-h-52 hover:opacity-90 transition-opacity">
+                    @else
+                        <div class="flex flex-col items-center justify-center p-6 bg-surface-container-low hover:bg-surface-container transition-colors">
+                            <svg class="w-12 h-12 mb-2 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/></svg>
+                            <span class="text-sm font-bold">Klik untuk Lihat PDF</span>
+                        </div>
+                    @endif
+                </div>
+                <a href="{{ $payUrl }}" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 w-full py-2 rounded-xl border border-outline-variant text-sm font-bold hover:bg-surface-container-low transition-colors mb-4">
+                    <span class="material-symbols-outlined text-sm">open_in_new</span> Buka di Tab Baru
+                </a>
+
+                {{-- Confirm payment button for bank/ewallet --}}
+                @if ($paymentConfirmed)
+                    <div class="flex items-center gap-2 text-green-700 font-bold text-sm bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-2">
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">check_circle</span>
+                        Pembayaran telah dikonfirmasi
+                        @if($applicant->unique_code)
+                        — Kode: <span class="font-black tracking-wider">{{ $applicant->unique_code }}</span>
+                        @endif
+                    </div>
+                @else
+                    <form method="POST" action="{{ route('admin.ppdb.applicants.by_school.confirm_payment', ['school' => $schoolModel->slug, 'id' => $applicant->id]) }}">
+                        @csrf
+                        <button type="submit"
+                            onclick="return confirm('Konfirmasi pembayaran dari {{ addslashes($applicant->full_name) }} sudah diterima dan kode unik akan dibuat?')"
+                            class="w-full py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors">
+                            <span class="material-symbols-outlined text-base">verified</span>
+                            Konfirmasi Pembayaran & Buat Kode Unik
+                        </button>
+                    </form>
+                @endif
+            @endif
+
+            <div class="space-y-2 text-sm mt-4">
                 @if($applicant->payment_amount)
                 <div class="flex justify-between items-center">
                     <span class="text-on-surface-variant">Jumlah</span>
@@ -205,9 +266,6 @@
                 </div>
                 @endif
             </div>
-            <a href="{{ $payUrl }}" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 w-full py-2 rounded-xl border border-outline-variant text-sm font-bold hover:bg-surface-container-low transition-colors">
-                <span class="material-symbols-outlined text-sm">open_in_new</span> Buka di Tab Baru
-            </a>
         </section>
         @endif
 

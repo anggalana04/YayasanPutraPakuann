@@ -3,9 +3,9 @@
 <html class="light" lang="id" style="margin:0; padding:0; background:#f7f7f4;"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Masuk PPDB Yayasan Putra Pakuan</title>
-<meta name="description" content="Halaman masuk PPDB Yayasan Putra Pakuan untuk memantau status pendaftaran dan melengkapi tahapan seleksi." />
-<meta name="keywords" content="masuk ppdb yayasan putra pakuan, login ppdb bogor, portal pendaftaran sekolah" />
+<title>Masuk SPMB Yayasan Putra Pakuan</title>
+<meta name="description" content="Halaman masuk SPMB Yayasan Putra Pakuan untuk memantau status pendaftaran dan melengkapi tahapan seleksi." />
+<meta name="keywords" content="masuk spmb yayasan putra pakuan, login spmb bogor, portal pendaftaran sekolah" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="{{ url()->current() }}" />
 <link rel="icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
@@ -13,13 +13,13 @@
 <link rel="apple-touch-icon" href="{{ asset('images/logo-yayasan.png') }}" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="id_ID" />
-<meta property="og:title" content="Masuk PPDB Yayasan Putra Pakuan" />
-<meta property="og:description" content="Halaman masuk PPDB Yayasan Putra Pakuan untuk memantau status pendaftaran dan melengkapi tahapan seleksi." />
+<meta property="og:title" content="Masuk SPMB Yayasan Putra Pakuan" />
+<meta property="og:description" content="Halaman masuk SPMB Yayasan Putra Pakuan untuk memantau status pendaftaran dan melengkapi tahapan seleksi." />
 <meta property="og:url" content="{{ url()->current() }}" />
 <meta property="og:image" content="{{ asset('images/logo-yayasan.png') }}" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Masuk PPDB Yayasan Putra Pakuan" />
-<meta name="twitter:description" content="Halaman masuk PPDB Yayasan Putra Pakuan untuk memantau status pendaftaran dan melengkapi tahapan seleksi." />
+<meta name="twitter:title" content="Masuk SPMB Yayasan Putra Pakuan" />
+<meta name="twitter:description" content="Halaman masuk SPMB Yayasan Putra Pakuan untuk memantau status pendaftaran dan melengkapi tahapan seleksi." />
 <meta name="twitter:image" content="{{ asset('images/logo-yayasan.png') }}" />
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -139,7 +139,7 @@
 </div>
 <div class="relative z-10 flex gap-4">
 <div class="px-6 py-4 glass-effect rounded-2xl border border-white/20">
-<p class="text-xs font-bold uppercase tracking-widest text-on-primary-fixed mb-1">Status PPDB</p>
+<p class="text-xs font-bold uppercase tracking-widest text-on-primary-fixed mb-1">Status SPMB</p>
 <p class="text-sm font-medium text-on-primary-fixed-variant">Gelombang 1 : Terbuka</p>
 </div>
 </div>
@@ -156,7 +156,7 @@
 </div>
 <div class="max-w-md mx-auto w-full">
 <header class="mb-10 text-center lg:text-left">
-<h2 class="font-headline text-3xl font-bold text-on-surface mb-2 tracking-tight">Selamat Datang di Portal PPDB</h2>
+<h2 class="font-headline text-3xl font-bold text-on-surface mb-2 tracking-tight">Selamat Datang di Portal SPMB</h2>
 <p class="text-on-surface-variant">Silakan masuk menggunakan akun pendaftaran Anda</p>
 </header>
 <form class="space-y-6">

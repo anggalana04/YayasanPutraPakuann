@@ -1,4 +1,4 @@
-﻿@extends('layouts.SMK.app')
+@extends('layouts.SMK.app')
 
 @section('content')
 @php
@@ -42,7 +42,7 @@
 @endphp
 
 <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
-    <main class="mx-auto w-full max-w-7xl px-6 lg:px-10">
+    <div class="mx-auto w-full max-w-7xl px-6 lg:px-10">
         <!-- Hero Section -->
         <section class="py-12 lg:py-20">
             <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
@@ -55,7 +55,7 @@
                         Pendaftaran Dibuka
                     </div> --}}
                     <h1 class="text-5xl font-black leading-tight tracking-tight text-charcoal dark:text-slate-50 lg:text-7xl">
-                        PPDB {{ $ppdbPeriod }} <br/>
+                        SPMB {{ $ppdbPeriod }} <br/>
                         <span class="text-primary">SMK Putra Pakuan</span>
                     </h1>
                     <p class="max-w-135 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
@@ -63,13 +63,13 @@
                         @if($ppdbOpen)
                             Pendaftaran Peserta Didik Baru Tahun Ajaran {{ $ppdbPeriod }} sedang dibuka.
                         @else
-                            Saat ini PPDB belum dibuka atau sedang tutup. Cek jadwal di bawah untuk informasi lebih lanjut.
+                            Saat ini SPMB belum dibuka atau sedang tutup. Cek jadwal di bawah untuk informasi lebih lanjut.
                         @endif
                     </p>
                     <div class="flex flex-col gap-4 sm:flex-row">
                         <button class="flex h-14 items-center justify-center rounded-xl px-8 text-base font-bold text-charcoal transition-transform hover:scale-[1.02] active:scale-95 {{ $ppdbOpen ? 'bg-primary' : 'bg-slate-300 cursor-not-allowed'}}" {{ $ppdbOpen ? '' : 'disabled'}}
                             onclick="if({{ $ppdbOpen ? 'true' : 'false' }}) window.location.href='{{ route('ppdb.register', ['school'=>$school]) }}';">
-                            {{ $ppdbOpen ? 'Daftar Sekarang' : 'PPDB Saat Ini Ditutup' }}
+                            {{ $ppdbOpen ? 'Daftar Sekarang' : 'SPMB Saat Ini Ditutup' }}
                         </button>
                         <button class="flex h-14 items-center justify-center rounded-xl border-2 border-charcoal/10 px-8 text-base font-bold text-charcoal transition-colors hover:bg-charcoal/5 dark:border-slate-800 dark:text-slate-200"
                             onclick="window.location.href='{{ route('ppdb.login', ['school'=>$school]) }}'">
@@ -91,24 +91,24 @@
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
                 <a href="{{ route('ppdb.register', ['school'=>$school]) }}" class="group flex flex-col h-full rounded-2xl bg-white p-8 shadow-sm transition-all hover:shadow-md dark:bg-slate-900/50">
                     <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-charcoal">
+                        <span class="material-symbols-outlined text-3xl">payments</span>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold">1. Daftar & Bayar</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">Daftar dan bayar biaya pendaftaran untuk mendapatkan kode unik akses formulir.</p>
+                </a>
+                <a href="{{ route('ppdb.biodata', ['school'=>$school]) }}" class="group flex flex-col h-full rounded-2xl bg-white p-8 shadow-sm transition-all hover:shadow-md dark:bg-slate-900/50">
+                    <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-charcoal">
                         <span class="material-symbols-outlined text-3xl">app_registration</span>
                     </div>
-                    <h3 class="mb-2 text-xl font-bold">1. Registrasi Online</h3>
-                    <p class="text-sm leading-relaxed text-slate-500">Isi formulir pendaftaran melalui website resmi kami secara lengkap.</p>
+                    <h3 class="mb-2 text-xl font-bold">2. Isi Biodata</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">Lengkapi data diri calon peserta didik menggunakan kode unik Anda.</p>
                 </a>
                 <a href="{{ route('ppdb.berkas', ['school'=>$school]) }}" class="group flex flex-col h-full rounded-2xl bg-white p-8 shadow-sm transition-all hover:shadow-md dark:bg-slate-900/50">
                     <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-charcoal">
                         <span class="material-symbols-outlined text-3xl">upload_file</span>
                     </div>
-                    <h3 class="mb-2 text-xl font-bold">2. Unggah Berkas</h3>
+                    <h3 class="mb-2 text-xl font-bold">3. Unggah Berkas</h3>
                     <p class="text-sm leading-relaxed text-slate-500">Unggah dokumen persyaratan seperti Ijazah, KK, dan Akta Kelahiran.</p>
-                </a>
-                <a href="{{ route('ppdb.payment', ['school'=>$school]) }}" class="group flex flex-col h-full rounded-2xl bg-white p-8 shadow-sm transition-all hover:shadow-md dark:bg-slate-900/50">
-                    <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-charcoal">
-                        <span class="material-symbols-outlined text-3xl">verified</span>
-                    </div>
-                    <h3 class="mb-2 text-xl font-bold">3. Daftar Ulang</h3>
-                    <p class="text-sm leading-relaxed text-slate-500">Lakukan konfirmasi dan administrasi akhir setelah dinyatakan lolos.</p>
                 </a>
             </div>
         </section>
@@ -143,7 +143,7 @@
                                 </div>
                                 <div class="pt-1">
                                     <h4 class="font-bold">Jadwal Belum Tersedia</h4>
-                                    <p class="text-sm text-slate-400">Silakan hubungi admin untuk membuat fase PPDB.</p>
+                                    <p class="text-sm text-slate-400">Silakan hubungi admin untuk membuat fase SPMB.</p>
                                 </div>
                             </div>
                         @endforelse
@@ -183,7 +183,7 @@
                     </ul>
                     <div class="mt-8 rounded-xl bg-primary p-4 text-charcoal">
                         <p class="text-xs font-bold uppercase tracking-wide opacity-70">Info Penting</p>
-                        <p class="text-sm font-medium mt-1">Seluruh berkas fisik dikumpulkan ke sekretariat PPDB saat verifikasi tatap muka.</p>
+                        <p class="text-sm font-medium mt-1">Seluruh berkas fisik dikumpulkan ke sekretariat SPMB saat verifikasi tatap muka.</p>
                     </div>
                 </div>
             </div>
@@ -219,7 +219,7 @@
                             </div>
                         </div>
                         <button type="submit" class="mt-4 flex h-14 w-full items-center justify-center gap-2 rounded-xl {{ $ppdbOpen ? 'bg-primary' : 'bg-slate-300 cursor-not-allowed'}} text-base font-black text-charcoal transition-all hover:scale-[1.01] active:scale-95" {{ $ppdbOpen ? '' : 'disabled'}}>
-                            {{ $ppdbOpen ? 'Mulai Registrasi Online' : 'PPDB Ditutup' }}
+                            {{ $ppdbOpen ? 'Mulai Registrasi Online' : 'SPMB Ditutup' }}
                             <span class="material-symbols-outlined">arrow_forward</span>
                         </button>
                         <p class="text-center text-[10px] text-slate-400">Dengan menekan tombol di atas, Anda menyetujui syarat & ketentuan pendaftaran SMK Putra Pakuan.</p>
@@ -227,7 +227,7 @@
                 </div>
             </div>
         </section>
-    </main>
+    </div>
 </div>
 @endsection
 

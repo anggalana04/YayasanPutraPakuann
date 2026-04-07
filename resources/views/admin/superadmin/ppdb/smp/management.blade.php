@@ -1,9 +1,9 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
-@section('title', 'Manajemen PPDB - SMP Putra Pakuan CMS')
+@section('title', 'Manajemen SPMB - SMP Putra Pakuan CMS')
 
 @section('content')
-<div class="p-8 max-w-7xl mx-auto w-full">
+<div x-data="{ showPaymentModal: {{ $errors->any() ? 'true' : 'false' }}, paymentTab: 'ewallet' }" class="p-8 max-w-7xl mx-auto w-full">
     @if(session('success'))
         <div class="mb-6 p-4 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-2">
             <span class="material-symbols-outlined">check_circle</span>
@@ -24,9 +24,38 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
         <div>
-            <h2 class="text-3xl font-bold tracking-tight text-[#1c190d]">Manajemen PPDB</h2>
+            <h2 class="text-3xl font-bold tracking-tight text-[#1c190d]">Manajemen SPMB</h2>
             <p class="text-on-surface-variant mt-1">{{ $school->name }}</p>
         </div>
+    </div>
+
+    {{-- ── Pengaturan Pembayaran SPMB ────────────────────────────────── --}}
+    @php $schoolTypeSlug = strtolower($school->type === 'SDIT' ? 'sd' : $school->type); @endphp
+    <div class="bg-white rounded-3xl p-5 border border-outline flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10 shadow-sm">
+        <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1">payments</span>
+            </div>
+            <div class="min-w-0">
+                <h3 class="text-sm font-bold text-[#1c190d]">Pengaturan Pembayaran SPMB</h3>
+                <p class="text-xs text-on-surface-variant mt-0.5">
+                    @if ($homepage && ($homepage->payment_bank_account || $homepage->payment_ewallet_gopay || $homepage->payment_ewallet_dana || $homepage->payment_ewallet_ovo || $homepage->payment_ewallet_shopee))
+                        @if ($homepage->payment_bank_account)<span class="font-medium">{{ $homepage->payment_bank_name }}</span> {{ $homepage->payment_bank_account }}@endif
+                        @if ($homepage->payment_ewallet_gopay) &middot; GoPay @endif
+                        @if ($homepage->payment_ewallet_dana) &middot; DANA @endif
+                        @if ($homepage->payment_ewallet_ovo) &middot; OVO @endif
+                        @if ($homepage->payment_ewallet_shopee) &middot; ShopeePay @endif
+                    @else
+                        <span class="text-amber-600 font-medium">Belum dikonfigurasi &mdash; klik Edit untuk mengisi</span>
+                    @endif
+                </p>
+            </div>
+        </div>
+        <button @click="showPaymentModal = true"
+            class="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary font-bold rounded-2xl text-sm hover:bg-primary/90 transition-all shadow-sm">
+            <span class="material-symbols-outlined text-base">edit</span>
+            Edit Pembayaran
+        </button>
     </div>
 
     <!-- Year Selection & Controls Section -->
@@ -108,11 +137,11 @@
                                 <span class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform {{ $isLive ? 'translate-x-6' : '' }}"></span>
                             </span>
                             <span class="text-sm font-bold {{ $isLive ? 'text-emerald-700' : 'text-slate-600' }}">
-                                {{ $isLive ? 'PPDB Aktif' : 'PPDB Nonaktif' }}
+                                {{ $isLive ? 'SPMB Aktif' : 'SPMB Nonaktif' }}
                             </span>
                         </button>
                     </form>
-                    <p class="text-xs text-muted-foreground mt-2">Ubah status: saat aktif, tombol PPDB publik akan muncul dan hitung mundur mengikuti fase saat ini/berikutnya.</p>
+                    <p class="text-xs text-muted-foreground mt-2">Ubah status: saat aktif, tombol SPMB publik akan muncul dan hitung mundur mengikuti fase saat ini/berikutnya.</p>
                 </div>
             </div>
         </div>
@@ -213,7 +242,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-600" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.418A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.95 7.95 0 01-4.073-1.117l-.292-.174-3.018.86.872-2.938-.19-.302A7.95 7.95 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8zm4.406-5.845c-.242-.121-1.434-.707-1.657-.788-.222-.081-.384-.121-.545.121-.162.242-.626.788-.768.95-.141.162-.283.182-.525.061-.242-.121-1.022-.376-1.947-1.2-.719-.641-1.205-1.433-1.346-1.675-.142-.242-.015-.373.106-.493.109-.109.242-.283.363-.424.12-.141.161-.243.242-.404.08-.162.04-.303-.02-.424-.061-.121-.545-1.316-.747-1.8-.197-.473-.397-.409-.545-.417l-.465-.008c-.162 0-.424.061-.646.303-.222.242-.848.829-.848 2.022s.868 2.346.99 2.508c.12.162 1.71 2.611 4.143 3.662.58.25 1.031.4 1.382.512.58.185 1.108.159 1.526.096.465-.07 1.434-.586 1.636-1.152.202-.566.202-1.051.141-1.152-.06-.1-.222-.162-.465-.283z"/></svg>
                         Link Grup WhatsApp Peserta Didik Baru
                     </label>
-                    <p class="text-xs text-green-700/70 mb-3">Link ini akan tampil di dashboard PPDB calon siswa yang diterima, sebagai panduan untuk daftar ulang dan bergabung ke grup.</p>
+                    <p class="text-xs text-green-700/70 mb-3">Link ini akan tampil di dashboard SPMB calon siswa yang diterima, sebagai panduan untuk daftar ulang dan bergabung ke grup.</p>
                     <input type="url" name="wa_group_link" placeholder="https://chat.whatsapp.com/..." class="w-full p-3 border border-green-300 rounded-xl focus:ring-2 focus:ring-green-400 bg-white" value="{{ optional($selectedPhases->first())->wa_group_link }}">
                 </div>
 
@@ -288,6 +317,96 @@
             </div>
         </div>
     @endif
+
+    {{-- ── Payment Settings Modal ────────────────────────────────────── --}}
+    <div
+        x-show="showPaymentModal"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        @keydown.escape.window="showPaymentModal = false"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style="display: none;">
+        <div class="absolute inset-0 bg-[#1c190d]/50 backdrop-blur-sm" @click="showPaymentModal = false"></div>
+        <div class="relative bg-surface-container-lowest rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden" style="max-height: 90vh; overflow-y: auto;">
+            <div class="bg-[#1c190d] px-6 py-5 flex items-center justify-between sticky top-0 z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[#1c190d] text-lg">payments</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-base">Pengaturan Pembayaran SPMB</h4>
+                        <p class="text-white/50 text-xs">{{ $school->name }}</p>
+                    </div>
+                </div>
+                <button @click="showPaymentModal = false" class="w-8 h-8 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ route('admin.cms.payment_settings.update', ['schoolType' => $schoolTypeSlug]) }}" class="px-6 py-6">
+                @csrf
+                <input type="hidden" name="_redirect_to" value="ppdb_management">
+                <div class="flex gap-2 mb-5">
+                    <button type="button" @click="paymentTab = 'ewallet'"
+                        :class="paymentTab === 'ewallet' ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'"
+                        class="px-4 py-2 rounded-full text-xs font-bold transition-colors flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">wallet</span> E-Wallet
+                    </button>
+                    <button type="button" @click="paymentTab = 'bank'"
+                        :class="paymentTab === 'bank' ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'"
+                        class="px-4 py-2 rounded-full text-xs font-bold transition-colors flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">account_balance</span> Transfer Bank
+                    </button>
+                </div>
+                <div x-show="paymentTab === 'ewallet'" class="space-y-3 mb-2">
+                    <p class="text-xs text-on-surface-variant">Isi nomor HP/telepon yang terdaftar. Kosongkan yang tidak dipakai.</p>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">GoPay</label>
+                        <input type="text" name="payment_ewallet_gopay" value="{{ old('payment_ewallet_gopay', $homepage?->payment_ewallet_gopay) }}" placeholder="Contoh: 08123456789" class="w-full px-4 py-2.5 rounded-xl border border-outline-variant/50 bg-surface-container-low text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">DANA</label>
+                        <input type="text" name="payment_ewallet_dana" value="{{ old('payment_ewallet_dana', $homepage?->payment_ewallet_dana) }}" placeholder="Contoh: 08123456789" class="w-full px-4 py-2.5 rounded-xl border border-outline-variant/50 bg-surface-container-low text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">OVO</label>
+                        <input type="text" name="payment_ewallet_ovo" value="{{ old('payment_ewallet_ovo', $homepage?->payment_ewallet_ovo) }}" placeholder="Contoh: 08123456789" class="w-full px-4 py-2.5 rounded-xl border border-outline-variant/50 bg-surface-container-low text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">ShopeePay</label>
+                        <input type="text" name="payment_ewallet_shopee" value="{{ old('payment_ewallet_shopee', $homepage?->payment_ewallet_shopee) }}" placeholder="Contoh: 08123456789" class="w-full px-4 py-2.5 rounded-xl border border-outline-variant/50 bg-surface-container-low text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition">
+                    </div>
+                </div>
+                <div x-show="paymentTab === 'bank'" class="space-y-3 mb-2">
+                    <p class="text-xs text-on-surface-variant">Nomor rekening bank tujuan pembayaran SPMB.</p>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Nama Bank</label>
+                        <input type="text" name="payment_bank_name" value="{{ old('payment_bank_name', $homepage?->payment_bank_name) }}" placeholder="Contoh: Bank Mandiri" class="w-full px-4 py-2.5 rounded-xl border border-outline-variant/50 bg-surface-container-low text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Nomor Rekening</label>
+                        <input type="text" name="payment_bank_account" value="{{ old('payment_bank_account', $homepage?->payment_bank_account) }}" placeholder="Contoh: 1330012345678" class="w-full px-4 py-2.5 rounded-xl border border-outline-variant/50 bg-surface-container-low text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Nama Pemilik Rekening</label>
+                        <input type="text" name="payment_bank_holder" value="{{ old('payment_bank_holder', $homepage?->payment_bank_holder) }}" placeholder="Contoh: SMP PUTRA PAKUAN" class="w-full px-4 py-2.5 rounded-xl border border-outline-variant/50 bg-surface-container-low text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition">
+                    </div>
+                </div>
+                <div class="pt-4 border-t border-outline mt-4">
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1.5">Biaya Pendaftaran (Rp)</label>
+                    <input type="number" name="payment_registration_fee" value="{{ old('payment_registration_fee', $homepage?->payment_registration_fee) }}" placeholder="Contoh: 150000" min="0" step="1000" class="w-full px-4 py-2.5 rounded-xl border border-outline-variant/50 bg-surface-container-low text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition">
+                    <p class="text-xs text-on-surface-variant mt-1">Kosongkan jika tidak ditampilkan di halaman pembayaran.</p>
+                </div>
+                <div class="flex gap-3 pt-5">
+                    <button type="button" @click="showPaymentModal = false" class="flex-1 py-2.5 rounded-xl border border-outline-variant/50 text-on-surface-variant text-sm font-semibold hover:bg-surface-container transition-colors">Batal</button>
+                    <button type="submit" class="flex-1 py-2.5 rounded-xl bg-[#1c190d] text-[#fbd51d] text-sm font-bold hover:bg-[#1c190d]/90 transition-colors shadow-sm active:scale-[0.98]">Simpan Pembayaran</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <script>

@@ -421,4 +421,39 @@ class AdminPpdbApplicantsController extends Controller
 
         return response()->stream(fn() => $writer->save('php://output'), 200, $headers);
     }
+
+    /**
+     * POST /admin/ppdb/applicants/{school}/{id}/confirm-payment
+     * Confirm that payment has been received and generate the applicant's unique login code.
+     * Works for all payment methods (TU, bank transfer, e-wallet).
+     */
+    public function confirmPayment(Request $request, string $school, int $id)
+    {
+        $schoolModel = School::where('slug', $school)->firstOrFail();
+        $applicant   = PpdbApplication::findOrFail($id);
+
+        if ($applicant->school_id !== $schoolModel->id) {
+            abort(404);
+        }
+
+        $statusHistory   = $applicant->status_history ?: [];
+        $statusHistory[] = [
+            'status'     => 'payment_confirmed',
+            'changed_at' => now()->toDateTimeString(),
+            'note'       => 'Pembayaran dikonfirmasi oleh admin: ' . (auth('admin')->user()->name ?? 'admin'),
+        ];
+
+        // Generate unique_code if not already set — this is the applicant's login credential
+        if (! $applicant->unique_code) {
+            $applicant->unique_code = \App\Models\PpdbApplication::generateUniqueCode();
+        }
+
+        $applicant->payment_date    = $applicant->payment_date ?? now();
+        $applicant->status          = 'payment_uploaded';
+        $applicant->status_history  = $statusHistory;
+        $applicant->save();
+
+        $detailRoute = route('admin.ppdb.applicants.by_school.detail', ['school' => $school, 'id' => $id]);
+        return redirect($detailRoute)->with('success', 'Pembayaran berhasil dikonfirmasi. Kode unik telah dibuat untuk pendaftar.');
+    }
 }

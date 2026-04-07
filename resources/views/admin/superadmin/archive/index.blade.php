@@ -99,7 +99,7 @@
         <span class="material-symbols-outlined text-primary shrink-0" style="font-variation-settings: 'FILL' 1;">info</span>
         <div>
             <p class="font-bold text-on-surface text-sm mb-1">Cara menggunakan Arsip Digital</p>
-            <p class="text-on-surface-variant text-sm">Pilih sekolah dan tahun ajaran untuk melihat daftar siswa, berkas dokumen, dan statistik penerimaan. Siswa diterima dari PPDB dapat dipromosikan langsung dari halaman detail pendaftar.</p>
+            <p class="text-on-surface-variant text-sm">Pilih sekolah dan tahun ajaran untuk melihat daftar siswa, berkas dokumen, dan statistik penerimaan. Siswa diterima dari SPMB dapat dipromosikan langsung dari halaman detail pendaftar.</p>
         </div>
     </div>
 </div>

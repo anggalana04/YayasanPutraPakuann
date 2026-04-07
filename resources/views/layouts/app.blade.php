@@ -6,7 +6,7 @@
     @php
         $seoTitle = trim($__env->yieldContent('title', 'Yayasan Putra Pakuan | Pendidikan Berkualitas di Bogor'));
         $seoDescription = trim($__env->yieldContent('meta_description', 'Yayasan Putra Pakuan menaungi unit pendidikan berkualitas untuk membentuk generasi berkarakter, unggul, dan siap masa depan.'));
-        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'yayasan putra pakuan, sekolah bogor, pendidikan bogor, sd, smp, smk, ppdb'));
+        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'yayasan putra pakuan, sekolah bogor, pendidikan bogor, sd, smp, smk, spmb'));
         $seoImage = trim($__env->yieldContent('meta_image', asset('images/logo-yayasan.png')));
         $seoUrl = url()->current();
     @endphp
@@ -123,6 +123,8 @@
     <link href="{{ asset('js/aos.css') }}" rel="stylesheet">
     <!-- HTMX -->
     <script src="{{ asset('js/htmx.min.js') }}" defer></script>
+    <!-- Alpine.js -->
+    <script src="{{ asset('js/alpine.min.js') }}" defer></script>
     @stack('styles')
 </head>
 <body style="margin:0; padding:0;" class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 transition-colors duration-200"

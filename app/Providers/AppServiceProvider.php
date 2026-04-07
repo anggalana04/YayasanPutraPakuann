@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
 use Carbon\Carbon;
 use App\Models\School;
+use App\Models\SmkJurusan;
 use App\Models\PpdbApplication;
 use App\Models\PpdbMajorCapacity;
 use App\Models\PpdbManagementPhase;
@@ -106,6 +107,13 @@ class AppServiceProvider extends ServiceProvider
             });
 
             $view->with($ppdbData);
+
+            if ($schoolSlug === 'smk') {
+                $footerJurusans = Cache::remember('smk.footer.jurusans', 300, function () {
+                    return SmkJurusan::active()->select('name', 'slug')->limit(5)->get();
+                });
+                $view->with('footerJurusans', $footerJurusans);
+            }
         });
 
         View::composer('admin.superadmin.dashboard', function ($view) {
@@ -123,6 +131,7 @@ class AppServiceProvider extends ServiceProvider
 
                 $totalApplicantsBySchoolId = PpdbApplication::selectRaw('school_id, COUNT(*) as total')
                     ->whereIn('school_id', $schools->pluck('id')->all())
+                    ->whereIn('status', ['pending', 'payment_uploaded', 'accepted', 'rejected'])
                     ->groupBy('school_id')
                     ->pluck('total', 'school_id');
 
@@ -194,8 +203,8 @@ class AppServiceProvider extends ServiceProvider
                     ]);
                 }
 
-                $pendingVerifications = PpdbApplication::where('status', 'pending')->count();
-                $masterTotalApplicants = PpdbApplication::count();
+                $pendingVerifications = PpdbApplication::whereIn('status', ['pending', 'payment_uploaded'])->count();
+                $masterTotalApplicants = PpdbApplication::whereIn('status', ['pending', 'payment_uploaded', 'accepted', 'rejected'])->count();
 
                 $smkCapacityStats = collect();
                 $smkCapacityYear = null;

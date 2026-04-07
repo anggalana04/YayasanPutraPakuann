@@ -69,7 +69,7 @@
                         </span>
                     </div>
                 </div>
-                <!-- Visual representation of data from real PPDB applicants -->
+                <!-- Visual representation of data from real SPMB applicants -->
                 @php
                     $weeklyMax = max($weeklyApplicants->pluck('count')->max(), 1);
                 @endphp

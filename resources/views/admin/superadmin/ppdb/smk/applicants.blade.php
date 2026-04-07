@@ -1,6 +1,6 @@
 ﻿@extends('layouts.admin.app')
 
-@section('title', 'PPDB Manajemen Pendaftar - ' . ($schoolModel->name ?? ''))
+@section('title', 'SPMB Manajemen Pendaftar - ' . ($schoolModel->name ?? ''))
 
 @section('content')
 <div class="p-8 space-y-8 max-w-7xl mx-auto w-full">
@@ -230,7 +230,7 @@ Reset
         let lastPage = 1;
         const perPage = 10;
 
-        console.log('PPDB applicant AJAX data URL:', dataUrl);
+        console.log('SPMB applicant AJAX data URL:', dataUrl);
 
         function renderApplicantRows(applicants, page = 1) {
             if (!applicants.length) {

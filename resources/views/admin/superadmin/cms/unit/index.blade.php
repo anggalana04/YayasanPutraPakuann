@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
 @section('title', 'CMS - ' . strtoupper($schoolType) . ' Putra Pakuan')
 
@@ -52,6 +52,13 @@
                class="px-6 py-3 bg-white border border-primary/20 rounded-2xl font-bold text-sm hover:bg-primary/10 transition-all shadow-sm flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary">class</span>
                 Kelola Jurusan
+            </a>
+            @endif
+            @if($isYayasan)
+            <a href="{{ route('admin.cms.faq.index', ['schoolType' => $schoolType]) }}"
+               class="px-6 py-3 bg-white border border-primary/20 rounded-2xl font-bold text-sm hover:bg-primary/10 transition-all shadow-sm flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">help</span>
+                Kelola FAQ
             </a>
             @endif
         </div>
@@ -272,7 +279,93 @@
                     </div>
                 </form>
             </div>
-        </div>
+
+            {{-- ── Pengaturan Pembayaran SPMB ─────────────────────────────── --}}
+            @if (!$isYayasan)
+            <div class="bg-surface-container-lowest rounded-3xl p-6 shadow-sm ring-1 ring-[#1c190d]/5">
+                <div class="mb-6 flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">payments</span>
+                    <h3 class="text-2xl font-extrabold text-[#1c190d]">Pengaturan Pembayaran SPMB</h3>
+                </div>
+
+                <form method="POST" action="{{ route('admin.cms.payment_settings.update', ['schoolType' => $schoolType]) }}">
+                    @csrf
+
+                    {{-- Bank Transfer --}}
+                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-3">Transfer Bank</p>
+                    <div class="grid grid-cols-12 gap-4 mb-6">
+                        <div class="col-span-12 md:col-span-4">
+                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Nama Bank</label>
+                            <input type="text" name="payment_bank_name" value="{{ old('payment_bank_name', $homepage->payment_bank_name) }}"
+                                   class="mt-2 w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                   placeholder="Contoh: Bank Mandiri">
+                        </div>
+                        <div class="col-span-12 md:col-span-4">
+                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Nomor Rekening</label>
+                            <input type="text" name="payment_bank_account" value="{{ old('payment_bank_account', $homepage->payment_bank_account) }}"
+                                   class="mt-2 w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                   placeholder="Contoh: 1330012345678">
+                        </div>
+                        <div class="col-span-12 md:col-span-4">
+                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Nama Pemilik Rekening</label>
+                            <input type="text" name="payment_bank_holder" value="{{ old('payment_bank_holder', $homepage->payment_bank_holder) }}"
+                                   class="mt-2 w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                   placeholder="Contoh: SMK PUTRA PAKUAN">
+                        </div>
+                    </div>
+
+                    {{-- E-Wallet --}}
+                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-3">E-Wallet (isi yang tersedia, kosongkan sisanya)</p>
+                    <div class="grid grid-cols-12 gap-4 mb-6">
+                        <div class="col-span-12 md:col-span-6 lg:col-span-3">
+                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">GoPay</label>
+                            <input type="text" name="payment_ewallet_gopay" value="{{ old('payment_ewallet_gopay', $homepage->payment_ewallet_gopay) }}"
+                                   class="mt-2 w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                   placeholder="Nomor GoPay">
+                        </div>
+                        <div class="col-span-12 md:col-span-6 lg:col-span-3">
+                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">DANA</label>
+                            <input type="text" name="payment_ewallet_dana" value="{{ old('payment_ewallet_dana', $homepage->payment_ewallet_dana) }}"
+                                   class="mt-2 w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                   placeholder="Nomor DANA">
+                        </div>
+                        <div class="col-span-12 md:col-span-6 lg:col-span-3">
+                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">OVO</label>
+                            <input type="text" name="payment_ewallet_ovo" value="{{ old('payment_ewallet_ovo', $homepage->payment_ewallet_ovo) }}"
+                                   class="mt-2 w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                   placeholder="Nomor OVO">
+                        </div>
+                        <div class="col-span-12 md:col-span-6 lg:col-span-3">
+                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">ShopeePay</label>
+                            <input type="text" name="payment_ewallet_shopee" value="{{ old('payment_ewallet_shopee', $homepage->payment_ewallet_shopee) }}"
+                                   class="mt-2 w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                   placeholder="Nomor ShopeePay">
+                        </div>
+                    </div>
+
+                    {{-- Registration Fee --}}
+                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-3">Biaya Pendaftaran</p>
+                    <div class="grid grid-cols-12 gap-4 mb-6">
+                        <div class="col-span-12 md:col-span-4">
+                            <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Nominal (Rp)</label>
+                            <input type="number" name="payment_registration_fee" value="{{ old('payment_registration_fee', $homepage->payment_registration_fee) }}"
+                                   class="mt-2 w-full bg-white border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                   placeholder="Contoh: 150000" min="0" step="1000">
+                            <p class="mt-1 text-xs text-on-surface-variant">Kosongkan jika tidak ditampilkan di halaman pembayaran.</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit"
+                                class="px-6 py-3 bg-primary text-on-primary font-bold rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-sm">
+                            Simpan Pengaturan Pembayaran
+                        </button>
+                    </div>
+                </form>
+            </div>
+            @endif
+
+        </div>{{-- /left column --}}
 
         <div class="col-span-12 lg:col-span-5 space-y-4">
             <div class="bg-surface-container-lowest rounded-3xl p-6 shadow-sm ring-1 ring-[#1c190d]/5">

@@ -28,8 +28,8 @@
         <!-- Achievement Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse ($achievementItems as $achievement)
-                <div class="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="relative h-48 w-full overflow-hidden">
+                <a href="{{ route('yayasan.prestasi.show', ['slug' => $achievement->slug]) }}" class="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="relative aspect-[4/3] w-full overflow-hidden">
                         <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style="background-image: url('{{ $achievement->image_url ?? '/images/default-achievement.jpg' }}');"></div>
                         <div class="absolute bottom-3 left-3">
                             <span class="bg-indigo-600/90 text-white text-[10px] font-bold uppercase px-2 py-1 rounded backdrop-blur-sm">{{ Str::limit($achievement->category ?: 'Prestasi', 20) }}</span>
@@ -40,19 +40,23 @@
                             <span class="text-xs font-bold text-[#FDB913] tracking-wide">{{ $achievement->school?->name ?? 'Yayasan' }}</span>
                             <span class="text-xs text-slate-500 dark:text-slate-500">{{ optional($achievement->published_at)->format('Y') ?? date('Y') }}</span>
                         </div>
-                        <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight mb-2">{{ $achievement->title }}</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-4 flex-1">{{ $achievement->excerpt ?? \Illuminate\Support\Str::limit(strip_tags($achievement->content), 120) }}</p>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight mb-2 group-hover:text-[#FDB913] transition-colors">{{ $achievement->title }}</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-3 flex-1">{{ $achievement->excerpt ?? \Illuminate\Support\Str::limit(strip_tags($achievement->content), 120) }}</p>
+                        <span class="flex items-center gap-1 text-xs font-bold text-[#FDB913] opacity-0 group-hover:opacity-100 transition-opacity">
+                            Baca Selengkapnya
+                            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                        </span>
                     </div>
-                </div>
+                </a>
             @empty
                 <div class="col-span-full text-center text-slate-500">Belum ada prestasi yang dipublikasikan.</div>
             @endforelse
         </div>
 
         <div class="flex justify-center mt-10">
-            <button class="px-6 py-3 rounded-xl border-2 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-bold text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <a href="{{ route('yayasan.prestasi') }}" class="px-6 py-3 rounded-xl border-2 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-bold text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                 Lihat Arsip Prestasi
-            </button>
+            </a>
         </div>
     </div>
 </section>

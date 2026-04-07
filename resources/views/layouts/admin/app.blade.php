@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="description" content="Panel admin Yayasan Putra Pakuan untuk pengelolaan konten, pengguna, dan PPDB." />
+    <meta name="description" content="Panel admin Yayasan Putra Pakuan untuk pengelolaan konten, pengguna, dan SPMB." />
     <link rel="canonical" href="{{ url()->current() }}" />
     <link rel="icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
     <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
@@ -250,7 +250,7 @@
                     :class="(sideOpen || mobileOpen) ? '' : 'justify-center'"
                     href="{{ $ppdbLink }}">
                     <span class="material-symbols-outlined shrink-0" data-icon="how_to_reg">how_to_reg</span>
-                    <span x-show="sideOpen || mobileOpen" class="whitespace-nowrap overflow-hidden"> PPDB</span>
+                    <span x-show="sideOpen || mobileOpen" class="whitespace-nowrap overflow-hidden"> SPMB</span>
                 </a>
                 <a data-admin-nav data-admin-section="cms"
                     class="admin-nav-link {{ $isCmsActive ? 'is-active' : '' }} flex items-center gap-3 px-4 py-3 rounded-3xl mx-2 my-1 transition-all duration-300 font-medium"
@@ -321,6 +321,32 @@
         <!-- Main Content -->
         <div id="admin-page-shell" class="p-4 md:p-8 max-w-7xl mx-auto">
             @include('layouts.admin.partials.navigation-strip')
+
+            {{-- Flash message toast --}}
+            @if (session('success') || session('error') || session('info'))
+            <div id="admin-flash-toast"
+                 x-data="{ show: true }"
+                 x-show="show"
+                 x-init="setTimeout(() => show = false, 5000)"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 translate-y-2"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="mb-6 flex items-start gap-3 px-5 py-4 rounded-2xl shadow-md border
+                        {{ session('success') ? 'bg-green-50 border-green-200 text-green-800' : (session('error') ? 'bg-red-50 border-red-200 text-red-800' : 'bg-blue-50 border-blue-200 text-blue-800') }}">
+                <span class="material-symbols-outlined mt-0.5 shrink-0 text-xl"
+                      style="font-variation-settings:'FILL' 1">
+                    {{ session('success') ? 'check_circle' : (session('error') ? 'error' : 'info') }}
+                </span>
+                <p class="text-sm font-medium flex-1">{{ session('success') ?? session('error') ?? session('info') }}</p>
+                <button @click="show = false" class="shrink-0 hover:opacity-60 transition-opacity ml-2">
+                    <span class="material-symbols-outlined text-base">close</span>
+                </button>
+            </div>
+            @endif
+
             <div id="admin-page-content">
                 @yield('content')
             </div>

@@ -12,7 +12,7 @@
 <!-- Stepper Signature Component -->
 <section class="pt-12 mb-12">
 <div class="flex flex-row items-center justify-between w-full">
-<!-- Step 1 (Active) -->
+<!-- Step 1 (Active - Biodata) -->
 <div class="flex flex-col items-center flex-1">
 <div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xl shadow-md">
 01
@@ -23,25 +23,14 @@
 </div>
 </div>
 <div class="hidden md:block h-0.5 bg-surface-container-highest flex-1 mx-2"></div>
-<!-- Step 2 (Inactive) -->
+<!-- Step 2 (Inactive - Berkas) -->
 <div class="flex flex-col items-center flex-1">
 <div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold text-lg">
 02
 </div>
 <div class="mt-2">
 <p class="text-xs uppercase tracking-widest text-on-surface-variant font-medium">Langkah 2</p>
-<h3 class="text-lg font-bold text-on-surface-variant">Pilihan Jurusan</h3>
-</div>
-</div>
-<div class="hidden md:block h-0.5 bg-surface-container-highest flex-1 mx-2"></div>
-<!-- Step 3 (Inactive) -->
-<div class="flex flex-col items-center flex-1">
-<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold text-lg">
-03
-</div>
-<div class="mt-2">
-<p class="text-xs uppercase tracking-widest text-on-surface-variant font-medium">Langkah 3</p>
-<h3 class="text-lg font-bold text-on-surface-variant">Pembayaran</h3>
+<h3 class="text-lg font-bold text-on-surface-variant">Pilihan Jurusan & Berkas</h3>
 </div>
 </div>
 </div>

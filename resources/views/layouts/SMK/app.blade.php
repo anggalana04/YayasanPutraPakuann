@@ -1,4 +1,4 @@
-<!-- resources/views/layouts/SMK/app.blade.php -->
+@php $__smkIsHero = $__env->hasSection('hero_page'); @endphp
 <!DOCTYPE html>
 <html lang="id" style="margin:0; padding:0; background:#f8f8f5;">
 <head>
@@ -6,8 +6,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     @php
         $seoTitle = trim($__env->yieldContent('title', 'SMK Putra Pakuan | Sekolah Vokasi Unggul di Bogor'));
-        $seoDescription = trim($__env->yieldContent('meta_description', 'SMK Putra Pakuan menghadirkan pendidikan vokasi unggul dengan jurusan relevan industri, prestasi siswa, dan layanan PPDB online.'));
-        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'smk putra pakuan, smk bogor, ppdb smk, sekolah vokasi, jurusan smk'));
+        $seoDescription = trim($__env->yieldContent('meta_description', 'SMK Putra Pakuan menghadirkan pendidikan vokasi unggul dengan jurusan relevan industri, prestasi siswa, dan layanan SPMB online.'));
+        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'smk putra pakuan, smk bogor, spmb smk, sekolah vokasi, jurusan smk'));
         $seoImage = trim($__env->yieldContent('meta_image', asset('images/logo-yayasan.png')));
         $seoUrl = url()->current();
     @endphp
@@ -93,40 +93,17 @@
             margin: 0 !important;
             padding: 0 !important;
         }
-    </style>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#f2cc0d",
-                        "background-light": "#f8f8f5",
-                        "background-dark": "#221f10",
-                        "charcoal": "#1c190d",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.5rem",
-                        "lg": "1rem",
-                        "xl": "1.5rem",
-                        "full": "9999px"
-                    },
-                },
-            },
+        #main-content {
+            padding-top: 72px;
         }
-    </script>
-    <style type="text/tailwindcss">
-        html,
-        body {
-            margin: 0;
-            padding: 0;
+        #main-content:has([data-hero-section]) {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+            border-top: none !important;
         }
-
-        body { font-family: 'Lexend', sans-serif; }
-
+        [data-hero-section] {
+            margin-top: 0 !important;
+        }
     </style>
     @stack('head')
     <!-- HTMX -->
@@ -139,7 +116,7 @@
     hx-swap="outerHTML transition:true"
     hx-push-url="true">
     <!-- Navbar -->
-    <nav id="school-nav" style="margin-top:0;" class="fixed top-0 z-50 w-full bg-charcoal text-white border-b border-primary/20 transition-all duration-300">
+    <nav id="school-nav" style="margin-top:0;" class="fixed top-0 z-50 w-full {{ $__smkIsHero ? '' : 'bg-charcoal border-b border-primary/20' }} text-white transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <a href="{{ route('school.home', ['school'=> 'smk']) }}">
@@ -176,7 +153,7 @@
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.kontak', ['school' => 'smk']) }}">HUBUNGI KAMI</a>
                 @php
                     $ppdbLive = $ppdbLive ?? false;
-                    $ppdbLabel = ($ppdbPeriod ?? null) ? 'PPDB ' . $ppdbPeriod : 'PPDB';
+                    $ppdbLabel = ($ppdbPeriod ?? null) ? 'SPMB ' . $ppdbPeriod : 'SPMB';
                 @endphp
                 @if($ppdbLive)
                 <button class="bg-primary hover:bg-primary/90 text-charcoal px-5 py-2.5 rounded-lg text-xs font-bold transition-all ml-4" onclick="window.location.href='{{ route('school.ppdb', ['school' => 'smk']) }}'">
@@ -357,7 +334,7 @@
     })();
     </script>
 
-    <main id="main-content">
+    <main id="main-content" style="{{ $__smkIsHero ? 'padding-top:0;' : 'padding-top:72px;' }}">
         @yield('content')
     </main>
 
@@ -395,17 +372,17 @@
                         <li><a class="hover:text-white transition-colors" href="{{ route('school.profil', ['school' => 'smk']) }}#visi-misi">Visi & Misi</a></li>
                         <li><a class="hover:text-white transition-colors" href="#">Direktori Guru</a></li>
                         <li><a class="hover:text-white transition-colors" href="#">Galeri Foto</a></li>
-                        <li><a class="hover:text-white transition-colors" href="{{ route('school.ppdb', ['school' => 'smk']) }}">PPDB Online</a></li>
+                        <li><a class="hover:text-white transition-colors" href="{{ route('school.ppdb', ['school' => 'smk']) }}">SPMB Online</a></li>
                     </ul>
                 </div>
                 <div class="space-y-6">
                     <h4 class="text-lg font-bold text-primary">Jurusan</h4>
                     <ul class="space-y-4 text-slate-400 text-sm font-medium">
-                        <li><a class="hover:text-white transition-colors" href="#">Rekayasa Perangkat Lunak</a></li>
-                        <li><a class="hover:text-white transition-colors" href="#">Teknik Komputer & Jaringan</a></li>
-                        <li><a class="hover:text-white transition-colors" href="#">Multimedia & Desain Grafis</a></li>
-                        <li><a class="hover:text-white transition-colors" href="#">Akuntansi Keuangan</a></li>
-                        <li><a class="hover:text-white transition-colors" href="#">Perkantoran Digital</a></li>
+                        @forelse(($footerJurusans ?? collect()) as $fj)
+                            <li><a class="hover:text-white transition-colors" href="{{ route('school.jurusan.show', ['school' => 'smk', 'slug' => $fj->slug]) }}">{{ $fj->name }}</a></li>
+                        @empty
+                            <li><a class="hover:text-white transition-colors" href="{{ route('school.jurusan.index', ['school' => 'smk']) }}">Lihat Semua Jurusan</a></li>
+                        @endforelse
                     </ul>
                 </div>
                 <div class="space-y-6">
@@ -441,7 +418,7 @@
             <span class="material-symbols-outlined text-2xl">help</span>
         </button>
         <div id="smk-fab-menu" class="hidden w-64 rounded-xl bg-charcoal/95 text-white shadow-2xl p-3 space-y-2">
-            <a href="{{ route('school.ppdb', ['school' => 'smk']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Daftar PPDB</a>
+            <a href="{{ route('school.ppdb', ['school' => 'smk']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Daftar SPMB</a>
             <a href="{{ route('yayasan.akreditasi') }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Lihat Prestasi</a>
             <a href="{{ route('school.kontak', ['school' => 'smk']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Kontak Sekolah</a>
         </div>

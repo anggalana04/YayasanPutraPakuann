@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\AdminUserManagementController;
 use App\Http\Controllers\Admin\AdminPpdbApplicantsController;
 use App\Http\Controllers\Admin\ArchiveController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\FaqAdminController;
 
 // =====================
 // YAYASAN (MAIN SITE)
@@ -216,7 +217,8 @@ Route::get('/sitemap.xml', function () {
 
 Route::get('/fasilitas',      [YayasanPublicController::class, 'fasilitas'])->name('yayasan.fasilitas');
 Route::get('/akreditasi',    [YayasanPublicController::class, 'akreditasi'])->name('yayasan.akreditasi');
-Route::get('/prestasi',      [YayasanPublicController::class, 'prestasi'])->name('yayasan.prestasi');
+Route::get('/prestasi',        [YayasanPublicController::class, 'prestasi'])->name('yayasan.prestasi');
+Route::get('/prestasi/{slug}', [YayasanPublicController::class, 'prestasiShow'])->name('yayasan.prestasi.show');
 Route::get('/berita',        [YayasanPublicController::class, 'berita'])->name('yayasan.berita');
 Route::get('/berita/{slug}', [YayasanPublicController::class, 'beritaShow'])->name('yayasan.berita.show');
 Route::get('/kontak',        [YayasanPublicController::class, 'kontak'])->name('yayasan.kontak');
@@ -250,6 +252,7 @@ Route::middleware(['auth:admin', 'admin.access'])->group(function () {
             Route::get('/', [CmsController::class, 'index'])->name('admin.cms.by_school');
             Route::post('/kepsek', [CmsController::class, 'updateKepsek'])->name('admin.cms.kepsek.update');
             Route::post('/contact', [CmsController::class, 'updateContactInfo'])->name('admin.cms.contact.update');
+            Route::post('/payment-settings', [CmsController::class, 'updatePaymentSettings'])->name('admin.cms.payment_settings.update');
             Route::post('/yayasan-principals', [CmsController::class, 'updateYayasanPrincipals'])->name('admin.cms.yayasan.principals.update');
 
             // Berita
@@ -300,6 +303,13 @@ Route::middleware(['auth:admin', 'admin.access'])->group(function () {
             Route::get('/jurusan/{jurusan}/edit', [JurusanAdminController::class, 'edit'])->name('admin.cms.jurusan.edit');
             Route::put('/jurusan/{jurusan}', [JurusanAdminController::class, 'update'])->name('admin.cms.jurusan.update');
             Route::delete('/jurusan/{jurusan}', [JurusanAdminController::class, 'destroy'])->name('admin.cms.jurusan.destroy');
+
+            // FAQ (Yayasan)
+            Route::get('/faq', [FaqAdminController::class, 'index'])->name('admin.cms.faq.index');
+            Route::post('/faq', [FaqAdminController::class, 'store'])->name('admin.cms.faq.store');
+            Route::get('/faq/{faq}/edit', [FaqAdminController::class, 'edit'])->name('admin.cms.faq.edit');
+            Route::put('/faq/{faq}', [FaqAdminController::class, 'update'])->name('admin.cms.faq.update');
+            Route::delete('/faq/{faq}', [FaqAdminController::class, 'destroy'])->name('admin.cms.faq.destroy');
         });
 
     // Media upload for Quill editor (jurusan rich content)
@@ -335,6 +345,40 @@ Route::middleware(['auth:admin', 'admin.access'])->group(function () {
     // Decision endpoint for SMK applicants
     Route::post('/admin/ppdb/applicants/smk/{id}/decision', [\App\Http\Controllers\PpdbApplicationDecisionController::class, 'decide'])->name('admin.ppdb.applicants.smk.decision');
 
+    // Confirm payment for SMK applicants (all payment methods — TU, bank, e-wallet)
+    Route::post('/admin/ppdb/applicants/smk/{id}/confirm-payment', function ($id) {
+        $schoolModel = \App\Models\School::where('type', 'SMK')->firstOrFail();
+        $applicant   = \App\Models\PpdbApplication::findOrFail($id);
+        if ($applicant->school_id !== $schoolModel->id) abort(404);
+
+        $statusHistory   = $applicant->status_history ?: [];
+        $alreadyConfirmed = collect($statusHistory)->contains(
+            fn($h) => in_array($h['status'] ?? '', ['payment_confirmed', 'payment_confirmed_tu'])
+        );
+        if ($alreadyConfirmed) {
+            return redirect()->route('admin.ppdb.applicants.smk.detail', $id)
+                ->with('info', 'Pembayaran sudah pernah dikonfirmasi sebelumnya.');
+        }
+
+        $statusHistory[] = [
+            'status'     => 'payment_confirmed',
+            'changed_at' => now()->toDateTimeString(),
+            'note'       => 'Pembayaran dikonfirmasi oleh admin: ' . (auth('admin')->user()->name ?? 'admin'),
+        ];
+
+        if (! $applicant->unique_code) {
+            $applicant->unique_code = \App\Models\PpdbApplication::generateUniqueCode();
+        }
+
+        $applicant->payment_date   = $applicant->payment_date ?? now();
+        $applicant->status         = 'payment_uploaded';
+        $applicant->status_history = $statusHistory;
+        $applicant->save();
+
+        return redirect()->route('admin.ppdb.applicants.smk.detail', $id)
+            ->with('success', 'Pembayaran berhasil dikonfirmasi. Kode unik: ' . $applicant->unique_code);
+    })->name('admin.ppdb.applicants.smk.confirm_payment');
+
     // SMP Applicants
     Route::get('/admin/ppdb/applicants/smp', fn() => redirect()->route('admin.ppdb.applicants.by_school', ['school' => 'smp-putra-pakuan']))->name('admin.ppdb.applicants.smp');
 
@@ -347,6 +391,11 @@ Route::middleware(['auth:admin', 'admin.access'])->group(function () {
     Route::post('/admin/ppdb/applicants/{school}/{id}/decision', [\App\Http\Controllers\PpdbApplicationDecisionController::class, 'decideBySchool'])
         ->whereNumber('id')
         ->name('admin.ppdb.applicants.by_school.decision');
+
+    // Confirm TU (manual) payment by admin
+    Route::post('/admin/ppdb/applicants/{school}/{id}/confirm-payment', [AdminPpdbApplicantsController::class, 'confirmPayment'])
+        ->whereNumber('id')
+        ->name('admin.ppdb.applicants.by_school.confirm_payment');
 
     // PPDB Applicants by School (per jenjang view)
     Route::get('/admin/ppdb/applicants/{school}/data', [AdminPpdbApplicantsController::class, 'bySchoolData'])
@@ -464,12 +513,19 @@ Route::prefix('{school}')
 
         Route::get('/ppdb', fn($school) => $render($school, 'ppdb.index'))->name('school.ppdb');
 
-        // PPDB Authentication Routes (now per jenjang, with pretty URLs)
+        // PPDB Authentication Routes — Unique Code Based
         Route::get('/login', fn($school) => view(strtoupper($school) . '.ppdb.login', compact('school')))->name('ppdb.login');
-        Route::get('/daftar', fn($school) => view(strtoupper($school) . '.ppdb.register', compact('school')))->name('ppdb.register');
+        Route::get('/daftar', [App\Http\Controllers\PpdbAuthController::class, 'showRegisterForm'])->name('ppdb.register');
         Route::post('/login', [App\Http\Controllers\PpdbAuthController::class, 'login'])->middleware('throttle:10,1')->name('ppdb.login.post');
         Route::post('/logout', [App\Http\Controllers\PpdbAuthController::class, 'logout'])->name('ppdb.logout');
         Route::post('/daftar', [App\Http\Controllers\PpdbAuthController::class, 'register'])->name('ppdb.register.post');
+
+        // Registration success page (payment pending admin verification)
+        Route::get('/ppdb/register-success', [App\Http\Controllers\PpdbAuthController::class, 'registerSuccess'])->name('ppdb.register.success');
+
+        // Cek Kode Unik — applicant retrieves their code after admin verifies payment
+        Route::get('/ppdb/cek-kode', [App\Http\Controllers\PpdbAuthController::class, 'showCheckCode'])->name('ppdb.cek.kode');
+        Route::post('/ppdb/cek-kode', [App\Http\Controllers\PpdbAuthController::class, 'checkCode'])->name('ppdb.cek.kode.post');
 
         // PPDB authenticated routes (middleware enforced at routing layer)
         Route::middleware('ppdb.auth')->group(function () use ($render) {
@@ -478,14 +534,42 @@ Route::prefix('{school}')
             Route::post('/ppdb/biodata', [App\Http\Controllers\PpdbAuthController::class, 'updateBiodata'])->name('ppdb.biodata.update');
             Route::get('/ppdb/berkas', fn($school) => $render($school, 'ppdb.berkas'))->name('ppdb.berkas');
             Route::post('/ppdb/berkas', [App\Http\Controllers\PpdbAuthController::class, 'updateBerkas'])->name('ppdb.berkas.update');
-            Route::get('/ppdb/payment', fn($school) => $render($school, 'ppdb.payment'))->name('ppdb.payment');
-            Route::post('/ppdb/payment', [App\Http\Controllers\PpdbAuthController::class, 'updatePayment'])->name('ppdb.payment.update');
             Route::get('/ppdb/profil', fn($school) => $render($school, 'ppdb.profil'))->name('ppdb.profil');
         });
 
         Route::get('/program', fn($school) => $render($school, 'program'))->name('school.program');
 
         Route::get('/kesiswaan', fn($school) => $render($school, 'kesiswaan'))->name('school.kesiswaan');
+
+        Route::get('/prestasi/{slug}', function ($school, $slug) {
+            $schoolModel = \App\Models\School::where('type', \App\Models\School::resolveDbType($school))->firstOrFail();
+
+            $prestasi = \App\Models\Prestasi::where('school_id', $schoolModel->id)
+                ->where('slug', $slug)
+                ->where('status', 'published')
+                ->firstOrFail();
+
+            $related = \App\Models\Prestasi::where('school_id', $schoolModel->id)
+                ->where('status', 'published')
+                ->where('id', '!=', $prestasi->id)
+                ->where('category', $prestasi->category)
+                ->orderByDesc('published_at')
+                ->limit(3)
+                ->get();
+
+            if ($related->count() < 3) {
+                $extra = \App\Models\Prestasi::where('school_id', $schoolModel->id)
+                    ->where('status', 'published')
+                    ->where('id', '!=', $prestasi->id)
+                    ->whereNotIn('id', $related->pluck('id'))
+                    ->orderByDesc('published_at')
+                    ->limit(3 - $related->count())
+                    ->get();
+                $related = $related->concat($extra);
+            }
+
+            return view(strtoupper($school) . '.prestasi-detail', compact('school', 'schoolModel', 'prestasi', 'related'));
+        })->name('school.prestasi.show');
 
         Route::get('/prestasi', function ($school) {
             $schoolModel = \App\Models\School::where('type', \App\Models\School::resolveDbType($school))->firstOrFail();

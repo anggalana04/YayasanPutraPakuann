@@ -45,7 +45,7 @@ class AdminDashboardController extends Controller
             return redirect()->route('admin.ppdb.management', ['school' => $user->getSchoolSlug()]);
         }
 
-        $schools = School::all();
+        $schools = School::whereRaw('LOWER(type) != ?', ['yayasan'])->get();
 
         return view('admin.superadmin.ppdb.schools', compact('schools'));
     }

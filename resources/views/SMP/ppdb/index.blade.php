@@ -1,4 +1,4 @@
-﻿@extends('layouts.SMP.app')
+@extends('layouts.SMP.app')
 
 @section('content')
 @php
@@ -42,7 +42,7 @@
 @endphp
 
 <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
-    <main class="mx-auto w-full max-w-7xl px-6 lg:px-10">
+    <div class="mx-auto w-full max-w-7xl px-6 lg:px-10">
         <!-- Hero Section -->
         <section class="py-12 lg:py-20">
             <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
@@ -91,24 +91,24 @@
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
                 <a href="{{ route('ppdb.register', ['school'=>$school]) }}" class="group flex flex-col h-full rounded-2xl bg-white p-8 shadow-sm transition-all hover:shadow-md dark:bg-slate-900/50">
                     <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-charcoal">
+                        <span class="material-symbols-outlined text-3xl">payments</span>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold">1. Daftar & Bayar</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">Daftar dan bayar biaya pendaftaran untuk mendapatkan kode unik akses formulir.</p>
+                </a>
+                <a href="{{ route('ppdb.biodata', ['school'=>$school]) }}" class="group flex flex-col h-full rounded-2xl bg-white p-8 shadow-sm transition-all hover:shadow-md dark:bg-slate-900/50">
+                    <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-charcoal">
                         <span class="material-symbols-outlined text-3xl">app_registration</span>
                     </div>
-                    <h3 class="mb-2 text-xl font-bold">1. Registrasi Online</h3>
-                    <p class="text-sm leading-relaxed text-slate-500">Isi formulir pendaftaran melalui website resmi kami secara lengkap.</p>
+                    <h3 class="mb-2 text-xl font-bold">2. Isi Biodata</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">Lengkapi data diri calon peserta didik menggunakan kode unik Anda.</p>
                 </a>
                 <a href="{{ route('ppdb.berkas', ['school'=>$school]) }}" class="group flex flex-col h-full rounded-2xl bg-white p-8 shadow-sm transition-all hover:shadow-md dark:bg-slate-900/50">
                     <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-charcoal">
                         <span class="material-symbols-outlined text-3xl">upload_file</span>
                     </div>
-                    <h3 class="mb-2 text-xl font-bold">2. Unggah Berkas</h3>
+                    <h3 class="mb-2 text-xl font-bold">3. Unggah Berkas</h3>
                     <p class="text-sm leading-relaxed text-slate-500">Unggah dokumen persyaratan seperti Ijazah, KK, dan Akta Kelahiran.</p>
-                </a>
-                <a href="{{ route('ppdb.payment', ['school'=>$school]) }}" class="group flex flex-col h-full rounded-2xl bg-white p-8 shadow-sm transition-all hover:shadow-md dark:bg-slate-900/50">
-                    <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-charcoal">
-                        <span class="material-symbols-outlined text-3xl">verified</span>
-                    </div>
-                    <h3 class="mb-2 text-xl font-bold">3. Daftar Ulang</h3>
-                    <p class="text-sm leading-relaxed text-slate-500">Lakukan konfirmasi dan administrasi akhir setelah dinyatakan lolos.</p>
                 </a>
             </div>
         </section>
@@ -227,7 +227,7 @@
                 </div>
             </div>
         </section>
-    </main>
+    </div>
 </div>
 @endsection
 

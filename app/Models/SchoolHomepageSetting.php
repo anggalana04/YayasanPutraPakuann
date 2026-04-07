@@ -21,6 +21,14 @@ class SchoolHomepageSetting extends Model
         'contact_address',
         'contact_map_url',
         'yayasan_principals',
+        'payment_bank_name',
+        'payment_bank_account',
+        'payment_bank_holder',
+        'payment_ewallet_gopay',
+        'payment_ewallet_dana',
+        'payment_ewallet_ovo',
+        'payment_ewallet_shopee',
+        'payment_registration_fee',
     ];
 
     protected $casts = [

@@ -14,7 +14,7 @@
 @endpush
 
 @section('content')
-<main class="max-w-7xl mx-auto px-6 py-12">
+<div class="max-w-7xl mx-auto px-6 py-12">
     <!-- Breadcrumbs -->
     <nav class="flex items-center gap-2 text-sm font-medium text-slate-400 mb-8">
         <a class="hover:text-primary" href="#">Beranda</a>
@@ -128,7 +128,7 @@
             </div>
         </div>
     </section>
-</main>
+</div>
 @endsection
 
 

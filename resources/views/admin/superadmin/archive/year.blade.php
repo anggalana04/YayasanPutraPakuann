@@ -75,7 +75,7 @@ Arsip {{ $schoolModel->name }} &ndash; {{ $year }}
             $unpromotedCount = $unpromoted->count();
         @endphp
         <div class="bg-surface-container-lowest rounded-3xl p-6 shadow-sm">
-            <p class="text-xs font-bold text-outline uppercase tracking-wider mb-1">Total Pendaftar PPDB</p>
+            <p class="text-xs font-bold text-outline uppercase tracking-wider mb-1">Total Pendaftar SPMB</p>
             <p class="text-4xl font-black text-on-surface">{{ $ppdbTotal }}</p>
             <p class="text-xs text-on-surface-variant mt-1">{{ $ppdbAccepted }} diterima</p>
         </div>

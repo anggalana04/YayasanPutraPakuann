@@ -100,8 +100,8 @@
     </form>
 
     {{-- ═══════════════ Jodit WYSIWYG Editor ════════════════ --}}
+    {{-- CSS: inject once, safe to repeat --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jodit@3/build/jodit.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jodit@3/build/jodit.min.js"></script>
 
     <style>
     .jodit-container {
@@ -137,6 +137,7 @@
         const CSRF       = '{{ csrf_token() }}';
         const UPLOAD_URL = '{{ route("admin.cms.jurusan.media.upload") }}';
 
+        function initJodit() {
         Jodit.defaultOptions.controls.insertAudio = {
             tooltip: 'Sisipkan Audio',
             icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>',
@@ -211,6 +212,19 @@
             toolbarSticky: false,
             disablePlugins: 'about',
         });
+        } // end initJodit
+
+        // Load Jodit JS dynamically so HTMX navigation works correctly.
+        // On refresh Jodit is already cached; on first HTMX swap window.Jodit
+        // would be undefined because dynamic <script src> injection is async.
+        if (window.Jodit) {
+            initJodit();
+        } else {
+            var joditScript = document.createElement('script');
+            joditScript.src = 'https://cdn.jsdelivr.net/npm/jodit@3/build/jodit.min.js';
+            joditScript.onload = initJodit;
+            document.head.appendChild(joditScript);
+        }
     })();
     </script>
 </x-admin.cms-form-shell>

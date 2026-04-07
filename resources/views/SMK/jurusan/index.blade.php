@@ -3,11 +3,12 @@
 @section('title', 'Program Keahlian - SMK Putra Pakuan')
 @section('meta_description', 'Temukan program keahlian (jurusan) unggulan di SMK Putra Pakuan. Kurikulum berbasis industri, fasilitas modern, dan lulusan siap kerja.')
 
+@section('hero_page', '1')
+
 @section('content')
-<div id="main-content">
 
 {{-- ═══════════════════════════════════════ HERO ══════════════════════════════════════════ --}}
-<section class="relative pt-28 pb-20 overflow-hidden bg-charcoal text-white">
+<section class="relative pt-28 pb-20 overflow-hidden bg-charcoal text-white" data-hero-section>
     <div class="absolute inset-0 pointer-events-none">
         <div class="absolute inset-0 bg-gradient-to-br from-charcoal via-charcoal to-[#2d2910]"></div>
         <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#f8f8f5] dark:from-[#18160d] to-transparent"></div>
@@ -127,10 +128,9 @@
         <a href="{{ route('school.ppdb', ['school' => 'smk']) }}"
            class="inline-flex items-center gap-2 bg-primary text-charcoal font-black px-8 py-4 rounded-2xl hover:bg-primary/90 transition-all text-sm shadow-lg hover:shadow-xl hover:-translate-y-0.5">
             <span class="material-symbols-outlined">how_to_reg</span>
-            Daftar PPDB Online
+            Daftar SPMB Online
         </a>
     </div>
 </section>
 
-</div>
 @endsection

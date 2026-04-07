@@ -4,16 +4,16 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     @php
-        $seoTitle = trim($__env->yieldContent('title', 'PPDB SMK Putra Pakuan | Pendaftaran Peserta Didik Baru'));
-        $seoDescription = trim($__env->yieldContent('meta_description', 'Daftar PPDB SMK Putra Pakuan secara online. Lengkapi biodata, unggah berkas, dan pantau status seleksi dengan mudah.'));
-        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'ppdb smk putra pakuan, pendaftaran smk bogor, ppdb online smk'));
+        $seoTitle = trim($__env->yieldContent('title', 'SPMB SMK Putra Pakuan | Pendaftaran Peserta Didik Baru'));
+        $seoDescription = trim($__env->yieldContent('meta_description', 'Daftar SPMB SMK Putra Pakuan secara online. Lengkapi biodata, unggah berkas, dan pantau status seleksi dengan mudah.'));
+        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'spmb smk putra pakuan, pendaftaran smk bogor, spmb online smk'));
         $seoImage = trim($__env->yieldContent('meta_image', asset('images/logo-yayasan.png')));
         $seoUrl = url()->current();
     @endphp
     <title>{{ $seoTitle }}</title>
     <meta name="description" content="{{ $seoDescription }}" />
     <meta name="keywords" content="{{ $seoKeywords }}" />
-    <meta name="author" content="PPDB SMK Putra Pakuan" />
+    <meta name="author" content="SPMB SMK Putra Pakuan" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="{{ $seoUrl }}" />
     <link rel="alternate" hreflang="id-ID" href="{{ $seoUrl }}" />
@@ -23,7 +23,7 @@
     <link rel="apple-touch-icon" href="{{ asset('images/logo-yayasan.png') }}" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="id_ID" />
-    <meta property="og:site_name" content="PPDB SMK Putra Pakuan" />
+    <meta property="og:site_name" content="SPMB SMK Putra Pakuan" />
     <meta property="og:title" content="{{ $seoTitle }}" />
     <meta property="og:description" content="{{ $seoDescription }}" />
     <meta property="og:url" content="{{ $seoUrl }}" />
@@ -75,85 +75,6 @@
             --color-background-dark: #221f10;
         }
     </style>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#f2cc0d",
-                        "background-light": "#f8f8f5",
-                        "background-dark": "#221f10",
-                        "charcoal": "#1c190d",
-                        "brand-yellow": "#f2cc0d",
-                        "brand-charcoal": "#1c190d",
-                        "error": "#b02500",
-                        "surface-dim": "#d3d5d1",
-                        "surface-container-lowest": "#ffffff",
-                        "on-tertiary-fixed": "#4c4836",
-                        "on-secondary": "#faf2de",
-                        "on-primary-fixed-variant": "#645300",
-                        "on-secondary-container": "#565242",
-                        "outline-variant": "#acadab",
-                        "primary-dim": "#5f4e00",
-                        "secondary-dim": "#544f40",
-                        "on-error": "#ffefec",
-                        "secondary-fixed": "#eae2ce",
-                        "inverse-primary": "#fbd51d",
-                        "error-dim": "#b92902",
-                        "secondary-fixed-dim": "#dbd4c0",
-                        "inverse-on-surface": "#9c9d9b",
-                        "surface-container-low": "#f0f1ee",
-                        "tertiary-fixed-dim": "#eae2ca",
-                        "surface": "#f7f7f4",
-                        "on-surface": "#2d2f2d",
-                        "tertiary-container": "#f8f1d8",
-                        "surface-container": "#e8e8e5",
-                        "background": "#f7f7f4",
-                        "primary-fixed": "#fbd51d",
-                        "on-primary-container": "#594a00",
-                        "on-tertiary": "#faf2da",
-                        "surface-variant": "#dcddda",
-                        "on-surface-variant": "#5a5c5a",
-                        "on-primary-fixed": "#433700",
-                        "tertiary-dim": "#54503e",
-                        "on-primary": "#fff2cd",
-                        "surface-container-highest": "#dcddda",
-                        "surface-container-high": "#e2e3df",
-                        "on-background": "#2d2f2d",
-                        "primary-container": "#fbd51d",
-                        "tertiary-fixed": "#f8f1d8",
-                        "secondary": "#605b4c",
-                        "surface-bright": "#f7f7f4",
-                        "inverse-surface": "#0d0f0d",
-                        "primary-fixed-dim": "#ecc700",
-                        "on-secondary-fixed": "#433f31",
-                        "error-container": "#f95630",
-                        "surface-tint": "#6c5a00",
-                        "tertiary": "#605c49",
-                        "on-error-container": "#520c00",
-                        "on-secondary-fixed-variant": "#605b4c",
-                        "on-tertiary-container": "#5f5a47",
-                        "on-tertiary-fixed-variant": "#696451",
-                        "outline": "#767775",
-                        "secondary-container": "#eae2ce"
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"],
-                        "headline": ["Lexend"],
-                        "body": ["Lexend"],
-                        "label": ["Lexend"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.5rem",
-                        "lg": "1rem",
-                        "xl": "1.5rem",
-                        "full": "9999px"
-                    },
-                },
-            },
-        }
-    </script>
     <style>
         html,
         body {
@@ -192,7 +113,7 @@
             <div class="flex items-center">
                 <a href="{{ route('ppdb.dashboard', ['school' => $school]) }}" class="flex items-center space-x-2">
                     <img src="{{ asset('images/logo-yayasan.png') }}" alt="SMK Putra Pakuan" class="h-8 w-8">
-                    <span class="font-bold text-lg text-primary">PPDB SMK Putra Pakuan</span>
+                    <span class="font-bold text-lg text-primary">SPMB SMK Putra Pakuan</span>
                 </a>
             </div>
             <div class="hidden md:flex items-center space-x-8">

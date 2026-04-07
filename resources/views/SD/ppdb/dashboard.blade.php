@@ -10,8 +10,9 @@
 <h1 class="text-4xl md:text-5xl font-extrabold text-brand-charcoal tracking-tighter leading-none">{{ $application->full_name ?? '-' }}</h1>
 </div>
 <div class="bg-surface-container-low px-6 py-4 rounded-2xl border-l-4 border-brand-yellow">
-<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">ID Pendaftaran</p>
-<p class="text-2xl font-black text-brand-charcoal font-headline">#{{ $application->application_id ?? '-' }}</p>
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Kode Unik</p>
+<p class="text-2xl font-black text-brand-charcoal font-headline tracking-wider">{{ $application->unique_code ?? '-' }}</p>
+<p class="text-xs text-on-surface-variant mt-1">ID: {{ $application->application_id ?? '-' }}</p>
 </div>
 </div>
 </div>
@@ -138,7 +139,7 @@
 <span class="material-symbols-outlined text-sm" data-icon="call">call</span>
 </div>
 <div>
-<p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Hotline PPDB</p>
+<p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Hotline SPMB</p>
 <p class="text-sm font-bold text-brand-charcoal">(0251) 123 4567</p>
 <p class="text-xs text-on-surface-variant">Senin - Jumat (08:00 - 15:00)</p>
 </div>

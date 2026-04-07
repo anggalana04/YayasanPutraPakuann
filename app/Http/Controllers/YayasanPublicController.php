@@ -188,6 +188,54 @@ class YayasanPublicController extends Controller
         return view('yayasan/prestasi', compact('prestasiItems', 'pageContent'));
     }
 
+    public function prestasiShow(string $slug)
+    {
+        if (! Schema::hasTable('prestasis')) {
+            abort(404);
+        }
+
+        $prestasi = Cache::remember('yayasan.prestasi.detail.' . md5($slug), 120, function () use ($slug) {
+            return Prestasi::where('slug', $slug)
+                ->where('status', 'published')
+                ->first();
+        });
+
+        if (! $prestasi) {
+            abort(404);
+        }
+
+        $yayasanSchool = $this->resolveSchoolByType('yayasan');
+        $related = collect();
+
+        if ($yayasanSchool) {
+            $related = Cache::remember('yayasan.prestasi.related.' . $prestasi->id, 120, function () use ($prestasi, $yayasanSchool) {
+                $sameCategory = Prestasi::where('school_id', $yayasanSchool->id)
+                    ->where('status', 'published')
+                    ->where('id', '!=', $prestasi->id)
+                    ->where('category', $prestasi->category)
+                    ->orderByDesc('published_at')
+                    ->limit(3)
+                    ->get();
+
+                if ($sameCategory->count() < 3) {
+                    $extra = Prestasi::where('school_id', $yayasanSchool->id)
+                        ->where('status', 'published')
+                        ->where('id', '!=', $prestasi->id)
+                        ->whereNotIn('id', $sameCategory->pluck('id'))
+                        ->orderByDesc('featured')
+                        ->orderByDesc('published_at')
+                        ->limit(3 - $sameCategory->count())
+                        ->get();
+                    return $sameCategory->concat($extra);
+                }
+
+                return $sameCategory;
+            });
+        }
+
+        return view('yayasan/prestasi-detail', compact('prestasi', 'related'));
+    }
+
     public function berita()
     {
         $pageContent  = $this->pageContent('yayasan-berita');
@@ -252,6 +300,10 @@ class YayasanPublicController extends Controller
             $contactInfo['contact_map_url']  = $homepage->contact_map_url  ?: $contactInfo['contact_map_url'];
         }
 
-        return view('yayasan/kontak', compact('pageContent', 'contactInfo'));
+        $faqs = $yayasanSchool
+            ? \App\Models\Faq::where('school_id', $yayasanSchool->id)->active()->orderBy('sort_order')->get()
+            : collect();
+
+        return view('yayasan/kontak', compact('pageContent', 'contactInfo', 'faqs'));
     }
 }

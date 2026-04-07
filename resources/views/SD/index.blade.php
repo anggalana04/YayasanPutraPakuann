@@ -1,8 +1,10 @@
-﻿@extends('layouts.SD.app')
+@extends('layouts.SD.app')
 
 @section('title', 'SDIT Putra Pakuan - Unggul, Berkarakter, Berdaya Saing')
 
-@section('content')
+@section('hero_page', '1')
+
+@push('head')
 <style>
 /* Hero Carousel Styles */
 .hero-carousel-container {
@@ -78,7 +80,7 @@
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 18%),
+    background: linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.08) 10%, transparent 20%),
                 linear-gradient(135deg, rgba(28, 25, 13, 0.25) 0%, rgba(28, 25, 13, 0.15) 50%, rgba(242, 204, 13, 0.1) 100%);
     z-index: 2;
 }
@@ -101,7 +103,7 @@
 
 .hero-overlay-title {
     position: absolute;
-    top: 10%;
+    top: 18%;
     left: 10%;
     transform: translate(0, 0);
     font-size: clamp(1.8rem, 3.6vw, 4rem);
@@ -325,9 +327,11 @@
     }
 }
 </style>
+@endpush
 
+@section('content')
 <!-- Modern Hero Carousel -->
-<section class="relative min-h-screen" data-hero-section>
+<section class="relative min-h-screen overflow-hidden" data-hero-section>
     @php
         $heroSlides = $carouselImages->map(function ($item) {
             return [

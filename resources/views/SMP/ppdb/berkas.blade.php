@@ -6,7 +6,7 @@
 <!-- Stepper Signature Component -->
 <section class="pt-12 mb-12">
 <div class="flex flex-row items-center justify-between w-full">
-<!-- Step 1 (Done) -->
+<!-- Step 1 (Done - Biodata) -->
 <div class="flex flex-col items-center flex-1">
 <div class="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-xl shadow-md">
 <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">check</span>
@@ -17,7 +17,7 @@
 </div>
 </div>
 <div class="hidden md:block h-0.5 bg-surface-container-highest flex-1 mx-2"></div>
-<!-- Step 2 (Active) -->
+<!-- Step 2 (Active - Berkas) -->
 <div class="flex flex-col items-center flex-1">
 <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold text-lg shadow-md">
 02
@@ -25,17 +25,6 @@
 <div class="mt-2">
 <p class="text-xs uppercase tracking-widest text-primary font-bold">Langkah 2</p>
 <h3 class="text-lg font-bold text-on-surface">Berkas Dokumen</h3>
-</div>
-</div>
-<div class="hidden md:block h-0.5 bg-surface-container-highest flex-1 mx-2"></div>
-<!-- Step 3 (Inactive) -->
-<div class="flex flex-col items-center flex-1">
-<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold text-lg">
-03
-</div>
-<div class="mt-2">
-<p class="text-xs uppercase tracking-widest text-on-surface-variant font-medium">Langkah 3</p>
-<h3 class="text-lg font-bold text-on-surface-variant">Pembayaran</h3>
 </div>
 </div>
 </div>

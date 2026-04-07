@@ -8,7 +8,7 @@
         <div class="flex justify-between items-end">
             <div>
                 <h3 class="text-4xl font-bold tracking-tight text-[#1c190d] mb-2">Pilih Unit Sekolah</h3>
-                <p class="text-on-surface-variant max-w-xl">Pilih unit sekolah di bawah untuk mengelola data PPDB dan pengaturannya.</p>
+                <p class="text-on-surface-variant max-w-xl">Pilih unit sekolah di bawah untuk mengelola data SPMB dan pengaturannya.</p>
             </div>
         </div>
     </div>

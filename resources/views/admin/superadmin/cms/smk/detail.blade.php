@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+﻿@extends('layouts.admin.app')
 
 @section('title', 'Content Management - SMK Putra Pakuan CMS')
 
@@ -46,21 +46,21 @@
                 </div>
             </div>
         </div>
-        <!-- PPDB Section -->
+        <!-- SPMB Section -->
         <div class="bg-surface-container-lowest rounded-xl p-8 shadow-sm">
             <div class="flex items-center gap-4 mb-8">
                 <div class="h-12 w-12 bg-primary-container text-primary rounded-2xl flex items-center justify-center">
                     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">edit_note</span>
                 </div>
                 <div>
-                    <h3 class="text-xl font-bold text-[#1c190d]">PPDB Section</h3>
+                    <h3 class="text-xl font-bold text-[#1c190d]">SPMB Section</h3>
                     <p class="text-on-surface-variant text-sm">Judul, subjudul, tombol, dan countdown pendaftaran.</p>
                 </div>
             </div>
             <div class="space-y-6">
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">Judul</label>
-                    <input class="w-full bg-white border-none rounded-xl p-3 text-base font-bold focus:ring-0 border-b-2 border-transparent focus:border-primary transition-all text-[#1c190d]" type="text" value="PPDB 2024 TELAH DIBUKA"/>
+                    <input class="w-full bg-white border-none rounded-xl p-3 text-base font-bold focus:ring-0 border-b-2 border-transparent focus:border-primary transition-all text-[#1c190d]" type="text" value="SPMB 2024 TELAH DIBUKA"/>
                 </div>
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">Subjudul</label>

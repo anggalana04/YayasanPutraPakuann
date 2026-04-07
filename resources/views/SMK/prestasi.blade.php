@@ -5,7 +5,7 @@
 
 
 
-    <main class="max-w-[1280px] mx-auto mt-14 px-10 pb-12">
+    <div class="max-w-[1280px] mx-auto px-10 pb-12">
         <section class="mb-10">
             <div class="mb-6">
                 <h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">Prestasi Siswa</h2>
@@ -37,7 +37,7 @@
                 @endforelse
             </div>
         </section>
-    </main>
+    </div>
 @endsection
 
 

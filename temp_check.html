@@ -1,0 +1,1976 @@
+﻿
+
+
+
+
+
+﻿<!-- resources/views/layouts/SMK/app.blade.php -->
+<!DOCTYPE html>
+<html lang="id" style="margin:0; padding:0; background:#f8f8f5;">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <title>SMK Putra Pakuan - Unggul, Berkarakter, Berdaya Saing</title>
+    <meta name="description" content="SMK Putra Pakuan menghadirkan pendidikan vokasi unggul dengan jurusan relevan industri, prestasi siswa, dan layanan PPDB online." />
+    <meta name="keywords" content="smk putra pakuan, smk bogor, ppdb smk, sekolah vokasi, jurusan smk" />
+    <meta name="author" content="SMK Putra Pakuan" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="http://127.0.0.1:8000/smk" />
+    <link rel="alternate" hreflang="id-ID" href="http://127.0.0.1:8000/smk" />
+    <link rel="alternate" hreflang="x-default" href="http://127.0.0.1:8000/smk" />
+    <link rel="icon" type="image/png" href="http://127.0.0.1:8000/images/logo-yayasan.png" />
+    <link rel="shortcut icon" type="image/png" href="http://127.0.0.1:8000/images/logo-yayasan.png" />
+    <link rel="apple-touch-icon" href="http://127.0.0.1:8000/images/logo-yayasan.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:site_name" content="SMK Putra Pakuan" />
+    <meta property="og:title" content="SMK Putra Pakuan - Unggul, Berkarakter, Berdaya Saing" />
+    <meta property="og:description" content="SMK Putra Pakuan menghadirkan pendidikan vokasi unggul dengan jurusan relevan industri, prestasi siswa, dan layanan PPDB online." />
+    <meta property="og:url" content="http://127.0.0.1:8000/smk" />
+    <meta property="og:image" content="http://127.0.0.1:8000/images/logo-yayasan.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SMK Putra Pakuan - Unggul, Berkarakter, Berdaya Saing" />
+    <meta name="twitter:description" content="SMK Putra Pakuan menghadirkan pendidikan vokasi unggul dengan jurusan relevan industri, prestasi siswa, dan layanan PPDB online." />
+    <meta name="twitter:image" content="http://127.0.0.1:8000/images/logo-yayasan.png" />
+        <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"EducationalOrganization","@id":"http://127.0.0.1:8000/smk#organization","name":"SMK Putra Pakuan","url":"http://127.0.0.1:8000/smk","logo":{"@type":"ImageObject","url":"http://127.0.0.1:8000/images/logo-yayasan.png"}},{"@type":"WebSite","@id":"http://127.0.0.1:8000/smk#website","url":"http://127.0.0.1:8000/smk","name":"SMK Putra Pakuan","inLanguage":"id-ID","publisher":{"@id":"http://127.0.0.1:8000/smk#organization"}},{"@type":"WebPage","@id":"http://127.0.0.1:8000/smk#webpage","url":"http://127.0.0.1:8000/smk","name":"SMK Putra Pakuan - Unggul, Berkarakter, Berdaya Saing","description":"SMK Putra Pakuan menghadirkan pendidikan vokasi unggul dengan jurusan relevan industri, prestasi siswa, dan layanan PPDB online.","inLanguage":"id-ID","isPartOf":{"@id":"http://127.0.0.1:8000/smk#website"}}]}</script>
+        <link rel="preload" as="style" href="http://127.0.0.1:8000/build/assets/app-C3RSTozc.css" /><link rel="modulepreload" as="script" href="http://127.0.0.1:8000/build/assets/app-CfSRl2rv.js" /><link rel="stylesheet" href="http://127.0.0.1:8000/build/assets/app-C3RSTozc.css" /><script type="module" src="http://127.0.0.1:8000/build/assets/app-CfSRl2rv.js"></script>    <link href="http://127.0.0.1:8000/fonts/fonts.css" rel="stylesheet"/>
+    <script src="http://127.0.0.1:8000/js/alpine.min.js" defer></script>
+    <style>
+        :root {
+            --color-primary: #f2cc0d;
+            --color-secondary: #605b4c;
+            --color-charcoal: #1c190d;
+            --color-background-light: #f8f8f5;
+            --color-background-dark: #221f10;
+        }
+    </style>
+    <style>
+        html,
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        #main-content {
+            padding-top: 72px;
+        }
+        #main-content:has([data-hero-section]) {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+            border-top: none !important;
+            font-size: 0;
+            line-height: 0;
+        }
+        #main-content:has([data-hero-section]) > * {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        [data-hero-section] {
+            margin-top: 0 !important;
+        }
+    </style>
+    <style>
+/* Hero Carousel Styles */
+.hero-carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hero-slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+.hero-image,
+.hero-media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0;
+    transform: scale(1);
+    transition: transform 0.35s ease-out;
+}
+
+.hero-slide.active .hero-image,
+.hero-slide.active .hero-media {
+    transform: scale(1.02);
+}
+
+.hero-carousel-container {
+    min-height: 100vh;
+    max-height: 100vh;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .hero-carousel-container {
+        min-height: 100vh;
+        max-height: 100vh;
+        width: 100%;
+        border-radius: 0;
+    }
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.08) 10%, transparent 20%),
+                linear-gradient(135deg, rgba(28, 25, 13, 0.25) 0%, rgba(28, 25, 13, 0.15) 50%, rgba(242, 204, 13, 0.1) 100%);
+    z-index: 2;
+}
+
+.hero-text-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.hero-overlay-title,
+.hero-overlay-description {
+    color: #ffffff;
+    text-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.hero-overlay-title {
+    position: absolute;
+    top: 6%;
+    left: 10%;
+    transform: translate(0, 0);
+    font-size: clamp(1.8rem, 3.6vw, 4rem);
+    font-weight: 900;
+    max-width: 55%;
+    line-height: 1.08;
+    text-align: left;
+    font-family: 'Playfair Display', 'Georgia', serif;
+    letter-spacing: 0.02em;
+    text-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+.hero-overlay-description {
+    position: absolute;
+    bottom: 14%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    font-size: clamp(1.05rem, 1.4vw, 1.45rem);
+    font-weight: 500;
+    max-width: 70%;
+    text-align: center;
+    line-height: 1.4;
+    color: #fefcf7;
+}
+
+.hero-slide.active .hero-overlay-title,
+.hero-slide.active .hero-overlay-description {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.hero-text-content {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-slide.active .hero-text-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-badge {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+
+.hero-slide.active .hero-badge {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.hero-title {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+}
+
+.hero-slide.active .hero-title {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-description {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+}
+
+.hero-slide.active .hero-description {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-buttons {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.7s;
+}
+
+.hero-slide.active .hero-buttons {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-stats {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.9s;
+}
+
+.hero-slide.active .hero-stats {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.carousel-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0;
+}
+
+.hero-carousel-container:hover .carousel-nav-btn {
+    opacity: 1;
+}
+
+.carousel-nav-btn:hover {
+    background: rgba(242, 204, 13, 0.3);
+    border-color: rgba(242, 204, 13, 0.5);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav-btn.prev {
+    left: 24px;
+}
+
+.carousel-nav-btn.next {
+    right: 24px;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 12px;
+}
+
+.carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.carousel-dot::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.carousel-dot.active {
+    background: #FDB913;
+    width: 40px;
+    border-radius: 6px;
+}
+
+.carousel-dot.active::before {
+    border-color: rgba(253, 185, 19, 0.3);
+}
+
+.carousel-dot:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(1.2);
+}
+
+/* Progress bar for autoplay */
+.carousel-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: rgba(253, 185, 19, 0.5);
+    width: 0;
+    z-index: 11;
+    transition: width 5s linear;
+}
+
+.carousel-progress.active {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .carousel-nav-btn {
+        width: 44px;
+        height: 44px;
+        opacity: 1;
+    }
+
+    .carousel-nav-btn.prev {
+        left: 12px;
+    }
+
+    .carousel-nav-btn.next {
+        right: 12px;
+    }
+
+    .carousel-dots {
+        bottom: 20px;
+    }
+}
+</style>
+    <!-- HTMX -->
+    <script src="http://127.0.0.1:8000/js/htmx.min.js" defer></script>
+</head>
+<body style="margin:0; padding:0;" class="m-0 p-0 bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100"
+    hx-boost="true"
+    hx-target="#main-content"
+    hx-select="#main-content"
+    hx-swap="outerHTML transition:true"
+    hx-push-url="true">
+    <!-- Navbar -->
+    <nav id="school-nav" style="margin-top:0;" class="fixed top-0 z-50 w-full  text-white transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="http://127.0.0.1:8000/smk">
+                    <div class="size-10">
+                        <img src="http://127.0.0.1:8000/images/logo-yayasan.png" alt="Logo SMK Putra Pakuan">
+                    </div>
+                </a>
+                <div>
+                    <h1 class="text-lg font-bold leading-none tracking-tight text-white">SMK PUTRA PAKUAN</h1>
+                    <p class="text-[10px] text-primary font-medium tracking-widest uppercase">Sekolah Menengah Kejuruan</p>
+                </div>
+            </div>
+            <div class="hidden lg:flex items-center gap-6">
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk">BERANDA</a>
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/profil">PROFIL</a>
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/prestasi">PRESTASI</a>
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/jurusan">JURUSAN</a>
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/berita">BERITA</a>
+                <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                    <button type="button" class="text-xs font-semibold hover:text-primary transition-colors flex items-center gap-1 focus:outline-none" @click.prevent="open = !open" @focus="open = true" tabindex="0">
+                        DIREKTORI
+                        <span class="material-symbols-outlined text-xs">expand_more</span>
+                    </button>
+                    <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="absolute left-0 mt-2 w-64 bg-white text-charcoal rounded-lg shadow-lg border border-primary/10 z-50">
+                        <a href="http://127.0.0.1:8000/smk/direktori/guru"
+                        class="block px-6 py-3 hover:bg-primary/10 text-sm font-semibold border-b border-slate-100">
+                        Direktori Guru & Tenaga Kependidikan
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/galeri">GALERI</a>
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/kontak">HUBUNGI KAMI</a>
+                                                <button class="bg-primary hover:bg-primary/90 text-charcoal px-5 py-2.5 rounded-lg text-xs font-bold transition-all ml-4" onclick="window.location.href='http://127.0.0.1:8000/smk/ppdb'">
+                    PPDB 2026/2027
+                </button>
+                            </div>
+            <!-- Mobile menu button -->
+            <button class="lg:hidden text-primary" id="mobile-menu-toggle" aria-label="Open menu">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+        <!-- Mobile Navbar -->
+        <div id="mobile-menu" class="fixed inset-0 z-50 bg-charcoal/95 text-white flex flex-col gap-6 px-8 py-10 transition-all duration-300 translate-x-full lg:hidden" style="display:none;">
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex items-center gap-3">
+                    <a href="http://127.0.0.1:8000/smk">
+                        <div class="size-10">
+                            <img src="http://127.0.0.1:8000/images/logo-yayasan.png" alt="Logo SMK Putra Pakuan">
+                        </div>
+                    </a>
+                    <div>
+                        <h1 class="text-lg font-bold leading-none tracking-tight text-white">SMK PUTRA PAKUAN</h1>
+                    </div>
+                </div>
+                <button class="text-primary text-2xl" id="mobile-menu-close" aria-label="Close menu">
+                    <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                    <span aria-hidden="true" class="sr-only">Close</span>
+                </button>
+            </div>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk">BERANDA</a>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/profil">PROFIL</a>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/prestasi">PRESTASI</a>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/jurusan">JURUSAN</a>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/berita">BERITA</a>
+            <div class="flex flex-col gap-2">
+                <button class="text-base font-semibold hover:text-primary transition-colors flex items-center gap-1 focus:outline-none" id="mobile-direktori-toggle">
+                    DIREKTORI
+                    <span class="material-symbols-outlined text-xs">expand_more</span>
+                </button>
+                <div id="mobile-direktori-dropdown" class="ml-4 flex-col gap-1 hidden">
+                    <a href="http://127.0.0.1:8000/smk/direktori/guru" class="block py-2 text-sm font-semibold">Direktori Guru & Tenaga Kependidikan</a>
+                    
+                    
+                </div>
+            </div>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/galeri">GALERI</a>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/kontak">HUBUNGI KAMI</a>
+                        <a class="text-base font-semibold hover:text-primary transition-colors" href="http://127.0.0.1:8000/smk/ppdb">PPDB 2026/2027</a>
+                    </div>
+        <script>
+            // HTMX-safe mobile menu handlers
+            function initSmkMobileMenu() {
+                const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuClose = document.getElementById('mobile-menu-close');
+                const mobileDirektoriToggle = document.getElementById('mobile-direktori-toggle');
+                const mobileDirektoriDropdown = document.getElementById('mobile-direktori-dropdown');
+
+                if (!mobileMenu) return;
+
+                const openMobileMenu = () => {
+                    mobileMenu.style.display = 'flex';
+                    requestAnimationFrame(() => {
+                        mobileMenu.style.translate = '0';
+                    });
+                };
+
+                const closeMobileMenu = () => {
+                    mobileMenu.style.translate = '100%';
+                    mobileMenu.addEventListener('transitionend', function hideMenu() {
+                        mobileMenu.style.display = 'none';
+                        mobileMenu.style.translate = '';
+                        mobileMenu.removeEventListener('transitionend', hideMenu);
+                    });
+                };
+
+                if (mobileMenuToggle && !mobileMenuToggle._htmxInit) {
+                    mobileMenuToggle._htmxInit = true;
+                    mobileMenuToggle.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        openMobileMenu();
+                    });
+                }
+
+                if (mobileMenuClose && !mobileMenuClose._htmxInit) {
+                    mobileMenuClose._htmxInit = true;
+                    mobileMenuClose.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        closeMobileMenu();
+                    });
+                }
+
+                if (mobileDirektoriToggle && mobileDirektoriDropdown && !mobileDirektoriToggle._htmxInit) {
+                    mobileDirektoriToggle._htmxInit = true;
+                    mobileDirektoriToggle.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        mobileDirektoriDropdown.classList.toggle('hidden');
+                    });
+
+                    if (!mobileDirektoriDropdown._htmxInit) {
+                        mobileDirektoriDropdown._htmxInit = true;
+                        mobileDirektoriDropdown.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                        });
+                    }
+
+                    if (!document._smkDirektoriOutsideInit) {
+                        document._smkDirektoriOutsideInit = true;
+                        document.addEventListener('click', (e) => {
+                            if (!mobileDirektoriToggle.contains(e.target) && !mobileDirektoriDropdown.contains(e.target)) {
+                                mobileDirektoriDropdown.classList.add('hidden');
+                            }
+                        });
+                    }
+                }
+
+                mobileMenu.querySelectorAll('a[href]').forEach((link) => {
+                    if (link._htmxInit) return;
+                    link._htmxInit = true;
+                    link.addEventListener('click', () => {
+                        closeMobileMenu();
+                    });
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSmkMobileMenu);
+            } else {
+                initSmkMobileMenu();
+            }
+
+            document.addEventListener('htmx:afterSettle', initSmkMobileMenu);
+        </script>
+    </nav>
+    <!-- End Navbar -->
+    <script>
+    (function() {
+        var _navScrollListener = null;
+        function updateNavLayout() {
+            var nav = document.getElementById('school-nav');
+            var mainContent = document.getElementById('main-content');
+            if (!nav) return;
+            if (_navScrollListener) {
+                window.removeEventListener('scroll', _navScrollListener);
+                _navScrollListener = null;
+            }
+            var hasHero = mainContent && mainContent.querySelector('[data-hero-section]');
+            if (hasHero) {
+                if (mainContent) mainContent.style.paddingTop = '0';
+                var onScroll = function() {
+                    if (window.scrollY > 80) {
+                        nav.classList.add('bg-charcoal');
+                        nav.style.borderColor = '';
+                        nav.style.boxShadow = '0 4px 20px rgba(0,0,0,0.4)';
+                    } else {
+                        nav.classList.remove('bg-charcoal');
+                        nav.style.borderColor = 'transparent';
+                        nav.style.boxShadow = 'none';
+                    }
+                };
+                _navScrollListener = onScroll;
+                window.addEventListener('scroll', _navScrollListener, { passive: true });
+                onScroll();
+            } else {
+                nav.classList.add('bg-charcoal');
+                nav.style.borderColor = '';
+                nav.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+                if (mainContent) {
+                    mainContent.style.paddingTop = nav.offsetHeight + 'px';
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', updateNavLayout);
+        document.addEventListener('htmx:afterSettle', updateNavLayout);
+    })();
+    </script>
+
+    <main id="main-content" style="padding-top:0;">
+        <!-- Modern Hero Carousel -->
+<section class="relative min-h-screen overflow-hidden" data-hero-section>
+    
+    <div class="hero-carousel-container">
+        <!-- Progress Bar -->
+        <div id="carouselProgress" class="carousel-progress"></div>
+
+        <!-- Slides -->
+                <div class="hero-slide active" data-slide="0">
+                            <img src="/images/cms/smk/carousel/carousel_smk_35888b2e-d7cb-4b41-a471-baa2a99b6649.png" alt="Hero 1" class="hero-image">
+                        <div class="hero-overlay"></div>
+            <div class="hero-text-overlay">
+                <h2 class="hero-overlay-title">Selamat Datang di SMK Putra Pakuan</h2>                <p class="hero-overlay-description">Mencetak generasi vokasi unggul, berkarakter, dan siap kerja di era industri 4.0.</p>            </div>
+        </div>
+                <div class="hero-slide " data-slide="1">
+                            <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=1400&amp;q=85" alt="Hero 2" class="hero-image">
+                        <div class="hero-overlay"></div>
+            <div class="hero-text-overlay">
+                <h2 class="hero-overlay-title">Laboratorium Komputer Modern</h2>                <p class="hero-overlay-description">Fasilitas lab jaringan &amp; komputer berstandar industri untuk mendukung kompetensi keahlian TKJ.</p>            </div>
+        </div>
+                <div class="hero-slide " data-slide="2">
+                            <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1400&amp;q=85" alt="Hero 3" class="hero-image">
+                        <div class="hero-overlay"></div>
+            <div class="hero-text-overlay">
+                <h2 class="hero-overlay-title">Juara LKS Provinsi Jawa Barat 2026</h2>                <p class="hero-overlay-description">SMK Putra Pakuan kembali mengharumkan nama Kabupaten Bogor di kompetisi kompetensi siswa tingkat provinsi.</p>            </div>
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <button class="carousel-nav-btn prev" id="prevBtn" title="Sebelumnya">
+            <span class="material-symbols-outlined text-3xl">chevron_left</span>
+        </button>
+        <button class="carousel-nav-btn next" id="nextBtn" title="Berikutnya">
+            <span class="material-symbols-outlined text-3xl">chevron_right</span>
+        </button>
+
+        <!-- Dots Navigation -->
+        <div class="carousel-dots">
+                        <button class="carousel-dot active" data-dot="0" aria-label="Go to slide 1"></button>
+                        <button class="carousel-dot " data-dot="1" aria-label="Go to slide 2"></button>
+                        <button class="carousel-dot " data-dot="2" aria-label="Go to slide 3"></button>
+                    </div>
+    </div>
+</section>
+
+﻿
+
+
+
+<section style="background: #08080f; overflow: hidden;">
+
+    
+    <div style="border-bottom: 1px solid rgba(255,255,255,0.07); padding: 13px 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <div class="flex items-center gap-2">
+                <span class="relative flex h-2 w-2 shrink-0">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+            </div>
+            <span style="color: rgba(255,255,255,0.78); font-size: 12px; font-weight: 500;">Tahun Ajaran 2026/2027</span>
+        </div>
+    </div>
+
+    
+    <div style="max-width: 1200px; margin: 0 auto; padding: 4rem 2rem 4.5rem;">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center gap-14">
+
+            
+            <div class="flex-1 min-w-0">
+
+                
+                <div class="flex items-center gap-3" style="margin-bottom: 1.5rem;">
+                    <div style="width: 36px; height: 2px; background: #FDB913; border-radius: 2px; flex-shrink: 0;"></div>
+                    <span style="color: #FDB913; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.25em;">Penerimaan Peserta Didik Baru</span>
+                </div>
+
+                
+                <h2 style="font-size: clamp(2.8rem, 6vw, 5.2rem); font-weight: 900; color: #ffffff; line-height: 0.9; letter-spacing: -0.03em; margin: 0 0 1.25rem 0;">
+                    SPMB<br>
+                    <span style="color: #FDB913;">SMK</span><br>
+                    Putra Pakuan
+                </h2>
+
+                
+                <p style="color: rgba(255,255,255,0.78); font-size: 14px; font-weight: 500; margin: 0 0 1.25rem 0;">
+                    Tahun Ajaran 2026/2027
+                </p>
+
+                
+                <p style="color: rgba(255,255,255,0.88); font-size: 15px; line-height: 1.65; max-width: 440px; margin: 0 0 2rem 0;">
+                    Bergabunglah dengan SMK Putra Pakuan dan raih masa depanmu bersama kami.
+                    Fasilitas lengkap, pengajar berpengalaman, dan kurikulum industri terkini.
+                </p>
+
+                
+                                <div style="display: inline-flex; align-items: center; gap: 10px; background: rgba(253,185,19,0.12); border: 1px solid rgba(253,185,19,0.35); border-radius: 9999px; padding: 8px 20px; margin-bottom: 2rem;">
+                    <span style="width: 7px; height: 7px; background: #FDB913; border-radius: 50%; flex-shrink: 0;"></span>
+                    <span style="color: #FDB913; font-size: 13px; font-weight: 600;">Periode 3</span>
+                    <span style="color: rgba(255,255,255,0.78); font-size: 11px;">· Sedang Berjalan</span>
+                </div>
+                
+                
+                <div class="flex flex-wrap items-center gap-5">
+                    <a href="http://127.0.0.1:8000/smk/ppdb"
+                       style="display: inline-flex; align-items: center; gap: 9px; background: #FDB913; color: #0a0a0a; font-weight: 800; font-size: 14px; padding: 14px 30px; border-radius: 12px; text-decoration: none; transition: opacity 0.15s;"
+                       onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+                        <span class="material-symbols-outlined" style="font-size: 18px; line-height: 1;">how_to_reg</span>
+                        Daftar Sekarang
+                    </a>
+                                        <div>
+                        <div style="color: rgba(255,255,255,0.82); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 4px;">Batas Pendaftaran</div>
+                        <div style="color: #ffffff; font-weight: 700; font-size: 15px;">7 April 2026</div>
+                    </div>
+                                    </div>
+            </div>
+
+            
+                        <div class="w-full lg:w-auto shrink-0" style="min-width: 300px; max-width: 360px;">
+                <div style="color: rgba(255,255,255,0.82); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.25em; margin-bottom: 18px;">Waktu Tersisa</div>
+
+                <div id="ppdb-countdown" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;"
+                     data-target="2026-04-07T23:59:59+00:00">
+
+                    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 26px 14px; text-align: center;">
+                        <div id="ppdb-days" style="font-size: 3rem; font-weight: 900; color: #ffffff; font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.03em;">00</div>
+                        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(255,255,255,0.75); margin-top: 10px; font-weight: 600;">Hari</div>
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 26px 14px; text-align: center;">
+                        <div id="ppdb-hours" style="font-size: 3rem; font-weight: 900; color: #ffffff; font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.03em;">00</div>
+                        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(255,255,255,0.75); margin-top: 10px; font-weight: 600;">Jam</div>
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 26px 14px; text-align: center;">
+                        <div id="ppdb-minutes" style="font-size: 3rem; font-weight: 900; color: #ffffff; font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.03em;">00</div>
+                        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(255,255,255,0.75); margin-top: 10px; font-weight: 600;">Menit</div>
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 26px 14px; text-align: center;">
+                        <div id="ppdb-seconds" style="font-size: 3rem; font-weight: 900; color: #ffffff; font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.03em;">00</div>
+                        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(255,255,255,0.75); margin-top: 10px; font-weight: 600;">Detik</div>
+                    </div>
+                </div>
+
+                <p style="color: rgba(255,255,255,0.68); font-size: 11px; line-height: 1.6; margin-top: 14px;">
+                    Waktu tersisa hingga penutupan fase pendaftaran. Segera lengkapi dokumen Anda.
+                </p>
+            </div>
+            
+        </div>
+    </div>
+
+    
+    <div style="border-top: 1px solid rgba(255,255,255,0.06); padding: 14px 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+            <span style="color: rgba(255,255,255,0.65); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em;">SMK Putra Pakuan</span>
+            <span style="color: rgba(255,255,255,0.50); font-size: 11px;">© Putra Pakuan Education Group</span>
+        </div>
+    </div>
+</section>
+
+
+<script>
+(function () {
+    var countdownContainer = document.getElementById('ppdb-countdown');
+    if (!countdownContainer) return;
+
+    var targetIso = countdownContainer.dataset.target;
+    if (!targetIso) return;
+
+    var targetDate = new Date(targetIso);
+
+    function pad(value) {
+        return String(value).padStart(2, '0');
+    }
+
+    function updateCountdown() {
+        var now = new Date();
+        var diff = targetDate - now;
+
+        if (diff <= 0) {
+            document.getElementById('ppdb-days').textContent = '00';
+            document.getElementById('ppdb-hours').textContent = '00';
+            document.getElementById('ppdb-minutes').textContent = '00';
+            document.getElementById('ppdb-seconds').textContent = '00';
+            clearInterval(timer);
+            return;
+        }
+
+        var totalSeconds = Math.floor(diff / 1000);
+        var days = Math.floor(totalSeconds / 86400);
+        var hours = Math.floor((totalSeconds % 86400) / 3600);
+        var minutes = Math.floor((totalSeconds % 3600) / 60);
+        var seconds = totalSeconds % 60;
+
+        document.getElementById('ppdb-days').textContent = pad(days);
+        document.getElementById('ppdb-hours').textContent = pad(hours);
+        document.getElementById('ppdb-minutes').textContent = pad(minutes);
+        document.getElementById('ppdb-seconds').textContent = pad(seconds);
+    }
+
+    updateCountdown();
+    var timer = setInterval(updateCountdown, 1000);
+})();
+</script>
+
+
+<section class="w-full bg-white py-24">
+    <div class="max-w-7xl mx-auto px-4 md:px-10">
+
+        
+        <div class="flex items-center gap-3 mb-14">
+            <div class="h-px w-12 bg-slate-300"></div>
+            <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Sambutan Kepala Sekolah</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+
+            
+            <div class="flex flex-col gap-6">
+                <div class="overflow-hidden rounded-2xl bg-slate-100 aspect-4/5">
+                    <img src="/images/cms/smk/kepsek_SMK_28babcaf-4818-401e-ab61-2161b283a8ca.png"
+                         alt="Apid Sutarno, S.Kom, Gr"
+                         class="w-full h-full object-cover object-top grayscale-20 hover:grayscale-0 transition-all duration-700">
+                </div>
+                <div class="flex flex-col gap-1 px-1">
+                    <p class="text-slate-900 font-bold text-xl leading-snug">Apid Sutarno, S.Kom, Gr</p>
+                    <p class="text-slate-500 text-sm">Kepala SMK Putra Pakuan, SMK Putra Pakuan</p>
+                </div>
+            </div>
+
+            
+            <div class="flex flex-col justify-center gap-8 py-4">
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight tracking-tight">
+                    Selamat<br>Datang.
+                </h2>
+
+                <blockquote class="text-slate-600 text-lg md:text-xl leading-relaxed font-light border-l-2 border-slate-200 pl-6">
+                    "Bismillahirrahmanirrahim
+
+Assalamualaikum warahmatullahi wabarakatuh
+
+Alhamdulillahi rabbil&#039;alamin kami panjatkan kehadlirat Allah SWT, bahwasannya dengan rahmat dan karunia-nya akhirnya website sekolah ini dengan alamat http://smk.putrapakuan.sch.id/ dapat kami perbaharui.
+
+Kami mengucapkan selamat datang di Website kami Sekolah Menengah Kejuruan Putra Pakuan yang saya tujukan untuk seluruh guru, karyawan dan siswa siswi serta khalayak umum guna dapat mengakses seluruh informasi tentang segala profil, aktivitas/kegiatan serta fasilitas  yang ada di sekolah kami.
+
+Kami berharap, dengan adanya media layanan informasi situs ini semoga dapat mewujudkan hubungan silaturahmi yang lebih erat lagi, menambah wawasan, mempermudah dan mempercepat proses dalam mendapatkan informasi yang dibutuhkan.
+
+ 
+
+Terimakasih sudah berkunjung di website kami"
+                </blockquote>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="w-full bg-white">
+
+    
+    <div class="max-w-7xl mx-auto px-6 md:px-12 pt-20 md:pt-28 pb-14 md:pb-20">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-0.5 bg-[#FDB913]"></div>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.25em]">Mengapa Kami</span>
+        </div>
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <h2 class="text-slate-900 text-4xl md:text-5xl lg:text-6xl font-black leading-tight max-w-xl">
+                Keunggulan<br>SMK Putra Pakuan
+            </h2>
+
+        </div>
+    </div>
+
+    
+    <div class="flex flex-col lg:flex-row" id="keunggulan-root">
+
+        
+        <div class="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center lg:w-2/5 xl:w-[42%] shrink-0 bg-white border-r border-slate-100 z-10">
+            <div class="px-6 md:px-12 xl:px-20 py-8 lg:py-0">
+                                                <button type="button"
+                        data-idx="0"
+                        class="keunggulan-tab flex items-start gap-5 w-full text-left py-6 md:py-7 border-b border-slate-100 focus:outline-none">
+
+                    
+                    <span class="tab-num shrink-0 text-6xl md:text-7xl font-black leading-none tabular-nums select-none transition-colors duration-300"
+                          style="color:#FDB913">
+                        01
+                    </span>
+
+                    
+                    <div class="pt-1.5 overflow-hidden">
+                        <span class="material-symbols-outlined text-xl tab-icon transition-colors duration-300"
+                              style="color:#64748b">factory</span>
+                        <h3 class="tab-title font-bold text-lg md:text-xl leading-snug mt-1 transition-colors duration-300"
+                            style="color:#0f172a">Link and Match Industri</h3>
+                        <p class="tab-desc text-slate-500 text-sm leading-relaxed mt-2 overflow-hidden transition-all duration-500"
+                           style="max-height:8rem;opacity:1">50+ mitra industri terkemuka untuk magang dan penempatan kerja langsung setelah lulus.</p>
+                    </div>
+                </button>
+                                <button type="button"
+                        data-idx="1"
+                        class="keunggulan-tab flex items-start gap-5 w-full text-left py-6 md:py-7 border-b border-slate-100 focus:outline-none">
+
+                    
+                    <span class="tab-num shrink-0 text-6xl md:text-7xl font-black leading-none tabular-nums select-none transition-colors duration-300"
+                          style="color:#f1f5f9">
+                        02
+                    </span>
+
+                    
+                    <div class="pt-1.5 overflow-hidden">
+                        <span class="material-symbols-outlined text-xl tab-icon transition-colors duration-300"
+                              style="color:#cbd5e1">workspace_premium</span>
+                        <h3 class="tab-title font-bold text-lg md:text-xl leading-snug mt-1 transition-colors duration-300"
+                            style="color:#94a3b8">Sertifikasi Kompetensi</h3>
+                        <p class="tab-desc text-slate-500 text-sm leading-relaxed mt-2 overflow-hidden transition-all duration-500"
+                           style="max-height:0;opacity:0">Siswa mendapat sertifikat BNSP dan industri yang diakui secara nasional dan internasional.</p>
+                    </div>
+                </button>
+                                <button type="button"
+                        data-idx="2"
+                        class="keunggulan-tab flex items-start gap-5 w-full text-left py-6 md:py-7 border-b border-slate-100 focus:outline-none">
+
+                    
+                    <span class="tab-num shrink-0 text-6xl md:text-7xl font-black leading-none tabular-nums select-none transition-colors duration-300"
+                          style="color:#f1f5f9">
+                        03
+                    </span>
+
+                    
+                    <div class="pt-1.5 overflow-hidden">
+                        <span class="material-symbols-outlined text-xl tab-icon transition-colors duration-300"
+                              style="color:#cbd5e1">engineering</span>
+                        <h3 class="tab-title font-bold text-lg md:text-xl leading-snug mt-1 transition-colors duration-300"
+                            style="color:#94a3b8">Teaching Factory</h3>
+                        <p class="tab-desc text-slate-500 text-sm leading-relaxed mt-2 overflow-hidden transition-all duration-500"
+                           style="max-height:0;opacity:0">Workshop industri nyata di dalam sekolah memberikan pengalaman kerja profesional sejak dini.</p>
+                    </div>
+                </button>
+                                <button type="button"
+                        data-idx="3"
+                        class="keunggulan-tab flex items-start gap-5 w-full text-left py-6 md:py-7  focus:outline-none">
+
+                    
+                    <span class="tab-num shrink-0 text-6xl md:text-7xl font-black leading-none tabular-nums select-none transition-colors duration-300"
+                          style="color:#f1f5f9">
+                        04
+                    </span>
+
+                    
+                    <div class="pt-1.5 overflow-hidden">
+                        <span class="material-symbols-outlined text-xl tab-icon transition-colors duration-300"
+                              style="color:#cbd5e1">rocket_launch</span>
+                        <h3 class="tab-title font-bold text-lg md:text-xl leading-snug mt-1 transition-colors duration-300"
+                            style="color:#94a3b8">Wirausaha Muda</h3>
+                        <p class="tab-desc text-slate-500 text-sm leading-relaxed mt-2 overflow-hidden transition-all duration-500"
+                           style="max-height:0;opacity:0">Program inkubasi bisnis dan entrepreneurship membentuk wirausahawan muda yang inovatif.</p>
+                    </div>
+                </button>
+                            </div>
+        </div>
+
+        
+                <div class="relative flex-1 h-[70vw] lg:h-screen overflow-hidden bg-slate-900">
+                        <div class="keunggulan-img absolute inset-0 transition-opacity duration-700"
+                 style="opacity:1;z-index:1">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1400&amp;q=80&amp;auto=format&amp;fit=crop"
+                     alt="Link and Match Industri"
+                     class="w-full h-full object-cover"
+                     loading="eager">
+                
+                <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent"></div>
+                <div class="absolute inset-0 bg-linear-to-r from-black/30 to-transparent"></div>
+
+                
+                <div class="absolute bottom-8 right-8 text-right">
+                    <p class="text-white/50 text-[10px] uppercase tracking-widest mb-1">
+                        01 / 04
+                    </p>
+                    <p class="text-white font-bold text-lg md:text-xl">Link and Match Industri</p>
+                </div>
+
+                
+                <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-white/10">
+                    <div class="keunggulan-progress h-full bg-[#FDB913] w-0 transition-none"></div>
+                </div>
+            </div>
+                        <div class="keunggulan-img absolute inset-0 transition-opacity duration-700"
+                 style="opacity:0;z-index:0">
+                <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1400&amp;q=80&amp;auto=format&amp;fit=crop"
+                     alt="Sertifikasi Kompetensi"
+                     class="w-full h-full object-cover"
+                     loading="lazy">
+                
+                <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent"></div>
+                <div class="absolute inset-0 bg-linear-to-r from-black/30 to-transparent"></div>
+
+                
+                <div class="absolute bottom-8 right-8 text-right">
+                    <p class="text-white/50 text-[10px] uppercase tracking-widest mb-1">
+                        02 / 04
+                    </p>
+                    <p class="text-white font-bold text-lg md:text-xl">Sertifikasi Kompetensi</p>
+                </div>
+
+                
+                <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-white/10">
+                    <div class="keunggulan-progress h-full bg-[#FDB913] w-0 transition-none"></div>
+                </div>
+            </div>
+                        <div class="keunggulan-img absolute inset-0 transition-opacity duration-700"
+                 style="opacity:0;z-index:0">
+                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&amp;q=80&amp;auto=format&amp;fit=crop"
+                     alt="Teaching Factory"
+                     class="w-full h-full object-cover"
+                     loading="lazy">
+                
+                <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent"></div>
+                <div class="absolute inset-0 bg-linear-to-r from-black/30 to-transparent"></div>
+
+                
+                <div class="absolute bottom-8 right-8 text-right">
+                    <p class="text-white/50 text-[10px] uppercase tracking-widest mb-1">
+                        03 / 04
+                    </p>
+                    <p class="text-white font-bold text-lg md:text-xl">Teaching Factory</p>
+                </div>
+
+                
+                <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-white/10">
+                    <div class="keunggulan-progress h-full bg-[#FDB913] w-0 transition-none"></div>
+                </div>
+            </div>
+                        <div class="keunggulan-img absolute inset-0 transition-opacity duration-700"
+                 style="opacity:0;z-index:0">
+                <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?w=1400&amp;q=80&amp;auto=format&amp;fit=crop"
+                     alt="Wirausaha Muda"
+                     class="w-full h-full object-cover"
+                     loading="lazy">
+                
+                <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent"></div>
+                <div class="absolute inset-0 bg-linear-to-r from-black/30 to-transparent"></div>
+
+                
+                <div class="absolute bottom-8 right-8 text-right">
+                    <p class="text-white/50 text-[10px] uppercase tracking-widest mb-1">
+                        04 / 04
+                    </p>
+                    <p class="text-white font-bold text-lg md:text-xl">Wirausaha Muda</p>
+                </div>
+
+                
+                <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-white/10">
+                    <div class="keunggulan-progress h-full bg-[#FDB913] w-0 transition-none"></div>
+                </div>
+            </div>
+                    </div>
+    </div>
+</section>
+<script>
+(function () {
+    var root = document.getElementById('keunggulan-root');
+    if (!root) return;
+
+    var tabs  = Array.from(root.querySelectorAll('.keunggulan-tab'));
+    var imgs  = Array.from(root.querySelectorAll('.keunggulan-img'));
+    var bars  = Array.from(root.querySelectorAll('.keunggulan-progress'));
+    var DURATION = 5000;
+    var current = 0;
+    var timer, barTimer;
+
+    function activate(i, resetAuto) {
+        tabs.forEach(function (tab, j) {
+            var num   = tab.querySelector('.tab-num');
+            var title = tab.querySelector('.tab-title');
+            var icon  = tab.querySelector('.tab-icon');
+            var desc  = tab.querySelector('.tab-desc');
+            var active = j === i;
+            num.style.color   = active ? '#FDB913' : '#f1f5f9';
+            title.style.color = active ? '#0f172a'  : '#94a3b8';
+            icon.style.color  = active ? '#64748b'  : '#cbd5e1';
+            desc.style.maxHeight = active ? '8rem' : '0';
+            desc.style.opacity   = active ? '1'    : '0';
+        });
+        imgs.forEach(function (img, j) {
+            img.style.opacity = j === i ? '1' : '0';
+            img.style.zIndex  = j === i ? '1' : '0';
+        });
+        bars.forEach(function (bar) {
+            bar.style.transition = 'none';
+            bar.style.width = '0%';
+        });
+        if (resetAuto !== false) {
+            clearInterval(timer);
+            clearTimeout(barTimer);
+            animateBar(i);
+            timer = setInterval(function () {
+                current = (current + 1) % tabs.length;
+                activate(current);
+            }, DURATION);
+        }
+        current = i;
+    }
+
+    function animateBar(i) {
+        var bar = bars[i];
+        if (!bar) return;
+        barTimer = setTimeout(function () {
+            bar.style.transition = 'width ' + DURATION + 'ms linear';
+            bar.style.width = '100%';
+        }, 30);
+    }
+
+    activate(0, true);
+
+    tabs.forEach(function (tab, i) {
+        tab.addEventListener('click', function () { activate(i, true); });
+    });
+})();
+</script>
+
+
+<section class="w-full py-20 md:py-28" style="background: #020617;">
+
+    
+    <div class="max-w-7xl mx-auto px-6 md:px-12 mb-14 md:mb-16">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-px" style="background:#FDB913"></div>
+                    <span class="text-[11px] font-bold uppercase tracking-[0.25em]" style="color:#FDB913">
+                        Kompetensi Keahlian
+                    </span>
+                </div>
+                <h2 style="color: #ffffff; font-weight: 900; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15;">
+                    Jurusan &amp; Program Keahlian
+                </h2>
+            </div>
+
+        </div>
+    </div>
+
+    
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                                    <a href="http://127.0.0.1:8000/smk/ppdb"
+               class="group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer"
+               style="background:#111">
+
+                
+                <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&amp;q=80&amp;auto=format&amp;fit=crop"
+                         alt="Manajemen Perkantoran dan Layanan Bisnis (MPLB)"
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                         loading="lazy">
+                    
+                    <div class="absolute inset-0 transition-opacity duration-300"
+                         style="background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,0.65) 100%)"></div>
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                         style="background:rgba(0,0,0,0.25)"></div>
+
+                    
+                    <div class="absolute top-4 left-4">
+                        <span class="text-sm font-black tabular-nums px-2.5 py-1 rounded-lg"
+                              style="background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.5);backdrop-filter:blur(4px)">
+                            01
+                        </span>
+                    </div>
+
+                    
+                    <div class="absolute top-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+                         style="background:#3b82f6"></div>
+                </div>
+
+                
+                <div class="flex flex-col flex-1 p-5 md:p-6" style="background:#111">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                             style="background:#3b82f618">
+                            <span class="material-symbols-outlined text-base leading-none"
+                                  style="color:#3b82f6">business_center</span>
+                        </div>
+                        <div class="w-px h-4" style="background:rgba(255,255,255,0.1)"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest" style="color:#3b82f6">
+                            Kompetensi Keahlian
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-white text-base md:text-lg leading-snug mb-2">Manajemen Perkantoran dan Layanan Bisnis (MPLB)</h3>
+                    <p class="text-sm leading-relaxed flex-1" style="color:rgba(255,255,255,0.45)">Administrasi perkantoran modern, pelayanan bisnis, pengarsipan digital, dan komunikasi profesional.</p>
+                    <div class="flex items-center gap-1.5 mt-4 text-xs font-semibold transition-colors duration-300 group-hover:text-white"
+                         style="color:rgba(255,255,255,0.3)">
+                        Pelajari Selengkapnya
+                        <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+                    </div>
+                </div>
+            </a>
+                                    <a href="http://127.0.0.1:8000/smk/ppdb"
+               class="group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer"
+               style="background:#111">
+
+                
+                <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&amp;q=80&amp;auto=format&amp;fit=crop"
+                         alt="Akuntansi dan Keuangan Lembaga (AKL)"
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                         loading="lazy">
+                    
+                    <div class="absolute inset-0 transition-opacity duration-300"
+                         style="background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,0.65) 100%)"></div>
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                         style="background:rgba(0,0,0,0.25)"></div>
+
+                    
+                    <div class="absolute top-4 left-4">
+                        <span class="text-sm font-black tabular-nums px-2.5 py-1 rounded-lg"
+                              style="background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.5);backdrop-filter:blur(4px)">
+                            02
+                        </span>
+                    </div>
+
+                    
+                    <div class="absolute top-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+                         style="background:#f97316"></div>
+                </div>
+
+                
+                <div class="flex flex-col flex-1 p-5 md:p-6" style="background:#111">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                             style="background:#f9731618">
+                            <span class="material-symbols-outlined text-base leading-none"
+                                  style="color:#f97316">account_balance</span>
+                        </div>
+                        <div class="w-px h-4" style="background:rgba(255,255,255,0.1)"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest" style="color:#f97316">
+                            Kompetensi Keahlian
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-white text-base md:text-lg leading-snug mb-2">Akuntansi dan Keuangan Lembaga (AKL)</h3>
+                    <p class="text-sm leading-relaxed flex-1" style="color:rgba(255,255,255,0.45)">Akuntansi dasar hingga lanjutan, perpajakan, pengelolaan keuangan, dan praktik aplikasi akuntansi.</p>
+                    <div class="flex items-center gap-1.5 mt-4 text-xs font-semibold transition-colors duration-300 group-hover:text-white"
+                         style="color:rgba(255,255,255,0.3)">
+                        Pelajari Selengkapnya
+                        <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+                    </div>
+                </div>
+            </a>
+                                    <a href="http://127.0.0.1:8000/smk/ppdb"
+               class="group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer"
+               style="background:#111">
+
+                
+                <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+                    <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=900&amp;q=80&amp;auto=format&amp;fit=crop"
+                         alt="Teknik Komputer Jaringan (TKJ)"
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                         loading="lazy">
+                    
+                    <div class="absolute inset-0 transition-opacity duration-300"
+                         style="background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,0.65) 100%)"></div>
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                         style="background:rgba(0,0,0,0.25)"></div>
+
+                    
+                    <div class="absolute top-4 left-4">
+                        <span class="text-sm font-black tabular-nums px-2.5 py-1 rounded-lg"
+                              style="background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.5);backdrop-filter:blur(4px)">
+                            03
+                        </span>
+                    </div>
+
+                    
+                    <div class="absolute top-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+                         style="background:#eab308"></div>
+                </div>
+
+                
+                <div class="flex flex-col flex-1 p-5 md:p-6" style="background:#111">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                             style="background:#eab30818">
+                            <span class="material-symbols-outlined text-base leading-none"
+                                  style="color:#eab308">router</span>
+                        </div>
+                        <div class="w-px h-4" style="background:rgba(255,255,255,0.1)"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest" style="color:#eab308">
+                            Kompetensi Keahlian
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-white text-base md:text-lg leading-snug mb-2">Teknik Komputer Jaringan (TKJ)</h3>
+                    <p class="text-sm leading-relaxed flex-1" style="color:rgba(255,255,255,0.45)">Jaringan komputer, administrasi server, keamanan siber, dan troubleshooting infrastruktur digital.</p>
+                    <div class="flex items-center gap-1.5 mt-4 text-xs font-semibold transition-colors duration-300 group-hover:text-white"
+                         style="color:rgba(255,255,255,0.3)">
+                        Pelajari Selengkapnya
+                        <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+                    </div>
+                </div>
+            </a>
+                                    <a href="http://127.0.0.1:8000/smk/ppdb"
+               class="group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer"
+               style="background:#111">
+
+                
+                <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+                    <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=900&amp;q=80&amp;auto=format&amp;fit=crop"
+                         alt="Desain Komunikasi Visual (DKV)"
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                         loading="lazy">
+                    
+                    <div class="absolute inset-0 transition-opacity duration-300"
+                         style="background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,0.65) 100%)"></div>
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                         style="background:rgba(0,0,0,0.25)"></div>
+
+                    
+                    <div class="absolute top-4 left-4">
+                        <span class="text-sm font-black tabular-nums px-2.5 py-1 rounded-lg"
+                              style="background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.5);backdrop-filter:blur(4px)">
+                            04
+                        </span>
+                    </div>
+
+                    
+                    <div class="absolute top-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+                         style="background:#ef4444"></div>
+                </div>
+
+                
+                <div class="flex flex-col flex-1 p-5 md:p-6" style="background:#111">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                             style="background:#ef444418">
+                            <span class="material-symbols-outlined text-base leading-none"
+                                  style="color:#ef4444">palette</span>
+                        </div>
+                        <div class="w-px h-4" style="background:rgba(255,255,255,0.1)"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest" style="color:#ef4444">
+                            Kompetensi Keahlian
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-white text-base md:text-lg leading-snug mb-2">Desain Komunikasi Visual (DKV)</h3>
+                    <p class="text-sm leading-relaxed flex-1" style="color:rgba(255,255,255,0.45)">Desain grafis, branding visual, ilustrasi digital, fotografi, dan produksi konten kreatif.</p>
+                    <div class="flex items-center gap-1.5 mt-4 text-xs font-semibold transition-colors duration-300 group-hover:text-white"
+                         style="color:rgba(255,255,255,0.3)">
+                        Pelajari Selengkapnya
+                        <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+                    </div>
+                </div>
+            </a>
+                                    <a href="http://127.0.0.1:8000/smk/ppdb"
+               class="group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer"
+               style="background:#111">
+
+                
+                <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+                    <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=900&amp;q=80&amp;auto=format&amp;fit=crop"
+                         alt="Teknik Kendaraan Ringan (TKR)"
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                         loading="lazy">
+                    
+                    <div class="absolute inset-0 transition-opacity duration-300"
+                         style="background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,0.65) 100%)"></div>
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                         style="background:rgba(0,0,0,0.25)"></div>
+
+                    
+                    <div class="absolute top-4 left-4">
+                        <span class="text-sm font-black tabular-nums px-2.5 py-1 rounded-lg"
+                              style="background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.5);backdrop-filter:blur(4px)">
+                            05
+                        </span>
+                    </div>
+
+                    
+                    <div class="absolute top-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+                         style="background:#10b981"></div>
+                </div>
+
+                
+                <div class="flex flex-col flex-1 p-5 md:p-6" style="background:#111">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                             style="background:#10b98118">
+                            <span class="material-symbols-outlined text-base leading-none"
+                                  style="color:#10b981">directions_car</span>
+                        </div>
+                        <div class="w-px h-4" style="background:rgba(255,255,255,0.1)"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest" style="color:#10b981">
+                            Kompetensi Keahlian
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-white text-base md:text-lg leading-snug mb-2">Teknik Kendaraan Ringan (TKR)</h3>
+                    <p class="text-sm leading-relaxed flex-1" style="color:rgba(255,255,255,0.45)">Perawatan, perbaikan, diagnosis sistem kendaraan ringan, dan praktik otomotif modern.</p>
+                    <div class="flex items-center gap-1.5 mt-4 text-xs font-semibold transition-colors duration-300 group-hover:text-white"
+                         style="color:rgba(255,255,255,0.3)">
+                        Pelajari Selengkapnya
+                        <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+                    </div>
+                </div>
+            </a>
+                                    <a href="http://127.0.0.1:8000/smk/ppdb"
+               class="group relative flex flex-col overflow-hidden rounded-2xl cursor-pointer"
+               style="background:#111">
+
+                
+                <div class="relative overflow-hidden" style="aspect-ratio:4/3">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&amp;q=80&amp;auto=format&amp;fit=crop"
+                         alt="Teknik Sepeda Motor (TSM)"
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                         loading="lazy">
+                    
+                    <div class="absolute inset-0 transition-opacity duration-300"
+                         style="background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,0.65) 100%)"></div>
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                         style="background:rgba(0,0,0,0.25)"></div>
+
+                    
+                    <div class="absolute top-4 left-4">
+                        <span class="text-sm font-black tabular-nums px-2.5 py-1 rounded-lg"
+                              style="background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.5);backdrop-filter:blur(4px)">
+                            06
+                        </span>
+                    </div>
+
+                    
+                    <div class="absolute top-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+                         style="background:#8b5cf6"></div>
+                </div>
+
+                
+                <div class="flex flex-col flex-1 p-5 md:p-6" style="background:#111">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                             style="background:#8b5cf618">
+                            <span class="material-symbols-outlined text-base leading-none"
+                                  style="color:#8b5cf6">two_wheeler</span>
+                        </div>
+                        <div class="w-px h-4" style="background:rgba(255,255,255,0.1)"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest" style="color:#8b5cf6">
+                            Kompetensi Keahlian
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-white text-base md:text-lg leading-snug mb-2">Teknik Sepeda Motor (TSM)</h3>
+                    <p class="text-sm leading-relaxed flex-1" style="color:rgba(255,255,255,0.45)">Servis, tune up, kelistrikan, dan perawatan sepeda motor sesuai standar bengkel industri.</p>
+                    <div class="flex items-center gap-1.5 mt-4 text-xs font-semibold transition-colors duration-300 group-hover:text-white"
+                         style="color:rgba(255,255,255,0.3)">
+                        Pelajari Selengkapnya
+                        <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+                    </div>
+                </div>
+            </a>
+                    </div>
+    </div>
+</section>
+
+
+<section class="w-full py-20 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 md:px-10">
+
+        <div class="flex items-end justify-between mb-10 gap-4 flex-wrap">
+            <div>
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-5 h-px bg-[#FDB913]"></div>
+                    <span class="text-xs font-semibold text-[#FDB913] uppercase tracking-[0.18em]">Dokumentasi</span>
+                </div>
+                <h2 class="text-slate-900 text-2xl md:text-3xl font-bold">Galeri Terbaru</h2>
+                                <p class="text-slate-500 text-sm mt-2 max-w-md">Dokumentasi kegiatan dan momen spesial terbaru dari SMK Putra Pakuan.</p>
+                            </div>
+            <a href="http://127.0.0.1:8000/smk/galeri"
+               class="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-sm font-medium transition-colors">
+                Lihat Semua <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+        </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <a href="http://127.0.0.1:8000/smk/galeri"
+               class="group relative aspect-4/3 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 block bg-slate-200">
+                <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&amp;q=80"
+                     alt="Pameran Karya Siswa Hari Pendidikan Nasional"
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                     loading="lazy">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-end p-4">
+                    <p class="text-white font-semibold text-sm leading-snug opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">Pameran Karya Siswa Hari Pendidikan Nasional</p>
+                </div>
+            </a>
+                        <a href="http://127.0.0.1:8000/smk/galeri"
+               class="group relative aspect-4/3 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 block bg-slate-200">
+                <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&amp;q=80"
+                     alt="Penerimaan Piala LKS Provinsi Jawa Barat"
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                     loading="lazy">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-end p-4">
+                    <p class="text-white font-semibold text-sm leading-snug opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">Penerimaan Piala LKS Provinsi Jawa Barat</p>
+                </div>
+            </a>
+                        <a href="http://127.0.0.1:8000/smk/galeri"
+               class="group relative aspect-4/3 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 block bg-slate-200">
+                <img src="https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?w=800&amp;q=80"
+                     alt="Kunjungan Industri ke Pabrik Otomotif"
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                     loading="lazy">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-end p-4">
+                    <p class="text-white font-semibold text-sm leading-snug opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">Kunjungan Industri ke Pabrik Otomotif</p>
+                </div>
+            </a>
+                    </div>
+        
+    </div>
+</section>
+
+
+<section class="w-full py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 md:px-10">
+
+        <div class="flex items-end justify-between mb-10 gap-4 flex-wrap">
+            <div>
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-5 h-px bg-[#FDB913]"></div>
+                    <span class="text-xs font-semibold text-[#FDB913] uppercase tracking-[0.18em]">Informasi</span>
+                </div>
+                <h2 class="text-slate-900 text-2xl md:text-3xl font-bold">Berita Terbaru</h2>
+            </div>
+            <a href="http://127.0.0.1:8000/smk/berita"
+               class="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-sm font-medium transition-colors">
+                Lihat Semua <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+        </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <a href="http://127.0.0.1:8000/smk/berita/peringatan-hari-pendidikan-nasional-2026-smk-putra-pakuan-6fb5aa"
+               class="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all duration-300 overflow-hidden">
+                <div class="relative h-48 overflow-hidden bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?w=900&amp;q=80"
+                         alt="Peringatan Hari Pendidikan Nasional 2026 SMK Putra Pakuan"
+                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                         loading="lazy">
+                                        <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-sm text-white text-[10px] font-semibold px-2 py-1 rounded uppercase tracking-wide">
+                        Kegiatan
+                    </div>
+                                    </div>
+                <div class="flex flex-col flex-1 p-5 gap-2.5">
+                    <p class="text-xs text-slate-400">
+                        2 May 2026
+                    </p>
+                    <h3 class="font-bold text-slate-900 text-sm leading-snug group-hover:text-slate-700 transition-colors line-clamp-2">
+                        Peringatan Hari Pendidikan Nasional 2026 SMK Putra Pakuan
+                    </h3>
+                                        <p class="text-slate-500 text-xs leading-relaxed line-clamp-2 flex-1">
+                        SMK Putra Pakuan menyelenggarakan upacara dan serangkaian kegiatan apresiasi pendidikan dalam rangka memperingati Hari Pendidikan Nasional (Hardiknas) 2 Mei 2026.
+                    </p>
+                                        <div class="flex items-center gap-1 text-xs font-semibold text-slate-500 group-hover:text-slate-900 transition-colors mt-auto pt-1">
+                        Baca selengkapnya <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                    </div>
+                </div>
+            </a>
+                        <a href="http://127.0.0.1:8000/smk/berita/jadwal-ujian-akhir-semester-genap-tahun-ajaran-20252026-675f94"
+               class="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all duration-300 overflow-hidden">
+                <div class="relative h-48 overflow-hidden bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&amp;q=80"
+                         alt="Jadwal Ujian Akhir Semester Genap Tahun Ajaran 2025/2026"
+                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                         loading="lazy">
+                                        <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-sm text-white text-[10px] font-semibold px-2 py-1 rounded uppercase tracking-wide">
+                        Pengumuman
+                    </div>
+                                    </div>
+                <div class="flex flex-col flex-1 p-5 gap-2.5">
+                    <p class="text-xs text-slate-400">
+                        25 Mar 2026
+                    </p>
+                    <h3 class="font-bold text-slate-900 text-sm leading-snug group-hover:text-slate-700 transition-colors line-clamp-2">
+                        Jadwal Ujian Akhir Semester Genap Tahun Ajaran 2025/2026
+                    </h3>
+                                        <p class="text-slate-500 text-xs leading-relaxed line-clamp-2 flex-1">
+                        SMK Putra Pakuan mengumumkan jadwal Ujian Akhir Semester (UAS) Genap Tahun Ajaran 2025/2026. Ujian akan dilaksanakan mulai tanggal 4 hingga 14 Juni 2026.
+                    </p>
+                                        <div class="flex items-center gap-1 text-xs font-semibold text-slate-500 group-hover:text-slate-900 transition-colors mt-auto pt-1">
+                        Baca selengkapnya <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                    </div>
+                </div>
+            </a>
+                        <a href="http://127.0.0.1:8000/smk/berita/smk-putra-pakuan-raih-juara-1-lks-tingkat-provinsi-jawa-barat-8e1c3d"
+               class="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all duration-300 overflow-hidden">
+                <div class="relative h-48 overflow-hidden bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=900&amp;q=80"
+                         alt="SMK Putra Pakuan Raih Juara 1 LKS Tingkat Provinsi Jawa Barat"
+                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                         loading="lazy">
+                                        <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-sm text-white text-[10px] font-semibold px-2 py-1 rounded uppercase tracking-wide">
+                        Prestasi
+                    </div>
+                                    </div>
+                <div class="flex flex-col flex-1 p-5 gap-2.5">
+                    <p class="text-xs text-slate-400">
+                        21 Mar 2026
+                    </p>
+                    <h3 class="font-bold text-slate-900 text-sm leading-snug group-hover:text-slate-700 transition-colors line-clamp-2">
+                        SMK Putra Pakuan Raih Juara 1 LKS Tingkat Provinsi Jawa Barat
+                    </h3>
+                                        <p class="text-slate-500 text-xs leading-relaxed line-clamp-2 flex-1">
+                        Tim siswa SMK Putra Pakuan berhasil meraih juara pertama dalam Lomba Kompetensi Siswa (LKS) bidang IT Network Systems Administration tingkat Provinsi Jawa Barat yang diselenggarakan di Bandung.
+                    </p>
+                                        <div class="flex items-center gap-1 text-xs font-semibold text-slate-500 group-hover:text-slate-900 transition-colors mt-auto pt-1">
+                        Baca selengkapnya <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                    </div>
+                </div>
+            </a>
+                    </div>
+        
+    </div>
+</section>
+<script>
+    // Hero Carousel
+    function initHeroCarousel(root = document) {
+        const carouselRoot = root.querySelector('.hero-carousel-container');
+        if (!carouselRoot || carouselRoot.dataset.carouselInitialized === 'true') {
+            return;
+        }
+
+        carouselRoot.dataset.carouselInitialized = 'true';
+
+        const slides = carouselRoot.querySelectorAll('.hero-slide');
+        const dots = carouselRoot.querySelectorAll('.carousel-dot');
+        const prevBtn = carouselRoot.querySelector('#prevBtn');
+        const nextBtn = carouselRoot.querySelector('#nextBtn');
+        const progress = carouselRoot.querySelector('#carouselProgress');
+
+        if (!slides.length || !dots.length || !prevBtn || !nextBtn) {
+            return;
+        }
+
+        let currentIndex = 0;
+        let autoplayTimeout;
+        let progressInterval;
+        let activeVideo = null;
+
+        function stopVideoPlayback() {
+            if (activeVideo) {
+                activeVideo.pause();
+                activeVideo.currentTime = 0;
+                activeVideo.removeEventListener('ended', onVideoEnded);
+                activeVideo = null;
+            }
+        }
+
+        function onVideoEnded() {
+            stopAutoplay();
+            nextSlide();
+            startAutoplay();
+        }
+
+        function setActiveSlide(index) {
+            // Remove active from all
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            // Add active to current
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+
+            currentIndex = index;
+
+            // Hint browser to preload metadata for next slide (small � just duration/dimensions)
+            const nextIdx = (index + 1) % slides.length;
+            const nextVideo = slides[nextIdx]?.querySelector('video');
+            if (nextVideo && nextVideo.readyState === 0) {
+                nextVideo.preload = 'metadata';
+            }
+
+            // Reset progress
+            resetProgress();
+        }
+
+        function nextSlide() {
+            const next = (currentIndex + 1) % slides.length;
+            setActiveSlide(next);
+        }
+
+        function prevSlide() {
+            const prev = (currentIndex - 1 + slides.length) % slides.length;
+            setActiveSlide(prev);
+        }
+
+        function resetProgress() {
+            if (!progress) {
+                return;
+            }
+            progress.classList.remove('active');
+            void progress.offsetWidth; // Trigger reflow
+            progress.classList.add('active');
+        }
+
+        function startAutoplay() {
+            stopAutoplay();
+
+            const activeSlide = slides[currentIndex];
+            const video = activeSlide.querySelector('video');
+
+            if (video) {
+                stopVideoPlayback();
+                activeVideo = video;
+
+                // Set preload so browser can stream on play() � do NOT call load()
+                // which would eagerly download the entire video file.
+                if (video.readyState === 0) {
+                    video.preload = 'auto';
+                }
+
+                video.play().catch(() => {
+                    // Autoplay may be blocked in some browsers.
+                });
+
+                video.addEventListener('ended', onVideoEnded);
+
+                // If duration isn't known immediately, fallback to 12s.
+                const durationMs = video.duration && !isNaN(video.duration) && isFinite(video.duration)
+                    ? Math.ceil(video.duration * 1000) + 500
+                    : 12000;
+
+                autoplayTimeout = setTimeout(() => {
+                    if (video && !video.ended) {
+                        video.pause();
+                        onVideoEnded();
+                    }
+                }, durationMs);
+
+                if (progress) {
+                    progress.classList.remove('active');
+                }
+            } else {
+                stopVideoPlayback();
+                resetProgress();
+                autoplayTimeout = setTimeout(() => {
+                    nextSlide();
+                    startAutoplay();
+                }, 5000);
+            }
+        }
+
+        function pauseAutoplay() {
+            if (autoplayTimeout) {
+                clearTimeout(autoplayTimeout);
+                autoplayTimeout = null;
+            }
+
+            if (activeVideo) {
+                activeVideo.pause();
+            }
+
+            if (progress) {
+                progress.classList.remove('active');
+            }
+        }
+
+        function resumeAutoplay() {
+            const activeSlide = slides[currentIndex];
+            const video = activeSlide.querySelector('video');
+
+            if (video) {
+                activeVideo = video;
+                video.play().catch(() => {
+                    // autoplay may be blocked; continue with fallback
+                });
+
+                video.removeEventListener('ended', onVideoEnded);
+                video.addEventListener('ended', onVideoEnded);
+
+                const remainingMs = (video.duration && !isNaN(video.duration) && isFinite(video.duration))
+                    ? Math.max(300, Math.ceil((video.duration - video.currentTime) * 1000) + 500)
+                    : 12000;
+
+                autoplayTimeout = setTimeout(() => {
+                    if (video && !video.ended) {
+                        video.pause();
+                        onVideoEnded();
+                    }
+                }, remainingMs);
+
+                if (progress) {
+                    progress.classList.remove('active');
+                }
+            } else {
+                startAutoplay();
+            }
+        }
+
+        function stopAutoplay() {
+            if (autoplayTimeout) {
+                clearTimeout(autoplayTimeout);
+                autoplayTimeout = null;
+            }
+            stopVideoPlayback();
+            if (progress) {
+                progress.classList.remove('active');
+            }
+        }
+
+        // Event listeners
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            startAutoplay();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            startAutoplay();
+        });
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                setActiveSlide(index);
+                startAutoplay();
+            });
+        });
+
+        // Hint metadata only for first video � do NOT call load() here as it
+        // triggers a full download of the video file at page load time.
+        const firstVideo = slides[0]?.querySelector('video');
+        if (firstVideo && firstVideo.readyState === 0) {
+            firstVideo.preload = 'metadata';
+        }
+
+        // Start autoplay (no hover pause)
+        startAutoplay();
+    }
+
+    initHeroCarousel(document);
+    document.addEventListener('htmx:load', (event) => {
+        initHeroCarousel(event.detail?.elt || document);
+    });
+
+</script>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal text-white pt-20 pb-10 border-t-4 border-primary">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 lg:col-span-1 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="relative w-10 h-10 rounded-lg overflow-hidden border border-white/30">
+                            <img src="http://127.0.0.1:8000/images/logo-yayasan.png" alt="SMK Putra Pakuan" class="w-full h-full object-cover" />
+                            <span class="absolute -top-2 -right-2 bg-white text-charcoal rounded-full w-5 h-5 grid place-items-center text-xs font-bold border border-charcoal">�</span>
+                        </div>
+                        <h2 class="text-xl font-black tracking-tight">SMK PUTRA PAKUAN</h2>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Membangun generasi emas Indonesia yang kompeten, kreatif, dan mandiri melalui pendidikan vokasi yang berkualitas dan relevan.
+                    </p>
+                    <div class="flex gap-4">
+                        <a class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all" href="#">
+                            <span class="material-symbols-outlined text-xl">social_leaderboard</span>
+                        </a>
+                        <a class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all" href="#">
+                            <span class="material-symbols-outlined text-xl">language</span>
+                        </a>
+                        <a class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all" href="#">
+                            <span class="material-symbols-outlined text-xl">alternate_email</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-lg font-bold text-primary">Navigasi</h4>
+                    <ul class="space-y-4 text-slate-400 text-sm font-medium">
+                        <li><a class="hover:text-white transition-colors" href="http://127.0.0.1:8000/smk/profil">Profil Sekolah</a></li>
+                        <li><a class="hover:text-white transition-colors" href="http://127.0.0.1:8000/smk/profil#visi-misi">Visi & Misi</a></li>
+                        <li><a class="hover:text-white transition-colors" href="#">Direktori Guru</a></li>
+                        <li><a class="hover:text-white transition-colors" href="#">Galeri Foto</a></li>
+                        <li><a class="hover:text-white transition-colors" href="http://127.0.0.1:8000/smk/ppdb">PPDB Online</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-lg font-bold text-primary">Jurusan</h4>
+                    <ul class="space-y-4 text-slate-400 text-sm font-medium">
+                        <li><a class="hover:text-white transition-colors" href="#">Rekayasa Perangkat Lunak</a></li>
+                        <li><a class="hover:text-white transition-colors" href="#">Teknik Komputer & Jaringan</a></li>
+                        <li><a class="hover:text-white transition-colors" href="#">Multimedia & Desain Grafis</a></li>
+                        <li><a class="hover:text-white transition-colors" href="#">Akuntansi Keuangan</a></li>
+                        <li><a class="hover:text-white transition-colors" href="#">Perkantoran Digital</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-lg font-bold text-primary">Hubungi Kami</h4>
+                    <div class="space-y-4">
+                        <div class="flex gap-3 items-start">
+                            <span class="material-symbols-outlined text-primary mt-1">location_on</span>
+                            <p class="text-slate-400 text-sm">Jl. Raya Pakuan No. 123, Bogor, Jawa Barat, Indonesia</p>
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            <span class="material-symbols-outlined text-primary">call</span>
+                            <p class="text-slate-400 text-sm">(0251) 1234567</p>
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            <span class="material-symbols-outlined text-primary">mail</span>
+                            <p class="text-slate-400 text-sm">info@smkputrapakuan.sch.id</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-xs font-medium">
+                <p>� 2024 SMK Putra Pakuan. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a class="hover:text-white" href="#">Kebijakan Privasi</a>
+                    <a class="hover:text-white" href="#">Syarat Layanan</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Floating Quick Info FAB -->
+    <div id="smk-fab-container" class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+        <button id="smk-fab" class="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-charcoal shadow-2xl hover:bg-primary/90 focus:outline-none" aria-label="Quick Info">
+            <span class="material-symbols-outlined text-2xl">help</span>
+        </button>
+        <div id="smk-fab-menu" class="hidden w-64 rounded-xl bg-charcoal/95 text-white shadow-2xl p-3 space-y-2">
+            <a href="http://127.0.0.1:8000/smk/ppdb" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Daftar PPDB</a>
+            <a href="http://127.0.0.1:8000/akreditasi" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Lihat Prestasi</a>
+            <a href="http://127.0.0.1:8000/smk/kontak" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Kontak Sekolah</a>
+        </div>
+    </div>
+
+    <script>
+        // Consolidated FAB button handler - prevent duplicate initialization
+        if (!window.__fabInitialized) {
+            window.__fabInitialized = true;
+
+            const initializeFabHandler = () => {
+                const smkFabButton = document.getElementById('smk-fab');
+                const smkFabMenu = document.getElementById('smk-fab-menu');
+
+                if (smkFabButton) {
+                    smkFabButton.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        smkFabMenu.classList.toggle('hidden');
+                    });
+                }
+
+                if (smkFabMenu) {
+                    document.addEventListener('click', function (event) {
+                        if (!smkFabButton.contains(event.target) && !smkFabMenu.contains(event.target)) {
+                            smkFabMenu.classList.add('hidden');
+                        }
+                    });
+                }
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeFabHandler);
+            } else {
+                initializeFabHandler();
+            }
+        }
+    </script>
+
+    <!-- End Footer -->
+    </body>
+</html>
+
+
+
+
+

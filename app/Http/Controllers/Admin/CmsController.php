@@ -404,4 +404,37 @@ class CmsController extends Controller
             abort(403);
         }
     }
+
+    public function updatePaymentSettings(Request $request, string $schoolType)
+    {
+        $school = School::where('type', School::resolveDbType($schoolType))->firstOrFail();
+        $this->abortUnlessSuperAdmin();
+
+        $validated = $request->validate([
+            'payment_bank_name'         => ['nullable', 'string', 'max:100'],
+            'payment_bank_account'      => ['nullable', 'string', 'max:50'],
+            'payment_bank_holder'       => ['nullable', 'string', 'max:255'],
+            'payment_ewallet_gopay'     => ['nullable', 'string', 'max:50'],
+            'payment_ewallet_dana'      => ['nullable', 'string', 'max:50'],
+            'payment_ewallet_ovo'       => ['nullable', 'string', 'max:50'],
+            'payment_ewallet_shopee'    => ['nullable', 'string', 'max:50'],
+            'payment_registration_fee'  => ['nullable', 'numeric', 'min:0'],
+        ]);
+
+        $homepage = SchoolHomepageSetting::firstOrCreate(['school_id' => $school->id]);
+        $homepage->fill($validated);
+        $homepage->save();
+
+        $this->flushSchoolCache($school);
+
+        if ($request->input('_redirect_to') === 'ppdb_management') {
+            return redirect()
+                ->route('admin.ppdb.management', ['school' => $school->slug])
+                ->with('success', 'Pengaturan pembayaran PPDB berhasil diperbarui.');
+        }
+
+        return redirect()
+            ->route('admin.cms.by_school', ['schoolType' => strtolower($schoolType)])
+            ->with('success', 'Pengaturan pembayaran PPDB berhasil diperbarui.');
+    }
 }
