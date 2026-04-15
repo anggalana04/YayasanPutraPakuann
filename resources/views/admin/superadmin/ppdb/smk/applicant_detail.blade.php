@@ -153,7 +153,7 @@
                         ['file' => $applicant->kk_file, 'label' => 'Kartu Keluarga / AKTA'],
                         ['file' => $applicant->ijazah_file, 'label' => 'Ijazah SMP'],
                         ['file' => $applicant->prestasi_file, 'label' => 'Dokumen Prestasi / Sertifikat'],
-                        ['file' => $applicant->raport_file, 'label' => 'Rapor Semester 1-5'],
+                        ['file' => $applicant->akta_kelahiran_file, 'label' => 'Akta Kelahiran'],
                         ['file' => $applicant->payment_proof, 'label' => 'Bukti Pembayaran'],
                     ] as $doc)
                         @if(!empty($doc['file']))

@@ -370,8 +370,8 @@
                     <ul class="space-y-4 text-slate-400 text-sm font-medium">
                         <li><a class="hover:text-white transition-colors" href="{{ route('school.profil', ['school' => 'smk']) }}">Profil Sekolah</a></li>
                         <li><a class="hover:text-white transition-colors" href="{{ route('school.profil', ['school' => 'smk']) }}#visi-misi">Visi & Misi</a></li>
-                        <li><a class="hover:text-white transition-colors" href="#">Direktori Guru</a></li>
-                        <li><a class="hover:text-white transition-colors" href="#">Galeri Foto</a></li>
+                        <li><a class="hover:text-white transition-colors" href="{{ route('school.direktori.guru', ['school' => 'smk']) }}">Direktori Guru</a></li>
+                        <li><a class="hover:text-white transition-colors" href="{{ route('school.galeri', ['school' => 'smk']) }}">Galeri Foto</a></li>
                         <li><a class="hover:text-white transition-colors" href="{{ route('school.ppdb', ['school' => 'smk']) }}">SPMB Online</a></li>
                     </ul>
                 </div>

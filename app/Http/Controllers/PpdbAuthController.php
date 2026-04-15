@@ -323,12 +323,12 @@ class PpdbAuthController extends Controller
             'kk_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'ijazah_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'photo_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'raport_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'akta_kelahiran_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'prestasi_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
         $application->major_1 = $validated['major_1'] ?? null;
         $application->major_2 = $validated['major_2'] ?? null;
-        $fileFields = ['kk_file', 'ijazah_file', 'photo_file', 'raport_file', 'prestasi_file'];
+        $fileFields = ['kk_file', 'ijazah_file', 'photo_file', 'akta_kelahiran_file', 'prestasi_file'];
         foreach ($fileFields as $field) {
             if ($request->hasFile($field)) {
                 $file = $request->file($field);

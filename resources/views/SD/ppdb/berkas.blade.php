@@ -128,19 +128,19 @@
                             <input class="hidden" type="file" name="photo_file" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this, 2, 'photo_file_name')">
                         </label>
                     </div>
-                    <!-- Upload Card 4: Raport Semester -->
+                    <!-- Upload Card 4: Akta Kelahiran -->
                     <div class="flex flex-col">
                         <label class="group cursor-pointer">
                             <div class="aspect-[4/5] bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant/30 flex flex-col items-center justify-center p-6 text-center group-hover:bg-primary-container/10 group-hover:border-primary transition-all duration-300">
                                 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-4 text-3xl" data-icon="folder_open">folder_open</span>
-                                <span class="text-xs font-bold text-on-surface mb-2">Unggah Raport Semester</span>
+                                <span class="text-xs font-bold text-on-surface mb-2">Unggah Akta Kelahiran</span>
                                 <span class="text-[10px] text-on-surface-variant">Klik untuk cari file</span>
-                                @if(isset($application->raport_file) && $application->raport_file)
-                                    <span class="block mt-2 text-xs text-green-600">{{ basename($application->raport_file) }}</span>
+                                @if(isset($application->akta_kelahiran_file) && $application->akta_kelahiran_file)
+                                    <span class="block mt-2 text-xs text-green-600">{{ basename($application->akta_kelahiran_file) }}</span>
                                 @endif
-                                <span id="raport_file_name" class="block mt-2 text-xs text-blue-600"></span>
+                                <span id="akta_kelahiran_file_name" class="block mt-2 text-xs text-blue-600"></span>
                             </div>
-                            <input class="hidden" type="file" name="raport_file" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this, 2, 'raport_file_name')">
+                            <input class="hidden" type="file" name="akta_kelahiran_file" accept=".jpg,.jpeg,.png,.pdf" onchange="validateFileSize(this, 2, 'akta_kelahiran_file_name')">
                         </label>
                     </div>
                     <!-- Upload Card 5: Prestasi / Sertifikat -->

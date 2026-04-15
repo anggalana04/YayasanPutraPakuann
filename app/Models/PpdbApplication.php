@@ -42,7 +42,7 @@ class PpdbApplication extends Authenticatable
         'kk_file',
         'ijazah_file',
         'photo_file',
-        'raport_file',
+        'akta_kelahiran_file',
         'prestasi_file',
         'last_registration_step',
         'place_of_birth',

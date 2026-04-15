@@ -21,7 +21,7 @@ Detail Siswa – {{ $student->full_name }}
         ['label' => 'Kartu Keluarga',   'icon' => 'family_restroom', 'path' => $app->kk_file],
         ['label' => 'Ijazah / SKL',     'icon' => 'workspace_premium','path' => $app->ijazah_file],
         ['label' => 'Foto Siswa',       'icon' => 'photo_camera',    'path' => $app->photo_file],
-        ['label' => 'Raport',           'icon' => 'menu_book',       'path' => $app->raport_file],
+        ['label' => 'Akta Kelahiran',   'icon' => 'badge',           'path' => $app->akta_kelahiran_file],
         ['label' => 'Sertifikat Prestasi', 'icon' => 'emoji_events', 'path' => $app->prestasi_file],
         ['label' => 'Bukti Pembayaran', 'icon' => 'receipt_long',    'path' => $app->payment_proof],
     ] : [];

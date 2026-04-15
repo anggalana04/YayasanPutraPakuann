@@ -174,7 +174,7 @@
                         </li>
                         <li class="flex items-center gap-3 text-sm text-slate-300">
                             <span class="material-symbols-outlined text-primary text-xl">check_circle</span>
-                            Rapor Semester 1-5
+                            Akta Kelahiran
                         </li>
                         <li class="flex items-center gap-3 text-sm text-slate-300">
                             <span class="material-symbols-outlined text-primary text-xl">check_circle</span>

@@ -15,7 +15,8 @@
 
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
                 @forelse ($prestasi ?? [] as $item)
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+                    <a href="{{ route('school.prestasi.show', ['school' => $school, 'slug' => $item->slug]) }}"
+                       class="block bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
                         <div class="relative h-48 w-full bg-cover bg-center" style="background-image: url('{{ $item->image_url ?? 'https://via.placeholder.com/640x360?text=Tanpa+Gambar' }}');">
                             <div class="absolute top-3 left-3">
                                 <span class="bg-blue-600/90 text-white text-xs font-bold px-2 py-1 rounded backdrop-blur-sm">{{ $item->category ?? 'Umum' }}</span>
@@ -29,7 +30,7 @@
                             <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">{{ $item->title }}</h3>
                             <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">{{ \Illuminate\Support\Str::limit($item->excerpt ?? $item->content, 120) }}</p>
                         </div>
-                    </div>
+                    </a>
                 @empty
                     <div class="md:col-span-2 xl:col-span-3 p-8 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-center text-slate-500 dark:text-slate-400">
                         Belum ada data prestasi yang ditayangkan. Silakan tambahkan melalui dashboard admin.

@@ -166,7 +166,7 @@ class AdminPpdbApplicantsController extends Controller
             'KK File',
             'Ijazah File',
             'Photo File',
-            'Raport File',
+            'Akta Kelahiran File',
             'Created At',
             'Updated At',
         ];
@@ -209,7 +209,7 @@ class AdminPpdbApplicantsController extends Controller
             $item->kk_file,
             $item->ijazah_file,
             $item->photo_file,
-            $item->raport_file,
+            $item->akta_kelahiran_file,
             $item->created_at?->format('Y-m-d H:i:s') ?? '',
             $item->updated_at?->format('Y-m-d H:i:s') ?? '',
         ];

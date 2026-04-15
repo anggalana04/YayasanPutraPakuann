@@ -132,7 +132,7 @@
             <div class="hidden lg:flex items-center gap-6">
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.home', ['school' => 'sd']) }}">BERANDA</a>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.profil', ['school' => 'sd']) }}">PROFIL</a>
-                <a class="text-xs font-semibold hover:text-primary transition-colors" href="#">KATEGORI</a>
+                <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.prestasi', ['school' => request()->route('school') ?? 'sd']) }}">PRESTASI</a>
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.berita', ['school' => request()->route('school') ?? 'sd']) }}">BERITA</a>
                 <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
                     <button type="button" class="text-xs font-semibold hover:text-primary transition-colors flex items-center gap-1 focus:outline-none" @click.prevent="open = !open" @focus="open = true" tabindex="0">
@@ -182,7 +182,7 @@
             </div>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.home', ['school' => 'sd']) }}">BERANDA</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.profil', ['school' => 'sd']) }}">PROFIL</a>
-            <a class="text-base font-semibold hover:text-primary transition-colors" href="#">KATEGORI</a>
+            <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.prestasi', ['school' => request()->route('school') ?? 'sd']) }}">PRESTASI</a>
             <a class="text-base font-semibold hover:text-primary transition-colors" href="{{ route('school.berita', ['school' => request()->route('school') ?? 'sd']) }}">BERITA</a>
             <div class="flex flex-col gap-2">
                 <button class="text-base font-semibold hover:text-primary transition-colors flex items-center gap-1 focus:outline-none" id="mobile-direktori-toggle">

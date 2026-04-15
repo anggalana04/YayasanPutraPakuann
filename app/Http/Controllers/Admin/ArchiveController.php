@@ -377,7 +377,7 @@ class ArchiveController extends Controller
                     'kk'          => $app->kk_file,
                     'ijazah'      => $app->ijazah_file,
                     'foto'        => $app->photo_file,
-                    'raport'      => $app->raport_file,
+                    'akta-kelahiran' => $app->akta_kelahiran_file,
                     'prestasi'    => $app->prestasi_file,
                     'bukti-bayar' => $app->payment_proof,
                 ];
@@ -407,7 +407,7 @@ class ArchiveController extends Controller
         $manifest .= "Total Siswa  : {$studentCount}\n";
         $manifest .= "Total Berkas : {$filesAdded}\n\n";
         $manifest .= $structureNote;
-        $manifest .= "Setiap folder siswa berisi biodata.txt dan file berkas PPDB (kk, ijazah, foto, raport, prestasi, bukti-bayar) bila tersedia.\n";
+        $manifest .= "Setiap folder siswa berisi biodata.txt dan file berkas PPDB (kk, ijazah, foto, akta-kelahiran, prestasi, bukti-bayar) bila tersedia.\n";
         $zip->addFromString('MANIFEST.txt', $manifest);
 
         $zip->close();
