@@ -115,18 +115,18 @@
                     <span class="font-bold text-lg text-primary">SPMB SMP Putra Pakuan</span>
                 </a>
             </div>
+            @php
+                $user = Auth::guard('ppdb_applications')->user();
+                $showProfile = $user && request()->routeIs('ppdb.dashboard', 'ppdb.profil');
+                $displayName = $user?->full_name ?: ($user?->email ?: 'Pengguna');
+            @endphp
+            @if ($showProfile)
             <div class="hidden md:flex items-center space-x-8">
                 <!-- Profile Dropdown (Frontend Only) -->
                 <div x-data="{ open: false }" class="relative">
                     <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
-                        <img src="{{ Auth::guard('ppdb_applications')->user()->profile_photo_url ?? asset('images/default-profile.png') }}" alt="Profile" class="h-8 w-8 rounded-full border-2 border-primary object-cover">
-                        <span class="text-sm font-medium text-white">
-                            @php
-                                $user = Auth::guard('ppdb_applications')->user();
-                                $displayName = $user?->full_name ?: ($user?->email ?: 'Pengguna');
-                            @endphp
-                            {{ $displayName }}
-                        </span>
+                        <img src="{{ $user->profile_photo_url ?? asset('images/default-profile.png') }}" alt="Profile" class="h-8 w-8 rounded-full border-2 border-primary object-cover">
+                        <span class="text-sm font-medium text-white">{{ $displayName }}</span>
                         <span class="material-symbols-outlined text-primary">expand_more</span>
                     </button>
                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-40 bg-white dark:bg-charcoal rounded-lg shadow-lg py-2 z-50" x-cloak>
@@ -139,34 +139,38 @@
                     </div>
                 </div>
             </div>
+            @endif
+            @if ($showProfile)
             <div class="md:hidden flex items-center">
                 <button type="button" class="ppdb-nav-link p-2 rounded-md" id="mobile-menu-button">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
             </div>
+            @endif
         </div>
     </div>
     <!-- Mobile menu: only show profile dropdown -->
+    @if ($showProfile)
     <div class="md:hidden hidden" id="mobile-menu">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-charcoal/95">
             <div x-data="{ open: false }" class="relative">
                 <button @click="open = !open" class="flex items-center space-x-2 w-full focus:outline-none px-3 py-2 rounded-md">
-                    <img src="{{ Auth::guard('ppdb_applications')->user()->profile_photo_url ?? asset('images/default-profile.png') }}" alt="Profile" class="h-8 w-8 rounded-full border-2 border-primary object-cover">
-                    <span class="text-base font-medium text-white">
-                        @php
-                            $user = Auth::guard('ppdb_applications')->user();
-                            $displayName = $user?->full_name ?: ($user?->email ?: 'Pengguna');
-                        @endphp
-                        {{ $displayName }}
-                    </span>
+                    <img src="{{ $user->profile_photo_url ?? asset('images/default-profile.png') }}" alt="Profile" class="h-8 w-8 rounded-full border-2 border-primary object-cover">
+                    <span class="text-base font-medium text-white">{{ $displayName }}</span>
                     <span class="material-symbols-outlined text-primary">expand_more</span>
                 </button>
                 <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-40 bg-white dark:bg-charcoal rounded-lg shadow-lg py-2 z-50" x-cloak>
-                    <button class="block w-full text-left px-4 py-2 text-sm text-charcoal dark:text-white hover:bg-primary/10">Keluar</button>
+                    <a href="{{ route('ppdb.dashboard', ['school' => $school]) }}" class="block w-full text-left px-4 py-2 text-sm text-charcoal dark:text-white hover:bg-primary/10">Dasbor</a>
+                    <a href="{{ route('ppdb.profil', ['school' => $school]) }}" class="block w-full text-left px-4 py-2 text-sm text-charcoal dark:text-white hover:bg-primary/10">Profil</a>
+                    <form method="POST" action="{{ route('ppdb.logout', ['school' => $school]) }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Keluar</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    @endif
 </nav>
 
 <main class="min-h-screen bg-background-light dark:bg-background-dark">
@@ -178,6 +182,7 @@
 @yield('ppdb-footer')
 
 <!-- BottomNavBar (Mobile) -->
+@if (!request()->routeIs('ppdb.register', 'ppdb.register.post'))
 <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-4 pt-2 md:hidden bg-white/60 dark:bg-[#1c190d]/60 backdrop-blur-2xl z-50 rounded-t-3xl shadow-[0_-10px_40px_rgba(28,25,13,0.06)]">
     <a href="{{ route('ppdb.dashboard', ['school' => $school]) }}" class="flex flex-col items-center justify-center {{ request()->routeIs('ppdb.dashboard') ? 'bg-[#f2cc0d] text-[#1c190d]' : 'text-[#1c190d]/50 dark:text-white/50' }} rounded-2xl p-2 min-w-16">
         <span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
@@ -195,6 +200,7 @@
         </button>
     </form>
 </nav>
+@endif
 
 <script>
     document.getElementById('mobile-menu-button').addEventListener('click', function() {

@@ -33,20 +33,10 @@
 
 {{-- ── Header ──────────────────────────────────────────────────────── --}}
 <div class="mb-10 text-center">
-    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4">
-        <span class="material-symbols-outlined text-sm">how_to_reg</span>
-        Langkah 1 dari 2 — Pembayaran
-    </div>
     <h1 class="font-headline text-4xl md:text-5xl font-bold tracking-tighter text-on-background mb-4">Daftar &amp; Bayar Biaya Pendaftaran</h1>
     <p class="text-on-surface-variant max-w-lg mx-auto">
         Isi data diri singkat dan lakukan pembayaran untuk mendapatkan <strong>kode unik</strong> akses ke form pendaftaran.
     </p>
-    @if ($regFee)
-        <div class="mt-4 inline-flex items-center gap-2 px-5 py-2 rounded-full bg-primary/10 border border-primary/20">
-            <span class="material-symbols-outlined text-primary text-sm">payments</span>
-            <span class="font-bold text-primary text-sm">Biaya Pendaftaran: Rp {{ number_format($regFee, 0, ',', '.') }}</span>
-        </div>
-    @endif
 </div>
 
 {{-- ── Alerts ──────────────────────────────────────────────────────── --}}
@@ -130,7 +120,7 @@
         <div class="flex items-center justify-between rounded-xl border border-outline-variant/40 px-4 py-3 bg-surface-container-low/30 hover:bg-surface-container-low transition">
             <div class="flex items-center gap-3">
                 {{-- GoPay logo --}}
-                <img src="{{ asset('images/ewallet/gopay.svg') }}" alt="GoPay" class="h-6 w-auto">
+                <img src="{{ asset('images/Logo_Gopay.svg.png') }}" alt="GoPay" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; width: 50px;">
                 <span class="text-on-surface font-bold tracking-wider text-lg">{{ $gopay }}</span>
             </div>
             <button type="button" onclick="copyText('{{ $gopay }}')" class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors" title="Salin nomor">
@@ -143,7 +133,7 @@
         <div class="flex items-center justify-between rounded-xl border border-outline-variant/40 px-4 py-3 bg-surface-container-low/30 hover:bg-surface-container-low transition">
             <div class="flex items-center gap-3">
                 {{-- DANA logo --}}
-                <img src="{{ asset('images/ewallet/dana.svg') }}" alt="DANA" class="h-6 w-auto">
+                <img src="{{ asset('images/Logo_dana_blue.svg.png') }}" alt="DANA" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; width: 50px;">
                 <span class="text-on-surface font-bold tracking-wider text-lg">{{ $dana }}</span>
             </div>
             <button type="button" onclick="copyText('{{ $dana }}')" class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors" title="Salin nomor">
@@ -156,7 +146,7 @@
         <div class="flex items-center justify-between rounded-xl border border-outline-variant/40 px-4 py-3 bg-surface-container-low/30 hover:bg-surface-container-low transition">
             <div class="flex items-center gap-3">
                 {{-- OVO logo --}}
-                <img src="{{ asset('images/ewallet/ovo.svg') }}" alt="OVO" class="h-6 w-auto">
+                <img src="{{ asset('images/Logo_ovo_purple.svg.png') }}" alt="OVO" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; width: 50px;">
                 <span class="text-on-surface font-bold tracking-wider text-lg">{{ $ovo }}</span>
             </div>
             <button type="button" onclick="copyText('{{ $ovo }}')" class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors" title="Salin nomor">
@@ -169,7 +159,7 @@
         <div class="flex items-center justify-between rounded-xl border border-outline-variant/40 px-4 py-3 bg-surface-container-low/30 hover:bg-surface-container-low transition">
             <div class="flex items-center gap-3">
                 {{-- ShopeePay logo --}}
-                <img src="{{ asset('images/ewallet/shopeepay.svg') }}" alt="ShopeePay" class="h-6 w-auto">
+                <img src="{{ asset('images/2-shopeepay-rectangle-orange2-1208029004.png') }}" alt="ShopeePay" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; width: 50px;">
                 <span class="text-on-surface font-bold tracking-wider text-lg">{{ $shopee }}</span>
             </div>
             <button type="button" onclick="copyText('{{ $shopee }}')" class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors" title="Salin nomor">
@@ -205,6 +195,15 @@
                 onchange="showFileName(this, 'ewallet_file_name')">
             <span id="ewallet_file_name" class="block mt-2 text-xs text-blue-600"></span>
         </label>
+        @if ($regFee)
+        <div class="flex items-center gap-2 px-4 py-3 bg-white rounded-xl border border-primary/20 justify-center">
+            <span class="material-symbols-outlined text-primary text-xl">payments</span>
+            <div class="text-center">
+                <p class="text-xs text-on-surface-variant uppercase tracking-wider">Jumlah Pembayaran</p>
+                <p class="text-xl font-bold text-black">Rp {{ number_format($regFee, 0, ',', '.') }}</p>
+            </div>
+        </div>
+        @endif
         <select name="ewallet_type" id="ewalletType"
             class="w-full bg-white border border-outline-variant rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
             @if ($gopay) <option value="GoPay">GoPay</option> @endif
@@ -278,6 +277,15 @@
                 onchange="showFileName(this, 'bank_file_name')">
             <span id="bank_file_name" class="block mt-2 text-xs text-blue-600"></span>
         </label>
+        @if ($regFee)
+        <div class="flex items-center gap-2 px-4 py-3 bg-white rounded-xl border border-primary/20 justify-center">
+            <span class="material-symbols-outlined text-primary text-xl">payments</span>
+            <div class="text-center">
+                <p class="text-xs text-on-surface-variant uppercase tracking-wider">Jumlah Pembayaran</p>
+                <p class="text-xl font-bold text-black">Rp {{ number_format($regFee, 0, ',', '.') }}</p>
+            </div>
+        </div>
+        @endif
         <button type="submit" onclick="setMethod('bank')"
             class="w-full bg-on-surface text-white py-4 rounded-full font-bold shadow-lg hover:opacity-90 active:scale-[0.98] transition-all">
             Daftar &amp; Bayar via Transfer Bank

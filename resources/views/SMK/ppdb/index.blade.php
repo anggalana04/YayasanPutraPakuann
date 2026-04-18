@@ -21,24 +21,49 @@
 
     $ppdbOpen = $phases->where('is_live', true)->isNotEmpty();
     $now = Carbon::now();
-    $activePhase = $phases->first(function ($phase) use ($now) {
-        $start = Carbon::parse($phase->start_date)->startOfDay();
-        $end = Carbon::parse($phase->end_date)->endOfDay();
-        return $now->between($start, $end);
-    });
 
-    $upcomingPhases = $phases->filter(function ($phase) use ($now) {
-        return Carbon::parse($phase->start_date)->gt($now);
-    })->values();
+    $activePhase = $phases
+        ->filter(function ($phase) use ($now) {
+            $start = Carbon::parse($phase->start_date)->startOfDay();
+            $end = Carbon::parse($phase->end_date)->endOfDay();
+            return $now->gte($start) && $now->lte($end);
+        })
+        ->sortByDesc(function ($phase) {
+            return Carbon::parse($phase->start_date)->timestamp;
+        })
+        ->first();
 
-    $ppdbPeriod = $phases->last() ? (Carbon::parse($phases->first()->start_date)->year . '/' . (Carbon::parse($phases->first()->start_date)->year + 1)) : '2024/2025';
-    if ($activePhase) {
-        $ppdbPeriod = Carbon::parse($activePhase->start_date)->year . '/' . (Carbon::parse($activePhase->start_date)->year + 1);
-    } elseif ($upcomingPhases->first()) {
-        $ppdbPeriod = Carbon::parse($upcomingPhases->first()->start_date)->year . '/' . (Carbon::parse($upcomingPhases->first()->start_date)->year + 1);
+    if (!$activePhase) {
+        $activePhase = $phases->firstWhere('status', 'active');
     }
 
-    $displayPhaseName = $activePhase ? $activePhase->phase_name : ($upcomingPhases->first() ? 'Upcoming: ' . $upcomingPhases->first()->phase_name : 'Belum ada fase aktif');
+    $livePhase = $phases
+        ->filter(function ($phase) use ($now) {
+            return $phase->is_live && Carbon::parse($phase->end_date)->endOfDay()->gte($now);
+        })
+        ->sortByDesc(function ($phase) {
+            return Carbon::parse($phase->start_date)->timestamp;
+        })
+        ->first();
+
+    $upcomingPhases = $phases->filter(function ($phase) use ($now) {
+        return Carbon::parse($phase->start_date)->startOfDay()->gt($now);
+    })->sortBy(function ($phase) {
+        return Carbon::parse($phase->start_date)->timestamp;
+    })->values();
+
+    $phaseForPeriod = $activePhase ?: $livePhase ?: $upcomingPhases->first() ?? $phases->last();
+    $ppdbPeriod = '2024/2025';
+    if ($phaseForPeriod) {
+        $yearStart = Carbon::parse($phaseForPeriod->start_date)->year;
+        $ppdbPeriod = $yearStart . '/' . ($yearStart + 1);
+    }
+
+    $displayPhaseName = $activePhase
+        ? $activePhase->phase_name
+        : ($livePhase
+            ? 'Upcoming: ' . $livePhase->phase_name
+            : ($upcomingPhases->first() ? 'Upcoming: ' . $upcomingPhases->first()->phase_name : 'Belum ada fase aktif'));
 @endphp
 
 <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
@@ -74,6 +99,10 @@
                         <button class="flex h-14 items-center justify-center rounded-xl border-2 border-charcoal/10 px-8 text-base font-bold text-charcoal transition-colors hover:bg-charcoal/5 dark:border-slate-800 dark:text-slate-200"
                             onclick="window.location.href='{{ route('ppdb.login', ['school'=>$school]) }}'">
                             Login Pendaftar
+                        </button>
+                        <button class="flex h-14 items-center justify-center rounded-xl border-2 border-primary px-8 text-base font-bold text-primary bg-white transition-colors hover:bg-primary/5"
+                            onclick="window.location.href='{{ route('ppdb.cek.kode', ['school'=>$school]) }}'">
+                            Cek Status Pendaftaran
                         </button>
                     </div>
                 </div>

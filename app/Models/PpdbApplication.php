@@ -14,6 +14,7 @@ class PpdbApplication extends Authenticatable
     protected $fillable = [
         'application_id',
         'unique_code',
+        'login_token',
         'school_id',
         'password',
         'full_name',
@@ -52,6 +53,7 @@ class PpdbApplication extends Authenticatable
     protected $hidden = [
         'password',
         'unique_code',
+        'login_token',
     ];
 
     protected $casts = [
@@ -112,6 +114,21 @@ class PpdbApplication extends Authenticatable
     }
 
     /**
+     * Generate a secure random login token (format: PPDB-XXXX-XXXX).
+     * Uses alphanumeric characters for strong randomness.
+     */
+    public static function generateLoginToken(): string
+    {
+        do {
+            $part1 = strtoupper(\Illuminate\Support\Str::random(4));
+            $part2 = strtoupper(\Illuminate\Support\Str::random(4));
+            $token = 'PPDB-' . $part1 . '-' . $part2;
+        } while (self::where('login_token', $token)->exists());
+
+        return $token;
+    }
+
+    /**
      * Generate a unique 8-char alphanumeric code for applicant login.
      * Uses unambiguous characters (no 0/O/1/I/L).
      */
@@ -166,7 +183,7 @@ class PpdbApplication extends Authenticatable
 
     public function isCompleted()
     {
-        return in_array($this->status, ['payment_uploaded', 'payment_completed', 'verified', 'accepted']);
+        return in_array($this->status, ['payment_uploaded', 'payment_confirmed', 'payment_completed', 'verified', 'accepted']);
     }
 
     public function canLogin()

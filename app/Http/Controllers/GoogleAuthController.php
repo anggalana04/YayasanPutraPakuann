@@ -45,6 +45,8 @@ class GoogleAuthController extends Controller
 
             Auth::login($user);
 
+            $generatedPpdbId = 'SPMB-' . date('Y') . '-' . strtoupper(substr(md5($user->email . $school), 0, 6));
+            $generatedLoginToken = PpdbApplication::generateLoginToken();
             $ppdb = PpdbApplication::firstOrCreate(
                 [
                     'email'     => $user->email,
@@ -53,17 +55,18 @@ class GoogleAuthController extends Controller
                 [
                     'full_name'      => $user->name,
                     'status'         => 'draft',
-                    'application_id' => 'PPDB-' . date('Y') . '-' . strtoupper(substr(md5($user->email . $school), 0, 6)),
+                    'application_id' => $generatedPpdbId,
+                    'login_token'    => $generatedLoginToken,
                     'password'       => bcrypt(uniqid()),
-                    'unique_code'    => PpdbApplication::generateUniqueCode(),
+                    'unique_code'    => $generatedPpdbId,
                     'assigned_major' => null,
                 ]
             );
 
             if (! $ppdb->full_name)              $ppdb->full_name = $user->name;
-            if (! $ppdb->application_id)         $ppdb->application_id = 'PPDB-' . date('Y') . '-' . strtoupper(substr(md5($user->email . $school), 0, 6));
+            if (! $ppdb->application_id)         $ppdb->application_id = $generatedPpdbId;
+            if (! $ppdb->login_token)            $ppdb->login_token = $generatedLoginToken;
             if (! $ppdb->password)               $ppdb->password = bcrypt(uniqid());
-            if (! $ppdb->unique_code)            $ppdb->unique_code = PpdbApplication::generateUniqueCode();
             if (! $ppdb->status)                 $ppdb->status = 'draft';
             if (! $ppdb->last_registration_step) $ppdb->last_registration_step = 'biodata';
             $ppdb->save();

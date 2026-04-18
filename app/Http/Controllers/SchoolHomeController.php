@@ -86,8 +86,6 @@ class SchoolHomeController extends Controller
                     ->get();
             });
 
-            $ppdbLive = $phases->where('is_live', true)->isNotEmpty();
-
             $now = Carbon::now();
 
             $activePhase = $phases
@@ -101,23 +99,57 @@ class SchoolHomeController extends Controller
                 })
                 ->first();
 
-            $nextPhase = $phases
+            if (!$activePhase) {
+                $activePhase = $phases->firstWhere('status', 'active');
+            }
+
+            $livePhase = $phases
+                ->filter(function ($phase) use ($now) {
+                    $start = Carbon::parse($phase->start_date)->startOfDay();
+                    $end = Carbon::parse($phase->end_date)->endOfDay();
+                    return $phase->is_live && $now->gte($start) && $now->lte($end);
+                })
+                ->sortByDesc(function ($phase) {
+                    return Carbon::parse($phase->start_date)->timestamp;
+                })
+                ->first();
+
+            // Auto-disable is_live flag if all phases have ended
+            $allPhasesEnded = $phases->every(function ($phase) use ($now) {
+                return Carbon::parse($phase->end_date)->endOfDay()->lt($now);
+            });
+
+            if ($allPhasesEnded && $phases->whereNotNull('is_live')->isNotEmpty()) {
+                PpdbManagementPhase::where('school_id', $schoolModel->id)
+                    ->where('is_live', true)
+                    ->update(['is_live' => false]);
+            }
+
+            $upcomingPhases = $phases
                 ->filter(function ($phase) use ($now) {
                     return Carbon::parse($phase->start_date)->startOfDay()->gt($now);
                 })
                 ->sortBy(function ($phase) {
                     return Carbon::parse($phase->start_date)->timestamp;
-                })
-                ->first();
-            $phaseForCountdown = $activePhase ?? $nextPhase ?? $phases->last();
+                });
+
+            $phaseForCountdown = $activePhase ?: $livePhase ?: $upcomingPhases->first() ?? $phases->last();
 
             if ($phaseForCountdown) {
-                $ppdbCurrentPhase = $activePhase ? $activePhase->phase_name : ($nextPhase ? "Upcoming: {$nextPhase->phase_name}" : $phaseForCountdown->phase_name);
-                $ppdbCountdownDate = Carbon::parse($phaseForCountdown->end_date)->endOfDay();
+                if ($activePhase) {
+                    $ppdbCurrentPhase = $activePhase->phase_name;
+                } elseif ($livePhase) {
+                    $ppdbCurrentPhase = "Upcoming: {$livePhase->phase_name}";
+                } elseif ($upcomingPhases->first()) {
+                    $ppdbCurrentPhase = "Upcoming: {$upcomingPhases->first()->phase_name}";
+                }
 
+                $ppdbCountdownDate = Carbon::parse($phaseForCountdown->end_date)->endOfDay();
                 $yearStart = Carbon::parse($phaseForCountdown->start_date)->year;
                 $ppdbPeriod = $yearStart . '/' . ($yearStart + 1);
             }
+
+            $ppdbLive = $livePhase !== null;
         }
 
         $view = strtoupper($school) . '.index';

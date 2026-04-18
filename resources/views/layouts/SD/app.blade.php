@@ -7,7 +7,7 @@
     @php
         $seoTitle = trim($__env->yieldContent('title', 'SDIT Putra Pakuan | Sekolah Dasar Islam Terpadu di Bogor'));
         $seoDescription = trim($__env->yieldContent('meta_description', 'SDIT Putra Pakuan menghadirkan pendidikan dasar Islam terpadu yang unggul, berkarakter, dan ramah perkembangan anak.'));
-        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'sdit putra pakuan, sd islam terpadu bogor, ppdb sdit, sekolah dasar islam'));
+        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'sdit putra pakuan, sd islam terpadu bogor, spmb sdit, sekolah dasar islam'));
         $seoImage = trim($__env->yieldContent('meta_image', asset('images/logo-sdit-putrapakuan.png')));
         $seoUrl = url()->current();
     @endphp
@@ -149,7 +149,7 @@
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.kontak', ['school' => 'sd']) }}">HUBUNGI KAMI</a>
                 @php
                     $ppdbLive = $ppdbLive ?? false;
-                    $ppdbLabel = ($ppdbPeriod ?? null) ? 'PPDB ' . $ppdbPeriod : 'PPDB';
+                    $ppdbLabel = ($ppdbPeriod ?? null) ? 'SPMB ' . $ppdbPeriod : 'SPMB';
                 @endphp
                 @if($ppdbLive)
                 <button class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all ml-4" onclick="window.location.href='{{ route('school.ppdb', ['school' => 'sd']) }}'">
@@ -364,7 +364,7 @@
                         <li><a class="hover:text-white transition-colors" href="{{ route('school.visi', ['school' => 'sd']) }}">Visi &amp; Misi</a></li>
                         <li><a class="hover:text-white transition-colors" href="{{ route('school.direktori.guru', ['school' => 'sd']) }}">Direktori Guru</a></li>
                         <li><a class="hover:text-white transition-colors" href="{{ route('school.galeri', ['school' => 'sd']) }}">Galeri Foto</a></li>
-                        <li><a class="hover:text-white transition-colors" href="{{ route('school.ppdb', ['school' => 'sd']) }}">PPDB Online</a></li>
+                        <li><a class="hover:text-white transition-colors" href="{{ route('school.ppdb', ['school' => 'sd']) }}">SPMB Online</a></li>
                     </ul>
                 </div>
                 <div class="space-y-6">
@@ -411,7 +411,7 @@
             <span class="material-symbols-outlined text-2xl">help</span>
         </button>
         <div id="sd-fab-menu" class="hidden w-64 rounded-xl bg-charcoal/95 text-white shadow-2xl p-3 space-y-2">
-            <a href="{{ route('school.ppdb', ['school' => 'sd']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Daftar PPDB</a>
+            <a href="{{ route('school.ppdb', ['school' => 'sd']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Daftar SPMB</a>
             <a href="{{ route('school.kontak', ['school' => 'sd']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Kontak Sekolah</a>
         </div>
     </div>

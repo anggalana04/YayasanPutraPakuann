@@ -131,8 +131,15 @@
                         @method('PATCH')
                         @php
                             $isLive = $selectedPhases->first()?->is_live ?? false;
+                            $now = \Carbon\Carbon::now();
+                            $allPhasesEnded = $selectedPhases->every(fn($phase) => $phase->end_date < $now);
+                            // Auto turn off if a phase has ended but is still marked as live
+                            if ($isLive && $allPhasesEnded) {
+                                $selectedPhases->each->update(['is_live' => false]);
+                                $isLive = false;
+                            }
                         @endphp
-                        <button type="submit" class="flex items-center gap-3 px-4 py-2 bg-white border rounded-full shadow-sm transition-all hover:shadow-md">
+                        <button type="submit" {{ $allPhasesEnded ? 'disabled' : '' }} class="flex items-center gap-3 px-4 py-2 bg-white border rounded-full shadow-sm transition-all hover:shadow-md {{ $allPhasesEnded ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md' }}">
                             <span class="relative inline-block w-12 h-6 rounded-full transition-colors {{ $isLive ? 'bg-emerald-500' : 'bg-slate-300' }}">
                                 <span class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform {{ $isLive ? 'translate-x-6' : '' }}"></span>
                             </span>
@@ -141,7 +148,7 @@
                             </span>
                         </button>
                     </form>
-                    <p class="text-xs text-muted-foreground mt-2">Ubah status: saat aktif, tombol SPMB publik akan muncul dan hitung mundur mengikuti fase saat ini/berikutnya.</p>
+                    <p class="text-xs text-muted-foreground mt-2">{{ $allPhasesEnded ? '⚠️ Semua periode telah berakhir. Toggle otomatis dimatikan.' : 'Ubah status: saat aktif, tombol SPMB publik akan muncul dan hitung mundur mengikuti fase saat ini/berikutnya.' }}</p>
                 </div>
             </div>
         </div>

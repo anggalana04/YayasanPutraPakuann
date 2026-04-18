@@ -44,143 +44,124 @@ tailwind.config = {
 </head>
 <body style="margin:0; padding:0;" class="bg-background font-body text-on-surface min-h-screen">
 
-<div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
-
-    {{-- Left: Decorative panel (desktop only) --}}
-    <div class="hidden lg:flex flex-col justify-between bg-primary-container p-16 overflow-hidden relative">
-        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 70% 20%, #6c5a00 0%, transparent 60%), radial-gradient(circle at 30% 80%, #433700 0%, transparent 50%);"></div>
-        <div class="relative z-10">
-            <a href="{{ route('school.ppdb', ['school' => $school]) }}" class="inline-flex items-center gap-2 text-on-primary-fixed/60 hover:text-on-primary-fixed text-xs font-bold uppercase tracking-widest mb-16 transition-colors">
-                <span class="material-symbols-outlined text-base">arrow_back</span>
-                Halaman SPMB
-            </a>
-            <div class="mb-8">
-                <div class="w-16 h-16 bg-on-primary-fixed/10 rounded-2xl flex items-center justify-center mb-6">
-                    <span class="material-symbols-outlined text-3xl text-on-primary-fixed" style="font-variation-settings:'FILL' 1">task_alt</span>
+<div class="min-h-screen flex items-center justify-center px-4 py-10">
+    <div class="w-full max-w-3xl rounded-[2rem] overflow-hidden bg-white shadow-[0_30px_80px_rgba(28,25,13,0.08)]">
+        <div class="p-8 md:p-10 lg:p-14">
+            <div class="mb-8 text-center">
+                <div class="inline-flex items-center justify-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-sm font-semibold text-amber-800 mb-4">
+                    <span class="material-symbols-outlined">task_alt</span>
+                    Pendaftaran Berhasil
                 </div>
-                <h2 class="font-headline text-4xl font-black text-on-primary-fixed tracking-tighter leading-tight mb-4">Pendaftaran<br>Diterima!</h2>
-                <p class="text-on-primary-fixed/70 text-base leading-relaxed max-w-xs">
-                    Bukti pembayaran Anda sudah kami terima. Tunggu verifikasi admin untuk mendapat kode unik login Anda.
-                </p>
-            </div>
+                <h1 class="text-3xl font-black text-slate-900 mb-2">Terima kasih, {{ $regData['full_name'] }}!</h1>
+                <p class="text-slate-600 max-w-xl mx-auto">
+                    @php
+                        $paymentMethod = strtolower($regData['payment_method'] ?? '');
+                        $isTUPayment = stripos($paymentMethod, 'tu') !== false || stripos($paymentMethod, 'tata usaha') !== false || stripos($paymentMethod, 'kasir') !== false;
+                    @endphp
+                    @if($isTUPayment)
+                    Pendaftaran Anda telah dicatat. Silakan segera lakukan pembayaran ke Tata Usaha (TU) sesuai nominal yang telah ditentukan. Hubungi admin untuk informasi lebih lanjut jika diperlukan.
+                @else
+                    Bukti pembayaran Anda sudah kami terima. Admin sedang memverifikasi (biasanya 1x24 jam). Simpan ID Pendaftaran Anda dengan baik.
+                @endif
+            </p>
         </div>
-        {{-- Steps --}}
-        <div class="relative z-10 space-y-4">
-            <div class="flex items-center gap-3">
-                <span class="w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs font-bold shrink-0">✓</span>
-                <span class="text-on-primary-fixed text-sm font-medium">Daftar & unggah bukti pembayaran</span>
-            </div>
-            <div class="flex items-center gap-3">
-                <span class="w-7 h-7 rounded-full bg-on-primary-fixed/20 text-on-primary-fixed flex items-center justify-center text-xs font-bold shrink-0">2</span>
-                <span class="text-on-primary-fixed/60 text-sm">Verifikasi pembayaran oleh admin</span>
-            </div>
-            <div class="flex items-center gap-3">
-                <span class="w-7 h-7 rounded-full bg-on-primary-fixed/20 text-on-primary-fixed flex items-center justify-center text-xs font-bold shrink-0">3</span>
-                <span class="text-on-primary-fixed/60 text-sm">Login dengan kode unik & isi formulir</span>
-            </div>
-        </div>
-    </div>
 
-    {{-- Right: Content --}}
-    <div class="flex flex-col justify-center p-6 md:p-10 lg:p-16 overflow-y-auto">
-
-        {{-- Mobile back link --}}
-        <a href="{{ route('school.ppdb', ['school' => $school]) }}" class="lg:hidden inline-flex items-center gap-1 text-xs text-on-surface-variant hover:text-on-surface mb-8 transition-colors">
-            <span class="material-symbols-outlined text-base">arrow_back</span>
-            Kembali ke Halaman SPMB
-        </a>
-
-        {{-- Mobile header --}}
-        <div class="lg:hidden flex items-center gap-4 mb-8">
-            <div class="w-14 h-14 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center">
-                <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1">task_alt</span>
-            </div>
-            <div>
-                <h1 class="font-headline text-2xl font-bold tracking-tight">Pendaftaran Diterima!</h1>
-                <p class="text-xs text-on-surface-variant">Bukti pembayaran berhasil dikirim</p>
+        {{-- PENTING WARNING - Moved to top for prominence --}}
+        <div class="rounded-3xl border-2 border-red-400 bg-red-50 p-6 mb-8 shadow-md">
+            <div class="flex gap-3 items-start">
+                <span class="material-symbols-outlined text-red-600 text-2xl shrink-0" style="font-variation-settings:'FILL' 1;">warning</span>
+                <div>
+                    <p class="font-black text-red-900 text-base mb-1">PENTING - SIMPAN ID PENDAFTARAN!</p>
+                    <p class="text-sm text-red-800 leading-relaxed font-semibold">Simpan ID Pendaftaran <span class="text-lg font-black">{{ $regData['application_id'] }}</span> dengan baik. Gunakan ID ini untuk masuk ke portal dan mengecek status pendaftaran Anda.</p>
+                </div>
             </div>
         </div>
 
-        <div class="max-w-md w-full mx-auto lg:mx-0">
-
-        <h1 class="hidden lg:block font-headline text-3xl font-bold tracking-tighter text-on-background mb-2">
-            Pembayaran Dikirim
-        </h1>
-        <p class="hidden lg:block text-on-surface-variant mb-8 text-sm leading-relaxed">
-            Admin akan memverifikasi dalam <strong>1×24 jam</strong>. Setelah terverifikasi, kode unik login Anda akan tersedia.
-        </p>
-
-        {{-- Status Card --}}
-        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-5 flex gap-3 items-start">
-            <span class="material-symbols-outlined text-amber-500 mt-0.5 shrink-0 text-xl" style="font-variation-settings:'FILL' 1;">pending</span>
-            <div class="text-sm text-amber-800">
-                <p class="font-bold mb-1">Menunggu Verifikasi Pembayaran</p>
-                <p>Setelah admin mengkonfirmasi, gunakan tombol <em>"Cek Kode Unik"</em> di bawah untuk mengambil kode Anda.</p>
+        <div class="grid gap-4 mb-8">
+            <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+                <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">ID Pendaftaran Anda</p>
+                <div class="flex items-center justify-between gap-4">
+                    <p class="text-2xl font-black tracking-[0.12em] text-slate-600">{{ $regData['application_id'] }}</p>
+                    <button type="button" onclick="copyToClipboard('{{ $regData['application_id'] }}', this)" class="inline-flex items-center gap-2 rounded-lg bg-slate-200 hover:bg-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition" title="Salin ID">
+                        <span class="material-symbols-outlined text-base">content_copy</span>
+                        <span class="hidden sm:inline">Salin</span>
+                    </button>
+                </div>
+                <p class="text-xs text-slate-500 mt-2">Gunakan ID ini untuk masuk ke portal dan cek status</p>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+                    <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Nama</p>
+                    <p class="font-semibold text-slate-900">{{ $regData['full_name'] }}</p>
+                </div>
+                <div class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+                    <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">WhatsApp</p>
+                    <p class="font-semibold text-slate-900">{{ $regData['phone'] }}</p>
+                </div>
             </div>
         </div>
 
-        {{-- Next Steps (mobile only) --}}
-        <div class="lg:hidden bg-surface-container-low rounded-xl p-4 mb-5">
-            <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Langkah Selanjutnya</p>
-            <ol class="space-y-2 text-sm">
-                <li class="flex items-start gap-2">
-                    <span class="w-5 h-5 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
-                    <span>Daftar & unggah bukti pembayaran <span class="text-green-600 font-semibold">(selesai)</span></span>
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="w-5 h-5 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">2</span>
-                    <span>Tunggu verifikasi pembayaran oleh admin</span>
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="w-5 h-5 bg-surface-container-high rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 text-on-surface-variant">3</span>
-                    <span>Cek kode unik lalu login untuk isi biodata &amp; berkas</span>
-                </li>
-            </ol>
+        <div class="grid gap-3">
+            <a href="{{ route('ppdb.cek.kode', ['school' => $school]) }}" class="rounded-2xl bg-primary px-5 py-4 text-center text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:bg-[#5c4800]">Cek Status Pendaftaran</a>
+            <a href="{{ route('ppdb.login', ['school' => $school]) }}" class="rounded-2xl border border-slate-200 px-5 py-4 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Masuk dengan ID Pendaftaran</a>
         </div>
-
-        {{-- Info Summary --}}
-        <div class="bg-surface-container-low rounded-xl p-4 mb-6 space-y-2 text-sm">
-            <div class="flex justify-between">
-                <span class="text-on-surface-variant">ID Pendaftaran</span>
-                <span class="font-bold">{{ $regData['application_id'] }}</span>
-            </div>
-            <div class="flex justify-between">
-                <span class="text-on-surface-variant">Nama</span>
-                <span class="font-bold">{{ $regData['full_name'] }}</span>
-            </div>
-            <div class="flex justify-between">
-                <span class="text-on-surface-variant">WhatsApp</span>
-                <span class="font-bold">{{ $regData['phone'] }}</span>
-            </div>
-            <div class="flex justify-between">
-                <span class="text-on-surface-variant">Metode Pembayaran</span>
-                <span class="font-bold text-amber-600">
-                    {{ $regData['payment_method'] === 'tu' ? 'Bayar di TU' : ucfirst($regData['payment_method']) }}
-                </span>
-            </div>
-        </div>
-
-        {{-- CTA Buttons --}}
-        <div class="space-y-3">
-            <a href="{{ route('ppdb.cek.kode', ['school' => $school]) }}"
-               class="w-full bg-primary-container text-on-primary-fixed font-bold py-4 px-6 rounded-xl shadow-md hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined">key</span>
-                <span>Cek Kode Unik Saya</span>
-            </a>
-            <a href="{{ route('ppdb.login', ['school' => $school]) }}"
-               class="w-full bg-surface-container-low text-on-surface font-bold py-3 px-6 rounded-xl hover:bg-surface-container-high transition-all flex items-center justify-center gap-2 text-sm">
-                <span class="material-symbols-outlined text-base">login</span>
-                <span>Sudah Punya Kode? Masuk</span>
-            </a>
-        </div>
-
-        <p class="text-center text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface/30 mt-10">
-            &copy; {{ date('Y') }} {{ strtoupper($school) }} Putra Pakuan Bogor
-        </p>
-
         </div>
     </div>
 </div>
 
+<script>
+function copyToClipboard(text, button) {
+    // Try modern Clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            showCopySuccess(button);
+        }).catch(() => {
+            // Fallback to older method
+            fallbackCopyToClipboard(text, button);
+        });
+    } else {
+        // Fallback for older browsers
+        fallbackCopyToClipboard(text, button);
+    }
+}
+
+function fallbackCopyToClipboard(text, button) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    textarea.style.pointerEvents = 'none';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+        const success = document.execCommand('copy');
+        if (success) {
+            showCopySuccess(button);
+        } else {
+            alert('Gagal menyalin ID. Silakan coba lagi.');
+        }
+    } catch (err) {
+        console.error('Copy failed:', err);
+        alert('Gagal menyalin ID. Silakan coba lagi.');
+    } finally {
+        document.body.removeChild(textarea);
+    }
+}
+
+function showCopySuccess(button) {
+    if (!button) return;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<span class="material-symbols-outlined text-base">check</span><span class="hidden sm:inline">Tersalin</span>';
+    button.classList.add('bg-green-200', 'text-green-700');
+    button.classList.remove('bg-slate-200', 'hover:bg-slate-300', 'text-slate-700');
+
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.classList.remove('bg-green-200', 'text-green-700');
+        button.classList.add('bg-slate-200', 'hover:bg-slate-300', 'text-slate-700');
+    }, 2000);
+}
+</script>
 </body>
 </html>

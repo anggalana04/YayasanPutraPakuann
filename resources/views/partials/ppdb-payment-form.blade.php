@@ -130,7 +130,7 @@
         @if ($gopay)
         <div class="flex items-center justify-between rounded-xl border border-outline-variant/40 px-4 py-3 bg-surface-container-low/30 hover:bg-surface-container-low transition">
             <div class="flex items-center gap-3">
-                <span class="text-xl font-black text-green-600">GoPay</span>
+                <img src="{{ asset('images/Logo_Gopay.svg.png') }}" alt="GoPay" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 80px;">
                 <span class="text-on-surface font-bold tracking-wider text-lg">{{ $gopay }}</span>
             </div>
             <button type="button" onclick="copyText('{{ $gopay }}')"
@@ -144,7 +144,7 @@
         @if ($dana)
         <div class="flex items-center justify-between rounded-xl border border-outline-variant/40 px-4 py-3 bg-surface-container-low/30 hover:bg-surface-container-low transition">
             <div class="flex items-center gap-3">
-                <span class="text-xl font-black text-blue-600">DANA</span>
+                <img src="{{ asset('images/Logo_dana_blue.svg.png') }}" alt="DANA" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 120px;">
                 <span class="text-on-surface font-bold tracking-wider text-lg">{{ $dana }}</span>
             </div>
             <button type="button" onclick="copyText('{{ $dana }}')"
@@ -158,7 +158,7 @@
         @if ($ovo)
         <div class="flex items-center justify-between rounded-xl border border-outline-variant/40 px-4 py-3 bg-surface-container-low/30 hover:bg-surface-container-low transition">
             <div class="flex items-center gap-3">
-                <span class="text-xl font-black text-purple-700">OVO</span>
+                <img src="{{ asset('images/Logo_ovo_purple.svg.png') }}" alt="OVO" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 80px;">
                 <span class="text-on-surface font-bold tracking-wider text-lg">{{ $ovo }}</span>
             </div>
             <button type="button" onclick="copyText('{{ $ovo }}')"
@@ -172,7 +172,7 @@
         @if ($shopee)
         <div class="flex items-center justify-between rounded-xl border border-outline-variant/40 px-4 py-3 bg-surface-container-low/30 hover:bg-surface-container-low transition">
             <div class="flex items-center gap-3">
-                <span class="text-xl font-black text-orange-500">ShopeePay</span>
+                <img src="{{ asset('images/2-shopeepay-rectangle-orange2-1208029004.png') }}" alt="ShopeePay" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 100px;">
                 <span class="text-on-surface font-bold tracking-wider text-lg">{{ $shopee }}</span>
             </div>
             <button type="button" onclick="copyText('{{ $shopee }}')"
@@ -200,16 +200,16 @@
             </div>
             <h2 class="text-xl font-bold tracking-tight">Bukti Pembayaran</h2>
         </div>
-        <label class="flex-1 border-2 border-dashed border-outline-variant/30 rounded-2xl flex flex-col items-center justify-center p-6 text-center bg-white/50 hover:bg-white transition-all cursor-pointer group min-h-[180px]">
+        <label for="ewallet_proof_file" class="flex-1 border-2 border-dashed border-outline-variant/30 rounded-2xl flex flex-col items-center justify-center p-6 text-center bg-white/50 hover:bg-white transition-all cursor-pointer group min-h-[180px]">
             <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <span class="material-symbols-outlined text-primary text-3xl">image</span>
             </div>
             <p class="font-bold text-on-background mb-1">Unggah Screenshot Bukti</p>
-            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest">JPG, PNG atau PDF (Maks 2MB)</p>
+            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Klik di sini atau drag file (JPG, PNG, PDF - Maks 2MB)</p>
             <input class="hidden" type="file" name="payment_proof" id="ewallet_proof_file"
                 accept=".jpg,.jpeg,.png,.pdf"
                 onchange="showFileName(this, 'ewallet_file_name')">
-            <span id="ewallet_file_name" class="block mt-2 text-xs text-blue-600"></span>
+            <span id="ewallet_file_name" class="block mt-2 text-xs text-blue-600 font-semibold"></span>
         </label>
         <select name="ewallet_type" id="ewalletType"
             class="w-full bg-white border border-outline-variant rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
@@ -275,16 +275,16 @@
             </div>
             <h2 class="text-xl font-bold tracking-tight">Bukti Pembayaran</h2>
         </div>
-        <label class="flex-1 border-2 border-dashed border-outline-variant/30 rounded-2xl flex flex-col items-center justify-center p-6 text-center bg-white/50 hover:bg-white transition-all cursor-pointer group min-h-[180px]">
+        <label for="bank_proof_file" class="flex-1 border-2 border-dashed border-outline-variant/30 rounded-2xl flex flex-col items-center justify-center p-6 text-center bg-white/50 hover:bg-white transition-all cursor-pointer group min-h-[180px]">
             <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <span class="material-symbols-outlined text-primary text-3xl">image</span>
             </div>
             <p class="font-bold text-on-background mb-1">Unggah Bukti Transfer</p>
-            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest">JPG, PNG atau PDF (Maks 2MB)</p>
+            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Klik di sini atau drag file (JPG, PNG, PDF - Maks 2MB)</p>
             <input class="hidden" type="file" name="payment_proof" id="bank_proof_file"
                 accept=".jpg,.jpeg,.png,.pdf"
                 onchange="showFileName(this, 'bank_file_name')">
-            <span id="bank_file_name" class="block mt-2 text-xs text-blue-600"></span>
+            <span id="bank_file_name" class="block mt-2 text-xs text-blue-600 font-semibold"></span>
         </label>
         <button type="submit" onclick="setMethod('bank')"
             class="w-full bg-on-surface text-white py-4 rounded-full font-bold shadow-lg hover:opacity-90 active:scale-[0.98] transition-all">

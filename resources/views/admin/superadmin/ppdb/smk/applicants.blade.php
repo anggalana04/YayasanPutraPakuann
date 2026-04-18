@@ -142,9 +142,9 @@ Reset
 <button id="exportCsvBtn" type="button" class="bg-[#1c190d] text-[#f2cc0d] px-6 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
     <span class="material-symbols-outlined text-sm" data-icon="download">download</span> Ekspor CSV
 </button>
-<button id="exportXlsxBtn" type="button" class="bg-[#0077b6] text-white px-6 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
+{{-- <button id="exportXlsxBtn" type="button" class="bg-[#0077b6] text-white px-6 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
     <span class="material-symbols-outlined text-sm" data-icon="grid_view">grid_view</span> Ekspor Excel
-</button>
+</button> --}}
 </div>
 </div>
 </div>

@@ -1,5 +1,5 @@
 {{--
-  Cek Kode Unik page — applicant enters phone number to retrieve their unique code.
+  Cek Kode Unik page — applicant enters ID Pendaftaran and phone number to verify their registration status.
   Variables:
     $school      — lowercase school slug
     $status      — null | 'pending' | 'found'  (on result)
@@ -26,7 +26,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Cek Kode Unik — SPMB {{ $schoolLabel }} Putra Pakuan</title>
+<title>Cek ID Pendaftaran — SPMB {{ $schoolLabel }} Putra Pakuan</title>
 <link rel="icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -116,14 +116,14 @@ tailwind.config = {
             </div>
         </div>
 
-        {{-- Unique Code Display --}}
+        {{-- ID Pendaftaran Display --}}
         <div class="bg-primary-container/20 border-2 border-primary/30 rounded-2xl p-6 mb-5">
-            <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Kode Unik Anda</p>
+            <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">ID Pendaftaran Anda</p>
             <div class="flex items-center gap-3">
                 <p class="text-4xl md:text-5xl font-black text-primary font-headline tracking-[0.15em]" id="uniqueCode">
-                    {{ $unique_code }}
+                    {{ $application_id }}
                 </p>
-                <button type="button" onclick="copyCode()" class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors" title="Salin kode">
+                <button type="button" onclick="copyCode()" class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors" title="Salin ID Pendaftaran">
                     <span class="material-symbols-outlined text-2xl">content_copy</span>
                 </button>
             </div>
@@ -153,8 +153,35 @@ tailwind.config = {
         <a href="{{ route('ppdb.login', ['school' => $school]) }}"
            class="w-full bg-primary-container text-on-primary-fixed font-bold py-4 px-6 rounded-xl shadow-md hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
             <span class="material-symbols-outlined">login</span>
-            Masuk dengan Kode Unik
+            Masuk dengan ID Pendaftaran
         </a>
+
+        @elseif ($status === 'confirmed')
+        {{-- ── PAYMENT CONFIRMED (NO UNIQUE CODE YET) ──────────────── --}}
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-14 h-14 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1;">check_circle</span>
+            </div>
+            <div>
+                <h1 class="font-headline text-2xl font-bold tracking-tight">Pembayaran Dikonfirmasi!</h1>
+                <p class="text-xs text-on-surface-variant">Halo, <strong>{{ $full_name }}</strong></p>
+            </div>
+        </div>
+
+        <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-5 text-sm text-green-800">
+            <p class="font-bold mb-1">ID Pendaftaran: {{ $application_id }}</p>
+            <p>Pembayaran Anda telah dikonfirmasi oleh admin! Kode akses akan segera diaktifkan untuk melanjutkan pendaftaran.</p>
+        </div>
+
+        <div class="bg-surface-container-low rounded-xl p-4 mb-6 text-sm space-y-2">
+            <p class="font-bold text-xs uppercase tracking-widest text-on-surface-variant mb-2">Status Pembayaran</p>
+            <p class="text-on-surface font-semibold text-green-600">✓ Pembayaran Dikonfirmasi</p>
+        </div>
+
+        <button onclick="window.location.href='{{ route('ppdb.login', ['school' => $school]) }}'" class="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-green-700 transition-all flex items-center justify-center gap-2 text-sm">
+            <span class="material-symbols-outlined text-base">login</span>
+            Masuk Sekarang
+        </button>
 
         @elseif ($status === 'pending')
         {{-- ── PENDING VERIFICATION ──────────────────────────────── --}}
@@ -163,23 +190,45 @@ tailwind.config = {
                 <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1;">pending</span>
             </div>
             <div>
-                <h1 class="font-headline text-2xl font-bold tracking-tight">Sedang Diproses</h1>
+                <h1 class="font-headline text-2xl font-bold tracking-tight">
+                    @if(strpos($payment_method ?? '', 'TU') !== false || $payment_method === 'tu')
+                        Pembayaran Menunggu Tata Usaha
+                    @else
+                        Pembayaran Sedang Diverifikasi
+                    @endif
+                </h1>
                 <p class="text-xs text-on-surface-variant">Halo, <strong>{{ $full_name }}</strong></p>
             </div>
         </div>
 
         <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 text-sm text-amber-800">
             <p class="font-bold mb-1">ID Pendaftaran: {{ $application_id }}</p>
-            <p>Bukti pembayaran Anda sedang dalam proses verifikasi oleh admin. Silakan cek kembali nanti.</p>
+            @if(strpos($payment_method ?? '', 'TU') !== false || $payment_method === 'tu')
+                <p>Silakan lakukan pembayaran ke Tata Usaha (TU) sesuai nominal biaya pendaftaran yang telah ditentukan.</p>
+            @else
+                <p>Bukti pembayaran Anda sedang dalam proses verifikasi oleh admin. Silakan cek kembali nanti (biasanya dalam 1x24 jam).</p>
+            @endif
         </div>
 
         <div class="bg-surface-container-low rounded-xl p-4 mb-6 text-sm space-y-2">
-            <p class="font-bold text-xs uppercase tracking-widest text-on-surface-variant mb-2">Langkah selanjutnya</p>
-            <ol class="list-decimal list-inside space-y-1 text-on-surface-variant">
-                <li>Tunggu hingga admin memverifikasi bukti pembayaran.</li>
-                <li>Kembali ke halaman ini dan masukkan nomor WhatsApp.</li>
-                <li>Setelah terverifikasi, kode unik akan muncul di sini.</li>
-            </ol>
+            <p class="font-bold text-xs uppercase tracking-widest text-on-surface-variant mb-2">Metode Pembayaran</p>
+            @if($payment_method)
+                @if(strtolower($payment_method) === 'gopay')
+                    <img src="{{ asset('images/Logo_Gopay.svg.png') }}" alt="GoPay" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 80px;">
+                @elseif(strtolower($payment_method) === 'dana')
+                    <img src="{{ asset('images/Logo_dana_blue.svg.png') }}" alt="DANA" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 120px;">
+                @elseif(strtolower($payment_method) === 'ovo')
+                    <img src="{{ asset('images/Logo_ovo_purple.svg.png') }}" alt="OVO" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 80px;">
+                @elseif(strtolower($payment_method) === 'shopeepay')
+                    <img src="{{ asset('images/2-shopeepay-rectangle-orange2-1208029004.png') }}" alt="ShopeePay" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 100px;">
+                @elseif(strpos(strtolower($payment_method), 'tu') !== false)
+                    <p class="text-on-surface font-semibold">Bayar di TU Sekolah</p>
+                @else
+                    <p class="text-on-surface font-semibold">{{ $payment_method }}</p>
+                @endif
+            @else
+                <p class="text-on-surface font-semibold">Tidak Ditentukan</p>
+            @endif
         </div>
 
         <button onclick="window.location.reload()" class="w-full bg-surface-container-low text-on-surface font-bold py-3 px-6 rounded-xl hover:bg-surface-container-high transition-all flex items-center justify-center gap-2 text-sm">
@@ -189,9 +238,9 @@ tailwind.config = {
 
         @else
         {{-- ── PHONE LOOKUP FORM ─────────────────────────────────── --}}
-        <h1 class="font-headline text-3xl font-bold tracking-tighter text-on-background mb-2">Cek Kode Unik</h1>
+        <h1 class="font-headline text-3xl font-bold tracking-tighter text-on-background mb-2">Cek ID Pendaftaran</h1>
         <p class="text-on-surface-variant text-sm mb-8 leading-relaxed">
-            Masukkan nomor WhatsApp yang Anda daftarkan untuk melihat kode unik setelah pembayaran diverifikasi.
+            Masukkan ID Pendaftaran dan nomor WhatsApp yang Anda daftarkan untuk memastikan hanya Anda yang dapat melihat status dan kode akses.
         </p>
 
         @if ($errors->any())
@@ -202,6 +251,14 @@ tailwind.config = {
 
         <form method="POST" action="{{ route('ppdb.cek.kode.post', ['school' => $school]) }}" class="space-y-4">
             @csrf
+            <div class="space-y-1.5">
+                <label class="text-xs font-semibold text-on-surface/70 ml-2 uppercase tracking-wider" for="cek_application_id">
+                    ID Pendaftaran
+                </label>
+                <input name="application_id" id="cek_application_id" type="text" required
+                    class="w-full bg-surface-container-low border-none rounded-2xl px-5 py-4 text-sm focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant"
+                    placeholder="SPMB-2026-0001" value="{{ old('application_id') }}" autocomplete="off"/>
+            </div>
             <div class="space-y-1.5">
                 <label class="text-xs font-semibold text-on-surface/70 ml-2 uppercase tracking-wider" for="cek_phone">
                     Nomor WhatsApp

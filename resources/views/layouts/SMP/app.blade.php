@@ -7,7 +7,7 @@
     @php
         $seoTitle = trim($__env->yieldContent('title', 'SMP Putra Pakuan | Sekolah Menengah Pertama di Bogor'));
         $seoDescription = trim($__env->yieldContent('meta_description', 'SMP Putra Pakuan membina siswa berprestasi, berkarakter, dan siap melanjutkan ke jenjang pendidikan yang lebih tinggi.'));
-        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'smp putra pakuan, smp bogor, ppdb smp, sekolah menengah pertama'));
+        $seoKeywords = trim($__env->yieldContent('meta_keywords', 'smp putra pakuan, smp bogor, spmb smp, sekolah menengah pertama'));
         $seoImage = trim($__env->yieldContent('meta_image', asset('images/logo-yayasan.png')));
         $seoUrl = url()->current();
     @endphp
@@ -146,7 +146,7 @@
                 <a class="text-xs font-semibold hover:text-primary transition-colors" href="{{ route('school.kontak', ['school' => 'smp']) }}">HUBUNGI KAMI</a>
                 @php
                     $ppdbLive = $ppdbLive ?? false;
-                    $ppdbLabel = ($ppdbPeriod ?? null) ? 'PPDB ' . $ppdbPeriod : 'PPDB';
+                    $ppdbLabel = ($ppdbPeriod ?? null) ? 'SPMB ' . $ppdbPeriod : 'SPMB';
                 @endphp
                 @if($ppdbLive)
                 <button class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all ml-4" onclick="window.location.href='{{ route('school.ppdb', ['school' => 'smp']) }}'">
@@ -361,7 +361,7 @@
                         <li><a class="hover:text-white transition-colors" href="{{ route('school.visi', ['school' => 'smp']) }}">Visi & Misi</a></li>
                         <li><a class="hover:text-white transition-colors" href="{{ route('school.direktori.guru', ['school' => 'smp']) }}">Direktori Guru</a></li>
                         <li><a class="hover:text-white transition-colors" href="{{ route('school.galeri', ['school' => 'smp']) }}">Galeri Foto</a></li>
-                        <li><a class="hover:text-white transition-colors" href="{{ route('school.ppdb', ['school' => 'smp']) }}">PPDB Online</a></li>
+                        <li><a class="hover:text-white transition-colors" href="{{ route('school.ppdb', ['school' => 'smp']) }}">SPMB Online</a></li>
                     </ul>
                 </div>
                 <div class="space-y-6">
@@ -408,7 +408,7 @@
             <span class="material-symbols-outlined text-2xl">help</span>
         </button>
         <div id="smp-fab-menu" class="hidden w-64 rounded-xl bg-charcoal/95 text-white shadow-2xl p-3 space-y-2">
-            <a href="{{ route('school.ppdb', ['school' => 'smp']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Daftar PPDB</a>
+            <a href="{{ route('school.ppdb', ['school' => 'smp']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Daftar SPMB</a>
             <a href="{{ route('school.prestasi', ['school' => 'smp']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Lihat Prestasi</a>
             <a href="{{ route('school.kontak', ['school' => 'smp']) }}" class="block px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary transition-colors">Kontak Sekolah</a>
         </div>

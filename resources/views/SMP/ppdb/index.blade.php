@@ -21,24 +21,49 @@
 
     $ppdbOpen = $phases->where('is_live', true)->isNotEmpty();
     $now = Carbon::now();
-    $activePhase = $phases->first(function ($phase) use ($now) {
-        $start = Carbon::parse($phase->start_date)->startOfDay();
-        $end = Carbon::parse($phase->end_date)->endOfDay();
-        return $now->between($start, $end);
-    });
 
-    $upcomingPhases = $phases->filter(function ($phase) use ($now) {
-        return Carbon::parse($phase->start_date)->gt($now);
-    })->values();
+    $activePhase = $phases
+        ->filter(function ($phase) use ($now) {
+            $start = Carbon::parse($phase->start_date)->startOfDay();
+            $end = Carbon::parse($phase->end_date)->endOfDay();
+            return $now->gte($start) && $now->lte($end);
+        })
+        ->sortByDesc(function ($phase) {
+            return Carbon::parse($phase->start_date)->timestamp;
+        })
+        ->first();
 
-    $ppdbPeriod = $phases->last() ? (Carbon::parse($phases->first()->start_date)->year . '/' . (Carbon::parse($phases->first()->start_date)->year + 1)) : '2024/2025';
-    if ($activePhase) {
-        $ppdbPeriod = Carbon::parse($activePhase->start_date)->year . '/' . (Carbon::parse($activePhase->start_date)->year + 1);
-    } elseif ($upcomingPhases->first()) {
-        $ppdbPeriod = Carbon::parse($upcomingPhases->first()->start_date)->year . '/' . (Carbon::parse($upcomingPhases->first()->start_date)->year + 1);
+    if (!$activePhase) {
+        $activePhase = $phases->firstWhere('status', 'active');
     }
 
-    $displayPhaseName = $activePhase ? $activePhase->phase_name : ($upcomingPhases->first() ? 'Upcoming: ' . $upcomingPhases->first()->phase_name : 'Belum ada fase aktif');
+    $livePhase = $phases
+        ->filter(function ($phase) use ($now) {
+            return $phase->is_live && Carbon::parse($phase->end_date)->endOfDay()->gte($now);
+        })
+        ->sortByDesc(function ($phase) {
+            return Carbon::parse($phase->start_date)->timestamp;
+        })
+        ->first();
+
+    $upcomingPhases = $phases->filter(function ($phase) use ($now) {
+        return Carbon::parse($phase->start_date)->startOfDay()->gt($now);
+    })->sortBy(function ($phase) {
+        return Carbon::parse($phase->start_date)->timestamp;
+    })->values();
+
+    $phaseForPeriod = $activePhase ?: $livePhase ?: $upcomingPhases->first() ?? $phases->last();
+    $ppdbPeriod = '2024/2025';
+    if ($phaseForPeriod) {
+        $yearStart = Carbon::parse($phaseForPeriod->start_date)->year;
+        $ppdbPeriod = $yearStart . '/' . ($yearStart + 1);
+    }
+
+    $displayPhaseName = $activePhase
+        ? $activePhase->phase_name
+        : ($livePhase
+            ? 'Upcoming: ' . $livePhase->phase_name
+            : ($upcomingPhases->first() ? 'Upcoming: ' . $upcomingPhases->first()->phase_name : 'Belum ada fase aktif'));
 @endphp
 
 <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
@@ -55,7 +80,7 @@
                         Pendaftaran Dibuka
                     </div> --}}
                     <h1 class="text-5xl font-black leading-tight tracking-tight text-charcoal dark:text-slate-50 lg:text-7xl">
-                        PPDB {{ $ppdbPeriod }} <br/>
+                        SPMB {{ $ppdbPeriod }} <br/>
                         <span class="text-primary">SMP Putra Pakuan</span>
                     </h1>
                     <p class="max-w-135 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
@@ -63,17 +88,21 @@
                         @if($ppdbOpen)
                             Pendaftaran Peserta Didik Baru Tahun Ajaran {{ $ppdbPeriod }} sedang dibuka.
                         @else
-                            Saat ini PPDB belum dibuka atau sedang tutup. Cek jadwal di bawah untuk informasi lebih lanjut.
+                            Saat ini SPMB belum dibuka atau sedang tutup. Cek jadwal di bawah untuk informasi lebih lanjut.
                         @endif
                     </p>
                     <div class="flex flex-col gap-4 sm:flex-row">
                         <button class="flex h-14 items-center justify-center rounded-xl px-8 text-base font-bold text-charcoal transition-transform hover:scale-[1.02] active:scale-95 {{ $ppdbOpen ? 'bg-primary' : 'bg-slate-300 cursor-not-allowed'}}" {{ $ppdbOpen ? '' : 'disabled'}}
                             onclick="if({{ $ppdbOpen ? 'true' : 'false' }}) window.location.href='{{ route('ppdb.register', ['school'=>$school]) }}';">
-                            {{ $ppdbOpen ? 'Daftar Sekarang' : 'PPDB Saat Ini Ditutup' }}
+                            {{ $ppdbOpen ? 'Daftar Sekarang' : 'SPMB Saat Ini Ditutup' }}
                         </button>
                         <button class="flex h-14 items-center justify-center rounded-xl border-2 border-charcoal/10 px-8 text-base font-bold text-charcoal transition-colors hover:bg-charcoal/5 dark:border-slate-800 dark:text-slate-200"
                             onclick="window.location.href='{{ route('ppdb.login', ['school'=>$school]) }}'">
                             Login Pendaftar
+                        </button>
+                        <button class="flex h-14 items-center justify-center rounded-xl border-2 border-primary px-8 text-base font-bold text-primary bg-white transition-colors hover:bg-primary/5"
+                            onclick="window.location.href='{{ route('ppdb.cek.kode', ['school'=>$school]) }}'">
+                            Cek Status Pendaftaran
                         </button>
                     </div>
                 </div>
@@ -143,7 +172,7 @@
                                 </div>
                                 <div class="pt-1">
                                     <h4 class="font-bold">Jadwal Belum Tersedia</h4>
-                                    <p class="text-sm text-slate-400">Silakan hubungi admin untuk membuat fase PPDB.</p>
+                                    <p class="text-sm text-slate-400">Silakan hubungi admin untuk membuat fase SPMB.</p>
                                 </div>
                             </div>
                         @endforelse
@@ -219,7 +248,7 @@
                             </div>
                         </div>
                         <button type="submit" class="mt-4 flex h-14 w-full items-center justify-center gap-2 rounded-xl {{ $ppdbOpen ? 'bg-primary' : 'bg-slate-300 cursor-not-allowed'}} text-base font-black text-charcoal transition-all hover:scale-[1.01] active:scale-95" {{ $ppdbOpen ? '' : 'disabled'}}>
-                            {{ $ppdbOpen ? 'Mulai Registrasi Online' : 'PPDB Ditutup' }}
+                            {{ $ppdbOpen ? 'Mulai Registrasi Online' : 'SPMB Ditutup' }}
                             <span class="material-symbols-outlined">arrow_forward</span>
                         </button>
                         <p class="text-center text-[10px] text-slate-400">Dengan menekan tombol di atas, Anda menyetujui syarat & ketentuan pendaftaran SMP Putra Pakuan.</p>

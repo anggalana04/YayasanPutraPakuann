@@ -74,24 +74,54 @@ class AppServiceProvider extends ServiceProvider
                     })
                     ->first();
 
+                if (!$activePhase) {
+                    $activePhase = $phases->firstWhere('status', 'active');
+                }
+
+                $livePhase = $phases
+                    ->filter(function ($phase) use ($now) {
+                        $start = Carbon::parse($phase->start_date)->startOfDay();
+                        $end = Carbon::parse($phase->end_date)->endOfDay();
+                        return $phase->is_live && $now->gte($start) && $now->lte($end);
+                    })
+                    ->sortByDesc(function ($phase) {
+                        return Carbon::parse($phase->start_date)->timestamp;
+                    })
+                    ->first();
+
+                // Auto-disable is_live flag if all phases have ended
+                $allPhasesEnded = $phases->every(function ($phase) use ($now) {
+                    return Carbon::parse($phase->end_date)->endOfDay()->lt($now);
+                });
+
+                if ($allPhasesEnded && $school && $phases->whereNotNull('is_live')->isNotEmpty()) {
+                    PpdbManagementPhase::where('school_id', $school->id)
+                        ->where('is_live', true)
+                        ->update(['is_live' => false]);
+                }
+
                 $nextPhase = $phases
                     ->filter(function ($phase) use ($now) {
                         return Carbon::parse($phase->start_date)->startOfDay()->gt($now);
                     })
                     ->sortBy(function ($phase) {
                         return Carbon::parse($phase->start_date)->timestamp;
-                    })
-                    ->first();
-                $phaseForCountdown = $activePhase ?? $nextPhase ?? $phases->last();
+                    });
+
+                $phaseForCountdown = $activePhase ?: $livePhase ?: $nextPhase->first() ?? $phases->last();
 
                 $ppdbCurrentPhase = null;
                 $ppdbCountdownDate = null;
                 $ppdbPeriod = null;
 
                 if ($phaseForCountdown) {
-                    $ppdbCurrentPhase = $activePhase
-                        ? $activePhase->phase_name
-                        : ($nextPhase ? "Upcoming: {$nextPhase->phase_name}" : $phaseForCountdown->phase_name);
+                    if ($activePhase) {
+                        $ppdbCurrentPhase = $activePhase->phase_name;
+                    } elseif ($livePhase) {
+                        $ppdbCurrentPhase = "Upcoming: {$livePhase->phase_name}";
+                    } elseif ($nextPhase->first()) {
+                        $ppdbCurrentPhase = "Upcoming: {$nextPhase->first()->phase_name}";
+                    }
 
                     $ppdbCountdownDate = Carbon::parse($phaseForCountdown->end_date)->endOfDay();
                     $yearStart = Carbon::parse($phaseForCountdown->start_date)->year;
@@ -99,7 +129,7 @@ class AppServiceProvider extends ServiceProvider
                 }
 
                 return [
-                    'ppdbLive' => $phases->where('is_live', true)->isNotEmpty(),
+                    'ppdbLive' => $livePhase !== null,
                     'ppdbPeriod' => $ppdbPeriod,
                     'ppdbCurrentPhase' => $ppdbCurrentPhase,
                     'ppdbCountdownDate' => $ppdbCountdownDate,
@@ -131,7 +161,7 @@ class AppServiceProvider extends ServiceProvider
 
                 $totalApplicantsBySchoolId = PpdbApplication::selectRaw('school_id, COUNT(*) as total')
                     ->whereIn('school_id', $schools->pluck('id')->all())
-                    ->whereIn('status', ['pending', 'payment_uploaded', 'accepted', 'rejected'])
+                    ->whereIn('status', ['pending', 'payment_uploaded', 'payment_confirmed', 'accepted', 'rejected'])
                     ->groupBy('school_id')
                     ->pluck('total', 'school_id');
 
@@ -203,8 +233,8 @@ class AppServiceProvider extends ServiceProvider
                     ]);
                 }
 
-                $pendingVerifications = PpdbApplication::whereIn('status', ['pending', 'payment_uploaded'])->count();
-                $masterTotalApplicants = PpdbApplication::whereIn('status', ['pending', 'payment_uploaded', 'accepted', 'rejected'])->count();
+                $pendingVerifications = PpdbApplication::whereIn('status', ['pending', 'payment_uploaded', 'payment_confirmed'])->count();
+                $masterTotalApplicants = PpdbApplication::whereIn('status', ['pending', 'payment_uploaded', 'payment_confirmed', 'accepted', 'rejected'])->count();
 
                 $smkCapacityStats = collect();
                 $smkCapacityYear = null;

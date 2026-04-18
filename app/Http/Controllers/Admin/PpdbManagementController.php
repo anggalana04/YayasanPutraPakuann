@@ -104,8 +104,8 @@ class PpdbManagementController extends Controller
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->get();
 
-            $pendingCount = $applicants->where('status', 'payment_uploaded')->count();
-            $notHandledCount = $applicants->whereIn('status', ['payment_uploaded', 'pending'])->count();
+            $pendingCount = $applicants->whereIn('status', ['pending', 'payment_uploaded', 'payment_confirmed'])->count();
+            $notHandledCount = $applicants->whereIn('status', ['payment_uploaded', 'payment_confirmed', 'pending'])->count();
         }
 
 
@@ -355,7 +355,9 @@ class PpdbManagementController extends Controller
             ->filter()
             ->countBy();
 
-        return view('admin.superadmin.ppdb.' . strtolower($schoolModel->type) . '.capacity', [
+        // Map school type to view folder (SDIT → sd)
+        $viewType = $schoolModel->type === 'SDIT' ? 'sd' : strtolower($schoolModel->type);
+        return view('admin.superadmin.ppdb.' . $viewType . '.capacity', [
             'school' => $schoolModel,
             'year' => $year,
             'capacities' => $capacities,
@@ -483,6 +485,32 @@ class PpdbManagementController extends Controller
 
         // Toggle is_live for all phases in this year
         $isCurrentlyLive = $phases->first()->is_live;
+        $now = \Carbon\Carbon::now();
+
+        // Check if all phases have ended
+        $allPhasesEnded = $phases->every(function ($phase) use ($now) {
+            return $phase->end_date < $now;
+        });
+
+        // If trying to turn ON PPDB but all phases have ended, reject it
+        if (!$isCurrentlyLive && $allPhasesEnded) {
+            return back()->withErrors(['year' => 'Tidak dapat mengaktifkan PPDB. Semua periode pendaftaran telah berakhir.']);
+        }
+
+        // If trying to turn ON, but ANY phase has ended, show warning
+        if (!$isCurrentlyLive && $phases->some(function ($phase) use ($now) {
+            return $phase->end_date < $now;
+        })) {
+            return back()->withErrors(['year' => 'Beberapa periode pendaftaran sudah berakhir. Silakan periksa tanggal periode Anda.']);
+        }
+
+        if (!$isCurrentlyLive) {
+            // When opening a new live year, ensure no other year remains live for the same school.
+            PpdbManagementPhase::where('school_id', $schoolModel->id)
+                ->whereYear('start_date', '<>', $yearStart)
+                ->update(['is_live' => false]);
+        }
+
         foreach ($phases as $phase) {
             $phase->is_live = !$isCurrentlyLive;
             $phase->save();

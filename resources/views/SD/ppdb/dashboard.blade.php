@@ -10,9 +10,13 @@
 <h1 class="text-4xl md:text-5xl font-extrabold text-brand-charcoal tracking-tighter leading-none">{{ $application->full_name ?? '-' }}</h1>
 </div>
 <div class="bg-surface-container-low px-6 py-4 rounded-2xl border-l-4 border-brand-yellow">
-<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Kode Unik</p>
-<p class="text-2xl font-black text-brand-charcoal font-headline tracking-wider">{{ $application->unique_code ?? '-' }}</p>
-<p class="text-xs text-on-surface-variant mt-1">ID: {{ $application->application_id ?? '-' }}</p>
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">ID Pendaftaran</p>
+<div class="flex items-center justify-between gap-3">
+<p class="text-2xl font-black text-brand-charcoal font-headline tracking-wider">{{ $application->application_id ?? '-' }}</p>
+<button type="button" onclick="copyToClipboard('{{ $application->application_id }}', this)" class="inline-flex items-center gap-1 rounded-lg bg-slate-200 hover:bg-slate-300 px-2 py-1.5 text-xs font-semibold text-slate-700 transition" title="Salin ID">
+<span class="material-symbols-outlined text-sm">content_copy</span>
+</button>
+</div>
 </div>
 </div>
 </div>
@@ -28,9 +32,6 @@
 <h2 class="text-2xl font-bold text-brand-charcoal">Status Pendaftaran</h2>
 <p class="text-on-surface-variant">Update terakhir: {{ $application->updated_at ? $application->updated_at->format('d M Y') : '-' }}</p>
 </div>
-<span class="bg-brand-yellow/20 text-brand-charcoal px-4 py-2 rounded-full text-sm font-bold animate-pulse">
-    {{ $application->status === 'payment_uploaded' ? 'Menunggu Verifikasi Pembayaran' : ($application->status ?? '-') }}
-</span>
 </div>
 <!-- Step Tracker (Vertical Editorial Style) -->
 @php
@@ -184,6 +185,63 @@
 </div>
 </div>
 </div>
+@endsection
+
+@section('ppdb-scripts')
+<script>
+function copyToClipboard(text, button) {
+    // Try modern Clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            showCopySuccess(button);
+        }).catch(() => {
+            // Fallback to older method
+            fallbackCopyToClipboard(text, button);
+        });
+    } else {
+        // Fallback for older browsers
+        fallbackCopyToClipboard(text, button);
+    }
+}
+
+function fallbackCopyToClipboard(text, button) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    textarea.style.pointerEvents = 'none';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+        const success = document.execCommand('copy');
+        if (success) {
+            showCopySuccess(button);
+        } else {
+            alert('Gagal menyalin ID. Silakan coba lagi.');
+        }
+    } catch (err) {
+        console.error('Copy failed:', err);
+        alert('Gagal menyalin ID. Silakan coba lagi.');
+    } finally {
+        document.body.removeChild(textarea);
+    }
+}
+
+function showCopySuccess(button) {
+    if (!button) return;
+    const originalHTML = button.innerHTML;
+    button.innerHTML = '<span class="material-symbols-outlined text-sm">check</span>';
+    button.classList.add('bg-green-200', 'text-green-700');
+    button.classList.remove('bg-slate-200', 'hover:bg-slate-300', 'text-slate-700');
+
+    setTimeout(() => {
+        button.innerHTML = originalHTML;
+        button.classList.remove('bg-green-200', 'text-green-700');
+        button.classList.add('bg-slate-200', 'hover:bg-slate-300', 'text-slate-700');
+    }, 2000);
+}
+</script>
 @endsection
 
 @section('ppdb-footer')

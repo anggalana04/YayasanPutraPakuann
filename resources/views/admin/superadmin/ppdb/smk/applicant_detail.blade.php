@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('title', 'Applicant Details - SMK Putra Pakuan')
 
@@ -273,10 +273,10 @@
                     <form method="POST" action="{{ route('admin.ppdb.applicants.smk.confirm_payment', $applicant->id) }}">
                         @csrf
                         <button type="submit"
-                            onclick="return confirm('Konfirmasi pembayaran dari {{ addslashes($applicant->full_name) }} sudah diterima dan kode unik akan dibuat?')"
+                            onclick="return confirm('Konfirmasi pembayaran dari {{ addslashes($applicant->full_name) }} sudah diterima?')"
                             class="w-full py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors">
                             <span class="material-symbols-outlined text-base">verified</span>
-                            Konfirmasi Pembayaran & Buat Kode Unik
+                            Konfirmasi Pembayaran
                         </button>
                     </form>
                 @endif
@@ -292,7 +292,19 @@
                 @if($applicant->payment_method)
                 <div class="flex justify-between items-center">
                     <span class="text-on-surface-variant">Metode</span>
-                    <span class="font-bold">{{ $applicant->payment_method }}</span>
+                    @if(strtolower($applicant->payment_method) === 'gopay')
+                        <img src="{{ asset('images/Logo_Gopay.svg.png') }}" alt="GoPay" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 80px;">
+                    @elseif(strtolower($applicant->payment_method) === 'dana')
+                        <img src="{{ asset('images/Logo_dana_blue.svg.png') }}" alt="DANA" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 120px;">
+                    @elseif(strtolower($applicant->payment_method) === 'ovo')
+                        <img src="{{ asset('images/Logo_ovo_purple.svg.png') }}" alt="OVO" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 80px;">
+                    @elseif(strtolower($applicant->payment_method) === 'shopeepay')
+                        <img src="{{ asset('images/2-shopeepay-rectangle-orange2-1208029004.png') }}" alt="ShopeePay" class="flex-shrink-0 h-7 object-contain align-middle" style="display: block; max-width: 100px;">
+                    @elseif(strpos(strtolower($applicant->payment_method), 'tu') !== false)
+                        <span class="font-bold">Bayar di TU</span>
+                    @else
+                        <span class="font-bold">{{ $applicant->payment_method }}</span>
+                    @endif
                 </div>
                 @endif
                 @if($applicant->payment_date)

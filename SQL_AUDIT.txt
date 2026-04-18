@@ -1,0 +1,24 @@
+<?php
+/**
+ * SQL Audit: Direct database query to diagnose the issue
+ */
+
+// Simulate direct SQL query
+echo "=== SQL Query for Diagnosis ===\n";
+echo "SELECT id, application_id, status, school_id, full_name, phone, payment_method, unique_code\n";
+echo "FROM ppdb_applications\n";
+echo "WHERE application_id = 'SPMB-2026-71980';\n";
+echo "\n";
+echo "=== Expected Results ===\n";
+echo "Should show ONE record (or possibly multiple if data got duplicated)\n";
+echo "Status should be: payment_confirmed (if admin confirmed it)\n";
+echo "Or: payment_uploaded (if not yet confirmed)\n";
+echo "Or: pending (if no payment proof uploaded)\n";
+echo "\n";
+echo "=== If you see multiple records ===\n";
+echo "This indicates data integrity issue - contact DB admin\n";
+echo "\n";
+echo "=== If status is NOT 'payment_confirmed' ===\n";
+echo "Then the save() call in the route handler failed silently\n";
+echo "Check: storage/logs/laravel.log for errors\n";
+?>

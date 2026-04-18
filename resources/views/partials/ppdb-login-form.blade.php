@@ -1,5 +1,5 @@
 {{--
-  Shared SPMB login form — unique code based.
+  Shared SPMB login form — Application ID (SPMB-YEAR-XXXX) based.
   Variables: $school
 --}}
 
@@ -73,10 +73,10 @@ tailwind.config = {
     </div>
     <div class="relative z-10 max-w-md">
         <h1 class="font-headline text-5xl font-bold text-on-primary-fixed leading-[1.1] mb-6">
-            Masuk dengan Kode Unik Anda.
+            Masuk dengan ID Pendaftaran Anda.
         </h1>
         <p class="text-lg text-on-primary-fixed-variant leading-relaxed">
-            Gunakan kode unik yang Anda terima saat pendaftaran untuk mengakses form biodata, berkas, dan dashboard pendaftaran.
+            Gunakan ID Pendaftaran yang Anda terima saat daftar untuk mengakses form biodata, berkas, dan dashboard pendaftaran.
         </p>
     </div>
     <div class="relative z-10 flex gap-4">
@@ -101,7 +101,7 @@ tailwind.config = {
     <div class="max-w-md mx-auto w-full">
         <header class="mb-10 text-center lg:text-left">
             <h2 class="font-headline text-3xl font-bold text-on-surface mb-2 tracking-tight">Masuk ke Portal SPMB</h2>
-            <p class="text-on-surface-variant">Masukkan kode unik yang Anda terima saat pendaftaran</p>
+            <p class="text-on-surface-variant">Masukkan ID Pendaftaran (SPMB-XXXX-XXXX) yang Anda terima saat mendaftar</p>
         </header>
 
         <form class="space-y-6" method="POST" action="{{ route('ppdb.login.post', ['school' => $school]) }}">
@@ -116,23 +116,22 @@ tailwind.config = {
                 </div>
             @endif
 
-            {{-- Unique Code Input --}}
+            {{-- Application ID Input --}}
             <div class="space-y-2 group">
-                <label class="text-sm font-bold text-on-surface tracking-tight block ml-1" for="unique_code">Kode Unik</label>
+                <label class="text-sm font-bold text-on-surface tracking-tight block ml-1" for="application_id">ID Pendaftaran</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <span class="material-symbols-outlined text-outline text-xl">key</span>
+                        <span class="material-symbols-outlined text-outline text-xl">badge</span>
                     </div>
                     <input class="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:bg-surface-container-lowest focus:ring-0 rounded-t-xl transition-all font-bold text-on-surface placeholder:text-outline-variant placeholder:font-normal tracking-[0.15em] text-lg uppercase"
-                           id="unique_code" name="unique_code"
-                           placeholder="XXXX-XXXX"
+                           id="application_id" name="application_id"
+                           placeholder="SPMB-2026-0001"
                            type="text"
-                           maxlength="9"
+                           maxlength="50"
                            autocomplete="off"
-                           value="{{ old('unique_code') }}"
-                           oninput="formatCode(this)"/>
+                           value="{{ old('application_id') }}"/>
                 </div>
-                <p class="text-xs text-on-surface-variant ml-1">Format: XXXX-XXXX (8 karakter)</p>
+                <p class="text-xs text-on-surface-variant ml-1">Gunakan ID Pendaftaran Anda, misalnya SPMB-2026-0001.</p>
             </div>
 
             {{-- Login Button --}}
@@ -172,12 +171,8 @@ tailwind.config = {
 
 <script>
 function formatCode(input) {
-    // Auto-format: insert dash after 4th character
-    let val = input.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-    if (val.length > 4) {
-        val = val.substring(0, 4) + '-' + val.substring(4, 8);
-    }
-    input.value = val;
+    // Keep Application ID characters uppercase and allow dashes.
+    input.value = input.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
 }
 </script>
 </body>

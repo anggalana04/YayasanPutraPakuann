@@ -27,7 +27,7 @@ class AdminPpdbApplicantsController extends Controller
         PpdbApplication::cleanupOldDrafts();
 
         $query = PpdbApplication::where('school_id', $schoolId)
-            ->whereIn('status', ['pending', 'payment_uploaded', 'accepted', 'rejected']);
+            ->whereIn('status', ['pending', 'payment_uploaded', 'payment_confirmed', 'accepted', 'rejected']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -340,7 +340,9 @@ class AdminPpdbApplicantsController extends Controller
                 $this->computeMajorStats($applicant, $schoolModel->id);
         }
 
-        $view = 'admin.superadmin.ppdb.' . strtolower($schoolModel->type) . '.applicant_detail';
+        // Map school type to view folder (SDIT → sd)
+        $viewType = $schoolModel->type === 'SDIT' ? 'sd' : strtolower($schoolModel->type);
+        $view = 'admin.superadmin.ppdb.' . $viewType . '.applicant_detail';
         if (! view()->exists($view)) {
             abort(404, 'Applicant detail view not found for this school.');
         }
@@ -424,8 +426,8 @@ class AdminPpdbApplicantsController extends Controller
 
     /**
      * POST /admin/ppdb/applicants/{school}/{id}/confirm-payment
-     * Confirm that payment has been received and generate the applicant's unique login code.
-     * Works for all payment methods (TU, bank transfer, e-wallet).
+     * Confirm that payment has been received and generate the applicant's secure login token.
+     * Handles both TU (bank teller) and online (bank transfer, e-wallet) payments.
      */
     public function confirmPayment(Request $request, string $school, int $id)
     {
@@ -436,6 +438,12 @@ class AdminPpdbApplicantsController extends Controller
             abort(404);
         }
 
+        // Check if already confirmed
+        if ($applicant->status === 'payment_confirmed') {
+            return redirect()->route('admin.ppdb.applicants.by_school.detail', ['school' => $school, 'id' => $id])
+                ->with('info', 'Pembayaran sudah pernah dikonfirmasi sebelumnya.');
+        }
+
         $statusHistory   = $applicant->status_history ?: [];
         $statusHistory[] = [
             'status'     => 'payment_confirmed',
@@ -443,17 +451,30 @@ class AdminPpdbApplicantsController extends Controller
             'note'       => 'Pembayaran dikonfirmasi oleh admin: ' . (auth('admin')->user()->name ?? 'admin'),
         ];
 
-        // Generate unique_code if not already set — this is the applicant's login credential
-        if (! $applicant->unique_code) {
-            $applicant->unique_code = \App\Models\PpdbApplication::generateUniqueCode();
+        // Ensure login_token is generated if not already present
+        if (!$applicant->login_token) {
+            $applicant->login_token = PpdbApplication::generateLoginToken();
         }
 
+        // Set confirmed status
         $applicant->payment_date    = $applicant->payment_date ?? now();
-        $applicant->status          = 'payment_uploaded';
+        $applicant->status          = 'payment_confirmed';
         $applicant->status_history  = $statusHistory;
         $applicant->save();
 
+        // Force explicit verification that status was saved
+        $applicant->refresh();
+        if ($applicant->status !== 'payment_confirmed') {
+            // Fallback: Use direct update query
+            PpdbApplication::where('id', $applicant->id)
+                ->update([
+                    'status' => 'payment_confirmed',
+                    'status_history' => json_encode($statusHistory),
+                    'payment_date' => $applicant->payment_date,
+                ]);
+        }
+
         $detailRoute = route('admin.ppdb.applicants.by_school.detail', ['school' => $school, 'id' => $id]);
-        return redirect($detailRoute)->with('success', 'Pembayaran berhasil dikonfirmasi. Kode unik telah dibuat untuk pendaftar.');
+        return redirect($detailRoute)->with('success', 'Pembayaran berhasil dikonfirmasi. ID Pendaftaran telah siap digunakan untuk login.');
     }
 }

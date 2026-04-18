@@ -366,17 +366,41 @@ Route::middleware(['auth:admin', 'admin.access'])->group(function () {
             'note'       => 'Pembayaran dikonfirmasi oleh admin: ' . (auth('admin')->user()->name ?? 'admin'),
         ];
 
-        if (! $applicant->unique_code) {
-            $applicant->unique_code = \App\Models\PpdbApplication::generateUniqueCode();
+        // Ensure login_token is generated if not already present
+        if (!$applicant->login_token) {
+            $applicant->login_token = \App\Models\PpdbApplication::generateLoginToken();
         }
 
         $applicant->payment_date   = $applicant->payment_date ?? now();
-        $applicant->status         = 'payment_uploaded';
+        $applicant->status         = 'payment_confirmed';
         $applicant->status_history = $statusHistory;
         $applicant->save();
 
+        // Force explicit verification that status was saved
+        $applicant->refresh();
+        if ($applicant->status !== 'payment_confirmed') {
+            // Fallback: Use direct update query
+            \App\Models\PpdbApplication::where('id', $applicant->id)
+                ->update([
+                    'status' => 'payment_confirmed',
+                    'status_history' => json_encode($statusHistory),
+                    'payment_date' => $applicant->payment_date,
+                ]);
+        }
+
+        // Log for debugging
+        $final = \App\Models\PpdbApplication::find($applicant->id);
+        \Illuminate\Support\Facades\Log::info('SMK Payment Confirm Debug', [
+            'applicant_id' => $applicant->id,
+            'application_id' => $applicant->application_id,
+            'status_before' => $applicant->getOriginal('status'),
+            'status_after_save' => $applicant->status,
+            'status_after_refresh' => $final->status,
+            'school_id' => $applicant->school_id,
+        ]);
+
         return redirect()->route('admin.ppdb.applicants.smk.detail', $id)
-            ->with('success', 'Pembayaran berhasil dikonfirmasi. Kode unik: ' . $applicant->unique_code);
+            ->with('success', 'Pembayaran berhasil dikonfirmasi. ID Pendaftaran: ' . $applicant->application_id);
     })->name('admin.ppdb.applicants.smk.confirm_payment');
 
     // SMP Applicants
@@ -513,7 +537,7 @@ Route::prefix('{school}')
 
         Route::get('/ppdb', fn($school) => $render($school, 'ppdb.index'))->name('school.ppdb');
 
-        // PPDB Authentication Routes — Unique Code Based
+        // PPDB Authentication Routes — ID PPDB login
         Route::get('/login', fn($school) => view(strtoupper($school) . '.ppdb.login', compact('school')))->name('ppdb.login');
         Route::get('/daftar', [App\Http\Controllers\PpdbAuthController::class, 'showRegisterForm'])->name('ppdb.register');
         Route::post('/login', [App\Http\Controllers\PpdbAuthController::class, 'login'])->middleware('throttle:10,1')->name('ppdb.login.post');
@@ -526,6 +550,24 @@ Route::prefix('{school}')
         // Cek Kode Unik — applicant retrieves their code after admin verifies payment
         Route::get('/ppdb/cek-kode', [App\Http\Controllers\PpdbAuthController::class, 'showCheckCode'])->name('ppdb.cek.kode');
         Route::post('/ppdb/cek-kode', [App\Http\Controllers\PpdbAuthController::class, 'checkCode'])->name('ppdb.cek.kode.post');
+
+        // DEBUG ENDPOINT only for development
+        Route::get('/ppdb/debug/{applicationId}', function (string $applicationId) {
+            $app = \App\Models\PpdbApplication::where('application_id', strtoupper($applicationId))->first();
+            if (!$app) return response()->json(['error' => 'Not found'], 404);
+
+            return response()->json([
+                'id' => $app->id,
+                'application_id' => $app->application_id,
+                'full_name' => $app->full_name,
+                'phone' => $app->phone,
+                'school_id' => $app->school_id,
+                'status' => $app->status,
+                'unique_code' => $app->unique_code,
+                'payment_method' => $app->payment_method,
+                'status_history' => $app->status_history,
+            ]);
+        })->name('ppdb.debug');
 
         // PPDB authenticated routes (middleware enforced at routing layer)
         Route::middleware('ppdb.auth')->group(function () use ($render) {
