@@ -5,6 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta name="robots" content="noindex, nofollow" />
     <meta name="description" content="Panel admin Yayasan Putra Pakuan untuk pengelolaan konten, pengguna, dan SPMB." />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="canonical" href="{{ url()->current() }}" />
     <link rel="icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />
     <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo-yayasan.png') }}" />

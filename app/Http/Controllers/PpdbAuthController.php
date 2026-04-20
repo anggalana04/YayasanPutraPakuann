@@ -383,7 +383,9 @@ class PpdbAuthController extends Controller
                 $application->$field = $path;
             }
         }
-        $application->status = 'pending';
+        // CRITICAL FIX: Do NOT reset status to 'pending'. The payment confirmation status must be preserved.
+        // The registration step progression is tracked via last_registration_step, not status.
+        // Status should remain as 'payment_confirmed' throughout the application process.
         $application->last_registration_step = 'done';
         $application->save();
         return redirect()->route('ppdb.dashboard', ['school' => $request->route('school')])->with('success', 'Berkas berhasil diunggah. Pendaftaran Anda telah lengkap.');

@@ -54,6 +54,40 @@ class AdminPpdbApplicantsController extends Controller
             });
         }
 
+        if ($request->filled('payment_method') && strtolower($request->payment_method) !== 'all') {
+            $paymentMethod = strtolower($request->payment_method);
+            $query->whereRaw('LOWER(payment_method) = ?', [$paymentMethod]);
+        }
+
+        if ($request->filled('payment_status') && strtolower($request->payment_status) !== 'all') {
+            $paymentStatus = strtolower($request->payment_status);
+            if ($paymentStatus === 'unpaid') {
+                $query->whereIn('status', ['pending', 'payment_uploaded']);
+            } elseif ($paymentStatus === 'paid') {
+                $query->whereIn('status', ['payment_confirmed', 'accepted']);
+            }
+        }
+
+        if ($request->filled('registration_step') && strtolower($request->registration_step) !== 'all') {
+            $registrationStep = strtolower($request->registration_step);
+            if ($registrationStep === 'waiting_payment_verification') {
+                $query->whereIn('status', ['pending', 'payment_uploaded']);
+            } elseif ($registrationStep === 'biodata') {
+                $query->where('last_registration_step', 'biodata')
+                    ->whereNotIn('status', ['pending', 'payment_uploaded']);
+            } elseif ($registrationStep === 'berkas') {
+                $query->where('last_registration_step', 'jurusan_berkas');
+            } elseif ($registrationStep === 'selesai') {
+                $query->where('last_registration_step', 'done');
+            } elseif ($registrationStep === 'diterima') {
+                $query->whereIn('status', ['accepted', 'accepted_major_1', 'accepted_major_2']);
+            } elseif (in_array($registrationStep, ['ditolak', 'rejected'], true)) {
+                $query->where('status', 'rejected');
+            } elseif ($registrationStep === 'wawancara') {
+                $query->whereNotNull('interview_date');
+            }
+        }
+
         if ($request->filled('status') && strtolower($request->status) !== 'all') {
             $query->where('status', strtolower($request->status));
         }
@@ -114,18 +148,66 @@ class AdminPpdbApplicantsController extends Controller
     }
 
     /** Map a PpdbApplication to the JSON array shape expected by the frontend. */
+    private static function getRegistrationStepLabel(PpdbApplication $item): string
+    {
+        if (in_array($item->status, ['accepted', 'accepted_major_1', 'accepted_major_2'], true)) {
+            return 'Diterima';
+        }
+
+        if ($item->status === 'rejected') {
+            return 'Enggak';
+        }
+
+        if (in_array($item->status, ['pending', 'payment_uploaded'], true)) {
+            return 'Menunggu Verifikasi Pembayaran';
+        }
+
+        if ($item->interview_date) {
+            return 'Wawancara';
+        }
+
+        return match ($item->last_registration_step) {
+            'jurusan_berkas' => 'Berkas',
+            'done'           => 'Selesai',
+            default          => 'Biodata',
+        };
+    }
+
+    private static function getPaymentStatusLabel(PpdbApplication $item): string
+    {
+        if (in_array($item->status, ['pending', 'payment_uploaded'], true)) {
+            return 'Menunggu Verifikasi Pembayaran';
+        }
+
+        if (in_array($item->status, ['payment_confirmed', 'accepted', 'accepted_major_1', 'accepted_major_2'], true)) {
+            return 'Sudah Bayar';
+        }
+
+        if ($item->status === 'rejected') {
+            return 'Ditolak';
+        }
+
+        return ucfirst(str_replace('_', ' ', $item->status));
+    }
+
     private function mapApplicant(PpdbApplication $item): array
     {
         return [
-            'id'             => $item->id,
-            'application_id' => $item->application_id,
-            'full_name'      => $item->full_name,
-            'email'          => $item->email,
-            'major_1'        => $item->major_1,
-            'major_2'        => $item->major_2,
-            'assigned_major' => $item->assigned_major,
-            'status'         => $item->status,
-            'created_at'     => $item->created_at?->format('Y-m-d') ?? '-',
+            'id'                 => $item->id,
+            'application_id'     => $item->application_id,
+            'full_name'          => $item->full_name,
+            'email'              => $item->email,
+            'registration_step'  => self::getRegistrationStepLabel($item),
+            'payment_status'     => self::getPaymentStatusLabel($item),
+            'major_1'            => $item->major_1,
+            'major_2'            => $item->major_2,
+            'assigned_major'     => $item->assigned_major,
+            'status'             => $item->status,
+            'payment_method'     => $item->payment_method,
+            'payment_proof'      => $item->payment_proof,
+            'payment_amount'     => $item->payment_amount,
+            'payment_date'       => $item->payment_date?->format('Y-m-d H:i:s') ?? null,
+            'created_at'         => $item->created_at?->format('Y-m-d') ?? '-',
         ];
     }
 
@@ -223,21 +305,33 @@ class AdminPpdbApplicantsController extends Controller
     public function smkIndex(Request $request)
     {
         $schoolModel        = School::where('type', 'SMK')->firstOrFail();
-        $query              = $this->buildApplicantQuery($schoolModel->id, $request);
-        $pendingCount       = (clone $query)->whereIn('status', ['pending', 'payment_uploaded'])->count();
+        $query               = $this->buildApplicantQuery($schoolModel->id, $request);
+        $totalApplicantsCount = PpdbApplication::where('school_id', $schoolModel->id)->count();
+        $pendingReviewCount   = PpdbApplication::where('school_id', $schoolModel->id)
+            ->whereIn('status', ['pending', 'payment_uploaded'])
+            ->count();
         $pendingOverallCount = PpdbApplication::where('school_id', $schoolModel->id)
             ->whereIn('status', ['pending', 'payment_uploaded'])->count();
-        $applicants  = $query->orderBy('created_at', 'desc')->get();
-        $capacities  = $this->getCapacities($schoolModel->id, $request->year);
+        $applicants   = $query->orderBy('created_at', 'desc')->get();
+        $capacities   = $this->getCapacities($schoolModel->id, $request->year);
         $selectedYear = $request->year;
+        $selectedMajor = $request->major;
+        $selectedPaymentMethod = $request->payment_method;
+        $selectedPaymentStatus = $request->payment_status;
+        $selectedRegistrationStep = $request->registration_step;
 
         return view('admin.superadmin.ppdb.smk.applicants', compact(
             'applicants',
             'schoolModel',
             'capacities',
             'selectedYear',
-            'pendingCount',
-            'pendingOverallCount'
+            'selectedMajor',
+            'selectedPaymentMethod',
+            'selectedPaymentStatus',
+            'selectedRegistrationStep',
+            'pendingOverallCount',
+            'totalApplicantsCount',
+            'pendingReviewCount'
         ));
     }
 
@@ -245,15 +339,19 @@ class AdminPpdbApplicantsController extends Controller
     public function smkData(Request $request)
     {
         $schoolModel = School::where('type', 'SMK')->firstOrFail();
-        $query      = $this->buildApplicantQuery($schoolModel->id, $request);
-        $applicants = $query->orderBy('created_at', 'desc')->get();
+        $query       = $this->buildApplicantQuery($schoolModel->id, $request);
+        $applicants  = $query->orderBy('created_at', 'desc')->get();
+
+        $totalApplicantsCount = PpdbApplication::where('school_id', $schoolModel->id)->count();
+        $pendingReviewCount = PpdbApplication::where('school_id', $schoolModel->id)
+            ->whereIn('status', ['pending', 'payment_uploaded'])
+            ->count();
 
         return response()->json([
             'applicants'      => $applicants->map(fn(PpdbApplication $item) => $this->mapApplicant($item)),
-            'total'           => $applicants->count(),
-            'pending'         => $applicants->whereIn('status', ['pending', 'payment_uploaded'])->count(),
-            'pending_overall' => PpdbApplication::where('school_id', $schoolModel->id)
-                ->whereIn('status', ['pending', 'payment_uploaded'])->count(),
+            'total'           => $totalApplicantsCount,
+            'pending'         => $pendingReviewCount,
+            'pending_overall' => $pendingReviewCount,
         ]);
     }
 
@@ -288,6 +386,14 @@ class AdminPpdbApplicantsController extends Controller
         $applicants   = $query->orderBy('created_at', 'desc')->get();
         $capacities   = $this->getCapacities($schoolModel->id, $request->year);
         $selectedYear = $request->year;
+        $selectedPaymentMethod = $request->payment_method;
+        $selectedPaymentStatus = $request->payment_status;
+        $selectedRegistrationStep = $request->registration_step;
+
+        $totalApplicantsCount = PpdbApplication::where('school_id', $schoolModel->id)->count();
+        $pendingReviewCount = PpdbApplication::where('school_id', $schoolModel->id)
+            ->whereIn('status', ['pending', 'payment_uploaded'])
+            ->count();
 
         $viewFolder = strtolower($schoolModel->type) === 'sdit' ? 'sd' : strtolower($schoolModel->type);
         $view = 'admin.superadmin.ppdb.' . $viewFolder . '.applicants';
@@ -295,7 +401,17 @@ class AdminPpdbApplicantsController extends Controller
             $view = 'admin.superadmin.ppdb.sd.applicants';
         }
 
-        return view($view, compact('applicants', 'schoolModel', 'selectedYear', 'capacities'));
+        return view($view, compact(
+            'applicants',
+            'schoolModel',
+            'selectedYear',
+            'selectedPaymentMethod',
+            'selectedPaymentStatus',
+            'selectedRegistrationStep',
+            'capacities',
+            'totalApplicantsCount',
+            'pendingReviewCount'
+        ));
     }
 
     /** GET /admin/ppdb/applicants/{school}/data */
@@ -304,6 +420,24 @@ class AdminPpdbApplicantsController extends Controller
         $schoolModel  = School::where('slug', $school)->firstOrFail();
         $query        = $this->buildApplicantQuery($schoolModel->id, $request);
         $pendingCount = (clone $query)->whereIn('status', ['pending', 'payment_uploaded'])->count();
+
+        // If specific applicant ID requested, fetch just that applicant
+        if ($request->filled('id')) {
+            $applicant = PpdbApplication::where('school_id', $schoolModel->id)->find($request->id);
+            if (!$applicant) {
+                return response()->json(['error' => 'Applicant not found'], 404);
+            }
+            return response()->json([
+                'applicants'   => [$this->mapApplicant($applicant)],
+                'total'        => 1,
+                'pending'      => in_array($applicant->status, ['pending', 'payment_uploaded']) ? 1 : 0,
+                'current_page' => 1,
+                'last_page'    => 1,
+                'per_page'     => 1,
+                'from'         => 1,
+                'to'           => 1,
+            ]);
+        }
 
         $applicants = $query->orderBy('created_at', 'desc')
             ->paginate(10, ['*'], 'page', $request->query('page', 1));
@@ -440,6 +574,12 @@ class AdminPpdbApplicantsController extends Controller
 
         // Check if already confirmed
         if ($applicant->status === 'payment_confirmed') {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pembayaran sudah pernah dikonfirmasi sebelumnya.'
+                ]);
+            }
             return redirect()->route('admin.ppdb.applicants.by_school.detail', ['school' => $school, 'id' => $id])
                 ->with('info', 'Pembayaran sudah pernah dikonfirmasi sebelumnya.');
         }
@@ -474,7 +614,48 @@ class AdminPpdbApplicantsController extends Controller
                 ]);
         }
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Pembayaran berhasil dikonfirmasi.',
+                'applicant' => $this->mapApplicant($applicant->fresh())
+            ]);
+        }
+
         $detailRoute = route('admin.ppdb.applicants.by_school.detail', ['school' => $school, 'id' => $id]);
         return redirect($detailRoute)->with('success', 'Pembayaran berhasil dikonfirmasi. ID Pendaftaran telah siap digunakan untuk login.');
+    }
+
+    /**
+     * DELETE /admin/ppdb/applicants/{school}/bulk-delete
+     * Delete multiple PPDB applicants by their IDs.
+     */
+    public function bulkDelete(Request $request, string $school)
+    {
+        $schoolModel = School::where('slug', $school)->firstOrFail();
+
+        $ids = $request->input('ids', []);
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json(['error' => 'No IDs provided'], 400);
+        }
+
+        // Delete applicants that belong to this school
+        $deleted = PpdbApplication::where('school_id', $schoolModel->id)
+            ->whereIn('id', $ids)
+            ->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => "{$deleted} pendaftar berhasil dihapus.",
+            'deleted' => $deleted
+        ]);
+    }
+
+    /**
+     * POST /admin/ppdb/applicants/{school}/bulk-delete (legacy POST for form compatibility)
+     */
+    public function bulkDeletePost(Request $request, string $school)
+    {
+        return $this->bulkDelete($request, $school);
     }
 }

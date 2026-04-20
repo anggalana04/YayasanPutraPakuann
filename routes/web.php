@@ -432,6 +432,9 @@ Route::middleware(['auth:admin', 'admin.access'])->group(function () {
     Route::get('/admin/ppdb/applicants/{school}/export.xlsx', [AdminPpdbApplicantsController::class, 'exportXlsx'])
         ->name('admin.ppdb.applicants.by_school.export.xlsx');
 
+    Route::delete('/admin/ppdb/applicants/{school}/bulk-delete', [AdminPpdbApplicantsController::class, 'bulkDelete'])
+        ->name('admin.ppdb.applicants.by_school.bulk_delete');
+
 
     Route::get('/admin/ppdb/applicants/{school}', [AdminPpdbApplicantsController::class, 'bySchoolIndex'])
         ->name('admin.ppdb.applicants.by_school');
